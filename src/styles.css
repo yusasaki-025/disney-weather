@@ -24,6 +24,44 @@
   --shadow: 0 1px 3px rgba(20, 30, 45, 0.08), 0 4px 12px rgba(20, 30, 45, 0.05);
 }
 
+/* ダークモード (§6.6)。◎ ○ の緑はやや明るめ、× の赤も視認性確保。 */
+[data-theme='dark'] {
+  --bg: #161b22;
+  --surface: #1f262e;
+  --surface-2: #2a323c;
+  --border: #38424e;
+  --text: #e6ebf0;
+  --text-sub: #9aa7b4;
+  --accent: #4a9eea;
+  --accent-dark: #66b0f0;
+  --score-excellent: #3fae50;
+  --score-good: #9ed46f;
+  --score-fair: #f0b454;
+  --score-bad: #e26464;
+  --risk-bg: #3a2222;
+  --warn-bg: #38301a;
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.5), 0 4px 12px rgba(0, 0, 0, 0.35);
+}
+
+[data-theme='dark'] .cancel-lv2 {
+  background: #3a2c1e;
+  color: #e6a06a;
+}
+
+[data-theme='dark'] .badge-vacation {
+  background: #232a44;
+  color: #aab2e8;
+}
+
+[data-theme='dark'] .row-main.is-decided {
+  background: #1d2c3d;
+}
+
+[data-theme='dark'] .skeleton {
+  background: linear-gradient(90deg, #2a323c 25%, #333d48 50%, #2a323c 75%);
+  background-size: 200% 100%;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -729,6 +767,114 @@ section {
   line-height: 1.6;
   color: var(--text-sub);
   border-top: 1px solid var(--border);
+}
+
+/* --- 雨雲レーダー (§3.18) --- */
+.nowcast {
+  margin-top: 16px;
+}
+
+.nowcast-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  text-decoration: none;
+  color: var(--text);
+}
+
+.nowcast-card:hover {
+  border-color: var(--accent);
+}
+
+.nowcast-card > .material-symbols-rounded:first-child {
+  font-size: 28px;
+  color: var(--accent);
+}
+
+.nowcast-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.nowcast-title {
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.nowcast-sub {
+  font-size: 11px;
+  color: var(--text-sub);
+}
+
+/* --- ヘルプモーダル (§3.16) --- */
+.modal-card-wide {
+  max-width: 640px;
+  text-align: left;
+  max-height: 82vh;
+  overflow-y: auto;
+}
+
+.help-body h2 {
+  font-size: 18px;
+  margin-bottom: 12px;
+}
+
+.help-body h3 {
+  font-size: 14px;
+  margin: 18px 0 6px;
+  color: var(--accent-dark);
+}
+
+.help-body ul {
+  margin: 0;
+  padding-left: 20px;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.btn-icon {
+  padding: 8px;
+}
+
+/* --- 印刷モード (§3.17 / §6.9) --- */
+@media print {
+  .app-header,
+  #controls,
+  #top3-section,
+  .legend,
+  .disclaimer,
+  .data-status,
+  .modal,
+  .detail-actions,
+  .nowcast,
+  .forecast-table thead {
+    display: none !important;
+  }
+  .row-main:not(.is-decided) {
+    display: none !important;
+  }
+  body {
+    background: #fff;
+  }
+  .table-scroll {
+    overflow: visible !important;
+    border: none;
+    box-shadow: none;
+  }
+  .forecast-table {
+    min-width: 0 !important;
+  }
+  .detail-row td {
+    background: #fff;
+  }
+  .cancel-badge {
+    border: 1px solid #999;
+  }
 }
 
 /* --- スマホ (375px) --- */

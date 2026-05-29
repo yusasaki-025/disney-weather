@@ -29,11 +29,20 @@
         <button id="btn-refresh" class="btn" type="button">
           <span class="material-symbols-rounded" aria-hidden="true">refresh</span>更新
         </button>
+        <button id="btn-print" class="btn" type="button">
+          <span class="material-symbols-rounded" aria-hidden="true">print</span>印刷
+        </button>
         <button id="btn-notion" class="btn" type="button">
           <span class="material-symbols-rounded" aria-hidden="true">ios_share</span>Notion 送信
         </button>
         <button id="btn-qr" class="btn" type="button">
           <span class="material-symbols-rounded" aria-hidden="true">qr_code_2</span>QR
+        </button>
+        <button id="btn-help" class="btn" type="button">
+          <span class="material-symbols-rounded" aria-hidden="true">help</span>ヘルプ
+        </button>
+        <button id="btn-theme" class="btn btn-icon" type="button" aria-label="ダークモード切替">
+          <span class="material-symbols-rounded" aria-hidden="true">dark_mode</span>
         </button>
       </div>
     </header>
@@ -94,6 +103,15 @@
       <span class="material-symbols-rounded" aria-hidden="true">cloud_off</span>
       <p id="error-text">予報を取得できませんでした。ネットワークを確認してから更新してください。</p>
       <button id="btn-retry-all" class="btn" type="button">再試行</button>
+    </div>
+
+    <div id="help-modal" class="modal" hidden>
+      <div class="modal-card modal-card-wide" role="dialog" aria-modal="true" aria-label="用語集とヘルプ">
+        <button id="help-close" class="modal-close" type="button" aria-label="閉じる">
+          <span class="material-symbols-rounded" aria-hidden="true">close</span>
+        </button>
+        <div id="help-body" class="help-body"></div>
+      </div>
     </div>
 
     <div id="qr-modal" class="modal" hidden>

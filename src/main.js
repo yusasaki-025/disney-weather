@@ -2,6 +2,9 @@
 import './styles.css';
 import { candidateDates, todayJst, nowIso } from './utils/date.js';
 import { loadCacheFresh, loadCacheRaw, saveCache } from './utils/cache.js';
+import { setupTheme } from './ui/theme.js';
+import { setupHelp } from './ui/help.js';
+import { setupPrint } from './ui/print.js';
 import { logger } from './utils/logger.js';
 import { fetchJma, SOURCE_ID as JMA } from './data/jma.js';
 import { fetchOpenMeteo, SOURCE_ID as OM } from './data/openMeteo.js';
@@ -214,10 +217,17 @@ const handlers = {
 };
 
 // --- ヘッダーボタン ---
-async function refresh(force) {
-  renderSkeleton();
+async function refresh(force, silent = false) {
+  if (!silent) renderSkeleton();
   await loadAll(force);
   render();
+}
+
+// 60秒自動更新 (§6.7) : 非アクティブ時は停止、キャッシュ TTL 超過時のみ実 fetch
+function silentTick() {
+  if (document.hidden) return;
+  const stale = activeSources.some((s) => loadCacheFresh(s) == null);
+  if (stale) refresh(false, true);
 }
 
 function renderSkeleton() {
@@ -272,10 +282,18 @@ function showQr() {
 // --- 起動 ---
 async function init() {
   setupHeader();
+  setupTheme();
+  setupHelp();
+  setupPrint({ getDecidedDate: () => state.decidedDate, openDetail: openByDate });
   wireControls(state, render);
   renderSkeleton();
   await loadAll(false);
   render();
+  // 60秒自動更新 (§6.7)
+  setInterval(silentTick, 60000);
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) silentTick();
+  });
 }
 
 init();

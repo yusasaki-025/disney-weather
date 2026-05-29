@@ -14,6 +14,7 @@ import { renderPopWindChart, renderTempChart } from './chart.js';
 import { suggestOutfit } from './outfit.js';
 import { SHOW_SCHEDULE } from '../data/showSchedule.js';
 import { freshnessLabel, UPDATE_CYCLE } from '../utils/freshness.js';
+import { nowcastHtml } from './nowcast.js';
 
 const SOURCE_LABEL = { jma: '気象庁', 'open-meteo': 'Open-Meteo', openweather: 'OpenWeather' };
 
@@ -94,6 +95,7 @@ function detailPanelHtml(row, park) {
         <h3>持ち物 ･ 服装</h3>
         <ul class="outfit-list">${outfit}</ul>
       </div>
+      ${nowcastHtml(row.date)}
       <div class="detail-actions">
         <button type="button" class="btn ${decided ? 'btn-primary' : ''}" data-action="decide">
           <span class="material-symbols-rounded" aria-hidden="true">event_available</span>${decided ? '決定済み' : 'この日に決めた'}
