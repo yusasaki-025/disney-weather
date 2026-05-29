@@ -89,12 +89,13 @@ describe('reliability (Phase 2)', () => {
 });
 
 describe('showSchedule', () => {
-  it('TDL high の ±1h 窓は {12,13,14,15}', () => {
-    expect([...showWindowHours('TDL', 'high', 1)].sort((a, b) => a - b)).toEqual([12, 13, 14, 15]);
+  it('TDL high (13:00 / 15:00) の ±1h 窓は {12,13,14,15,16}', () => {
+    expect([...showWindowHours('TDL', 'high', 1)].sort((a, b) => a - b)).toEqual([12, 13, 14, 15, 16]);
   });
-  it('TDS high 時刻 ・ マーカー', () => {
+  it('TDS high 時刻 (11:30 / 14:00) ・ TDL は全 4 公演', () => {
     expect(showTimes('TDS', 'high')).toEqual([11.5, 14]);
-    expect(allShowMarkers('TDL').length).toBe(3);
+    expect(allShowMarkers('TDL').length).toBe(4);
+    expect(allShowMarkers('TDL')[0].name).toBe('ハーモニー･イン･カラー');
   });
 });
 

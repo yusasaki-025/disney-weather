@@ -76,11 +76,12 @@ function sourceCellHtml(source, forecast, status) {
 }
 
 function detailPanelHtml(row, park) {
+  const PRIORITY_NOTE = { high: ' (メイン算定窓)', medium: ' (補助)', low: ' (参考)' };
   const showRows = (SHOW_SCHEDULE[park] || [])
     .map(
       (s) =>
-        `<div class="${s.priority === 'high' ? 'st-high' : ''}">${esc(s.type)} : ${s.times.join(' / ')}${
-          s.priority === 'high' ? ' (メイン算定窓)' : ' (参考)'
+        `<div class="${s.priority === 'high' ? 'st-high' : ''}">${esc(s.name)} : ${esc(s.time)}${
+          PRIORITY_NOTE[s.priority] || ''
         }</div>`,
     )
     .join('');
