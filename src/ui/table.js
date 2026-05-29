@@ -15,6 +15,13 @@ import { suggestOutfit } from './outfit.js';
 import { SHOW_SCHEDULE } from '../data/showSchedule.js';
 import { freshnessLabel, UPDATE_CYCLE } from '../utils/freshness.js';
 import { nowcastHtml } from './nowcast.js';
+import { getTempColor, getTempBandKey } from '../utils/tempColor.js';
+
+// 気温セルを暖寒色で着色 (§0.6-2)。data-tb はダークモード CSS 上書き用。
+function tempSpan(c) {
+  if (c == null) return '—';
+  return `<span class="tcolor" data-tb="${getTempBandKey(c)}" style="color:${getTempColor(c)}">${fmtNum(c, 0, '°')}</span>`;
+}
 
 const SOURCE_LABEL = { jma: '気象庁', 'open-meteo': 'Open-Meteo', openweather: 'OpenWeather' };
 
@@ -42,7 +49,7 @@ function sourceCellHtml(source, forecast, status) {
   }
   const temp =
     forecast.tempMax != null || forecast.tempMin != null
-      ? `${fmtNum(forecast.tempMax, 0, '°')} / ${fmtNum(forecast.tempMin, 0, '°')}`
+      ? `${tempSpan(forecast.tempMax)} / ${tempSpan(forecast.tempMin)}`
       : '—';
   const subParts = [`降水 ${fmtNum(forecast.popMax, 0, '%')}`];
   if (forecast.gustMax != null) subParts.push(`風 ${fmtNum(forecast.gustMax, 0)}`);
@@ -232,11 +239,16 @@ export function renderTable(els, rows, state, sources, sourceStatus, handlers) {
 export function renderLegend(el) {
   const item = (icon, color, text) =>
     `<span class="lg"><span class="material-symbols-rounded" style="color:${color}" aria-hidden="true">${icon}</span>${text}</span>`;
+  const tempLegend = `<span class="lg">気温色 :
+    <span class="tlg" style="background:#D24A4A"></span>暑い
+    <span class="tlg" style="background:#2D8F3E"></span>快適
+    <span class="tlg" style="background:#3F6FAE"></span>寒い</span>`;
   el.innerHTML = [
     item('check_circle', '#2D8F3E', '◎ 行くべき (85+)'),
     item('check', '#88C057', '○ 行ってよい (70+)'),
     item('warning', '#F2A93B', '△ 微妙 (50+)'),
     item('block', '#D24A4A', '× 別日推奨 (50 未満)'),
     '<span class="lg">昼パレード時刻 ±1h を最重視</span>',
+    tempLegend,
   ].join('');
 }

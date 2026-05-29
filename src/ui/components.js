@@ -42,17 +42,35 @@ export function cancelBadgeHtml(kind, badge) {
   </span>`;
 }
 
-// 朝/昼/夜 サブスコア HTML (昼を強調)
+// 朝/昼/夜 サブスコア HTML。
+// 時間帯ラベルを必ず併記。昼は枠 ＋ 太字 ＋ 数値併記で強調。朝 ・ 夜は記号のみ + ホバーで数値。
+// アイコンは使わない (フォント未読み込み時のフォールバック問題回避)。
 export function subscoreHtml(subscores, bands) {
-  return `<span class="subscore">${bands
-    .map((b) => {
-      const ss = subscores[b.key];
-      const sym = ss && ss.hasData ? ss.symbol.symbol : '—';
-      const color = ss && ss.hasData ? ss.symbol.color : '#b4bcc6';
-      const strong = b.key === 'noon' ? 'font-weight:700' : '';
-      return `<span class="ss"><span class="lbl" style="${strong}">${b.label}</span><span class="sym" style="color:${color}">${sym}</span></span>`;
-    })
-    .join('')}</span>`;
+  const ariaParts = bands.map((b) => {
+    const ss = subscores[b.key];
+    if (!ss || !ss.hasData) return `${b.label} データなし`;
+    if (b.key === 'noon') return `${b.label} ${ss.symbol.label} スコア${ss.score}`;
+    return `${b.label} ${ss.symbol.label}`;
+  });
+  const cells = bands.map((b) => {
+    const ss = subscores[b.key];
+    const has = ss && ss.hasData;
+    const sym = has ? ss.symbol.symbol : '—';
+    const color = has ? ss.symbol.color : '#b4bcc6';
+    if (b.key === 'noon') {
+      return `<span class="subscore subscore-main">
+        <span class="time-label">${b.label}</span>
+        <span class="symbol" style="color:${color}" aria-hidden="true">${sym}</span>
+        <span class="value">${has ? ss.score : '—'}</span>
+      </span>`;
+    }
+    const title = has ? `${b.label} ${ss.symbol.label} スコア${ss.score}` : `${b.label} データなし`;
+    return `<span class="subscore" title="${esc(title)}">
+      <span class="time-label">${b.label}</span>
+      <span class="symbol" style="color:${color}" aria-hidden="true">${sym}</span>
+    </span>`;
+  });
+  return `<span class="subscore-group" role="img" aria-label="${esc(ariaParts.join('、'))}">${cells.join('')}</span>`;
 }
 
 // スコアの読み上げ用ラベル

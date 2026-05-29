@@ -466,13 +466,14 @@ section {
   vertical-align: text-bottom;
 }
 
-.subscore {
+.subscore-group {
   display: inline-flex;
-  gap: 4px;
+  align-items: center;
+  gap: 6px;
   justify-content: center;
 }
 
-.subscore .ss {
+.subscore {
   display: inline-flex;
   flex-direction: column;
   align-items: center;
@@ -481,9 +482,40 @@ section {
   line-height: 1.2;
 }
 
-.subscore .ss .sym {
+.subscore .time-label {
+  font-size: 10px;
+}
+
+.subscore .symbol {
   font-size: 15px;
   font-weight: 700;
+}
+
+/* 昼 = 最重要。枠 ＋ 太字 ＋ 数値併記で強調。 */
+.subscore-main {
+  flex-direction: row;
+  align-items: center;
+  gap: 3px;
+  padding: 3px 8px;
+  border: 1.5px solid var(--accent);
+  border-radius: 8px;
+  background: var(--surface-2);
+}
+
+.subscore-main .time-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.subscore-main .symbol {
+  font-size: 17px;
+}
+
+.subscore-main .value {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
 }
 
 /* バッジ (風 / 雨 / 熱) */
@@ -539,6 +571,29 @@ section {
 
 .source-cell.is-empty {
   color: #b4bcc6;
+}
+
+/* 気温の暖寒色 (§0.6-2)。インラインは light 値、dark は data-tb で上書き。 */
+.tcolor {
+  font-weight: 700;
+}
+
+[data-theme='dark'] .tcolor[data-tb='h3'] { color: #f28b82 !important; }
+[data-theme='dark'] .tcolor[data-tb='h2'] { color: #f0938f !important; }
+[data-theme='dark'] .tcolor[data-tb='h1'] { color: #f0a95e !important; }
+[data-theme='dark'] .tcolor[data-tb='cf'] { color: #6fcb7e !important; }
+[data-theme='dark'] .tcolor[data-tb='w1'] { color: #6fb8dd !important; }
+[data-theme='dark'] .tcolor[data-tb='w2'] { color: #7fa6db !important; }
+[data-theme='dark'] .tcolor[data-tb='w3'] { color: #7e9bd8 !important; }
+[data-theme='dark'] .tcolor[data-tb='w4'] { color: #9aaedc !important; }
+
+.tlg {
+  display: inline-block;
+  width: 11px;
+  height: 11px;
+  border-radius: 3px;
+  vertical-align: text-bottom;
+  margin: 0 2px 0 4px;
 }
 
 .cell-fail {
@@ -877,6 +932,74 @@ section {
   }
 }
 
+/* --- ハンバーガーメニュー / ドロワー (§0.6-3) --- */
+.menu-toggle {
+  display: none; /* PC では非表示 */
+}
+
+.menu-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  background: rgba(20, 30, 45, 0.45);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.menu-overlay.open {
+  opacity: 1;
+}
+
+.menu-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 41;
+  width: 270px;
+  max-width: 80vw;
+  height: 100%;
+  background: var(--surface);
+  box-shadow: -4px 0 18px rgba(20, 30, 45, 0.18);
+  display: flex;
+  flex-direction: column;
+  padding: 16px 10px;
+  gap: 2px;
+  transform: translateX(100%);
+  transition: transform 0.2s ease;
+  overflow-y: auto;
+}
+
+.menu-drawer.open {
+  transform: translateX(0);
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 14px;
+  font-size: 15px;
+  font-family: inherit;
+  font-weight: 600;
+  color: var(--text);
+  background: none;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: left;
+}
+
+.menu-item:hover,
+.menu-item:focus-visible {
+  background: var(--surface-2);
+}
+
+.menu-item .material-symbols-rounded {
+  font-size: 20px;
+  color: var(--accent);
+}
+
 /* --- スマホ (375px) --- */
 @media (max-width: 720px) {
   .app-title h1 {
@@ -893,5 +1016,15 @@ section {
   }
   .app-main {
     padding: 14px;
+  }
+}
+
+/* 狭幅 : ヘッダー操作をハンバーガーに集約 (§0.6-3、< 768px) */
+@media (max-width: 767px) {
+  .desktop-actions {
+    display: none;
+  }
+  .menu-toggle {
+    display: inline-flex;
   }
 }

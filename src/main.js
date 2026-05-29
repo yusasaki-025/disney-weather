@@ -5,6 +5,7 @@ import { loadCacheFresh, loadCacheRaw, saveCache } from './utils/cache.js';
 import { setupTheme } from './ui/theme.js';
 import { setupHelp } from './ui/help.js';
 import { setupPrint } from './ui/print.js';
+import { setupMenu } from './ui/menu.js';
 import { logger } from './utils/logger.js';
 import { fetchJma, SOURCE_ID as JMA } from './data/jma.js';
 import { fetchOpenMeteo, SOURCE_ID as OM } from './data/openMeteo.js';
@@ -280,11 +281,51 @@ function showQr() {
 }
 
 // --- 起動 ---
+async function copyUrl() {
+  try {
+    await navigator.clipboard.writeText(window.location.href);
+    alert('URL をコピーしました');
+  } catch {
+    alert(window.location.href);
+  }
+}
+
+// 狭幅用ドロワーの項目 (ヘッダーボタンへ委譲 ＋ 一部は直接処理)
+function buildMenuItems() {
+  const click = (id) => document.getElementById(id)?.click();
+  return [
+    { label: 'URL をコピー', icon: 'content_copy', onClick: copyUrl },
+    { label: 'QR を表示', icon: 'qr_code_2', onClick: () => click('btn-qr') },
+    { label: 'Notion 送信', icon: 'ios_share', onClick: () => click('btn-notion') },
+    {
+      label: 'カレンダー登録',
+      icon: 'calendar_add_on',
+      onClick: () => {
+        if (!state.decidedDate) {
+          alert('先に行を開いて「この日に決めた」で決定日を選んでください');
+          return;
+        }
+        handlers.onCalendar(state.decidedDate);
+      },
+    },
+    { label: '印刷', icon: 'print', onClick: () => click('btn-print') },
+    { label: '強制更新', icon: 'refresh', onClick: () => refresh(true) },
+    { label: 'ダークモード切替', icon: 'dark_mode', onClick: () => click('btn-theme') },
+    { label: '用語集 / ヘルプ', icon: 'help', onClick: () => click('btn-help') },
+    {
+      label: '出典 ・ 注意書き',
+      icon: 'info',
+      onClick: () => document.querySelector('.disclaimer')?.scrollIntoView({ behavior: 'smooth' }),
+    },
+  ];
+}
+
 async function init() {
   setupHeader();
   setupTheme();
   setupHelp();
   setupPrint({ getDecidedDate: () => state.decidedDate, openDetail: openByDate });
+  setupMenu(buildMenuItems());
   wireControls(state, render);
   renderSkeleton();
   await loadAll(false);
