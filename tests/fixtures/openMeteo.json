@@ -1,0 +1,32 @@
+{
+  "daily": {
+    "time": ["2026-05-30", "2026-05-31"],
+    "temperature_2m_max": [25.5, 30.2],
+    "temperature_2m_min": [15.1, 18.0],
+    "apparent_temperature_max": [26.0, 33.0],
+    "apparent_temperature_min": [14.0, 17.0],
+    "precipitation_sum": [0, 6.5],
+    "precipitation_probability_max": [10, 80],
+    "wind_speed_10m_max": [5.2, 9.0],
+    "wind_gusts_10m_max": [11.0, 18.0],
+    "uv_index_max": [6.5, 9.2],
+    "weather_code": [1, 63]
+  },
+  "hourly": {
+    "time": [
+      "2026-05-30T08:00",
+      "2026-05-30T13:00",
+      "2026-05-30T14:00",
+      "2026-05-31T13:00",
+      "2026-05-31T23:00"
+    ],
+    "temperature_2m": [20, 28, 29, 31, 25],
+    "apparent_temperature": [21, 30, 31, 34, 26],
+    "precipitation_probability": [0, 10, 20, 70, 0],
+    "precipitation": [0, 0, 0, 2, 0],
+    "relative_humidity_2m": [50, 55, 60, 70, 80],
+    "wind_speed_10m": [3, 6, 7, 9, 2],
+    "wind_gusts_10m": [8, 12, 14, 18, 5],
+    "uv_index": [2, 6, 5, 8, 0]
+  }
+}

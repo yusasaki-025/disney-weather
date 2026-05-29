@@ -1,0 +1,26 @@
+{
+  "name": "disney-weather",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "TDL/TDS に行く日を決めるための天気比較ダッシュボード (単一 HTML artifact)",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build && cp dist/index.html dist/artifact.html",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "coverage": "vitest run --coverage",
+    "lint": "eslint ."
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.17.0",
+    "@vitest/coverage-v8": "^2.1.8",
+    "eslint": "^9.17.0",
+    "globals": "^15.14.0",
+    "jsdom": "^25.0.1",
+    "vite": "^6.0.7",
+    "vite-plugin-singlefile": "^2.1.0",
+    "vitest": "^2.1.8"
+  }
+}

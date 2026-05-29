@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Disney 行く日きめるダッシュボード</title>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400..600,0..1,0&display=swap"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/chart.js@4.4.6/dist/chart.umd.min.js"
+      integrity="sha384-Sse/HDqcypGpyTDpvZOJNnG0TT3feGQUkF9H+mnRvic+LjR+K1NhTt8f51KIQ3v3"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js"
+      integrity="sha384-8FWZA6BGMXhsfO+BLtrJK0We6gg5o1JyO8xQm6peWDEUs17ACA5ziE/NIAkl9z2k"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <header class="app-header">
+      <div class="app-title">
+        <span class="material-symbols-rounded" aria-hidden="true">park</span>
+        <h1>Disney 行く日きめるダッシュボード</h1>
+      </div>
+      <div class="header-actions">
+        <button id="btn-refresh" class="btn" type="button">
+          <span class="material-symbols-rounded" aria-hidden="true">refresh</span>更新
+        </button>
+        <button id="btn-notion" class="btn" type="button">
+          <span class="material-symbols-rounded" aria-hidden="true">ios_share</span>Notion 送信
+        </button>
+        <button id="btn-qr" class="btn" type="button">
+          <span class="material-symbols-rounded" aria-hidden="true">qr_code_2</span>QR
+        </button>
+      </div>
+    </header>
+
+    <p id="data-status" class="data-status" role="status" aria-live="polite"></p>
+
+    <main class="app-main">
+      <section id="top3-section" aria-labelledby="top3-heading">
+        <h2 id="top3-heading">今からの14日でベスト3</h2>
+        <div id="top3" class="top3-grid"></div>
+      </section>
+
+      <section id="controls" aria-label="表示の絞り込みと並び替え">
+        <div class="control-group" role="group" aria-label="パーク">
+          <span class="control-label">パーク</span>
+          <div class="seg" id="park-seg">
+            <button class="seg-btn" data-park="TDL" type="button">TDL</button>
+            <button class="seg-btn" data-park="TDS" type="button">TDS</button>
+          </div>
+        </div>
+        <div class="control-group" role="group" aria-label="並び順">
+          <span class="control-label">並び順</span>
+          <div class="seg" id="sort-seg">
+            <button class="seg-btn" data-sort="score" type="button">スコア順</button>
+            <button class="seg-btn" data-sort="date" type="button">日付順</button>
+          </div>
+        </div>
+        <div class="control-group" role="group" aria-label="曜日フィルター">
+          <span class="control-label">曜日</span>
+          <div class="seg" id="dayfilter-seg">
+            <button class="seg-btn" data-dayfilter="all" type="button">すべて</button>
+            <button class="seg-btn" data-dayfilter="weekday" type="button">平日のみ</button>
+            <button class="seg-btn" data-dayfilter="holiday" type="button">土日祝のみ</button>
+          </div>
+        </div>
+        <label class="check">
+          <input type="checkbox" id="only-good" />
+          <span>◎ ○ のみ</span>
+        </label>
+      </section>
+
+      <section id="table-section" aria-label="候補日の予報比較">
+        <div class="table-scroll">
+          <table id="forecast-table" class="forecast-table">
+            <thead></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <p class="legend" id="legend"></p>
+      </section>
+    </main>
+
+    <div id="error-screen" class="error-screen" hidden>
+      <span class="material-symbols-rounded" aria-hidden="true">cloud_off</span>
+      <p id="error-text">予報を取得できませんでした。ネットワークを確認してから更新してください。</p>
+      <button id="btn-retry-all" class="btn" type="button">再試行</button>
+    </div>
+
+    <div id="qr-modal" class="modal" hidden>
+      <div class="modal-card" role="dialog" aria-modal="true" aria-label="共有用 QR コード">
+        <button id="qr-close" class="modal-close" type="button" aria-label="閉じる">
+          <span class="material-symbols-rounded" aria-hidden="true">close</span>
+        </button>
+        <h2>このページを共有</h2>
+        <div id="qr-canvas"></div>
+        <p class="modal-note">同行者にこの QR を見せると同じ画面を開けます。</p>
+      </div>
+    </div>
+
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

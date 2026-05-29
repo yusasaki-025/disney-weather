@@ -1,0 +1,280 @@
+// エントリポイント : 取得 → 正規化 → スコア → 描画 → イベント結線。
+import './styles.css';
+import { candidateDates, todayJst, nowIso } from './utils/date.js';
+import { loadCacheFresh, loadCacheRaw, saveCache } from './utils/cache.js';
+import { logger } from './utils/logger.js';
+import { fetchJma, SOURCE_ID as JMA } from './data/jma.js';
+import { fetchOpenMeteo, SOURCE_ID as OM } from './data/openMeteo.js';
+import { fetchOpenWeather, SOURCE_ID as OW } from './data/openWeather.js';
+import { fetchEnvWbgt, WBGT_SOURCE } from './data/wbgt.js';
+import { dayType } from './data/holidays.js';
+import { evaluateDay } from './score/scoring.js';
+import { renderTop3 } from './ui/top3.js';
+import { renderTable, renderLegend } from './ui/table.js';
+import { loadState, applyFilterSort, wireControls, toggleNg, setDecided } from './ui/filters.js';
+import { sendCandidatesToNotion, markDecidedInNotion, isNotionConfigured } from './integrations/notion.js';
+import { addToCalendar, confirmText } from './integrations/gcal.js';
+
+const CONFIG = {
+  coords: { lat: 35.6329, lon: 139.8804 }, // 舞浜駅近辺 (TDL/TDS 共通)
+  openWeatherProxyUrl: '', // 設定すると OpenWeather 列が有効化 (Phase 2)
+  days: 15,
+};
+
+const SOURCE_LABEL = { jma: '気象庁', 'open-meteo': 'Open-Meteo', openweather: 'OpenWeather' };
+
+const state = loadState();
+let rawBySourceDate = {}; // { source: { date: forecast } }
+const sourceStatus = {}; // { source: { ok, error, stale, fetchedAt } }
+let activeSources = [JMA, OM];
+
+const els = {
+  thead: document.querySelector('#forecast-table thead'),
+  tbody: document.querySelector('#forecast-table tbody'),
+  top3: document.getElementById('top3'),
+  legend: document.getElementById('legend'),
+  status: document.getElementById('data-status'),
+  errorScreen: document.getElementById('error-screen'),
+};
+
+// --- データ取得 (キャッシュ + 失敗時 stale フォールバック) ---
+async function loadSource(source, fetchFn, force) {
+  if (!force) {
+    const fresh = loadCacheFresh(source);
+    if (fresh) {
+      sourceStatus[source] = { ok: true, cached: true };
+      return fresh;
+    }
+  }
+  const data = await fetchFn();
+  if (data.length > 0) {
+    saveCache(source, data);
+    sourceStatus[source] = { ok: true };
+    return data;
+  }
+  const stale = loadCacheRaw(source);
+  if (stale) {
+    sourceStatus[source] = { ok: true, stale: true, fetchedAt: stale.fetchedAt };
+    return stale.data;
+  }
+  sourceStatus[source] = { ok: false, error: '取得失敗' };
+  return [];
+}
+
+function indexByDate(list) {
+  const map = {};
+  for (const f of list) map[f.date] = f;
+  return map;
+}
+
+// 環境省 WBGT が取れた場合、日別最大を上書き (取れなければ派生計算のまま)
+function applyEnvWbgt(envWbgt) {
+  if (!envWbgt) return;
+  const omByDate = rawBySourceDate[OM] || {};
+  for (const [date, info] of Object.entries(envWbgt)) {
+    const f = omByDate[date];
+    if (f && info.wbgtMax != null) {
+      f.wbgtMax = info.wbgtMax;
+      f.wbgtSource = WBGT_SOURCE.ENV_JP;
+    }
+  }
+}
+
+async function loadAll(force = false) {
+  activeSources = [JMA, OM];
+  if (CONFIG.openWeatherProxyUrl) activeSources.push(OW);
+
+  const tasks = [
+    loadSource(JMA, () => fetchJma(), force),
+    loadSource(OM, () => fetchOpenMeteo(CONFIG.coords), force),
+  ];
+  if (CONFIG.openWeatherProxyUrl) {
+    tasks.push(loadSource(OW, () => fetchOpenWeather(CONFIG.coords, { proxyUrl: CONFIG.openWeatherProxyUrl }), force));
+  }
+  const results = await Promise.all(tasks);
+
+  rawBySourceDate = {};
+  activeSources.forEach((src, i) => {
+    rawBySourceDate[src] = indexByDate(results[i]);
+  });
+
+  // WBGT 優先ソース (環境省) を試行 (CORS で失敗したら派生計算のまま)
+  try {
+    applyEnvWbgt(await fetchEnvWbgt());
+  } catch (e) {
+    logger.info('環境省 WBGT スキップ', e.message);
+  }
+}
+
+// --- 行の組み立て (park でスコアが変わるので描画時に都度計算) ---
+function buildRows() {
+  const dates = candidateDates(CONFIG.days, todayJst());
+  const rows = [];
+  for (const date of dates) {
+    const forecasts = {};
+    const list = [];
+    for (const src of activeSources) {
+      const f = rawBySourceDate[src]?.[date];
+      if (f) {
+        forecasts[src] = f;
+        list.push(f);
+      }
+    }
+    rows.push({
+      date,
+      dayType: dayType(date),
+      forecasts,
+      eval: list.length ? evaluateDay(list, state.park) : null,
+    });
+  }
+  return rows.filter((r) => r.eval); // 全ソース欠損日は除外 (通常は起きない)
+}
+
+function updateStatus() {
+  const parts = activeSources.map((s) => {
+    const st = sourceStatus[s] || {};
+    const mark = st.ok ? '取得済' : '取得失敗';
+    const extra = st.stale ? ' (オフライン)' : st.cached ? ' (キャッシュ)' : '';
+    return `${SOURCE_LABEL[s]} ${mark}${extra}`;
+  });
+  const anyStale = activeSources.some((s) => sourceStatus[s]?.stale);
+  els.status.textContent = `更新 : ${nowIso().slice(11, 16)} ･ ${parts.join(' / ')}${
+    anyStale ? ' ･ オフライン中は直前キャッシュを表示しています' : ''
+  }`;
+  els.status.classList.toggle('is-error', activeSources.every((s) => !sourceStatus[s]?.ok));
+}
+
+// --- 描画 ---
+function render() {
+  const rows = buildRows();
+  const allFailed = activeSources.every((s) => !sourceStatus[s]?.ok) && rows.length === 0;
+  els.errorScreen.hidden = !allFailed;
+  document.getElementById('table-section').hidden = allFailed;
+  document.getElementById('top3-section').hidden = allFailed;
+  if (allFailed) {
+    updateStatus();
+    return;
+  }
+
+  const view = applyFilterSort(rows, state);
+  const ngSet = new Set(state.ngDates);
+  const rowsWithFlags = rows.map((r) => ({
+    ...r,
+    isNg: ngSet.has(r.date),
+    isDecided: r.date === state.decidedDate,
+  }));
+
+  renderTop3(els.top3, rowsWithFlags, { onSelect: openByDate, park: state.park });
+  renderTable(els, view, state, activeSources, sourceStatus, handlers);
+  renderLegend(els.legend);
+  updateStatus();
+}
+
+function openByDate(date) {
+  const tr = els.tbody.querySelector(`.row-main[data-date="${date}"]`);
+  if (tr) {
+    tr.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    tr.click();
+  }
+}
+
+// --- 詳細パネル内アクション ---
+const handlers = {
+  onDecide(date) {
+    setDecided(state, date);
+    render();
+    if (!isNotionConfigured()) return; // DB 未設定なら自動送信しない
+    const row = buildRows().find((r) => r.date === date);
+    if (row) {
+      markDecidedInNotion({ ...row, isDecided: true }, state.park).catch((e) =>
+        alert(`Notion 更新に失敗 : ${e.message}`),
+      );
+    }
+  },
+  onToggleNg(date) {
+    toggleNg(state, date);
+    render();
+  },
+  async onCalendar(date) {
+    const rows = buildRows();
+    const row = rows.find((r) => r.date === date);
+    if (!row) return;
+    if (!confirm(confirmText(row, state.park))) return;
+    try {
+      await addToCalendar(row, state.park);
+      alert('Google カレンダーに追加しました');
+    } catch (e) {
+      alert(`カレンダー登録に失敗 : ${e.message}`);
+    }
+  },
+  onRetryAll() {
+    refresh(true);
+  },
+};
+
+// --- ヘッダーボタン ---
+async function refresh(force) {
+  renderSkeleton();
+  await loadAll(force);
+  render();
+}
+
+function renderSkeleton() {
+  els.thead.innerHTML = '';
+  els.tbody.innerHTML = Array.from({ length: 8 })
+    .map(
+      () =>
+        `<tr><td colspan="8" style="padding:12px"><span class="skeleton" style="width:80%"></span></td></tr>`,
+    )
+    .join('');
+  els.status.textContent = '予報を取得しています…';
+}
+
+function setupHeader() {
+  document.getElementById('btn-refresh').addEventListener('click', () => refresh(true));
+  document.getElementById('btn-retry-all').addEventListener('click', () => refresh(true));
+
+  document.getElementById('btn-notion').addEventListener('click', async () => {
+    const rows = applyFilterSort(buildRows(), state);
+    try {
+      const res = await sendCandidatesToNotion(rows, state.park);
+      alert(`Notion に候補を送信しました (${res?.length ?? ''})`);
+    } catch (e) {
+      alert(`Notion 送信に失敗 : ${e.message}`);
+    }
+  });
+
+  document.getElementById('btn-qr').addEventListener('click', showQr);
+  document.getElementById('qr-close').addEventListener('click', () => {
+    document.getElementById('qr-modal').hidden = true;
+  });
+  document.getElementById('qr-modal').addEventListener('click', (e) => {
+    if (e.target.id === 'qr-modal') e.currentTarget.hidden = true;
+  });
+}
+
+function showQr() {
+  const box = document.getElementById('qr-canvas');
+  box.innerHTML = '';
+  try {
+    // eslint-disable-next-line no-undef
+    const qr = qrcode(0, 'M');
+    qr.addData(window.location.href);
+    qr.make();
+    box.innerHTML = qr.createImgTag(5, 8);
+  } catch {
+    box.textContent = window.location.href;
+  }
+  document.getElementById('qr-modal').hidden = false;
+}
+
+// --- 起動 ---
+async function init() {
+  setupHeader();
+  wireControls(state, render);
+  renderSkeleton();
+  await loadAll(false);
+  render();
+}
+
+init();

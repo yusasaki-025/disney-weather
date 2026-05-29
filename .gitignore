@@ -1,0 +1,15 @@
+node_modules/
+dist/
+coverage/
+
+# secrets
+.env
+.env.*
+.env.local
+*.pem
+*.key
+credentials.json
+*-service-account.json
+
+# OS
+.DS_Store
