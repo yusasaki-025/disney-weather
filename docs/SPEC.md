@@ -168,15 +168,95 @@ CSS 必須要件 :
 
 ARIA : `aria-label="朝 行ってよい、昼 行くべき スコア92、夜 微妙"`
 
-### 3.4 詳細パネル
+### 3.4 詳細パネル (Yuka さん指摘 : パッと見が分かりづらい / グラフは右 / 見出し区切り不明)
 
-行をクリックすると、その日の時系列予報 (1時間刻み 9:00 - 22:00) を全ソース重ねて折れ線で表示。
+#### 行クリックの可視化
 
-- 横軸 : 時刻
-- 左Y軸 : 降水確率 (%)
-- 右Y軸 : 風速 (m/s) ＋ 風速10m/s ラインに「パレード中止域」帯を背景塗り
-- 別パネル : 気温 / 体感温度の折れ線
-- 既知のショー･パレード時刻 (13:00 / 14:30 / 20:00 等、後述§3.10) を縦線でハイライト
+行が「クリックできる」と一目で分かるように :
+
+- 行ホバーで `cursor: pointer` ＋ 背景色をわずかに変化 (`var(--surface-2)`)
+- 行末に右向き chevron アイコン (`chevron_right` / 開いた行は `expand_more`)
+- 行末に「詳細を見る」テキスト (PC のみ、スマホはアイコンのみ)
+- `aria-expanded` `role="button"` `tabindex="0"`
+- Enter / Space キーで開閉
+
+#### 詳細パネルの構成 (2カラム ・ グラフ右)
+
+PC (≧ 768px) は **左に情報 ・ 右にグラフ** の2カラム :
+
+```
+┌─────────────────────────────────────────────────────────┐
+│  ─── 6/14 (土) の詳細 ───                  [閉じる ×]    │
+├─────────────────────────────┬───────────────────────────┤
+│ ◆ ショースケジュール (TDL)    │ ◆ 時系列予報              │
+│                              │                            │
+│  デイパレード ・ ショー (主算定)│   (Chart.js 折れ線)        │
+│  ・ ハーモニー･イン･カラー    │  - 降水確率 (左Y)          │
+│     13:00 プレミアアクセス     │  - 風速 (右Y)             │
+│  ・ Reach for the Stars       │  - 縦線 : ショー時刻       │
+│     20:50 季節限定             │  - 背景帯 : 10m/s ライン   │
+│  ナイトパレード (参考)         │                            │
+│  ・ ドリームライツ 19:30      │ ◆ 気温推移                 │
+│                              │   (小さい別チャート)        │
+├─────────────────────────────┴───────────────────────────┤
+│ ◆ 服装サジェスト                                         │
+│  ・ ポンチョ (傘はキャストに止められる)                    │
+│  ・ 日焼け止め SPF50                                     │
+│  ・ 羽織りもの (昼夜温度差 10℃)                          │
+├─────────────────────────────────────────────────────────┤
+│ ◆ 当日のキャラクターグリーティング (折りたたみ)            │
+│ ◆ 当日の休止情報 (折りたたみ)                            │
+└─────────────────────────────────────────────────────────┘
+```
+
+スマホ (< 768px) は **1カラム縦並び** : ショースケジュール → グラフ → 気温 → 服装 → グリ ・ 休止。
+
+#### 見出し区切りの強化 (Yuka さん指摘 : 区切りが分かりづらい)
+
+各セクションの見出しは「**装飾 ＋ ラベル ＋ 罫線**」で明確化 :
+
+```html
+<h3 class="panel-heading">
+  <span class="panel-bullet"></span>
+  ショースケジュール (TDL)
+</h3>
+```
+
+CSS :
+
+```css
+.panel-heading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text);
+  margin: 24px 0 12px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--accent);  /* ピンク or ブルーの太線 */
+}
+.panel-bullet {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background: var(--primary);
+  border-radius: 50%;
+}
+```
+
+セクション間には `margin-top: 24px` の余白を空け、ヘッダー以外にも淡い区切り線 `border-top: 1px solid var(--border)` を入れる。
+
+#### グラフ仕様
+
+- Chart.js v4.5.0 ・ ハイトは 300px 固定 (デスクトップ) / 240px (スマホ)
+- 横軸 : 時刻 (9:00 - 22:00)
+- 左Y軸 : 降水確率 (%) ・ 青系の塗り
+- 右Y軸 : 風速 (m/s) ・ オレンジ系の線
+- 風速10m/s に水平ライン ＋ 上側を薄い赤で塗り「パレード中止域」と注釈
+- ショー時刻 (`priority: 'high'`) を縦線でハイライト ＋ ショー名のラベル吹き出し
+- 別チャート : 気温 / 体感温度 (赤系) ・ WBGT (オレンジ系)
+- 凡例とツールチップで全項目見える
 
 ### 3.5 ソート ･ フィルター
 
@@ -255,25 +335,81 @@ TDR 公式の日別運営カレンダーから日替わりスケジュールを�
 - キャラクターグリーティング場所 ・ 時間帯
 - 休止情報 (アトラクション ・ ショー ・ レストラン)
 
-#### priority マッピング
+#### ショースケジュール現状の前提 (Yuka さん指摘「実際の時間引けてないってこと?」)
 
-ショー名 → priority のマッピング `src/data/showPriority.js` で管理。Yuka さん要望 : 季節限定の昼パレード最優先、ナイトパレードは通年で低 :
+回答 : **Phase 1 では公式 calendar からの自動取得は未実装**。`src/data/showSchedule.js` の固定 JSON で代替している。Phase 2 で公式 `/tdl/daily/calendar/{YYYYMMDD}/` ・ `/tds/daily/calendar/{YYYYMMDD}/` から日別取得する。
+
+ただし Phase 1 でも **固定 JSON に実在のショー名 ・ 時刻を入れて、ぱっと見の正確性を担保** する。「デイパレード (季節)」のような汎用ラベルは廃止、必ず実在公演名で表示。
+
+#### showSchedule.js の構造 (実在ショー名 ・ パーク別)
+
+公式 calendar (2026/6/4 時点) を確認した実データ :
 
 ```js
-{
-  // high : 季節限定 ・ 体験価値が日替わり ・ 中止が大ダメージ
-  'ディズニー・ハーモニー・イン・カラー': 'high',
-  'イッツ・ア・スウィーツフルタイム！': 'high',
-  'Reach for the Stars': 'high',
-  // medium : エントリー受付対象 ・ 短時間 ・ 屋内
-  'ジャンボリミッキー！レッツ・ダンス！': 'medium',
-  // low : 通年演目 ・ いつでも見られる
-  '東京ディズニーランド・エレクトリカルパレード・ドリームライツ': 'low',
-  'スカイ・フル・オブ・カラーズ': 'low',
-}
+// src/data/showSchedule.js
+export const SHOW_SCHEDULE = {
+  TDL: [
+    // high : 季節限定 ・ デイ ・ メイン算定窓
+    { name: 'ディズニー･ハーモニー･イン･カラー', times: ['13:00'], priority: 'high', kind: 'parade-day', tag: 'プレミアアクセス' },
+    { name: 'イッツ･ア･スウィーツフルタイム!', times: ['16:25'], priority: 'high', kind: 'show-day', tag: 'パルパルーザ枠 ・ 季節限定' },
+    { name: 'Reach for the Stars', times: ['20:50'], priority: 'high', kind: 'show-day', tag: '季節限定 ・ プレミアアクセス' },
+    // medium : 屋内 ・ エントリー受付対象
+    { name: 'ジャンボリミッキー!レッツ･ダンス!', times: ['12:45','14:00','15:15','17:05','18:20'], priority: 'medium', kind: 'show-indoor', tag: 'エントリー受付' },
+    // low : 通年ナイト ・ 花火 ・ 参考表示のみ
+    { name: '東京ディズニーランド･エレクトリカルパレード･ドリームライツ', times: ['19:30'], priority: 'low', kind: 'parade-night', tag: '通年' },
+    { name: 'スカイ･フル･オブ･カラーズ', times: ['20:30'], priority: 'low', kind: 'fireworks', tag: '通年花火' },
+    // ショーレストラン (時間別ロジック対象外)
+    { name: 'ミッキーのレインボー･ルアウ', times: [], priority: null, kind: 'show-restaurant', tag: '予約必須' },
+  ],
+  TDS: [
+    // high : 25周年記念デイハーバーショー (季節限定)
+    { name: 'スパークリング･ジュビリー･セレブレーション', times: ['11:30','14:00','16:00'], priority: 'high', kind: 'harbor-day', tag: '25周年 ・ 季節限定' },
+    // medium : エントリー受付対象屋内
+    { name: 'ダンス･ザ･グローブ!', times: ['13:00','14:45','17:05','18:50'], priority: 'medium', kind: 'show-indoor', tag: 'エントリー ・ プレミアアクセス' },
+    { name: 'ドリームス･テイク･フライト', times: ['11:00','12:25','13:50','15:55','17:20'], priority: 'medium', kind: 'show-indoor', tag: 'エントリー ・ プレミアアクセス' },
+    // low : 通年メインナイト ・ 環境演出 ・ 花火
+    { name: 'ビリーヴ!〜シー･オブ･ドリームス〜', times: ['19:30'], priority: 'low', kind: 'harbor-night', tag: '通年 ・ プレミアアクセス' },
+    { name: '【環境演出】スパークリング･ジュビリー･ナイト', times: ['20:15','20:40','20:55'], priority: 'low', kind: 'environment', tag: '季節 ・ 短時間' },
+    { name: 'スカイ･フル･オブ･カラーズ', times: ['20:30'], priority: 'low', kind: 'fireworks', tag: '通年花火' },
+    // ショーレストラン
+    { name: 'ダッフィー＆フレンズのワンダフル･フレンドシップ', times: [], priority: null, kind: 'show-restaurant', tag: '予約必須' },
+  ],
+};
 ```
 
-未知のショー名は Phase 2 で Claude AI (`askClaude`) に「季節限定か通年か」を判定させる。
+#### スコア算定窓
+
+- `priority: 'high'` の時刻 ±1h を **メインスコアの算定窓** (§5.1 の `wind_show_window` ・ `pop_show_window` ・ `wbgt_show_window`)
+- `priority: 'medium'` は補助スコア
+- `priority: 'low'` はサブスコア (夜) の参考表示のみ
+- `priority: null` (ショーレストラン) はスケジュール窓判定対象外
+
+#### UI 表示
+
+詳細パネルや行ホバーで「当日のショースケジュール」を表示するときは、固定ラベルではなく **実在公演名で表示** :
+
+```
+TDL :
+  デイパレード ・ ショー
+    ・ ディズニー･ハーモニー･イン･カラー  13:00  [プレミアアクセス]
+    ・ イッツ･ア･スウィーツフルタイム!   16:25  [パルパルーザ枠 ・ 季節限定]
+    ・ Reach for the Stars             20:50  [季節限定 ・ プレミアアクセス]
+  ナイトパレード ・ 花火 (参考)
+    ・ エレクトリカルパレード ・ ドリームライツ  19:30
+    ・ スカイ ・ フル ・ オブ ・ カラーズ        20:30
+  屋内 (エントリー受付)
+    ・ ジャンボリミッキー! レッツ ・ ダンス!   12:45 / 14:00 / 15:15 / 17:05 / 18:20
+```
+
+TDS も同様に実在公演名で。
+
+#### 月初メンテナンス
+
+公式は「翌月分は前月 8日頃に掲載」。月初に Yuka さんが `showSchedule.js` を公式 calendar と照合し、新規ショー ・ 終了ショーを差分更新 (README に手順)。Phase 2 で公式取得が動けば自動同期される。
+
+#### 未知のショー名の priority 判定 (Phase 2)
+
+公式取得で未知のショー名が出てきた場合は、Claude AI (`askClaude`) に「季節限定か通年か」「デイハーバー / ナイトハーバー / 屋内 / 花火」を判定させ、priority を自動付与。判定結果は `showPriority.js` のキャッシュに保存。
 
 #### スコア算定窓
 
@@ -931,6 +1067,126 @@ ARIA (スクリーンリーダー対応) :
 - §3.17 と整合。`@media print` で TOP3 / 決定日サマリのみを 1ページに収める
 - 不要 UI (ナビ ・ ボタン ・ グラフのインタラクション) を非表示
 - バッジは黒枠 ＋ 記号 (色印刷を前提にしない)
+
+### 6.9.5 デザイントークン (公式 TDR トーン準拠 ・ Yuka さん指摘「寂しい」対応)
+
+Yuka さん要望 : <https://www.tokyodisneyresort.jp/> の雰囲気に寄せる。
+
+公式トップを確認した結果 (2026/05/30) :
+
+- 背景は白 ・ 写真主導 ・ メインビジュアルが大きい
+- ヘッダーアイコンは色分け (赤 / 緑 / 青 / ピンク / オレンジ)
+- ロゴはレトロ風セリフ ・ 手書き要素
+- 色味 : 青空 ・ ピンク ・ ゴールド ・ 鮮やか
+- 親しみやすい角丸 ・ 柔らかいシャドウ
+
+これを踏まえたデザイントークン (CSS 変数) :
+
+```css
+:root {
+  /* 色 : ディズニートーン */
+  --primary       : #4A90D2;  /* ディズニーブルー (パーク青空) */
+  --primary-dark  : #2C6EAE;
+  --primary-light : #B8E0FE;
+  --accent        : #E84A8C;  /* ピンク (ミニーリボン) */
+  --accent-2      : #F0B040;  /* ゴールド (キラキラ) */
+
+  /* 状態色 */
+  --excellent     : #2D8F3E;  /* 行くべき (緑) */
+  --good          : #88C057;  /* 行ってよい (薄緑) */
+  --fair          : #F2A93B;  /* 微妙 (黄) */
+  --poor          : #D24A4A;  /* 別日 (赤) */
+
+  /* 背景 ・ 面 */
+  --background    : #FBFCFE;  /* オフホワイト (青み) */
+  --surface       : #FFFFFF;
+  --surface-2     : #EEF4FB;  /* 淡い水色 */
+  --surface-hover : #DCE7F5;
+  --border        : #D5E2F0;
+  --border-strong : #4A90D2;  /* 強調区切り線 */
+
+  /* テキスト */
+  --text          : #1E2A3A;
+  --text-sub      : #5A6B82;
+  --text-mute     : #8693A8;
+
+  /* タイポ */
+  --font-heading  : "Noto Serif JP", "Hiragino Mincho ProN", "Yu Mincho", serif;
+  --font-body     : "Noto Sans JP", "Hiragino Sans", "Yu Gothic UI", sans-serif;
+  --font-numeric  : "Inter", "Segoe UI", system-ui, sans-serif;  /* 数値の見やすさ */
+
+  /* 形 */
+  --radius        : 12px;
+  --radius-sm     : 8px;
+  --radius-pill   : 999px;
+
+  /* 影 (柔らかく ・ 青み) */
+  --shadow-soft   : 0 4px 16px rgba(74, 144, 210, 0.10);
+  --shadow-card   : 0 2px 8px rgba(74, 144, 210, 0.06);
+  --shadow-hover  : 0 8px 24px rgba(74, 144, 210, 0.16);
+
+  /* グラデーション (ヒーロー ・ アクセント) */
+  --gradient-hero    : linear-gradient(135deg, #4A90D2 0%, #B8E0FE 100%);
+  --gradient-magic   : linear-gradient(135deg, #E84A8C 0%, #F0B040 50%, #4A90D2 100%);
+  --gradient-subtle  : linear-gradient(180deg, #FBFCFE 0%, #EEF4FB 100%);
+}
+
+[data-theme="dark"] {
+  --primary       : #5BA3E0;
+  --primary-light : #3A5A78;
+  --accent        : #FF6FA8;
+  --accent-2      : #FFC661;
+
+  --background    : #0F1828;   /* 深い夜のネイビー */
+  --surface       : #1A2638;
+  --surface-2     : #243349;
+  --surface-hover : #2E4060;
+  --border        : #324560;
+  --border-strong : #5BA3E0;
+
+  --text          : #E8EEF6;
+  --text-sub      : #A7B3C4;
+  --text-mute     : #6C7B91;
+
+  --shadow-soft   : 0 4px 16px rgba(0, 0, 0, 0.4);
+  --shadow-card   : 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-hover  : 0 8px 24px rgba(0, 0, 0, 0.5);
+
+  --gradient-hero    : linear-gradient(135deg, #2C6EAE 0%, #4A90D2 100%);
+  --gradient-magic   : linear-gradient(135deg, #FF6FA8 0%, #FFC661 50%, #5BA3E0 100%);
+  --gradient-subtle  : linear-gradient(180deg, #0F1828 0%, #1A2638 100%);
+}
+```
+
+#### 装飾要素
+
+- **ヘッダー** : `--gradient-hero` 帯 (上部 80px ・ 高さ可変) ＋ タイトルロゴをセリフ体で大きく
+- **TOP3 カード** : `--shadow-soft` ＋ `--radius` 16px ＋ アクセントカラーの斜めリボン (例「ベスト!」「2位」)
+- **カレンダー行** : 通常は白、ホバーで `--surface-hover`、行末に chevron アイコン (`--primary` 色)
+- **スコアラベル ・ バッジ** : それぞれの状態色に淡い背景 ＋ 太字テキスト
+- **詳細パネル** : 開いた瞬間に下から slide-down 200ms、左カラム上に `--gradient-magic` の細い水平リボン
+- **見出し** : `border-bottom: 2px solid var(--accent)` ＋ 左の丸ドット (`--primary`)
+- **アイコン** : Material Symbols ＋ 状態色 ・ アクセントカラー
+- **ボタン** : ピンクアクセント (`--accent`) 背景 ＋ 白文字 ＋ 角丸 ＋ ホバーでわずかに膨張
+
+#### タイポグラフィ
+
+- 見出し (h1, h2, h3) : `var(--font-heading)` (Noto Serif JP) ・ 太字 700
+- 本文 : `var(--font-body)` (Noto Sans JP) ・ 400-500
+- 数値 (スコア ・ 気温 ・ 風速等) : `var(--font-numeric)` (Inter) ・ `font-variant-numeric: tabular-nums`
+- 日付 : ボディとサイズ違いでメリハリ (大きい数字 ＋ 小さい曜日)
+
+#### 写真要素 (任意 ・ Phase 1.5)
+
+公式の「メインビジュアルが大きい写真」のトーンを真似て、TOP3 セクション上部にうっすらパーク風景 (フリーの夕焼け空 / 花火 / シルエット) のグラデーション。著作権配慮のため画像素材は使わず、CSS グラデーションだけで「夢っぽさ」を表現。
+
+#### 削除 ・ 簡素化
+
+- 灰色背景 ・ 没個性のボーダーを廃止
+- 単調なテーブルラインは細く目立たなく
+- 余白を多めにとって伸び伸びと
+
+詳細は CHANGES.md §0.6.10 を参照。
 
 ### 6.10 ブラウザ互換テスト (チェックリスト)
 

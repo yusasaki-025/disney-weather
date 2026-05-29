@@ -32,8 +32,8 @@
           <button id="btn-notion" class="btn" type="button">
             <span class="material-symbols-rounded" aria-hidden="true">ios_share</span>Notion 送信
           </button>
-          <button id="btn-qr" class="btn" type="button">
-            <span class="material-symbols-rounded" aria-hidden="true">qr_code_2</span>QR
+          <button id="btn-copy" class="btn" type="button">
+            <span class="material-symbols-rounded" aria-hidden="true">content_copy</span>URL をコピー
           </button>
           <button id="btn-help" class="btn" type="button">
             <span class="material-symbols-rounded" aria-hidden="true">help</span>ヘルプ
@@ -107,6 +107,7 @@
 
     <footer role="contentinfo" class="disclaimer">
       本ツールは公開予報からの推定であり、運営の公式発表ではありません。当日の正確な運営状況は東京ディズニーリゾート公式サイト ･ アプリで必ずご確認ください。
+      <br />個人連携機能 (Notion 送信 ・ カレンダー登録) は Cowork 版でのみ動作します。
     </footer>
 
     <div id="error-screen" class="error-screen" hidden>
@@ -124,17 +125,6 @@
           <span class="material-symbols-rounded" aria-hidden="true">close</span>
         </button>
         <div id="help-body" class="help-body"></div>
-      </div>
-    </div>
-
-    <div id="qr-modal" class="modal" hidden>
-      <div class="modal-card" role="dialog" aria-modal="true" aria-label="共有用 QR コード">
-        <button id="qr-close" class="modal-close" type="button" aria-label="閉じる">
-          <span class="material-symbols-rounded" aria-hidden="true">close</span>
-        </button>
-        <h2>このページを共有</h2>
-        <div id="qr-canvas"></div>
-        <p class="modal-note">同行者にこの QR を見せると同じ画面を開けます。</p>
       </div>
     </div>
 

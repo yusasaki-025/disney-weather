@@ -363,6 +363,197 @@ JMA 24分前 ・ Open-Meteo 18分前   [キャッシュ表示中]  [強制更新
 
 詳細仕様 : §5.7 セルの共通レイアウト。
 
+#### 0.6.7 行クリックの可視化
+
+問題 : Yuka さん指摘「行をクリックできることが分かりづらい」。
+
+対応 :
+
+- 行ホバーで `cursor: pointer` ＋ 背景色変化 (`var(--surface-hover)`)
+- 行末に `chevron_right` アイコン (開いた行は `expand_more`)
+- PC では「詳細を見る」テキストを併記
+- `role="button"` `tabindex="0"` `aria-expanded` 対応
+- Enter / Space キーで開閉
+- ホバー時に微妙な elevation (shadow-hover)
+
+該当 : `src/ui/table.js` 行レンダラ、`src/styles.css` `.calendar-row:hover` 等
+
+#### 0.6.8 詳細パネルを2カラム (左 = 情報 / 右 = グラフ) に再設計
+
+問題 : Yuka さん指摘「クリックしたときの中身がパッと見分かりづらい / グラフは右側のほうが良い / 見出し区切りが分かりづらい」。
+
+対応 :
+
+- PC (≧ 768px) : 2カラム grid (左 = ショースケジュール ・ 服装 ・ グリ ・ 休止 / 右 = グラフ ・ 気温チャート)
+- スマホ (< 768px) : 1カラム縦並び (ショースケジュール → グラフ → 気温 → 服装)
+- 見出し (`<h3 class="panel-heading">`) :
+  - 左に丸ドット (`var(--primary)` のピル)
+  - 下に太い罫線 (`border-bottom: 2px solid var(--accent)`)
+  - 上に 24px 余白
+- セクション間に淡い水平線 (`border-top: 1px solid var(--border)`)
+- 開閉アニメ : 200ms slide-down ＋ fade-in
+- 行クリックで panel が行直下に挿入
+
+該当 :
+
+- `src/ui/detailPanel.js` 新規 (または `src/ui/chart.js` を分離)
+- `src/styles.css` の `.detail-panel` `.panel-grid` `.panel-heading` `.panel-bullet`
+- Chart.js の高さ : PC 300px / スマホ 240px、横軸時刻、左Y降水確率、右Y風速、縦線でショー時刻ハイライト
+
+詳細仕様 : §3.4 詳細パネル。
+
+#### 0.6.9 ショースケジュールを実在公演名 ・ パーク別に
+
+問題 : Yuka さん指摘「これは実際の時間引けてないってこと? ショースケジュールは具体名で書いて (例 : ハーモニーインカラー)。ランドとシーでも違うはず」。
+
+回答 :
+
+- **Phase 1 の現状 : 公式 calendar からの自動取得は未実装。`src/data/showSchedule.js` の固定 JSON で代替**
+- ただし Phase 1 でも **実在公演名 ・ 時刻 ・ パーク別** で表示できるよう固定 JSON を作り込む
+- Phase 2 で公式 `/tdl/daily/calendar/{YYYYMMDD}/` ・ `/tds/daily/calendar/{YYYYMMDD}/` から日別取得 (§3.10 / §3.20)
+
+固定 JSON (2026/6/4 時点の公式 calendar を確認した実データ) :
+
+```js
+// src/data/showSchedule.js
+export const SHOW_SCHEDULE = {
+  TDL: [
+    { name: 'ディズニー･ハーモニー･イン･カラー', times: ['13:00'], priority: 'high', kind: 'parade-day', tag: 'プレミアアクセス' },
+    { name: 'イッツ･ア･スウィーツフルタイム!', times: ['16:25'], priority: 'high', kind: 'show-day', tag: 'パルパルーザ枠 ・ 季節限定' },
+    { name: 'Reach for the Stars', times: ['20:50'], priority: 'high', kind: 'show-day', tag: '季節限定 ・ プレミアアクセス' },
+    { name: 'ジャンボリミッキー!レッツ･ダンス!', times: ['12:45','14:00','15:15','17:05','18:20'], priority: 'medium', kind: 'show-indoor', tag: 'エントリー受付' },
+    { name: '東京ディズニーランド･エレクトリカルパレード･ドリームライツ', times: ['19:30'], priority: 'low', kind: 'parade-night', tag: '通年' },
+    { name: 'スカイ･フル･オブ･カラーズ', times: ['20:30'], priority: 'low', kind: 'fireworks', tag: '通年花火' },
+    { name: 'ミッキーのレインボー･ルアウ', times: [], priority: null, kind: 'show-restaurant', tag: '予約必須' },
+  ],
+  TDS: [
+    { name: 'スパークリング･ジュビリー･セレブレーション', times: ['11:30','14:00','16:00'], priority: 'high', kind: 'harbor-day', tag: '25周年 ・ 季節限定' },
+    { name: 'ダンス･ザ･グローブ!', times: ['13:00','14:45','17:05','18:50'], priority: 'medium', kind: 'show-indoor', tag: 'エントリー ・ プレミアアクセス' },
+    { name: 'ドリームス･テイク･フライト', times: ['11:00','12:25','13:50','15:55','17:20'], priority: 'medium', kind: 'show-indoor', tag: 'エントリー ・ プレミアアクセス' },
+    { name: 'ビリーヴ!〜シー･オブ･ドリームス〜', times: ['19:30'], priority: 'low', kind: 'harbor-night', tag: '通年 ・ プレミアアクセス' },
+    { name: '【環境演出】スパークリング･ジュビリー･ナイト', times: ['20:15','20:40','20:55'], priority: 'low', kind: 'environment', tag: '季節 ・ 短時間' },
+    { name: 'スカイ･フル･オブ･カラーズ', times: ['20:30'], priority: 'low', kind: 'fireworks', tag: '通年花火' },
+    { name: 'ダッフィー＆フレンズのワンダフル･フレンドシップ', times: [], priority: null, kind: 'show-restaurant', tag: '予約必須' },
+  ],
+};
+```
+
+UI での表示 (詳細パネル内) は **実在公演名 ・ 時刻 ・ タグ** を1行ずつ列挙。priority 別にグルーピング :
+
+```
+TDL の場合 :
+  デイパレード ・ ショー (主算定)
+    ・ ディズニー･ハーモニー･イン･カラー  13:00  [プレミアアクセス]
+    ・ イッツ･ア･スウィーツフルタイム!   16:25  [パルパルーザ枠]
+    ・ Reach for the Stars             20:50  [季節限定]
+  ナイトパレード ・ 花火 (参考)
+    ・ エレクトリカルパレード ・ ドリームライツ  19:30
+    ・ スカイ ・ フル ・ オブ ・ カラーズ        20:30
+  屋内 (エントリー受付)
+    ・ ジャンボリミッキー!         12:45 / 14:00 / 15:15 / 17:05 / 18:20
+```
+
+該当ファイル :
+
+- `src/data/showSchedule.js` 全面書き換え (構造 ・ パーク別 ・ 実在公演名)
+- `src/data/showPriority.js` は不要に (showSchedule.js 内に priority を含めるため)
+- `src/ui/detailPanel.js` でショースケジュール表示 (グルーピング ・ 実在名)
+
+詳細仕様 : §3.10 ショースケジュール。
+
+#### 0.6.10 公式 TDR トーンへのデザイン刷新
+
+問題 : Yuka さん指摘「デザインや色合いが寂しい。<https://www.tokyodisneyresort.jp/> の雰囲気に合わせて」。
+
+公式トップを確認した結果 (2026/05/30) :
+
+- 白背景 ・ 写真主導 ・ メインビジュアルが大きい
+- ヘッダーアイコンは色分け (赤 ・ 緑 ・ 青 ・ ピンク ・ オレンジ)
+- ロゴはレトロ風セリフ ・ 手書き要素
+- 鮮やかな色 (青空 ・ ピンク ・ ゴールド)
+- 親しみやすい角丸 ・ 柔らかいシャドウ
+
+対応 (デザイントークン全面刷新) :
+
+```css
+:root {
+  --primary       : #4A90D2;  /* ディズニーブルー */
+  --accent        : #E84A8C;  /* ミニーピンク */
+  --accent-2      : #F0B040;  /* ゴールド */
+  --background    : #FBFCFE;
+  --surface       : #FFFFFF;
+  --surface-2     : #EEF4FB;
+  --surface-hover : #DCE7F5;
+  --border        : #D5E2F0;
+  --border-strong : #4A90D2;
+  --text          : #1E2A3A;
+  --text-sub      : #5A6B82;
+
+  --excellent : #2D8F3E;  /* 行くべき */
+  --good      : #88C057;
+  --fair      : #F2A93B;
+  --poor      : #D24A4A;
+
+  --font-heading  : "Noto Serif JP", "Hiragino Mincho ProN", "Yu Mincho", serif;
+  --font-body     : "Noto Sans JP", "Hiragino Sans", "Yu Gothic UI", sans-serif;
+  --font-numeric  : "Inter", "Segoe UI", system-ui, sans-serif;
+
+  --radius        : 12px;
+  --radius-sm     : 8px;
+  --radius-pill   : 999px;
+
+  --shadow-soft   : 0 4px 16px rgba(74, 144, 210, 0.10);
+  --shadow-card   : 0 2px 8px rgba(74, 144, 210, 0.06);
+  --shadow-hover  : 0 8px 24px rgba(74, 144, 210, 0.16);
+
+  --gradient-hero    : linear-gradient(135deg, #4A90D2 0%, #B8E0FE 100%);
+  --gradient-magic   : linear-gradient(135deg, #E84A8C 0%, #F0B040 50%, #4A90D2 100%);
+  --gradient-subtle  : linear-gradient(180deg, #FBFCFE 0%, #EEF4FB 100%);
+}
+
+[data-theme="dark"] {
+  --primary       : #5BA3E0;
+  --accent        : #FF6FA8;
+  --accent-2      : #FFC661;
+  --background    : #0F1828;
+  --surface       : #1A2638;
+  --surface-2     : #243349;
+  --surface-hover : #2E4060;
+  --border        : #324560;
+  --text          : #E8EEF6;
+  --text-sub      : #A7B3C4;
+}
+```
+
+具体的な装飾 :
+
+- ヘッダー : 上部に `var(--gradient-hero)` 帯 + タイトルをセリフ体で大きく
+- TOP3 カード : `--shadow-soft` ＋ `--radius` 16px ＋ 斜めリボン (1位はゴールド)
+- カレンダー行 : 白背景、ホバーで `--surface-hover` ＋ 行末に chevron アイコン
+- スコアラベル ・ バッジ : 各状態色に薄背景 ＋ 太字
+- 詳細パネル : 開いた瞬間に下から slide-down 200ms ・ 左カラム上に `--gradient-magic` の細リボン
+- 見出し : `border-bottom: 2px solid var(--accent)` ＋ 左の丸ドット (`--primary`)
+- ボタン : ピンクアクセント背景 ＋ 白文字 ＋ 角丸
+
+タイポグラフィ :
+
+- 見出し : `var(--font-heading)` (Noto Serif JP) ・ 太字 700
+- 本文 : `var(--font-body)` (Noto Sans JP) ・ 400-500
+- 数値 : `var(--font-numeric)` (Inter) ・ `font-variant-numeric: tabular-nums`
+
+フォントは Google Fonts CDN から `<link>` で読み込み (`Noto Serif JP` / `Noto Sans JP` / `Inter`)。Material Symbols 同様、Cowork artifact では未許可 CDN の可能性があるためフォールバック必須 (`font-display: swap` ＋ システムフォントへの安全な fallback)。
+
+該当ファイル :
+
+- `src/styles.css` の :root / [data-theme="dark"] 全面刷新
+- `src/index.html` の `<link>` で Google Fonts 読み込み
+- `src/ui/header.js` でヘッダーグラデーション帯
+- `src/ui/top3.js` でリボン装飾
+- `src/ui/table.js` の行ホバー ・ chevron 追加
+- `src/ui/detailPanel.js` で見出し装飾 ・ slide-down アニメ
+
+詳細仕様 : §6.9.5 デザイントークン。
+
 ### 0.7 公開ページ化 (Cloudflare Pages) ＋ ランタイム判定
 
 Yuka さん要望 : 「Mac 開いてなくても他の人も見れる公開ページ」
