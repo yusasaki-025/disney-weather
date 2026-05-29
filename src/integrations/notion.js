@@ -9,8 +9,11 @@ import { logger } from '../utils/logger.js';
 // ディズニー行く日候補 DB を作成したら、その data source ID (collection://<id> の <id>) を入れる。
 // database_id しか分からない場合は dataSourceId を空にして databaseId に設定する。
 export const NOTION_CONFIG = {
-  dataSourceId: '', // 例: 'f336d0bc-b841-465b-8045-024475c079dd'
-  databaseId: '', // dataSourceId が無いときのフォールバック
+  // 「ディズニー行く日候補」DB (個人ワークスペース、2026-05-30 作成)
+  // https://www.notion.so/d17f66b8c11b42d5b7e624226e79c6fe
+  // ※ Notion 上で DB を移動しても ID は変わらないので、好きな場所へドラッグしてよい。
+  dataSourceId: '74c55ded-1c60-454c-833d-e57ee752fb68',
+  databaseId: 'd17f66b8c11b42d5b7e624226e79c6fe', // dataSourceId が無いときのフォールバック
   // Cowork が公開する Notion コネクタのツール ID (環境ごとに異なる)
   createTool: 'mcp__0659b728-c5ec-4b9c-b289-01bef999914e__notion-create-pages',
   // DB のタイトル列名 (作成時に決めた名前に合わせる)
