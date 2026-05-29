@@ -16,6 +16,7 @@ import { SHOW_SCHEDULE } from '../data/showSchedule.js';
 import { freshnessLabel } from '../utils/freshness.js';
 import { nowcastHtml } from './nowcast.js';
 import { getTempColor, getTempBandKey } from '../utils/tempColor.js';
+import { getWeatherIcon } from '../utils/weatherIcon.js';
 
 // 気温セルを暖寒色で着色 (§0.6-2)。data-tb はダークモード CSS 上書き用。
 function tempSpan(c) {
@@ -24,6 +25,17 @@ function tempSpan(c) {
 }
 
 const SOURCE_LABEL = { jma: '気象庁', 'open-meteo': 'Open-Meteo', openweather: 'OpenWeather' };
+const CAT_ICON = { wind: 'air', rain: 'umbrella', wbgt: 'thermostat' };
+
+// 風 / 雨 / 熱セル : カテゴリアイコン(頭) ＋ 実数値(主) ＋ バッジ(副) (§0.5.2 / §0.6.6-3)
+function metricCell(kind, valueHtml, badge, extra = '') {
+  return `<td>
+    <div class="metric-cell">
+      <span class="cat-val"><span class="material-symbols-rounded cat-icon" aria-hidden="true">${CAT_ICON[kind]}</span>${valueHtml}</span>
+      ${cancelBadgeHtml(badge)}${extra}
+    </div>
+  </td>`;
+}
 
 function dayBadges(dt) {
   const out = [];
@@ -51,14 +63,15 @@ function sourceCellHtml(source, forecast, status) {
     forecast.tempMax != null || forecast.tempMin != null
       ? `${tempSpan(forecast.tempMax)} / ${tempSpan(forecast.tempMin)}`
       : '—';
-  const subParts = [`降水 ${fmtNum(forecast.popMax, 0, '%')}`];
-  if (forecast.gustMax != null) subParts.push(`風 ${fmtNum(forecast.gustMax, 0)}`);
   // 鮮度はステータスバーに集約 (§0.6-4)。セルはホバー title で補助表示のみ。
   const title = `${SOURCE_LABEL[source] || source} ${freshnessLabel(forecast.fetchedAt)}`;
+  // 大きな天気アイコン (40px) を主役に (§0.6.6-2)
+  const wi = getWeatherIcon(forecast.weatherText);
   return `<td class="source-cell" title="${esc(title)}">
-    <div class="sc-main">${temp}</div>
+    <span class="material-symbols-rounded weather-icon" style="color:${wi.color}" aria-hidden="true">${wi.name}</span>
     <div class="sc-sub">${esc(forecast.weatherText || '')}</div>
-    <div class="sc-sub">${subParts.join(' ')}</div>
+    <div class="sc-main">${temp}</div>
+    <div class="sc-sub">雨 ${fmtNum(forecast.popMax, 0, '%')}</div>
   </td>`;
 }
 
@@ -115,13 +128,15 @@ export function renderTable(els, rows, state, sources, sourceStatus, handlers) {
   const { thead, tbody } = els;
 
   // ヘッダー
+  const catHead = (kind, label) =>
+    `<th><span class="material-symbols-rounded cat-head" aria-hidden="true">${CAT_ICON[kind]}</span><span class="cat-head-label">${label}</span></th>`;
   thead.innerHTML = `<tr>
     <th class="col-date">日付</th>
     <th>スコア</th>
     <th>朝 / 昼 / 夜</th>
-    <th>風</th>
-    <th>雨</th>
-    <th>熱 (WBGT)</th>
+    ${catHead('wind', '風')}
+    ${catHead('rain', '雨')}
+    ${catHead('wbgt', '熱 (WBGT)')}
     ${sources.map((s) => `<th>${esc(SOURCE_LABEL[s] || s)}</th>`).join('')}
   </tr>`;
 
@@ -131,12 +146,20 @@ export function renderTable(els, rows, state, sources, sourceStatus, handlers) {
       const dt = row.dayType;
       const prevOff = i > 0 ? rows[i - 1].dayType.isOff : false;
       const groupStart = dt.isOff && !prevOff && state.sortBy === 'date';
+      // 風 / 雨 / 熱の実数値 (ショー窓優先) (§0.5.2)
+      const m = row.eval.metrics;
+      const gust = m.gustShowWindow != null ? m.gustShowWindow : m.gustMax;
+      const pop = m.popShowWindow != null ? m.popShowWindow : m.popMax;
+      const windVal = gust != null ? `${fmtNum(gust, 0)}<span class="unit">m/s</span>` : '—';
+      const rainVal =
+        pop != null
+          ? `${fmtNum(pop, 0)}%${m.precipSum != null && m.precipSum >= 0.5 ? ` ${fmtNum(m.precipSum, 1)}mm` : ''}`
+          : '—';
       const wbgtLabel = wbgtSourceLabel(Object.values(row.forecasts));
-      const wbgtVal = row.eval.metrics.wbgtMax;
-      const wbgtTag =
-        wbgtVal != null
-          ? `<div class="wbgt-tag ${wbgtLabel === '推定' ? 'derived' : ''}">WBGT ${fmtNum(wbgtVal, 0)} (${wbgtLabel})</div>`
-          : '';
+      const wbgtVal =
+        m.wbgtMax != null
+          ? `WBGT ${fmtNum(m.wbgtMax, 0)}${wbgtLabel === '推定' ? ' (推定)' : ''}`
+          : '—';
 
       const cls = [
         'row-main',
@@ -157,9 +180,9 @@ export function renderTable(els, rows, state, sources, sourceStatus, handlers) {
         </td>
         <td>${scorePillHtml(row.eval)}</td>
         <td>${subscoreHtml(row.eval.subscores, BANDS)}</td>
-        <td>${cancelBadgeHtml('wind', row.eval.badges.wind)}</td>
-        <td>${cancelBadgeHtml('rain', row.eval.badges.rain)}</td>
-        <td>${cancelBadgeHtml('wbgt', row.eval.badges.wbgt)}${wbgtTag}</td>
+        ${metricCell('wind', windVal, row.eval.badges.wind)}
+        ${metricCell('rain', rainVal, row.eval.badges.rain)}
+        ${metricCell('wbgt', wbgtVal, row.eval.badges.wbgt)}
         ${sources.map((s) => sourceCellHtml(s, row.forecasts[s], sourceStatus[s])).join('')}
       </tr>`;
 
@@ -228,19 +251,13 @@ export function renderTable(els, rows, state, sources, sourceStatus, handlers) {
   });
 }
 
-// 凡例 (§6.3 : 記号 ＋ アイコン ＋ 色)
+// 下部凡例 : スコアは上部カード (legend.js) に移したので、ここは気温色 ＋ 注記のみ。
 export function renderLegend(el) {
-  const item = (icon, color, text) =>
-    `<span class="lg"><span class="material-symbols-rounded" style="color:${color}" aria-hidden="true">${icon}</span>${text}</span>`;
   const tempLegend = `<span class="lg">気温色 :
     <span class="tlg" style="background:#D24A4A"></span>暑い
     <span class="tlg" style="background:#2D8F3E"></span>快適
     <span class="tlg" style="background:#3F6FAE"></span>寒い</span>`;
   el.innerHTML = [
-    item('check_circle', '#2D8F3E', '◎ 行くべき (85+)'),
-    item('check', '#88C057', '○ 行ってよい (70+)'),
-    item('warning', '#F2A93B', '△ 微妙 (50+)'),
-    item('block', '#D24A4A', '× 別日推奨 (50 未満)'),
     '<span class="lg">昼パレード時刻 ±1h を最重視</span>',
     tempLegend,
   ].join('');

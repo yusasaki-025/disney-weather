@@ -49,7 +49,9 @@ function rowToProperties(row, park) {
   const gust = m.gustShowWindow != null ? m.gustShowWindow : m.gustMax;
   const pop = m.popShowWindow != null ? m.popShowWindow : m.popMax;
   const sub = row.eval.subscores;
-  const subText = `朝${sub.morning?.symbol?.symbol ?? '-'} 昼${sub.noon?.symbol?.symbol ?? '-'} 夜${sub.night?.symbol?.symbol ?? '-'}`;
+  // §0.6.5 : 記号は廃止しテキストラベルで (例「朝 行くべき / 昼 微妙 / 夜 別日」)
+  const lbl = (ss) => (ss?.hasData ? ss.symbol.label : '-');
+  const subText = `朝 ${lbl(sub.morning)} / 昼 ${lbl(sub.noon)} / 夜 ${lbl(sub.night)}`;
   return {
     [NOTION_CONFIG.titleProp]: `${dateLabel(row.date)} ${park}`,
     日付: row.date,

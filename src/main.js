@@ -7,6 +7,7 @@ import { setupHelp } from './ui/help.js';
 import { setupPrint } from './ui/print.js';
 import { setupMenu } from './ui/menu.js';
 import { renderStatusBar } from './ui/statusBar.js';
+import { renderScoreLegend } from './ui/legend.js';
 import { logger } from './utils/logger.js';
 import { fetchJma, SOURCE_ID as JMA } from './data/jma.js';
 import { fetchOpenMeteo, SOURCE_ID as OM } from './data/openMeteo.js';
@@ -320,6 +321,7 @@ async function init() {
   setupHelp();
   setupPrint({ getDecidedDate: () => state.decidedDate, openDetail: openByDate });
   setupMenu(buildMenuItems());
+  renderScoreLegend(document.getElementById('score-legend'));
   wireControls(state, render);
   renderSkeleton();
   await loadAll(false);
