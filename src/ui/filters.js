@@ -7,7 +7,7 @@ const STORAGE_KEY = 'disney_weather_ui_v1';
 
 const DEFAULTS = {
   park: 'TDL',
-  sortBy: 'score', // 'score' | 'date'
+  sortBy: 'date', // 'date' (デフォルト) | 'score' (§3.5)
   dayFilter: 'all', // 'all' | 'weekday' | 'holiday'
   onlyGood: false,
   decidedDate: null,

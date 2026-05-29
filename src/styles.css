@@ -419,8 +419,13 @@ section {
   font-size: 14px;
 }
 
-.score-pill .marker {
-  font-size: 12px;
+.score-pill .material-symbols-rounded {
+  font-size: 16px;
+}
+
+.legend .material-symbols-rounded {
+  font-size: 16px;
+  vertical-align: text-bottom;
 }
 
 .subscore {
@@ -510,6 +515,22 @@ section {
   color: var(--accent);
   text-decoration: underline;
   cursor: pointer;
+}
+
+.sc-fresh {
+  font-size: 10px;
+  color: #9aa4b0;
+  margin-top: 2px;
+}
+
+.fresh-tag.cache {
+  display: inline-block;
+  margin-left: 4px;
+  padding: 0 5px;
+  border-radius: 4px;
+  background: var(--warn-bg);
+  color: #9a6a00;
+  font-weight: 700;
 }
 
 .wbgt-tag {
@@ -697,6 +718,17 @@ section {
   display: inline-flex;
   align-items: center;
   gap: 4px;
+}
+
+/* --- disclaimer フッター (§3.15) --- */
+.disclaimer {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 16px 20px 32px;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--text-sub);
+  border-top: 1px solid var(--border);
 }
 
 /* --- スマホ (375px) --- */

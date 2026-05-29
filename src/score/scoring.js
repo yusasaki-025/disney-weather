@@ -5,12 +5,13 @@
 import { mean, maxOf } from '../utils/units.js';
 import { showWindowHours } from '../data/showSchedule.js';
 
-// --- スコア → 記号 / 色 / ラベル (§5.3, §6.3) ---
+// --- スコア → 記号 / 色 / ラベル / アイコン (§5.3, §6.3) ---
+// 記号 ＋ 数値 ＋ 色 ＋ Material アイコンの 4 重表現。旧 ● ▲ ■ 図形記号は §6.3 で廃止。
 export const SYMBOLS = [
-  { min: 85, symbol: '◎', marker: '●', color: '#2D8F3E', label: '行くべき' },
-  { min: 70, symbol: '○', marker: '●', color: '#88C057', label: '行ってよい' },
-  { min: 50, symbol: '△', marker: '▲', color: '#F2A93B', label: '微妙' },
-  { min: -Infinity, symbol: '×', marker: '■', color: '#D24A4A', label: '別日推奨' },
+  { min: 85, symbol: '◎', icon: 'check_circle', color: '#2D8F3E', label: '行くべき' },
+  { min: 70, symbol: '○', icon: 'check', color: '#88C057', label: '行ってよい' },
+  { min: 50, symbol: '△', icon: 'warning', color: '#F2A93B', label: '微妙' },
+  { min: -Infinity, symbol: '×', icon: 'block', color: '#D24A4A', label: '別日推奨' },
 ];
 
 export function scoreToSymbol(score) {

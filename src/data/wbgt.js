@@ -12,7 +12,7 @@ export const WBGT_SOURCE = {
   DERIVED: 'derived',
 };
 
-// 舞浜は東京寄りのため東京 (44132) を最寄りに採用。千葉 = 45106 を代替候補とする。
+// 浦安直近の予測値として 44132 (船橋) を採用 (§3.13)。
 export const ENV_WBGT_POINT = '44132';
 const ENV_WBGT_URL = (point) =>
   `https://www.wbgt.env.go.jp/prev15WG/dl/yohou_${point}.csv`;

@@ -13,6 +13,7 @@ import { BANDS } from '../score/scoring.js';
 import { renderPopWindChart, renderTempChart } from './chart.js';
 import { suggestOutfit } from './outfit.js';
 import { SHOW_SCHEDULE } from '../data/showSchedule.js';
+import { freshnessLabel, UPDATE_CYCLE } from '../utils/freshness.js';
 
 const SOURCE_LABEL = { jma: '気象庁', 'open-meteo': 'Open-Meteo', openweather: 'OpenWeather' };
 
@@ -31,7 +32,7 @@ function wbgtSourceLabel(forecasts) {
   return null;
 }
 
-function sourceCellHtml(forecast, status) {
+function sourceCellHtml(source, forecast, status) {
   if (status && !status.ok) {
     return `<td class="source-cell"><span class="cell-fail">取得失敗 <button type="button" data-retry>再試行</button></span></td>`;
   }
@@ -44,10 +45,19 @@ function sourceCellHtml(forecast, status) {
       : '—';
   const subParts = [`降水 ${fmtNum(forecast.popMax, 0, '%')}`];
   if (forecast.gustMax != null) subParts.push(`風 ${fmtNum(forecast.gustMax, 0)}`);
+  // 鮮度ラベル (§3.14) : キャッシュ / オフラインは黄ラベル
+  const fresh = freshnessLabel(forecast.fetchedAt);
+  const cacheTag = status?.stale
+    ? '<span class="fresh-tag cache">キャッシュ</span>'
+    : status?.cached
+      ? '<span class="fresh-tag cache">キャッシュ</span>'
+      : '';
+  const freshLine = `<div class="sc-fresh" title="${esc(UPDATE_CYCLE[source] || '')}">最終更新 ${fresh}${cacheTag}</div>`;
   return `<td class="source-cell">
     <div class="sc-main">${temp}</div>
     <div class="sc-sub">${esc(forecast.weatherText || '')}</div>
     <div class="sc-sub">${subParts.join(' ')}</div>
+    ${freshLine}
   </td>`;
 }
 
@@ -148,7 +158,7 @@ export function renderTable(els, rows, state, sources, sourceStatus, handlers) {
         <td>${cancelBadgeHtml('wind', row.eval.badges.wind)}</td>
         <td>${cancelBadgeHtml('rain', row.eval.badges.rain)}</td>
         <td>${cancelBadgeHtml('wbgt', row.eval.badges.wbgt)}${wbgtTag}</td>
-        ${sources.map((s) => sourceCellHtml(row.forecasts[s], sourceStatus[s])).join('')}
+        ${sources.map((s) => sourceCellHtml(s, row.forecasts[s], sourceStatus[s])).join('')}
       </tr>`;
 
       const colspan = 6 + sources.length;
@@ -216,12 +226,15 @@ export function renderTable(els, rows, state, sources, sourceStatus, handlers) {
   });
 }
 
-// 凡例
+// 凡例 (§6.3 : 記号 ＋ アイコン ＋ 色)
 export function renderLegend(el) {
-  el.innerHTML = `
-    <span class="lg"><span style="color:#2D8F3E">●</span> ◎ 行くべき (85+)</span>
-    <span class="lg"><span style="color:#88C057">●</span> ○ 行ってよい (70+)</span>
-    <span class="lg"><span style="color:#F2A93B">▲</span> △ 微妙 (50+)</span>
-    <span class="lg"><span style="color:#D24A4A">■</span> × 別日推奨 (50未満)</span>
-    <span class="lg">昼パレード時刻 ±1h を最重視</span>`;
+  const item = (icon, color, text) =>
+    `<span class="lg"><span class="material-symbols-rounded" style="color:${color}" aria-hidden="true">${icon}</span>${text}</span>`;
+  el.innerHTML = [
+    item('check_circle', '#2D8F3E', '◎ 行くべき (85+)'),
+    item('check', '#88C057', '○ 行ってよい (70+)'),
+    item('warning', '#F2A93B', '△ 微妙 (50+)'),
+    item('block', '#D24A4A', '× 別日推奨 (50 未満)'),
+    '<span class="lg">昼パレード時刻 ±1h を最重視</span>',
+  ].join('');
 }

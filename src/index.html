@@ -41,11 +41,6 @@
     <p id="data-status" class="data-status" role="status" aria-live="polite"></p>
 
     <main class="app-main">
-      <section id="top3-section" aria-labelledby="top3-heading">
-        <h2 id="top3-heading">今からの14日でベスト3</h2>
-        <div id="top3" class="top3-grid"></div>
-      </section>
-
       <section id="controls" aria-label="表示の絞り込みと並び替え">
         <div class="control-group" role="group" aria-label="パーク">
           <span class="control-label">パーク</span>
@@ -57,8 +52,8 @@
         <div class="control-group" role="group" aria-label="並び順">
           <span class="control-label">並び順</span>
           <div class="seg" id="sort-seg">
-            <button class="seg-btn" data-sort="score" type="button">スコア順</button>
             <button class="seg-btn" data-sort="date" type="button">日付順</button>
+            <button class="seg-btn" data-sort="score" type="button">スコア順</button>
           </div>
         </div>
         <div class="control-group" role="group" aria-label="曜日フィルター">
@@ -84,7 +79,16 @@
         </div>
         <p class="legend" id="legend"></p>
       </section>
+
+      <section id="top3-section" aria-labelledby="top3-heading">
+        <h2 id="top3-heading">14日のうちベスト3</h2>
+        <div id="top3" class="top3-grid"></div>
+      </section>
     </main>
+
+    <footer role="contentinfo" class="disclaimer">
+      本ツールは公開予報からの推定であり、運営の公式発表ではありません。当日の正確な運営状況は東京ディズニーリゾート公式サイト ･ アプリで必ずご確認ください。
+    </footer>
 
     <div id="error-screen" class="error-screen" hidden>
       <span class="material-symbols-rounded" aria-hidden="true">cloud_off</span>

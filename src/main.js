@@ -14,9 +14,10 @@ import { renderTable, renderLegend } from './ui/table.js';
 import { loadState, applyFilterSort, wireControls, toggleNg, setDecided } from './ui/filters.js';
 import { sendCandidatesToNotion, markDecidedInNotion, isNotionConfigured } from './integrations/notion.js';
 import { addToCalendar, confirmText } from './integrations/gcal.js';
+import { LOCATION } from './config/location.js';
 
 const CONFIG = {
-  coords: { lat: 35.6329, lon: 139.8804 }, // 舞浜駅近辺 (TDL/TDS 共通)
+  coords: LOCATION.coords, // 舞浜駅近辺 (TDL/TDS 共通、§3.13)
   openWeatherProxyUrl: '', // 設定すると OpenWeather 列が有効化 (Phase 2)
   days: 15,
 };

@@ -22,11 +22,11 @@ export function dateLabel(date) {
   return `${formatMd(date)} (${weekday(date)})`;
 }
 
-// スコアピル HTML
+// スコアピル HTML (アイコン → 記号 → 数値 の順、§6.3)
 export function scorePillHtml(ev) {
   const s = ev.symbol;
   return `<span class="score-pill" style="background:${s.color}">
-    <span class="marker" aria-hidden="true">${s.marker}</span>
+    <span class="material-symbols-rounded" aria-hidden="true">${s.icon}</span>
     <span aria-hidden="true">${s.symbol}</span>
     <span>${ev.score}</span>
   </span>`;
