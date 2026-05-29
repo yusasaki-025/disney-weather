@@ -13,7 +13,7 @@ import { BANDS } from '../score/scoring.js';
 import { renderPopWindChart, renderTempChart } from './chart.js';
 import { suggestOutfit } from './outfit.js';
 import { SHOW_SCHEDULE } from '../data/showSchedule.js';
-import { freshnessLabel, UPDATE_CYCLE } from '../utils/freshness.js';
+import { freshnessLabel } from '../utils/freshness.js';
 import { nowcastHtml } from './nowcast.js';
 import { getTempColor, getTempBandKey } from '../utils/tempColor.js';
 
@@ -53,19 +53,12 @@ function sourceCellHtml(source, forecast, status) {
       : '—';
   const subParts = [`降水 ${fmtNum(forecast.popMax, 0, '%')}`];
   if (forecast.gustMax != null) subParts.push(`風 ${fmtNum(forecast.gustMax, 0)}`);
-  // 鮮度ラベル (§3.14) : キャッシュ / オフラインは黄ラベル
-  const fresh = freshnessLabel(forecast.fetchedAt);
-  const cacheTag = status?.stale
-    ? '<span class="fresh-tag cache">キャッシュ</span>'
-    : status?.cached
-      ? '<span class="fresh-tag cache">キャッシュ</span>'
-      : '';
-  const freshLine = `<div class="sc-fresh" title="${esc(UPDATE_CYCLE[source] || '')}">最終更新 ${fresh}${cacheTag}</div>`;
-  return `<td class="source-cell">
+  // 鮮度はステータスバーに集約 (§0.6-4)。セルはホバー title で補助表示のみ。
+  const title = `${SOURCE_LABEL[source] || source} ${freshnessLabel(forecast.fetchedAt)}`;
+  return `<td class="source-cell" title="${esc(title)}">
     <div class="sc-main">${temp}</div>
     <div class="sc-sub">${esc(forecast.weatherText || '')}</div>
     <div class="sc-sub">${subParts.join(' ')}</div>
-    ${freshLine}
   </td>`;
 }
 

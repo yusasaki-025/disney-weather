@@ -189,18 +189,61 @@ h3 {
   outline-offset: 2px;
 }
 
-.data-status {
-  margin: 0;
-  padding: 6px 20px;
+/* ステータスバー (§0.6-4) : ソース別鮮度をテーブル上部に集約 */
+.status-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+  padding: 8px 14px;
   font-size: 12px;
   color: var(--text-sub);
-  background: var(--surface-2);
-  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
 }
 
-.data-status.is-error {
+.status-bar .sb-srcs {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.status-bar .sb-src b {
+  color: var(--text);
+}
+
+.status-bar .sb-src.sb-fail {
   color: var(--score-bad);
-  background: var(--risk-bg);
+  font-weight: 700;
+}
+
+.status-bar .sb-dot {
+  color: var(--border);
+}
+
+.status-bar .sb-cache {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--warn-bg);
+  color: #9a6a00;
+  font-weight: 700;
+}
+
+.status-bar .sb-refresh {
+  margin-left: auto;
+  padding: 5px 12px;
+  font-size: 12px;
+}
+
+.status-bar .sb-refresh .material-symbols-rounded {
+  font-size: 16px;
+}
+
+[data-theme='dark'] .status-bar .sb-cache {
+  color: #e6c06a;
 }
 
 /* --- メイン --- */
@@ -608,22 +651,6 @@ section {
   color: var(--accent);
   text-decoration: underline;
   cursor: pointer;
-}
-
-.sc-fresh {
-  font-size: 10px;
-  color: #9aa4b0;
-  margin-top: 2px;
-}
-
-.fresh-tag.cache {
-  display: inline-block;
-  margin-left: 4px;
-  padding: 0 5px;
-  border-radius: 4px;
-  background: var(--warn-bg);
-  color: #9a6a00;
-  font-weight: 700;
 }
 
 .wbgt-tag {

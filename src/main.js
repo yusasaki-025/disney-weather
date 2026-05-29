@@ -1,11 +1,12 @@
 // エントリポイント : 取得 → 正規化 → スコア → 描画 → イベント結線。
 import './styles.css';
-import { candidateDates, todayJst, nowIso } from './utils/date.js';
+import { candidateDates, todayJst } from './utils/date.js';
 import { loadCacheFresh, loadCacheRaw, saveCache } from './utils/cache.js';
 import { setupTheme } from './ui/theme.js';
 import { setupHelp } from './ui/help.js';
 import { setupPrint } from './ui/print.js';
 import { setupMenu } from './ui/menu.js';
+import { renderStatusBar } from './ui/statusBar.js';
 import { logger } from './utils/logger.js';
 import { fetchJma, SOURCE_ID as JMA } from './data/jma.js';
 import { fetchOpenMeteo, SOURCE_ID as OM } from './data/openMeteo.js';
@@ -26,8 +27,6 @@ const CONFIG = {
   days: 15,
 };
 
-const SOURCE_LABEL = { jma: '気象庁', 'open-meteo': 'Open-Meteo', openweather: 'OpenWeather' };
-
 const state = loadState();
 let rawBySourceDate = {}; // { source: { date: forecast } }
 const sourceStatus = {}; // { source: { ok, error, stale, fetchedAt } }
@@ -38,7 +37,7 @@ const els = {
   tbody: document.querySelector('#forecast-table tbody'),
   top3: document.getElementById('top3'),
   legend: document.getElementById('legend'),
-  status: document.getElementById('data-status'),
+  status: document.getElementById('status-bar'),
   errorScreen: document.getElementById('error-screen'),
 };
 
@@ -136,17 +135,12 @@ function buildRows() {
 }
 
 function updateStatus() {
-  const parts = activeSources.map((s) => {
-    const st = sourceStatus[s] || {};
-    const mark = st.ok ? '取得済' : '取得失敗';
-    const extra = st.stale ? ' (オフライン)' : st.cached ? ' (キャッシュ)' : '';
-    return `${SOURCE_LABEL[s]} ${mark}${extra}`;
+  renderStatusBar(els.status, {
+    sources: activeSources,
+    sourceStatus,
+    rawBySourceDate,
+    onRefresh: () => refresh(true),
   });
-  const anyStale = activeSources.some((s) => sourceStatus[s]?.stale);
-  els.status.textContent = `更新 : ${nowIso().slice(11, 16)} ･ ${parts.join(' / ')}${
-    anyStale ? ' ･ オフライン中は直前キャッシュを表示しています' : ''
-  }`;
-  els.status.classList.toggle('is-error', activeSources.every((s) => !sourceStatus[s]?.ok));
 }
 
 // --- 描画 ---
@@ -239,7 +233,7 @@ function renderSkeleton() {
         `<tr><td colspan="8" style="padding:12px"><span class="skeleton" style="width:80%"></span></td></tr>`,
     )
     .join('');
-  els.status.textContent = '予報を取得しています…';
+  renderStatusBar(els.status, { loading: true });
 }
 
 function setupHeader() {
