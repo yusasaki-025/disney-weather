@@ -1055,3 +1055,362 @@ section {
     display: inline-flex;
   }
 }
+
+/* =========================================================================
+   §0.6.5 - §0.6.10 UI overhaul (末尾追記で既存ルールを cascade 上書き)
+   ========================================================================= */
+
+/* --- §0.6.10 デザイントークン (TDR トーン) --- */
+:root {
+  --bg: #f4f7fb;
+  --surface: #ffffff;
+  --surface-2: #eef3f9;
+  --border: #d8e1ec;
+  --text: #1a2740;
+  --text-sub: #5a6b85;
+  --brand-blue: #1f4fa3;
+  --brand-blue-dark: #163a7a;
+  --brand-pink: #e85d9a;
+  --brand-gold: #e8b54d;
+  --accent: #1f4fa3;
+  --accent-dark: #163a7a;
+  --score-excellent: #2e9e4f;
+  --score-good: #8fc861;
+  --score-fair: #f0a93c;
+  --score-bad: #e0544e;
+  --warn-bg: #fef4e2;
+  --risk-bg: #fdeceb;
+  --row-hover: #eef3f9;
+  --shadow-sm: 0 1px 3px rgba(31, 79, 163, 0.08);
+  --shadow-md: 0 4px 16px rgba(31, 79, 163, 0.12);
+  --shadow-lg: 0 12px 32px rgba(31, 79, 163, 0.16);
+  --shadow: 0 4px 16px rgba(31, 79, 163, 0.12);
+  --radius: 14px;
+  --grad-header: linear-gradient(135deg, #1f4fa3 0%, #2e6bc7 50%, #4a8fd6 100%);
+  --grad-top3: linear-gradient(135deg, #fff7e6 0%, #ffe9f2 100%);
+  --grad-band: linear-gradient(90deg, #1f4fa3, #e85d9a);
+  --font-head: 'Noto Serif JP', serif;
+  --font-body: 'Noto Sans JP', sans-serif;
+  --font-num: 'Inter', sans-serif;
+}
+
+[data-theme='dark'] {
+  --bg: #0e1626;
+  --surface: #18233a;
+  --surface-2: #1f2d49;
+  --border: #2d3e5e;
+  --text: #e6ecf5;
+  --text-sub: #9fb0cb;
+  --brand-blue: #4a8fd6;
+  --accent: #4a8fd6;
+  --accent-dark: #66a5e0;
+  --score-excellent: #3fb862;
+  --score-good: #9ed46f;
+  --score-fair: #f5bd5e;
+  --score-bad: #ec6a64;
+  --warn-bg: #38301a;
+  --risk-bg: #3a2222;
+  --row-hover: #1f2d49;
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.5);
+  --shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  --grad-header: linear-gradient(135deg, #142f5e 0%, #1f4170 100%);
+  --grad-top3: linear-gradient(135deg, #1f2d49 0%, #2a2036 100%);
+}
+
+/* --- フォント (system fallback 付き) --- */
+body {
+  font-family: var(--font-body), -apple-system, BlinkMacSystemFont, 'Hiragino Kaku Gothic ProN',
+    'Yu Gothic', 'Noto Sans JP', sans-serif;
+}
+h1, h2, h3, h4, .app-title h1 {
+  font-family: var(--font-head), -apple-system, 'Hiragino Mincho ProN', 'Yu Mincho', serif;
+}
+.score-pill .value,
+.subscore-pill .value,
+.metric-cell .value,
+.cat-val,
+.tcolor,
+.sb-src b {
+  font-family: var(--font-num), var(--font-body), sans-serif;
+  font-variant-numeric: tabular-nums;
+}
+
+/* --- ヘッダー (グラデーション) --- */
+.app-header {
+  background: var(--grad-header);
+  border-bottom: none;
+  box-shadow: var(--shadow-sm);
+}
+.app-header .app-title h1,
+.app-header .app-title .material-symbols-rounded {
+  color: #fff;
+}
+.app-header .btn {
+  background: rgba(255, 255, 255, 0.16);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.3);
+}
+.app-header .btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* --- §0.6.5 スコアピル (テキストラベル + 数値) --- */
+.score-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 13px;
+  border-radius: 999px;
+  color: #fff;
+  font-weight: 700;
+  font-size: 13px;
+  box-shadow: var(--shadow-sm);
+}
+.score-pill .value {
+  font-size: 14px;
+}
+.score-pill[data-level='good'],
+.score-pill[data-level='fair'] {
+  color: #2a3340;
+}
+
+/* --- §0.6.5 サブスコア 色ピル --- */
+.subscore-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+}
+.subscore-pill {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 30px;
+  padding: 3px 8px;
+  border-radius: 10px;
+  color: #fff;
+  line-height: 1.15;
+}
+.subscore-pill .time-label {
+  font-size: 9px;
+  opacity: 0.92;
+}
+.subscore-pill .value {
+  font-size: 13px;
+  font-weight: 700;
+}
+.subscore-pill[data-level='good'],
+.subscore-pill[data-level='fair'] {
+  color: #2a3340;
+}
+.subscore-pill[data-level='none'] {
+  background: var(--surface-2);
+  color: var(--text-sub);
+}
+.subscore-main {
+  padding: 5px 11px;
+  border: 2px solid var(--brand-gold);
+  border-radius: 12px;
+}
+.subscore-main .value {
+  font-size: 15px;
+}
+
+/* --- §0.6.5 スコア凡例カード --- */
+.score-legend {
+  margin-bottom: 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  padding: 4px 14px 6px;
+}
+.legend-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  font-family: var(--font-head), serif;
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--text);
+  cursor: pointer;
+  padding: 8px 0;
+}
+.legend-toggle .material-symbols-rounded {
+  color: var(--accent);
+}
+.legend-body {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 2px 0 8px;
+}
+.legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+}
+.legend-pill {
+  font-size: 12px;
+  padding: 3px 11px;
+}
+.legend-desc {
+  color: var(--text-sub);
+}
+
+/* --- §0.6.6 天気 ・ カテゴリアイコン --- */
+.weather-icon {
+  font-size: 40px;
+  display: block;
+  margin: 0 auto 2px;
+  line-height: 1;
+}
+.cat-icon {
+  font-size: 17px;
+  vertical-align: middle;
+  opacity: 0.8;
+}
+.cat-head {
+  font-size: 24px;
+  display: block;
+  margin: 0 auto;
+  color: var(--accent);
+}
+.cat-head-label {
+  font-size: 11px;
+}
+.metric-cell {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+}
+.cat-val {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 700;
+  font-size: 14px;
+}
+.cat-val .unit {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-sub);
+}
+
+/* テーブルヘッダーを薄いブルーに */
+.forecast-table thead th {
+  background: var(--surface-2);
+  color: var(--brand-blue-dark);
+}
+[data-theme='dark'] .forecast-table thead th {
+  color: #cfe0f5;
+}
+
+/* --- §0.6.7 行クリック可視化 (chevron) --- */
+.row-main {
+  cursor: pointer;
+}
+.col-chev {
+  width: 34px;
+  text-align: center;
+}
+.row-main .chevron {
+  font-size: 20px;
+  color: var(--text-sub);
+  opacity: 0.35;
+  transition: transform 0.2s, opacity 0.2s;
+}
+.row-main:hover .chevron {
+  opacity: 0.75;
+}
+.row-main[aria-expanded='true'] .chevron {
+  transform: rotate(180deg);
+  opacity: 0.95;
+  color: var(--accent);
+}
+
+/* --- §0.6.8 詳細パネル 2 カラム (左 情報 ・ 右 グラフ) --- */
+.detail-panel {
+  display: grid;
+  grid-template-columns: 5fr 7fr;
+  gap: 24px;
+  animation: detailSlideDown 0.25s ease;
+}
+@keyframes detailSlideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.detail-section {
+  margin-bottom: 16px;
+}
+.detail-section h4 {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  border-bottom: 2px solid var(--border);
+  padding: 0 0 5px 10px;
+  margin: 0 0 10px;
+}
+.detail-section h4::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 1px;
+  bottom: 6px;
+  width: 3px;
+  border-radius: 2px;
+  background: var(--brand-gold);
+}
+.detail-section h4 .material-symbols-rounded {
+  font-size: 18px;
+  color: var(--accent);
+}
+
+/* --- TOP3 カード (グラデーション + ゴールドリボン) --- */
+.top3-card {
+  background: var(--grad-top3);
+  position: relative;
+  overflow: hidden;
+}
+.top3-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--grad-band);
+}
+
+.btn-primary {
+  background: var(--brand-blue);
+  border-color: var(--brand-blue);
+}
+
+/* --- 狭幅調整 --- */
+@media (max-width: 767px) {
+  .detail-panel {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+  .weather-icon {
+    font-size: 32px;
+  }
+  .cat-head {
+    font-size: 20px;
+  }
+}

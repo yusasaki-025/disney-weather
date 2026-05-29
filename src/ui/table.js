@@ -17,6 +17,7 @@ import { freshnessLabel } from '../utils/freshness.js';
 import { nowcastHtml } from './nowcast.js';
 import { getTempColor, getTempBandKey } from '../utils/tempColor.js';
 import { getWeatherIcon } from '../utils/weatherIcon.js';
+import { isCowork } from '../utils/runtime.js';
 
 // 気温セルを暖寒色で着色 (§0.6-2)。data-tb はダークモード CSS 上書き用。
 function tempSpan(c) {
@@ -93,20 +94,21 @@ function detailPanelHtml(row, park) {
     .join('');
   const decided = row.isDecided;
   const ng = row.isNg;
+  // §0.6.8 : 左カラム = 情報、右カラム = グラフ。各ブロックは .detail-section + <h4> 見出し。
+  // 個人連携 (カレンダー登録) は Cowork 版のみ (§0.7)。
+  const calendarBtn = isCowork()
+    ? `<button type="button" class="btn" data-action="calendar">
+        <span class="material-symbols-rounded" aria-hidden="true">calendar_add_on</span>カレンダー登録
+      </button>`
+    : '';
   return `<div class="detail-panel">
-    <div class="detail-charts">
-      <h3>時系列 (降水確率 ･ 風速)</h3>
-      <div class="chart-box"><div style="position:relative;height:240px"><canvas data-chart="popwind"></canvas></div></div>
-      <h3 style="margin-top:14px">気温 ･ 体感温度</h3>
-      <div class="chart-box"><div style="position:relative;height:200px"><canvas data-chart="temp"></canvas></div></div>
-    </div>
-    <div class="detail-side">
-      <div>
-        <h3>${esc(park)} のショー ･ パレード時刻</h3>
+    <div class="detail-info">
+      <div class="detail-section">
+        <h4><span class="material-symbols-rounded" aria-hidden="true">theater_comedy</span>${esc(park)} のショー ･ パレード</h4>
         <div class="show-times">${showRows}</div>
       </div>
-      <div>
-        <h3>持ち物 ･ 服装</h3>
+      <div class="detail-section">
+        <h4><span class="material-symbols-rounded" aria-hidden="true">checkroom</span>持ち物 ･ 服装</h4>
         <ul class="outfit-list">${outfit}</ul>
       </div>
       ${nowcastHtml(row.date)}
@@ -114,12 +116,20 @@ function detailPanelHtml(row, park) {
         <button type="button" class="btn ${decided ? 'btn-primary' : ''}" data-action="decide">
           <span class="material-symbols-rounded" aria-hidden="true">event_available</span>${decided ? '決定済み' : 'この日に決めた'}
         </button>
-        <button type="button" class="btn" data-action="calendar">
-          <span class="material-symbols-rounded" aria-hidden="true">calendar_add_on</span>カレンダー登録
-        </button>
+        ${calendarBtn}
         <button type="button" class="btn" data-action="ng">
           <span class="material-symbols-rounded" aria-hidden="true">${ng ? 'undo' : 'block'}</span>${ng ? 'NG 解除' : '同行者 NG'}
         </button>
+      </div>
+    </div>
+    <div class="detail-charts">
+      <div class="detail-section">
+        <h4><span class="material-symbols-rounded" aria-hidden="true">water_drop</span>時系列 (降水確率 ･ 風速)</h4>
+        <div class="chart-box"><div style="position:relative;height:240px"><canvas data-chart="popwind"></canvas></div></div>
+      </div>
+      <div class="detail-section">
+        <h4><span class="material-symbols-rounded" aria-hidden="true">thermostat</span>気温 ･ 体感温度</h4>
+        <div class="chart-box"><div style="position:relative;height:200px"><canvas data-chart="temp"></canvas></div></div>
       </div>
     </div>
   </div>`;
@@ -139,6 +149,7 @@ export function renderTable(els, rows, state, sources, sourceStatus, handlers) {
     ${catHead('rain', '雨')}
     ${catHead('wbgt', '熱 (WBGT)')}
     ${sources.map((s) => `<th>${esc(SOURCE_LABEL[s] || s)}</th>`).join('')}
+    <th class="col-chev" aria-hidden="true"></th>
   </tr>`;
 
   // 連休グルーピング: 直前行も休日なら境界に枠
@@ -185,9 +196,10 @@ export function renderTable(els, rows, state, sources, sourceStatus, handlers) {
         ${metricCell('rain', rainVal, row.eval.badges.rain)}
         ${metricCell('wbgt', wbgtVal, row.eval.badges.wbgt)}
         ${sources.map((s) => sourceCellHtml(s, row.forecasts[s], sourceStatus[s])).join('')}
+        <td class="col-chev"><span class="material-symbols-rounded chevron" aria-hidden="true">expand_more</span></td>
       </tr>`;
 
-      const colspan = 6 + sources.length;
+      const colspan = 7 + sources.length;
       const detailRow = `<tr class="detail-row" data-detail="${row.date}" hidden>
         <td colspan="${colspan}"></td>
       </tr>`;
