@@ -1507,3 +1507,138 @@ h1, h2, h3, h4, .app-title h1 {
   background: var(--warn-bg);
   color: #9a6a00;
 }
+
+/* =========================================================================
+   §0.24 スマホカード再設計 ・ 余白詰め ・ クリック明示
+   (末尾追記で既存 §0.22 ルールを cascade 上書き。変数は既存トークンに読み替え:
+    --primary→--brand-blue / --shadow-card→--shadow / --shadow-hover→--shadow-lg)
+   ========================================================================= */
+
+/* 1. スペーシング ・ フォントの段階を絞る */
+:root {
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 12px;
+  --space-lg: 16px;
+  --fs-xs: 11px;
+  --fs-sm: 13px;
+  --fs-md: 14px;
+  --fs-lg: 16px;
+  --fs-xl: 18px;
+  --fs-2xl: 22px;
+}
+body {
+  line-height: 1.5;
+}
+
+/* 2. スマホ (< 768px) カード再設計 */
+@media (max-width: 767px) {
+  .forecast-table tr.calendar-row {
+    display: block;
+    padding: 12px;
+    margin-bottom: 8px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--surface);
+    box-shadow: var(--shadow);
+    cursor: pointer;
+    transition: box-shadow 0.2s, transform 0.1s;
+  }
+  .forecast-table tr.calendar-row:active {
+    transform: scale(0.99);
+    box-shadow: var(--shadow-lg);
+  }
+
+  /* 上段: 日付 ＋ スコア 横並び */
+  .forecast-table td.cell-date-score {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    padding: 0 0 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .cell-date-score::before {
+    content: none;
+  }
+  .cell-date-score .date-line {
+    font-size: var(--fs-sm);
+    font-weight: 600;
+  }
+  .cell-date-score .score-pill {
+    font-size: var(--fs-md);
+    padding: 4px 10px;
+    margin-top: 0;
+  }
+
+  /* 中段: 風 / 雨 / 熱 を 3 列等幅 */
+  .forecast-table tr.calendar-row td.cell-wind,
+  .forecast-table tr.calendar-row td.cell-rain,
+  .forecast-table tr.calendar-row td.cell-heat {
+    display: inline-block;
+    width: 33.33%;
+    box-sizing: border-box;
+    padding-right: 4px;
+    vertical-align: top;
+    margin-bottom: 8px;
+  }
+
+  /* 下段: 気象庁 / Open-Meteo 2 列 */
+  .forecast-table tr.calendar-row td.cell-jma,
+  .forecast-table tr.calendar-row td.cell-openmeteo {
+    display: inline-block;
+    width: 50%;
+    box-sizing: border-box;
+    padding-top: 8px;
+    border-top: 1px solid var(--border);
+    text-align: center;
+    vertical-align: top;
+  }
+  .cell-jma .weather-icon,
+  .cell-openmeteo .weather-icon {
+    font-size: 32px;
+    margin-bottom: 2px;
+  }
+
+  /* data-label: ブルー ・ 11px ・ 太字で明確 */
+  .forecast-table tr.calendar-row > td:not(.cell-date-score)::before {
+    content: attr(data-label);
+    display: block;
+    font-size: var(--fs-xs);
+    color: var(--brand-blue);
+    font-weight: 600;
+    margin-bottom: 2px;
+    letter-spacing: 0.3px;
+  }
+
+  /* 「タップで詳細」インジケータ (閉じカードのみ) */
+  .forecast-table tr.calendar-row:not([aria-expanded='true'])::after {
+    content: '› タップで詳細';
+    display: block;
+    text-align: center;
+    margin-top: 6px;
+    padding-top: 6px;
+    border-top: 1px dashed var(--border);
+    color: var(--brand-blue);
+    font-size: var(--fs-xs);
+    font-weight: 600;
+  }
+
+  /* 時間帯スコアは中央寄せ */
+  .subscore-group {
+    justify-content: center;
+  }
+}
+
+/* 3. PC でも余白を詰める */
+@media (min-width: 768px) {
+  .forecast-table tbody td {
+    padding: 10px 8px;
+  }
+  .score-legend {
+    padding: 12px 14px;
+  }
+  .app-header {
+    padding: 16px 24px;
+  }
+}
