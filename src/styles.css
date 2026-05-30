@@ -1750,3 +1750,108 @@ body {
     margin-top: 0;
   }
 }
+
+/* =========================================================================
+   §0.27 スマホカード微調整 (実機指摘4点)
+   - 風/雨/熱を 6 列グリッドで 3 等分 (wind wind / rain rain / heat heat)
+   - chevron (col-chev) を隠し「タップで詳細」二重表示を解消
+   - 日付(左) と スコアピル(右) を横並びに固定
+   末尾追記で §0.24/§0.25 を cascade 上書き。class は実在の .forecast-table を使用。
+   変数: --shadow-card→--shadow / --primary→--accent にマップ。
+   ========================================================================= */
+@media (max-width: 767px) {
+  .forecast-table tr.calendar-row {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-areas:
+      'date-score date-score date-score date-score date-score date-score'
+      'wind wind rain rain heat heat'
+      'jma jma jma openmeteo openmeteo openmeteo'
+      'more more more more more more';
+    gap: 8px;
+    padding: 12px;
+    margin-bottom: 8px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--surface);
+    box-shadow: var(--shadow);
+    cursor: pointer;
+  }
+
+  /* 各 td を領域へ割当 (block 化) */
+  .forecast-table tr.calendar-row > td.cell-date-score {
+    grid-area: date-score;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 0 0 8px;
+    margin: 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .forecast-table tr.calendar-row > td.cell-wind {
+    grid-area: wind;
+  }
+  .forecast-table tr.calendar-row > td.cell-rain {
+    grid-area: rain;
+  }
+  .forecast-table tr.calendar-row > td.cell-heat {
+    grid-area: heat;
+  }
+  .forecast-table tr.calendar-row > td.cell-jma {
+    grid-area: jma;
+    padding-top: 8px;
+    border-top: 1px solid var(--border);
+    text-align: center;
+  }
+  .forecast-table tr.calendar-row > td.cell-openmeteo {
+    grid-area: openmeteo;
+    padding-top: 8px;
+    border-top: 1px solid var(--border);
+    text-align: center;
+  }
+  .forecast-table tr.calendar-row > td.cell-wind,
+  .forecast-table tr.calendar-row > td.cell-rain,
+  .forecast-table tr.calendar-row > td.cell-heat {
+    display: block;
+    width: auto;
+    margin: 0;
+    padding-right: 0;
+  }
+
+  .cell-date-score::before {
+    content: none;
+  }
+  .cell-date-score .date-line {
+    font-size: 16px;
+    font-weight: 600;
+  }
+  .cell-date-score .score-pill {
+    font-size: 14px;
+    padding: 4px 10px;
+    flex-shrink: 0;
+    margin-top: 0;
+  }
+
+  /* chevron 廃止 (col-chev td ・ chevron span ともに隠し、二重表示を解消) */
+  .forecast-table tr.calendar-row > td.col-chev,
+  .forecast-table tr.calendar-row .chevron {
+    display: none !important;
+  }
+
+  /* 「タップで詳細」(閉) / 「閉じる」(開) を more 領域に集約 */
+  .forecast-table tr.calendar-row::after {
+    grid-area: more;
+    content: '› タップで詳細';
+    text-align: center;
+    margin-top: 0;
+    padding-top: 6px;
+    border-top: 1px dashed var(--border);
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .forecast-table tr.calendar-row[aria-expanded='true']::after {
+    content: '✕ 閉じる';
+  }
+}

@@ -2116,6 +2116,113 @@ priority 順序ソート ・ 凡例カードかヘルプモーダルで「太字
   - high (季節限定) が太字 ・ low (通年) がグレーで視覚区別される
   - TDL/TDS タブ両方で同じ修正適用
 
+### 0.27 スマホカード 4点微調整 (Yuka さん実機指摘)
+
+実機スクショで以下4点を確認 :
+
+1. **風 ・ 雨 ・ 熱を1列3分割にしたい** : 現状は風雨が2列 ・ 熱が次行全幅 (§0.25 grid-template-areas が `"wind rain"/"heat heat"` で2行に分かれてる)
+2. **「タップで詳細」と chevron arrow が二重** : 左下に `^` chevron、別途「› タップで詳細」テキスト両方表示 → どちらか一方に
+3. **カードデザインと toggle (chevron) デザインが不一致** : chevron が浮いてる → 廃止して統一
+4. **「別日 25」スコアピルが浮く ・ サイズ ・ 位置** : 日付の下に左寄せで縦並びになっていて統一感欠落 → 横並びで右寄せ
+
+#### CSS 修正 (src/styles.css の @media (max-width: 767px))
+
+```css
+/* 1. 風 ・ 雨 ・ 熱を3分割 ・ grid-template-areas を 6列ベースに */
+.disney-table tr.calendar-row {
+  display: grid !important;
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-areas:
+    "date-score date-score date-score date-score date-score date-score"
+    "wind wind rain rain heat heat"
+    "jma jma jma openmeteo openmeteo openmeteo"
+    "more more more more more more";
+  gap: 8px;
+  padding: 12px;
+  margin-bottom: 8px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+  cursor: pointer;
+  transition: box-shadow 0.2s, transform 0.1s;
+}
+
+/* 4. 日付＋スコアを横並び ・ space-between でスコア右寄せ */
+.disney-table td.cell-date-score {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center;
+  width: 100%;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+.cell-date-score::before { content: none; }
+.cell-date-score .date-line {
+  font-size: 16px;
+  font-weight: 600;
+}
+.cell-date-score .score-pill {
+  font-size: 14px;
+  padding: 4px 10px;
+  flex-shrink: 0;       /* 縮まないように */
+}
+
+/* 2 & 3. chevron 廃止 ・ 「タップで詳細」テキスト一本に */
+.disney-table tr.calendar-row .chevron,
+.disney-table tr.calendar-row .toggle-icon,
+.disney-table tr.calendar-row [class*="expand-icon"] {
+  display: none !important;
+}
+
+/* 「タップで詳細」テキストは ::after で grid-area: more に表示 (既存維持) */
+.disney-table tr.calendar-row::after {
+  grid-area: more;
+  content: '› タップで詳細';
+  text-align: center;
+  padding-top: 6px;
+  border-top: 1px dashed var(--border);
+  color: var(--primary);
+  font-size: 11px;
+  font-weight: 600;
+}
+.disney-table tr.calendar-row[aria-expanded="true"]::after {
+  content: '✕ 閉じる';
+}
+```
+
+#### 視覚イメージ (修正後)
+
+```
+┌───────────────────────────────────────┐
+│ 5/30 (土)              [別日 25]      │  ← 横並び ・ スコア右寄せ
+│ ─────────────────────────────────     │
+│ 風          雨          熱            │  ← data-label
+│ 12m/s       0%          26            │
+│ 中止リスク高 通常       暑さ注意       │  ← 3列等幅
+│ ─────────────────────────────────     │
+│ 気象庁              Open-Meteo        │
+│ ☀ 晴れ               ☀ 晴れ           │  ← 大きい天気アイコン
+│ 29°/29° 雨0%        26°/17° 雨53%    │
+│ ─ ─ ─ › タップで詳細 ─ ─ ─           │  ← chevron なし ・ テキストのみ
+└───────────────────────────────────────┘
+```
+
+#### 検証 (Chrome DevTools 375px iPhone エミュレーション必須)
+
+- 風 / 雨 / 熱 が3列等幅で並ぶ (熱が全幅にならない)
+- chevron `^` が表示されない (CSS で非表示)
+- 「タップで詳細」テキストだけが下部に出る
+- 開いた状態は「✕ 閉じる」に変わる
+- 日付 (左) と「別日 25」(右) が横並び ・ スコアピル右寄せ
+- 開閉時 ・ ダーク ・ ライト両方で破綻なし
+- npm test 緑、build 通る
+
+#### 該当ファイル
+
+- `src/styles.css` の @media (max-width: 767px) のみ修正
+- HTML / JS 変更不要 (chevron は既存 DOM のまま非表示)
+
 ### 0.7 公開ページ化 (Cloudflare Pages) ＋ ランタイム判定
 
 Yuka さん要望 : 「Mac 開いてなくても他の人も見れる公開ページ」
