@@ -76,16 +76,17 @@ function sourceCellHtml(source, forecast, status) {
   </td>`;
 }
 
-function detailPanelHtml(row, park) {
+function detailPanelHtml(row) {
   const PRIORITY_NOTE = { high: ' (メイン算定窓)', medium: ' (補助)', low: ' (参考)' };
-  const showRows = (SHOW_SCHEDULE[park] || [])
-    .map(
-      (s) =>
-        `<div class="${s.priority === 'high' ? 'st-high' : ''}">${esc(s.name)} : ${esc(s.time)}${
-          PRIORITY_NOTE[s.priority] || ''
-        }</div>`,
-    )
-    .join('');
+  const showRowsFor = (p) =>
+    (SHOW_SCHEDULE[p] || [])
+      .map(
+        (s) =>
+          `<div class="${s.priority === 'high' ? 'st-high' : ''}">${esc(s.name)} : ${esc(s.time)}${
+            PRIORITY_NOTE[s.priority] || ''
+          }</div>`,
+      )
+      .join('');
   const outfit = suggestOutfit(row.eval.metrics)
     .map(
       (o) =>
@@ -104,8 +105,13 @@ function detailPanelHtml(row, park) {
   return `<div class="detail-panel">
     <div class="detail-info">
       <div class="detail-section">
-        <h4><span class="material-symbols-rounded" aria-hidden="true">theater_comedy</span>${esc(park)} のショー ･ パレード</h4>
-        <div class="show-times">${showRows}</div>
+        <h4><span class="material-symbols-rounded" aria-hidden="true">theater_comedy</span>ショー ･ パレード</h4>
+        <div class="park-tabs" role="tablist" aria-label="パーク切替">
+          <button class="park-tab active" role="tab" data-park-tab="TDL" type="button">TDL</button>
+          <button class="park-tab" role="tab" data-park-tab="TDS" type="button">TDS</button>
+        </div>
+        <div class="show-times" data-park-shows="TDL">${showRowsFor('TDL')}</div>
+        <div class="show-times" data-park-shows="TDS" hidden>${showRowsFor('TDS')}</div>
       </div>
       <div class="detail-section">
         <h4><span class="material-symbols-rounded" aria-hidden="true">checkroom</span>持ち物 ･ 服装</h4>
@@ -222,7 +228,7 @@ export function renderTable(els, rows, state, sources, sourceStatus, handlers) {
     if (!willOpen) return;
 
     const row = rows.find((r) => r.date === date);
-    detail.firstElementChild.innerHTML = detailPanelHtml(row, state.park);
+    detail.firstElementChild.innerHTML = detailPanelHtml(row);
     detail.hidden = false;
     main.setAttribute('aria-expanded', 'true');
 
@@ -230,12 +236,23 @@ export function renderTable(els, rows, state, sources, sourceStatus, handlers) {
     renderPopWindChart(detail.querySelector('[data-chart="popwind"]'), forecasts, state.park);
     renderTempChart(detail.querySelector('[data-chart="temp"]'), forecasts, state.park);
 
-    // 詳細内アクション
+    // ショー ・ パレードの TDL/TDS タブ切替 (パークが近接のため詳細内タブで分離)
+    detail.querySelectorAll('.park-tab').forEach((tab) => {
+      tab.addEventListener('click', () => {
+        const p = tab.dataset.parkTab;
+        detail.querySelectorAll('.park-tab').forEach((t) => t.classList.toggle('active', t === tab));
+        detail.querySelectorAll('[data-park-shows]').forEach((el) => {
+          el.hidden = el.dataset.parkShows !== p;
+        });
+      });
+    });
+
+    // 詳細内アクション (カレンダーは Cowork 版のみ存在するので null ガード)
     detail.querySelector('[data-action="decide"]').addEventListener('click', () => handlers.onDecide(date));
     detail.querySelector('[data-action="ng"]').addEventListener('click', () => handlers.onToggleNg(date));
     detail
       .querySelector('[data-action="calendar"]')
-      .addEventListener('click', () => handlers.onCalendar(date));
+      ?.addEventListener('click', () => handlers.onCalendar(date));
   };
 
   tbody.querySelectorAll('.row-main').forEach((tr) => {

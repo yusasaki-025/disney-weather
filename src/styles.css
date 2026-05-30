@@ -1414,3 +1414,34 @@ h1, h2, h3, h4, .app-title h1 {
     font-size: 20px;
   }
 }
+
+/* --- 詳細内 TDL/TDS タブ (パーク上部トグル廃止、ショー/パレードのみタブ分け) --- */
+.park-tabs {
+  display: inline-flex;
+  gap: 2px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 2px;
+  margin-bottom: 8px;
+}
+.park-tab {
+  padding: 4px 16px;
+  font-size: 12px;
+  font-weight: 700;
+  font-family: inherit;
+  color: var(--text-sub);
+  background: none;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+}
+.park-tab.active {
+  background: var(--brand-blue);
+  color: #fff;
+}
+
+/* スコア凡例カードは下部に移動したので上マージンで区切る */
+#score-legend {
+  margin-top: 4px;
+}

@@ -80,7 +80,6 @@ export function wireControls(state, onChange) {
     });
   };
 
-  syncSeg('park-seg', 'park', state.park);
   syncSeg('sort-seg', 'sort', state.sortBy);
   syncSeg('dayfilter-seg', 'dayfilter', state.dayFilter);
   document.getElementById('only-good').checked = state.onlyGood;
@@ -95,7 +94,6 @@ export function wireControls(state, onChange) {
       });
     });
   };
-  bind('park-seg', 'park', 'park');
   bind('sort-seg', 'sort', 'sortBy');
   bind('dayfilter-seg', 'dayfilter', 'dayFilter');
 
