@@ -121,30 +121,33 @@ API キーは artifact には絶対に埋め込みません (プロキシ側に�
 - 雨雲レーダー (§3.18) は気象庁ページが frame-ancestors CSP で iframe 埋め込みを拒否するため、当日 ・ 前日のみ「公式ページを新しいタブで開く」直リンクカードにしています (§3.18 のフォールバック準拠)。
 - 自動通知 (§3.19・scheduled task) ･ PWA (§6.8) ･ テスト基盤 (msw ＋ Playwright、§7.4) は今回のパスでは未実装です (依存 ・ 構成上のトレードオフのため別途判断)。
 
-## ショースケジュールの月別取得 (§0.8 / Phase 2)
+## ショー ・ パレード時刻のメンテナンス (§0.8)
 
-ショー ・ パレードの時刻はシーズンで変わる ( GW は公演増、月後半で時刻変更、特定日だけ違う等 ) ため、公式の日別カレンダーから月単位で取得して `src/data/schedule/YYYY-MM.json` に保存できます。JSON がある日はその実時刻を、無い日は `src/data/showSchedule.js` の典型値 (FALLBACK) を使います。詳細パネルに「公式取得済 / 典型値で代替」バッジが出ます。
+ショー ・ パレードの時刻はシーズンや日によって変わります。表示は日別 JSON があればその実時刻を、無ければ典型値 (FALLBACK) を使い、詳細パネルに「公式取得済 / 典型値で代替」バッジが出ます。
 
-### 取得手順 (Claude Code に依頼する想定)
+### 公式サイトからの自動取得は不可
 
-公式サイトは bot 対策があるため初回のみブラウザ実行環境の準備が要ります。Claude Code に次のように伝えてください。
+当初は公式の日別カレンダーを Playwright で自動取得する設計でしたが、公式サイトは Akamai Bot Manager による bot 保護が入っており、headless ・ headed いずれの自動アクセスでも安定して中身を取得できないことを確認しました ( 空シェルが返る / 反復アクセスで遮断 )。`scripts/fetch-schedule.mjs` は記録として残していますが**実運用はできません**。
 
-> disney-weather でスケジュール取得の準備をして。playwright のブラウザを入れて、2026 年 7 月分を取得して
+### 日別の手動メンテ (現行運用)
 
-内部的には以下を実行します。
+Yuka さんが公式アプリ ・ 公式サイトで見た公演名 ・ 時刻を Claude に伝えると、Claude が `src/data/schedule/YYYY-MM.json` を作成 ・ 更新します。形式は次のとおり ( Claude が組み立てるので、伝えるのは「日付 ・ パーク ・ 公演名 ・ 時刻」だけで OK )。
 
+```json
+{
+  "month": "2026-06",
+  "days": {
+    "2026-06-04": {
+      "TDL": { "shows": [
+        { "name": "ディズニー･ハーモニー･イン･カラー", "times": ["13:00"], "priority": "high" }
+      ] }
+    }
+  }
+}
 ```
-npx playwright install chromium
-npm run fetch-schedule -- 2026-07
-git add src/data/schedule/2026-07.json
-git commit -m "data: 2026-07 schedule"
-git push
-```
 
-`npm run fetch-schedule -- YYYY-MM` は 1 か月分を 1 回だけ取得します ( リクエスト間 3 秒 ・ User-Agent 明示で公式サーバーに配慮 )。取得に失敗した日は自動で FALLBACK 表示になるため、アプリが壊れることはありません。
+JSON を置いて `npm run build` → main に push すると公開ページ ( https://disney-weather.pages.dev ) に反映されます。JSON が無い日は自動で FALLBACK ( 典型値で代替 ) 表示になります。
 
-### 規約上の注意
+### 典型値 (FALLBACK) の更新
 
-- 公式サイトの利用規約を確認のうえ自己責任で実行してください ( robots.txt は bot ブロックのため機械取得できません )。
-- 高頻度アクセスはしない ( 月 1 回の取得を想定 )。
-- 本ツールの表示は公開予報 ・ 公式ページからの推定であり、運営の公式発表ではありません。当日の運営は公式アプリで確認してください。
+日別までは持たず代表時刻だけ最新にしたい場合は、[src/data/showSchedule.js](src/data/showSchedule.js) の `FALLBACK_SCHEDULE` の公演名 ・ 時刻を更新します。
