@@ -1054,6 +1054,216 @@ table thead th {
 
 - `src/styles.css` のみ (HTML 構造変更不要)
 
+### 0.16 バッジ下限ガード (Yuka さん指摘 ・ スコアとバッジの矛盾解消)
+
+問題 : 6/10 (水) の例 :「OK 75 / 風 8m/s 通常 / 雨 34% 2.4mm ほぼ中止」 → 雨ほぼ中止なのに総合 OK は矛盾。
+
+原因 : §0.13.2 でスコア算定窓を **平均値** に変えたが、バッジ判定は **最大値** のまま。整合がとれていない。
+
+対応 : バッジリスク (severity) に応じて総合スコアに **下限ガード** (上限キャップ) を効かせる。
+
+#### Severity 定義
+
+| severity | バッジ例 |
+|---|---|
+| `normal` | 風/雨/熱「通常」 |
+| `warn` | 風バ可能性あり / 雨バ可能性 / 熱バ可能性あり / 暑さ注意 |
+| `danger` | 中止リスク高 / 雨キャン濃厚 / 熱キャン濃厚 |
+| `critical` | ほぼ中止 |
+
+#### スコアキャップ
+
+```js
+const RAW_SCORE = computeAvgScore(forecasts, day, park);   // 平均値ベース (§0.13.2)
+const worstSeverity = Math.max(windBadge.severity, rainBadge.severity, heatBadge.severity);
+
+let finalScore = RAW_SCORE;
+if (worstSeverity === 'critical')  finalScore = Math.min(finalScore, 25);  // 別日確定
+else if (worstSeverity === 'danger') finalScore = Math.min(finalScore, 45);  // 別日
+else if (worstSeverity === 'warn')   finalScore = Math.min(finalScore, 65);  // 微妙
+// 'normal' はキャップなし
+```
+
+| Severity | スコア上限 | スコア区分 |
+|---|---|---|
+| critical (ほぼ中止) | 25 | 別日 |
+| danger (中止濃厚) | 45 | 別日 |
+| warn (バ) | 65 | 微妙 |
+| normal (通常) | キャップなし | ベスト / OK / 微妙 / 別日 (素のまま) |
+
+#### 整合保証
+
+- バッジが「ほぼ中止」「中止リスク高」のいずれかの日 → 総合は最大「別日」
+- バッジが「風バ」「雨バ」「熱バ」「暑さ注意」のいずれかの日 → 総合は最大「微妙」
+- すべての日でバッジと総合スコアが整合する
+
+#### ツールチップ補助
+
+ガードが効いた日のスコアラベルにホバーで明示 :
+
+> 「平均値スコアは 75 (OK) ですが、バッジ『雨ほぼ中止』(ピーク 2.4mm/h, 14時) により総合を 25 (別日) に格下げ」
+
+このようにユーザーが「なぜ OK じゃないのか」を理解できる。
+
+#### テスト
+
+- raw=80 ・ バッジ critical → final=25
+- raw=80 ・ バッジ danger → final=45
+- raw=80 ・ バッジ warn → final=65
+- raw=80 ・ バッジ normal → final=80
+- 境界値 (raw=25 で critical → 25のまま、raw=20 で critical → 20のまま)
+
+#### 該当ファイル
+
+- `src/score/scoring.js` (computeScore 関数に severity 判定 ・ キャップ適用ロジック追加)
+- `src/tests/scoring.test.js` (テスト追加)
+- `src/ui/table.js` のスコアセルツールチップに「ガード理由」表示
+
+### 0.17 ヘッダー簡素化 ・ 印刷 / URL コピー / ナイトモード 全削除 (Yuka さん指摘)
+
+問題 : Yuka さん指摘「印刷 ・ URL コピー はあまり使わないから無くす」「ナイトモードも要らない」。
+
+対応 : ヘッダー右側を **「更新 ・ X分前」「ヘルプ」の2ボタン** だけにする。ハンバーガーメニューも項目少なくなるので廃止。
+
+#### 削除する機能 ・ ファイル
+
+| 項目 | 削除対象 |
+|---|---|
+| 印刷ボタン | `src/ui/print.js` ・ `src/ui/header.js` から該当ボタン削除 |
+| URL コピーボタン | `src/ui/header.js` から該当ボタン削除 ・ 用語集モーダルの「URL コピー」案内も削除 |
+| ナイトモード (ダークモード) | `src/ui/theme.js` 削除 ・ `src/styles.css` から `[data-theme="dark"]` ブロック全削除 |
+| 印刷用 CSS | `src/styles.css` の `@media print { ... }` 全削除 |
+| ハンバーガーメニュー | `src/ui/menu.js` 削除 ・ ヘッダーは2ボタン横並びに統一 (スマホでも) |
+| manifest.json の theme-color 切替 | ライト固定 |
+
+#### 残す機能 (ヘッダー)
+
+- **更新ボタン** (「更新 ・ X分前」表示、強制更新もこれに集約 §0.13.3)
+- **ヘルプボタン** (用語集モーダル)
+
+PC ・ スマホとも横並び2ボタンで収まるのでレイアウト崩れなし。
+
+#### 仕様書側の整理 (参考、Code 作業は不要)
+
+- §3.6 同行者共有 : URL コピー記述削除
+- §3.17 印刷モード : 削除
+- §6.6 ダークモード : 削除
+- §6.9 印刷用 CSS : 削除
+- §6.11 ハンバーガーメニュー : 削除
+- §14 DoD : 「印刷」「URL コピー」「ダーク切替」項目削除
+
+#### 検証
+
+- 公開ページのヘッダー右側に **「更新 ・ X分前」「ヘルプ」だけ**
+- ダーク CSS なし (常にライト)
+- 印刷時の見た目は通常レイアウトで OK
+- 用語集 (ヘルプ) は維持
+- スマホ 375px でも横並び崩れなし
+- npm test 緑、npm run build 通る
+
+### 0.18 「undefined」バグ修正 ＋ スコア ・ サブスコアにアイコン併用 (Yuka さん指摘)
+
+#### 0.18.1 「undefined」バグ修正
+
+Yuka さん指摘 : `5/31 (日) undefined スコア80` の `undefined` が何か分からない。
+
+推測原因 (Code 側で要確認) :
+
+- ARIA label or DOM テンプレート文字列に `${...}` が undefined を返してる
+- §0.13.1 ラベル変更時に `symbol.label` 参照キーが mismatch (旧「行ってよい」を期待してる箇所が残ってる)
+- 曜日変換 ・ スコア区分テキスト ・ ガード理由 (§0.16) のいずれかが undefined
+
+修正手順 :
+
+1. ブラウザで該当箇所を accessibility tree or DOM で確認
+2. undefined になっている変数を特定
+3. ラベル参照を正しい新名 (`ベスト` `OK`) に直す
+4. ARIA label のテストを追加して再発防止
+
+#### 0.18.2 スコア ・ サブスコアに評価アイコン併用
+
+Yuka さん指摘 : 「文字ばかりだからアイコン使って見やすく」。
+
+採用 : 評価系 Material Symbols (Yuka さん選択) :
+
+| スコア | アイコン | 色 | Unicode フォールバック |
+|---|---|---|---|
+| ベスト | `star` | `#2D8F3E` 緑 | ★ |
+| OK | `done` | `#88C057` 薄緑 | ✓ |
+| 微妙 | `warning` | `#F2A93B` 黄 | ⚠ |
+| 別日 | `block` | `#D24A4A` 赤 | ⊘ |
+
+過去にあった「`check_circle` も `check` も ✓ にフォールバックして混乱」問題は、今回は 4種ともフォント未読込時の Unicode が **形状的に異なる** (★ ✓ ⚠ ⊘) ので発生しない。
+
+#### スコアセル表示
+
+```
+[★] ベスト 92  (緑)
+[✓] OK 78     (薄緑)
+[⚠] 微妙 58   (黄)
+[⊘] 別日 32   (赤)
+```
+
+DOM 構造 :
+
+```html
+<span class="score-pill score-best">
+  <span class="material-symbols-rounded" aria-hidden="true">star</span>
+  <span class="label">ベスト</span>
+  <span class="value">92</span>
+</span>
+```
+
+ARIA は `aria-label="6月2日 ベスト スコア92"` でテキスト記号を含めない (アイコンは装飾扱い)。
+
+#### サブスコア (時間帯)
+
+```
+[朝 ✓]   [昼 ★ 92]   [夜 ⚠]
+```
+
+ピル内にアイコン (12-14px 小さめ) + 時間帯ラベル + (昼のみ数値)。
+
+#### 凡例カード
+
+凡例にもアイコン併用 :
+
+> [★] ベスト = 風 ・ 雨 ・ 暑さ全部 OK ／ [✓] OK = 軽微 ／ [⚠] 微妙 = 風バ or 雨バ域 ／ [⊘] 別日 = 中止リスク高
+
+#### CSS
+
+```css
+.score-pill .material-symbols-rounded {
+  font-size: 18px;
+  margin-right: 4px;
+  vertical-align: middle;
+}
+.subscore .material-symbols-rounded {
+  font-size: 13px;
+  margin-right: 2px;
+}
+.legend-item .material-symbols-rounded {
+  font-size: 16px;
+  vertical-align: text-bottom;
+}
+```
+
+#### 該当ファイル
+
+- `src/score/scoring.js` : ラベル定数に `icon: 'star'` フィールド追加
+- `src/ui/table.js` : スコアピル ・ サブスコアピルにアイコン
+- `src/ui/legend.js` : 凡例カードにアイコン
+- `src/styles.css` : アイコンサイズ ・ 余白
+
+#### 検証
+
+- スコアセル 4種が「アイコン + テキスト + 数値」で表示
+- サブスコアピルも「[時間帯ラベル][アイコン]」で表示
+- 凡例カードにもアイコン併用
+- DOM ・ ARIA に undefined が一切出ない
+- フォント未読み込み時も Unicode (★ ✓ ⚠ ⊘) で判別可能
+- npm test 緑、npm run build 通る
+
 ### 0.7 公開ページ化 (Cloudflare Pages) ＋ ランタイム判定
 
 Yuka さん要望 : 「Mac 開いてなくても他の人も見れる公開ページ」

@@ -344,10 +344,12 @@ section {
 }
 
 /* --- テーブル --- */
-/* 縦スクロールコンテナにして、見出し行 (thead) を内部 sticky で固定する */
+/* §0.15 : 見出し行 (thead) を sticky で固定。横スクロール(スマホ)と両立させるため、
+   テーブル領域を縦スクロールコンテナにし、その中で thead を top:0 に貼り付ける。
+   (overflow を持つ要素内では sticky がそのコンテナ基準で効く) */
 .table-scroll {
   overflow: auto;
-  max-height: calc(100vh - 150px);
+  max-height: calc(100vh - 140px);
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
@@ -364,13 +366,18 @@ section {
 .forecast-table thead th {
   position: sticky;
   top: 0;
+  z-index: 10;
   background: var(--surface-2);
   color: var(--text-sub);
   font-weight: 600;
   text-align: center;
   padding: 10px 8px;
   border-bottom: 1px solid var(--border);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
   white-space: nowrap;
+}
+[data-theme='dark'] .forecast-table thead th {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
 }
 
 .forecast-table th.col-date,
