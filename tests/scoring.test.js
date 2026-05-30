@@ -135,13 +135,20 @@ describe('scoreToSymbol (§5.3)', () => {
 
 describe('windBadge (§5.5)', () => {
   it('境界値', () => {
+    // §0.30 : デフォルト閾値 windBa 8 / windCancel 12。
     expect(windBadge(7.9).text).toBe('通常');
     expect(windBadge(8).text).toBe('風バ可能性あり');
-    expect(windBadge(9.9).text).toBe('風バ可能性あり');
-    expect(windBadge(10).text).toBe('中止リスク高');
-    expect(windBadge(12.9).text).toBe('中止リスク高');
-    expect(windBadge(13).text).toBe('ほぼ中止');
+    expect(windBadge(11.9).text).toBe('風バ可能性あり');
+    expect(windBadge(12).text).toBe('中止リスク高');
+    expect(windBadge(13.9).text).toBe('中止リスク高');
+    expect(windBadge(14).text).toBe('ほぼ中止');
     expect(windBadge(null).text).toBe('—');
+  });
+  it('ショー別閾値', () => {
+    // ハーモニー (windBa 6 / windCancel 12) は 7m で風バ域
+    expect(windBadge(7, { windBa: 6, windCancel: 12 }).level).toBe(1);
+    // エレクトリカル (windCancel 10) は 11m で中止リスク高
+    expect(windBadge(11, { windBa: 8, windCancel: 10 }).level).toBe(2);
   });
 });
 
@@ -364,7 +371,8 @@ describe('evaluateDay (統合)', () => {
     expect(r.score).toBeGreaterThanOrEqual(0);
     expect(r.score).toBeLessThanOrEqual(100);
     expect(r.symbol).toBeTruthy();
-    expect(r.badges.wind.text).toBe('中止リスク高'); // gust window 12
+    // §0.30 : date 無し → DEFAULT 閾値 (windBa8/windCancel12)。gust window 平均 11 → 風バ域。
+    expect(r.badges.wind.text).toBe('風バ可能性あり');
     expect(r.badges.rain.text).toBe('雨キャン濃厚'); // pop window 70
     expect(r.subscores.noon).toBeTruthy();
     expect(['ベスト', 'OK', '微妙', '別日']).toContain(r.subscores.noon.symbol.label);

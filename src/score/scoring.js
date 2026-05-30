@@ -3,7 +3,8 @@
 // 純関数として実装し、境界値をテストで担保する。
 
 import { mean, maxOf } from '../utils/units.js';
-import { showWindowHours } from '../data/showSchedule.js';
+import { showWindowHours, getDaySchedule } from '../data/showSchedule.js';
+import { strictestThreshold, DEFAULT_THRESHOLD } from '../data/show-thresholds.js';
 
 // --- スコア → レベル (§5.3, §0.6.5) ---
 // ◎ ○ △ × の記号は廃止。用途が直感的に伝わる日本語テキストラベル + 色で表現する。
@@ -80,11 +81,16 @@ export function uvDeduction(uvMax) {
 
 // --- バッジ (§5.5, §5.6) ---
 
-export function windBadge(gust) {
+// §0.30 : 風バッジはショー別閾値 (windBa/windCancel) で判定する。
+// threshold 省略時は DEFAULT (windBa 8 / windCancel 12)。
+// level0 通常 < windBa ≤ level1 風バ < windCancel ≤ level2 中止リスク高 < windCancel+2 ≤ level3 ほぼ中止
+export function windBadge(gust, threshold = DEFAULT_THRESHOLD) {
   if (gust == null) return { level: 0, text: '—' };
-  if (gust < 8) return { level: 0, text: '通常' };
-  if (gust < 10) return { level: 1, text: '風バ可能性あり' };
-  if (gust < 13) return { level: 2, text: '中止リスク高' };
+  const ba = threshold.windBa ?? DEFAULT_THRESHOLD.windBa;
+  const cancel = threshold.windCancel ?? DEFAULT_THRESHOLD.windCancel;
+  if (gust < ba) return { level: 0, text: '通常' };
+  if (gust < cancel) return { level: 1, text: '風バ可能性あり' };
+  if (gust < cancel + 2) return { level: 2, text: '中止リスク高' };
   return { level: 3, text: 'ほぼ中止' };
 }
 
@@ -276,8 +282,13 @@ export function evaluateDay(forecasts, park, date = null) {
   const gustForBadge = metrics.gustShowWindow != null ? metrics.gustShowWindow : metrics.gustMax;
   const popForBadge = metrics.popShowWindow != null ? metrics.popShowWindow : metrics.popMax;
   const wbgtForBadge = metrics.wbgtShowWindow != null ? metrics.wbgtShowWindow : metrics.wbgtMax;
+  // §0.30 : その日 ・ パークの high 優先ショーで最も中止しやすい閾値を使う (安全側)
+  const highShows = date
+    ? getDaySchedule(date, park).shows.filter((s) => s.priority === 'high')
+    : [];
+  const windThreshold = highShows.length ? strictestThreshold(highShows) : DEFAULT_THRESHOLD;
   const badges = {
-    wind: windBadge(gustForBadge),
+    wind: windBadge(gustForBadge, windThreshold),
     rain: rainBadge(popForBadge, metrics.precipSum),
     wbgt: wbgtBadge(wbgtForBadge, metrics.windShowWindow, metrics.feelsLikeMax),
   };
