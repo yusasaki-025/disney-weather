@@ -196,61 +196,14 @@ h3 {
   outline-offset: 2px;
 }
 
-/* ステータスバー (§0.6-4) : ソース別鮮度をテーブル上部に集約 */
-.status-bar {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex-wrap: wrap;
-  margin-bottom: 12px;
-  padding: 8px 14px;
-  font-size: 12px;
-  color: var(--text-sub);
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-}
-
-.status-bar .sb-srcs {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.status-bar .sb-src b {
-  color: var(--text);
-}
-
-.status-bar .sb-src.sb-fail {
-  color: var(--score-bad);
-  font-weight: 700;
-}
-
-.status-bar .sb-dot {
-  color: var(--border);
-}
-
-.status-bar .sb-cache {
-  padding: 2px 8px;
-  border-radius: 999px;
-  background: var(--warn-bg);
-  color: #9a6a00;
-  font-weight: 700;
-}
-
-.status-bar .sb-refresh {
-  margin-left: auto;
-  padding: 5px 12px;
-  font-size: 12px;
-}
-
-.status-bar .sb-refresh .material-symbols-rounded {
-  font-size: 16px;
-}
-
-[data-theme='dark'] .status-bar .sb-cache {
-  color: #e6c06a;
+/* 鮮度はヘッダー更新ボタンに集約 (§0.13.3)。キャッシュ中は黄ドットを付ける。 */
+#btn-refresh.is-cached::after {
+  content: '';
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--brand-gold);
+  margin-left: 2px;
 }
 
 /* --- メイン --- */

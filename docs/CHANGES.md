@@ -910,6 +910,150 @@ Yuka さん指摘 : 「◎ ○ のみって絞り込みがあるけど ◎ と�
 
 - `src/styles.css` の @media クエリのみ修正 (HTML 構造変更不要)
 
+### 0.13 スコアラベル短縮 ・ 平均値スコア ・ ステータスバー削除 (Yuka さん指摘)
+
+#### 0.13.1 スコアラベル短縮 (「行ってよい」が長い)
+
+Yuka さん指摘 : 「行ってよい」が長い。
+
+新ラベル :
+
+| 旧 | 新 | 色 |
+|---|---|---|
+| 行くべき | **ベスト** | `#2D8F3E` 緑 |
+| 行ってよい | **OK** | `#88C057` 薄緑 |
+| 微妙 | **微妙** | `#F2A93B` 黄 |
+| 別日 | **別日** | `#D24A4A` 赤 |
+
+凡例カード文言 :
+
+> ベスト = 風 ・ 雨 ・ 暑さ全部 OK ／ OK = 軽微 ／ 微妙 = 風バ or 雨バ域 ／ 別日 = 中止リスク高
+
+フィルター「行ける日のみ」は **「ベスト or OK」を含む意味** で維持 (文言変更なし)。
+
+該当ファイル :
+
+- `src/score/scoring.js` のラベル定数 (`label: '行くべき'` 等を更新)
+- `src/ui/legend.js` の凡例カード文言
+- `src/ui/table.js` (もし `行くべき` 等をハードコードしてれば)
+- ARIA label 例 : `aria-label="6月2日 ベスト スコア92"`
+
+#### 0.13.2 スコア算定窓を「最大値」→「平均値」に
+
+Yuka さん指摘 : 「スコアが赤ばかり、こんなもんなの?」「全然いい日がない」。
+
+原因 : 現状の `wind_show_window` ・ `pop_show_window` ・ `wbgt_show_window` は **昼パレード時刻 ±1h の最大値**。一瞬の突風 ・ 短時間スパイクで丸ごと「中止リスク高」「ほぼ中止」になりがち。
+
+対応 : 算定窓を **平均値** に変更。
+
+```js
+// 旧
+const wind_show = Math.max(...hourlyWindInWindow);
+
+// 新
+const wind_show = hourlyWindInWindow.reduce((a,b)=>a+b, 0) / hourlyWindInWindow.length;
+```
+
+対象 :
+
+- `wind_show_window` ・ `gust_show_window` : ±1h の平均
+- `pop_show_window` : ±1h の平均
+- `wbgt_show_window` : ±1h の平均
+
+維持するもの (詳細パネル ・ ツールチップ参考表示用) :
+
+- 1日の全体最大値 (`wind_max` ・ `pop_max` ・ `wbgt_max`) は引き続き計算 ・ 保持
+- バッジセルのツールチップに「ピーク 15m/s (15時)」のような補助情報
+
+#### 0.13.3 ステータスバー削除 ・ ヘッダー更新ボタンに鮮度集約
+
+Yuka さん指摘 : 「気象庁 今 ・ Open-Meteo 今 ・ 強制更新」が上のヘッダー「更新」ボタンと被って邪魔。
+
+対応 : ステータスバーを **完全削除**、鮮度はヘッダー更新ボタンに統合。
+
+新ヘッダー (右側) :
+
+```
+[(refresh) 更新 ・ 23分前] [印刷] [URLコピー] [ヘルプ] [ダーク]
+```
+
+- 「更新」ボタン内に「X分前」を併記 (一番古いソースの経過時間)
+- キャッシュ中は cached アイコンを更新アイコンに重ねる (or 隣に黄色ドット)
+- ホバー / フォーカスで詳細を `title` 属性で出す :
+  - `気象庁 18分前 ・ Open-Meteo 23分前 ・ WBGT 簡易計算`
+- WBGT ソースバッジ (環境省 / 簡易計算) は ヘルプモーダル or 詳細パネル に格下げ
+
+該当ファイル :
+
+- `src/ui/statusBar.js` を削除
+- `src/main.js` から statusBar import / 呼び出し削除
+- `src/ui/header.js` の更新ボタンに鮮度ラベル追加
+- スマホ (< 768px) ハンバーガー内も同じ
+
+### 0.14 フィルター「行ける日のみ」→「おすすめ日のみ」(Yuka さん再指摘)
+
+問題 : Yuka さん指摘「行ける日のみって自分の予定的に行ける日っぽい書き方だね」 → 「予定空いてる日」と誤読される。
+
+対応 : フィルター文言を **「おすすめ日のみ」** に変更。
+
+| 旧 | 新 |
+|---|---|
+| `[ ] 行ける日のみ` | `[ ] おすすめ日のみ` |
+
+- ARIA label : 「おすすめ日のみ表示」
+- README の絞り込み記述も同様に変更
+- 動作 : ON で 総合スコアが「ベスト」or「OK」の日のみ表示 (§0.13.1 ラベル変更後の前提)
+- localStorage キーは互換維持
+
+該当 :
+
+- `src/ui/filters.js` のチェックボックス label / aria-label
+- README.md の絞り込み説明
+
+### 0.15 テーブル見出しを sticky で画面追従 (Yuka さん指摘)
+
+問題 : 15日分のデータをスクロールしているうちに、列名 (日付 / スコア / 風 / 雨 / 熱 / 気象庁 / Open-Meteo) が見えなくなり「これは何の列?」が分からなくなる。
+
+対応 : `position: sticky` で見出し行をスクロール時にも画面上部に固定。
+
+#### 実装 (CSS only)
+
+`src/styles.css` に追加 :
+
+```css
+/* テーブル見出し行を sticky に */
+.calendar-header-row,
+.table-header-row,
+table thead,
+table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--surface);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+}
+
+/* ダークモード対応 */
+[data-theme="dark"] .calendar-header-row,
+[data-theme="dark"] .table-header-row,
+[data-theme="dark"] table thead {
+  background: var(--surface);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+```
+
+#### 注意点
+
+- ページ上部のヘッダーバー (タイトル「マイハマびより」) が sticky な場合は、`calendar-header-row` の `top` をヘッダー高さに合わせる (例 `top: 64px`)
+- ステータスバー削除 (§0.13.3) 後はヘッダー直下が見出し行になる
+- 詳細パネルが行クリックで挿入されても見出し追従は維持
+- スマホでも同じ sticky 動作 ・ 横スクロール時もヘッダーは追従
+- 詳細パネル内のサブ見出し (時間帯スコア / ショー ・ パレード 等) は sticky 不要 (パネル内のみ表示)
+
+#### 該当ファイル
+
+- `src/styles.css` のみ (HTML 構造変更不要)
+
 ### 0.7 公開ページ化 (Cloudflare Pages) ＋ ランタイム判定
 
 Yuka さん要望 : 「Mac 開いてなくても他の人も見れる公開ページ」

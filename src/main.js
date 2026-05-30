@@ -6,8 +6,8 @@ import { setupTheme } from './ui/theme.js';
 import { setupHelp } from './ui/help.js';
 import { setupPrint } from './ui/print.js';
 import { setupMenu } from './ui/menu.js';
-import { renderStatusBar } from './ui/statusBar.js';
 import { renderScoreLegend } from './ui/legend.js';
+import { freshnessLabel, UPDATE_CYCLE } from './utils/freshness.js';
 import { logger } from './utils/logger.js';
 import { fetchJma, SOURCE_ID as JMA } from './data/jma.js';
 import { fetchOpenMeteo, SOURCE_ID as OM } from './data/openMeteo.js';
@@ -36,7 +36,6 @@ const els = {
   tbody: document.querySelector('#forecast-table tbody'),
   top3: document.getElementById('top3'),
   legend: document.getElementById('legend'),
-  status: document.getElementById('status-bar'),
   errorScreen: document.getElementById('error-screen'),
 };
 
@@ -133,13 +132,50 @@ function buildRows() {
   return rows.filter((r) => r.eval); // 全ソース欠損日は除外 (通常は起きない)
 }
 
+// ヘッダー「更新」ボタンに鮮度を集約 (§0.13.3。旧ステータスバーは廃止)。
+function oldestFetchedAt(byDate) {
+  let oldest = null;
+  for (const f of Object.values(byDate || {})) {
+    if (f.fetchedAt && (oldest == null || f.fetchedAt < oldest)) oldest = f.fetchedAt;
+  }
+  return oldest;
+}
+
 function updateStatus() {
-  renderStatusBar(els.status, {
-    sources: activeSources,
-    sourceStatus,
-    rawBySourceDate,
-    onRefresh: () => refresh(true),
-  });
+  const label = document.getElementById('refresh-label');
+  const btn = document.getElementById('btn-refresh');
+  if (!label || !btn) return;
+
+  const SRC = { jma: '気象庁', 'open-meteo': 'Open-Meteo', openweather: 'OpenWeather' };
+  // 全ソースのうち最も古い鮮度をボタンに出す
+  let oldest = null;
+  const detail = [];
+  let anyCached = false;
+  let allFail = activeSources.length > 0;
+  for (const s of activeSources) {
+    const st = sourceStatus[s] || {};
+    if (st.ok) allFail = false;
+    if (st.cached || st.stale) anyCached = true;
+    const fa = oldestFetchedAt(rawBySourceDate[s]);
+    if (fa && (oldest == null || fa < oldest)) oldest = fa;
+    detail.push(st.ok ? `${SRC[s]} ${freshnessLabel(fa)}` : `${SRC[s]} 取得失敗`);
+    if (UPDATE_CYCLE[s]) detail.push(UPDATE_CYCLE[s]);
+  }
+  // WBGT ソース (環境省 / 簡易計算) も title に格下げ表示
+  let wbgtSrc = null;
+  for (const byDate of Object.values(rawBySourceDate || {})) {
+    for (const f of Object.values(byDate || {})) {
+      if (f.wbgtSource === 'env-jp') wbgtSrc = 'env-jp';
+      else if (f.wbgtSource === 'derived' && !wbgtSrc) wbgtSrc = 'derived';
+    }
+    if (wbgtSrc === 'env-jp') break;
+  }
+  if (wbgtSrc) detail.push(wbgtSrc === 'env-jp' ? 'WBGT 環境省' : 'WBGT 簡易計算');
+
+  const fresh = freshnessLabel(oldest);
+  label.textContent = allFail ? '更新' : fresh ? `更新 ・ ${fresh}` : '更新';
+  btn.title = detail.join(' ・ ');
+  btn.classList.toggle('is-cached', anyCached && !allFail);
 }
 
 // --- 描画 ---
@@ -213,7 +249,8 @@ function renderSkeleton() {
         `<tr><td colspan="8" style="padding:12px"><span class="skeleton" style="width:80%"></span></td></tr>`,
     )
     .join('');
-  renderStatusBar(els.status, { loading: true });
+  const label = document.getElementById('refresh-label');
+  if (label) label.textContent = '取得中…';
 }
 
 function setupHeader() {
@@ -240,7 +277,7 @@ function buildMenuItems() {
   const items = [{ label: 'URL をコピー', icon: 'content_copy', onClick: copyUrl }];
   items.push(
     { label: '印刷', icon: 'print', onClick: () => click('btn-print') },
-    { label: '強制更新', icon: 'refresh', onClick: () => refresh(true) },
+    { label: '更新 (最新を取得)', icon: 'refresh', onClick: () => refresh(true) },
     { label: 'ダークモード切替', icon: 'dark_mode', onClick: () => click('btn-theme') },
     { label: '用語集 / ヘルプ', icon: 'help', onClick: () => click('btn-help') },
     {

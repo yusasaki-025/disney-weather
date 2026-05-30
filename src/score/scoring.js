@@ -8,8 +8,8 @@ import { showWindowHours } from '../data/showSchedule.js';
 // --- スコア → レベル (§5.3, §0.6.5) ---
 // ◎ ○ △ × の記号は廃止。用途が直感的に伝わる日本語テキストラベル + 色で表現する。
 export const SYMBOLS = [
-  { min: 85, key: 'excellent', label: '行くべき', color: '#2D8F3E' },
-  { min: 70, key: 'good', label: '行ってよい', color: '#88C057' },
+  { min: 85, key: 'excellent', label: 'ベスト', color: '#2D8F3E' },
+  { min: 70, key: 'good', label: 'OK', color: '#88C057' },
   { min: 50, key: 'fair', label: '微妙', color: '#F2A93B' },
   { min: -Infinity, key: 'bad', label: '別日', color: '#D24A4A' },
 ];
@@ -115,7 +115,8 @@ export function wbgtBadge(wbgt, windShowWindow, feelsLikeMax) {
 
 // --- 指標の集計 (§5.1) ---
 
-// 指定時間帯 hours の field (hourly) について、各ソースの最大値を取り、ソース間平均を返す
+// 指定時間帯 hours の field (hourly) について、各ソースの最大値を取り、ソース間平均を返す。
+// (詳細パネルの「ピーク」参考表示用。スコアには使わない。)
 export function windowMax(forecasts, hours, field) {
   const perSource = [];
   for (const f of forecasts) {
@@ -125,6 +126,34 @@ export function windowMax(forecasts, hours, field) {
     if (m != null) perSource.push(m);
   }
   return mean(perSource);
+}
+
+// 指定時間帯 hours の field について、各ソースの平均を取り、ソース間平均を返す (§0.13.2)。
+// 一瞬の突風で全体評価が落ちないよう、スコア算定窓は平均ベースにする。
+export function windowMean(forecasts, hours, field) {
+  const perSource = [];
+  for (const f of forecasts) {
+    if (!f.hourly || f.hourly.length === 0) continue;
+    const vals = f.hourly.filter((p) => hours.has(p.hour)).map((p) => p[field]);
+    const m = mean(vals);
+    if (m != null) perSource.push(m);
+  }
+  return mean(perSource);
+}
+
+// 窓内ピーク時刻 (ツールチップ「ピーク 15m/s (15時)」用)。{ value, hour } | null。
+export function windowPeak(forecasts, hours, field) {
+  let best = null;
+  for (const f of forecasts) {
+    if (!f.hourly || f.hourly.length === 0) continue;
+    for (const p of f.hourly) {
+      if (!hours.has(p.hour)) continue;
+      const v = p[field];
+      if (v == null || Number.isNaN(v)) continue;
+      if (best == null || v > best.value) best = { value: v, hour: p.hour };
+    }
+  }
+  return best;
 }
 
 // その日の複数ソースを単純平均して指標オブジェクトを作る
@@ -142,11 +171,15 @@ export function aggregateMetrics(forecasts, park) {
     feelsLikeMin: avg('feelsLikeMin'),
     wbgtMax: avg('wbgtMax'),
     uvMax: avg('uvMax'),
-    // ショー時刻 ±1h の窓 (hourly から)
-    windShowWindow: windowMax(forecasts, highHours, 'wind'),
-    gustShowWindow: windowMax(forecasts, highHours, 'gust'),
-    popShowWindow: windowMax(forecasts, highHours, 'pop'),
-    wbgtShowWindow: windowMax(forecasts, highHours, 'wbgt'),
+    // ショー時刻 ±1h の窓 (hourly から)。スコア算定は平均ベース (§0.13.2)。
+    windShowWindow: windowMean(forecasts, highHours, 'wind'),
+    gustShowWindow: windowMean(forecasts, highHours, 'gust'),
+    popShowWindow: windowMean(forecasts, highHours, 'pop'),
+    wbgtShowWindow: windowMean(forecasts, highHours, 'wbgt'),
+    // 窓内ピーク (詳細ツールチップ参考表示用)
+    gustPeak: windowPeak(forecasts, highHours, 'gust'),
+    popPeak: windowPeak(forecasts, highHours, 'pop'),
+    wbgtPeak: windowPeak(forecasts, highHours, 'wbgt'),
   };
 }
 

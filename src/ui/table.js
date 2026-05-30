@@ -171,7 +171,13 @@ export function renderTable(els, rows, state, sources, sourceStatus, handlers) {
       const wbgtLabel = wbgtSourceLabel(Object.values(row.forecasts));
       // セルは数値のみ (列ヘッダーが「熱 (WBGT)」なので WBGT/(推定) は冗長)。詳細は title で補助。
       const wbgtVal = m.wbgtMax != null ? `${fmtNum(m.wbgtMax, 0)}` : '—';
-      const wbgtTitle = wbgtLabel === '環境省' ? 'WBGT 環境省取得値' : 'WBGT 簡易計算による推定値';
+      // §0.13.2 : スコアは平均ベース。ピーク (最大) は補助ツールチップに表示。
+      const peakTxt = (peak, unit) =>
+        peak ? `ピーク ${fmtNum(peak.value, 0)}${unit} (${peak.hour}時)` : '';
+      const windTitle = peakTxt(m.gustPeak, 'm/s');
+      const wbgtBase = wbgtLabel === '環境省' ? 'WBGT 環境省取得値' : 'WBGT 簡易計算による推定値';
+      const wbgtPeakTxt = peakTxt(m.wbgtPeak, '');
+      const wbgtTitle = wbgtPeakTxt ? `${wbgtBase} ・ ${wbgtPeakTxt}` : wbgtBase;
 
       const cls = [
         'row-main',
@@ -191,7 +197,7 @@ export function renderTable(els, rows, state, sources, sourceStatus, handlers) {
           </div>
         </td>
         <td>${scorePillHtml(row.eval)}</td>
-        ${metricCell('wind', windVal, row.eval.badges.wind)}
+        ${metricCell('wind', windVal, row.eval.badges.wind, windTitle)}
         ${metricCell('rain', rainVal, row.eval.badges.rain)}
         ${metricCell('wbgt', wbgtVal, row.eval.badges.wbgt, wbgtTitle)}
         ${sources.map((s) => sourceCellHtml(s, row.forecasts[s], sourceStatus[s])).join('')}

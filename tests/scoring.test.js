@@ -10,6 +10,8 @@ import {
   rainBadge,
   wbgtBadge,
   windowMax,
+  windowMean,
+  windowPeak,
   aggregateMetrics,
   scoreFromMetrics,
   bandSubscore,
@@ -108,10 +110,10 @@ describe('uvDeduction (§5.2)', () => {
 
 describe('scoreToSymbol (§5.3)', () => {
   it('境界値', () => {
-    expect(scoreToSymbol(100).label).toBe('行くべき');
-    expect(scoreToSymbol(85).label).toBe('行くべき');
-    expect(scoreToSymbol(84).label).toBe('行ってよい');
-    expect(scoreToSymbol(70).label).toBe('行ってよい');
+    expect(scoreToSymbol(100).label).toBe('ベスト');
+    expect(scoreToSymbol(85).label).toBe('ベスト');
+    expect(scoreToSymbol(84).label).toBe('OK');
+    expect(scoreToSymbol(70).label).toBe('OK');
     expect(scoreToSymbol(69).label).toBe('微妙');
     expect(scoreToSymbol(50).label).toBe('微妙');
     expect(scoreToSymbol(49).label).toBe('別日');
@@ -200,6 +202,39 @@ describe('windowMax', () => {
   });
 });
 
+describe('windowMean (§0.13.2 平均ベース算定窓)', () => {
+  const f = fakeForecast('open-meteo', {}, [
+    { hour: 12, gust: 6, wind: 4 },
+    { hour: 13, gust: 12, wind: 8 },
+    { hour: 18, gust: 20, wind: 10 },
+  ]);
+  it('窓内の平均を取る (一瞬の突風で評価が落ちない)', () => {
+    // 12,13 の gust 平均 = (6+12)/2 = 9 → 風バ可能性域
+    expect(windowMean([f], new Set([12, 13]), 'gust')).toBe(9);
+    expect(windBadge(windowMean([f], new Set([12, 13]), 'gust')).text).toBe('風バ可能性あり');
+    // max なら 12 で「中止リスク高」になるところ、平均で緩和
+    expect(windowMax([f], new Set([12, 13]), 'gust')).toBe(12);
+  });
+  it('全欠損は null', () => {
+    const noHourly = fakeForecast('jma', {});
+    expect(windowMean([noHourly], new Set([12]), 'gust')).toBeNull();
+  });
+});
+
+describe('windowPeak (ツールチップ用ピーク)', () => {
+  const f = fakeForecast('open-meteo', {}, [
+    { hour: 12, gust: 6 },
+    { hour: 13, gust: 15 },
+    { hour: 14, gust: 9 },
+  ]);
+  it('窓内最大の値と時刻を返す', () => {
+    expect(windowPeak([f], new Set([12, 13, 14]), 'gust')).toEqual({ value: 15, hour: 13 });
+  });
+  it('全欠損は null', () => {
+    expect(windowPeak([fakeForecast('jma', {})], new Set([12]), 'gust')).toBeNull();
+  });
+});
+
 describe('aggregateMetrics は単純平均 (欠損除外)', () => {
   it('daily 値を平均する', () => {
     const a = fakeForecast('open-meteo', { gustMax: 10, popMax: 40 });
@@ -233,7 +268,7 @@ describe('scoreFromMetrics は show-window を優先', () => {
       precipSum: 0, feelsLikeMax: 22, tempMax: 25, windShowWindow: null, uvMax: 0,
     };
     const r = scoreFromMetrics(m, 'TDL');
-    // wind 10 + rain 15 = 25 → score 75 → 行ってよい
+    // wind 10 + rain 15 = 25 → score 75 → OK
     expect(r.score).toBe(75);
     expect(r.symbol.label).toBe('行ってよい');
   });
@@ -247,7 +282,7 @@ describe('bandSubscore / weightedBandTotal', () => {
     ]);
     const s = bandSubscore([f], noon, 'TDL');
     expect(s.score).toBe(100);
-    expect(s.symbol.label).toBe('行くべき');
+    expect(s.symbol.label).toBe('ベスト');
     expect(s.hasData).toBe(true);
   });
   it('重み付き平均 (昼が最重要)', () => {
@@ -288,6 +323,6 @@ describe('evaluateDay (統合)', () => {
     expect(r.badges.wind.text).toBe('中止リスク高'); // gust window 12
     expect(r.badges.rain.text).toBe('雨キャン濃厚'); // pop window 70
     expect(r.subscores.noon).toBeTruthy();
-    expect(['行くべき', '行ってよい', '微妙', '別日']).toContain(r.subscores.noon.symbol.label);
+    expect(['ベスト', 'OK', '微妙', '別日']).toContain(r.subscores.noon.symbol.label);
   });
 });

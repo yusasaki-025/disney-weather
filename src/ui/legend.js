@@ -9,6 +9,8 @@ const DESC = {
   fair: '風バ or 雨バ域',
   bad: '中止リスク高',
 };
+// ラベルが短くなった (ベスト / OK) ので、行ける日 = ベスト + OK と凡例で補足
+
 
 export function renderScoreLegend(el) {
   const pills = SYMBOLS.map(
