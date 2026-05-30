@@ -554,6 +554,50 @@ TDL の場合 :
 
 詳細仕様 : §6.9.5 デザイントークン。
 
+#### 0.6.11 見出しの左ゴールド縦バーを削除 (komorebi ルール「縦アクセントバー禁止」)
+
+問題 : §0.6.10 で実装した見出しの左ゴールド縦バーは、Yuka さんの長年のルール「縦アクセントバーは AI っぽいので禁止」と衝突する (komorebi-design-system でも同様の指針)。
+
+対応 : 縦バーを削除し、**色 ・ 余白 ・ 下罫線** の組み合わせで区切りを表現。
+
+```css
+/* ✕ 旧 (NG) */
+.panel-heading {
+  border-left: 4px solid var(--accent-2);  /* ゴールド縦バー */
+  padding-left: 12px;
+}
+
+/* ○ 新 */
+.panel-heading {
+  /* 縦バーなし、色 ・ 余白 ・ 下罫線で区切る */
+  color: var(--primary);                       /* 見出しはブルー */
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 1.15rem;
+  margin-top: 32px;                            /* 大きめ上余白 */
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--accent);      /* 下にピンクの罫線 */
+}
+
+/* スマホ */
+@media (max-width: 767px) {
+  .panel-heading {
+    margin-top: 24px;
+    font-size: 1.05rem;
+  }
+}
+```
+
+縦バー以外の装飾 (左の丸ドット panel-bullet があれば、それも見直し or 廃止) も AI 風に見える可能性があるので一緒に簡素化。
+
+該当ファイル :
+
+- `src/styles.css` の `.panel-heading` `.section-heading` 等で `border-left` / `border-inline-start` を全削除
+- 見出しの装飾は 色 ・ フォント ・ 罫線 ・ 余白のみで構成
+
+詳細仕様 : §6.9.5 デザイントークン (装飾要素から縦バー言及を削除)。
+
 ### 0.7 公開ページ化 (Cloudflare Pages) ＋ ランタイム判定
 
 Yuka さん要望 : 「Mac 開いてなくても他の人も見れる公開ページ」
