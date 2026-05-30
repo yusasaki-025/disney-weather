@@ -1,0 +1,2 @@
+# 当日運営状況ログ (§0.28)。scripts/fetch-operation.mjs が YYYY-MM-DD.json を生成する。
+# 実データは Cowork Chrome MCP 経由 (Akamai 通過) で取得して追加する運用。

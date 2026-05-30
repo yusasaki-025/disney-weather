@@ -81,6 +81,39 @@ function sourceCellHtml(source, forecast, status) {
   </td>`;
 }
 
+// §0.28 : 当日の公式運営状況 (中止 ・ 内容変更 ・ 早閉め)。取得済の日のみ表示。
+function operationHtml(date) {
+  const op = latestOperation(date);
+  if (!op) return '';
+  const rows = [];
+  for (const park of ['TDL', 'TDS']) {
+    const s = op.parks[park];
+    if (!s) continue;
+    for (const c of s.closedShows || []) {
+      rows.push(
+        `<li class="op-item op-closed"><span class="material-symbols-rounded" aria-hidden="true">block</span><span class="op-park">${park}</span>${esc(c.text || c.name || '')}</li>`,
+      );
+    }
+    for (const m of s.modifiedShows || []) {
+      const t = m.time ? `${esc(m.time)} ` : '';
+      rows.push(
+        `<li class="op-item op-modified"><span class="material-symbols-rounded" aria-hidden="true">warning</span><span class="op-park">${park}</span>${t}${esc(m.text || m.name || '')}</li>`,
+      );
+    }
+    if (s.earlyClose) {
+      rows.push(
+        `<li class="op-item op-modified"><span class="material-symbols-rounded" aria-hidden="true">schedule</span><span class="op-park">${park}</span>早閉め ${esc(s.earlyClose)}</li>`,
+      );
+    }
+  }
+  if (rows.length === 0) return '';
+  const time = op.fetchedAt ? `${esc(op.fetchedAt.slice(11, 16))} 時点` : '';
+  return `<div class="detail-section">
+        <h4><span class="material-symbols-rounded" aria-hidden="true">campaign</span>当日中止情報${time ? `<span class="op-time">${time}</span>` : ''}</h4>
+        <ul class="op-list">${rows.join('')}</ul>
+      </div>`;
+}
+
 function detailPanelHtml(row) {
   // §0.8 : その日の実スケジュール (公式取得があれば official、無ければ fallback)
   const schedFor = (p) => getDaySchedule(row.date, p);
@@ -141,6 +174,7 @@ function detailPanelHtml(row) {
         <ul class="show-list" data-park-shows="TDL">${showRowsFor('TDL')}</ul>
         <ul class="show-list" data-park-shows="TDS" hidden>${showRowsFor('TDS')}</ul>
       </div>
+      ${operationHtml(row.date)}
       <div class="detail-section">
         <h4><span class="material-symbols-rounded" aria-hidden="true">checkroom</span>持ち物 ･ 服装</h4>
         <ul class="outfit-list">${outfit}</ul>

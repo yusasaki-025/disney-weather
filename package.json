@@ -12,7 +12,8 @@
     "test:watch": "vitest",
     "coverage": "vitest run --coverage",
     "lint": "eslint .",
-    "fetch-schedule": "node scripts/fetch-schedule.mjs"
+    "fetch-schedule": "node scripts/fetch-schedule.mjs",
+    "fetch-operation": "node scripts/fetch-operation.mjs"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",

@@ -1855,3 +1855,49 @@ body {
     content: '✕ 閉じる';
   }
 }
+
+/* §0.28 : 当日中止情報セクション (公式運営状況) */
+.op-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.op-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  padding: 6px 8px;
+  border-radius: 8px;
+}
+.op-item .material-symbols-rounded {
+  font-size: 18px;
+  flex-shrink: 0;
+}
+.op-park {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-sub);
+  flex-shrink: 0;
+}
+.op-closed {
+  background: var(--risk-bg);
+}
+.op-closed .material-symbols-rounded {
+  color: var(--score-bad);
+}
+.op-modified {
+  background: var(--warn-bg);
+}
+.op-modified .material-symbols-rounded {
+  color: var(--score-fair);
+}
+.op-time {
+  margin-left: 8px;
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--text-sub);
+}

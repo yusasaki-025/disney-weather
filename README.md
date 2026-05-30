@@ -163,3 +163,38 @@ JSON を置いて `npm run build` → main に push すると公開ページ ( h
 ### 典型値 (FALLBACK) の更新
 
 日別までは持たず代表時刻だけ最新にしたい場合は、[src/data/showSchedule.js](src/data/showSchedule.js) の `FALLBACK_SCHEDULE` の公演名 ・ 時刻を更新します。
+
+## 当日の運営状況 (中止 ・ 内容変更) の蓄積 (§0.28)
+
+ショー ・ パレードの当日中止や時刻変更、早閉めなどの「当日変更」を `src/data/operation-log/YYYY-MM-DD.json` に蓄積し、詳細パネルに「当日中止情報」セクションとして表示します ( 取得済の日のみ )。Phase 2 第4弾 ( 的中追跡 ) の基礎データになります。
+
+### 取得手順
+
+公式サイトは Akamai による bot 保護があるため、安定取得には実 Chrome 経由 ( Cowork Chrome MCP ) が必要です。取得結果を次の形式で `src/data/operation-log/` に保存します。
+
+```json
+{
+  "date": "2026-06-05",
+  "snapshots": [
+    {
+      "fetchedAt": "2026-06-05T08:00:00+09:00",
+      "park": "TDS",
+      "closedShows": [{ "text": "ビリーヴ! 中止 (天候不良)" }],
+      "modifiedShows": [{ "text": "ダンス ・ ザ ・ グローブ! 18:50 公演中止", "time": "18:50" }],
+      "earlyClose": "18:30",
+      "closedAttractions": [],
+      "rawTextSnippet": "..."
+    }
+  ]
+}
+```
+
+ローカル Mac で試す場合は `npm run fetch-operation` ( 今日 ) または `npm run fetch-operation -- 20260605` ( 指定日 )。取得できた日だけ JSON を出力し、失敗時は何も書きません。保存後は次でコミットします。
+
+```sh
+git add src/data/operation-log/
+git commit -m "data: operation snapshot YYYY-MM-DD"
+git push
+```
+
+JSON が無い日 ・ 取得失敗時はセクションを表示しません。

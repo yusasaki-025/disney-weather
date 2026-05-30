@@ -2223,6 +2223,197 @@ priority 順序ソート ・ 凡例カードかヘルプモーダルで「太字
 - `src/styles.css` の @media (max-width: 767px) のみ修正
 - HTML / JS 変更不要 (chevron は既存 DOM のまま非表示)
 
+### 0.28 Phase 2 第3弾 : 公式運営状況の蓄積
+
+概要 : TDR 公式運営状況ページから当日の中止 ・ 内容変更告知を 1日3回取得して蓄積。第4弾 (的中追跡) の基礎データとなる。
+
+#### データ源
+
+- TDL : `https://www.tokyodisneyresort.jp/info/operation.html`
+- TDR 公式運営カレンダー (個別日付) : 既存 §0.8 で取得済の `tdl/daily/calendar/{YYYYMMDD}/` / `tds/...` ページにも「赤字 = 当日変更」の情報が出る
+
+#### 取得頻度
+
+- 1日3回 (08:00 / 12:00 / 18:00 JST)
+- 取得失敗時は次回再試行 (Akamai 一時的ブロック対策)
+
+#### 実装方針 (3段階)
+
+**Stage 1 (Phase 2 で実装) : 手動 ・ ローカル Mac スクリプト**
+
+```
+scripts/fetch-operation.mjs (新規)
+
+引数 : なし (デフォルト今日) or YYYYMMDD
+動作 :
+  - Playwright (headless Chrome) で operation.html + daily/calendar を取得
+  - 中止 ・ 変更告知をパース
+  - src/data/operation-log/{YYYY-MM-DD}.json に書き込み (1日1ファイル ・ 取得タイミング別配列)
+  - リクエスト間 3秒 sleep、User-Agent 明示
+```
+
+JSON 例 :
+
+```json
+{
+  "date": "2026-06-05",
+  "snapshots": [
+    {
+      "fetchedAt": "2026-06-05T08:00:00+09:00",
+      "park": "TDS",
+      "closedShows": ["ビリーヴ!〜シー･オブ･ドリームス〜", "【環境演出】スパークリング･ジュビリー･ナイト"],
+      "modifiedShows": [
+        { "name": "ダンス･ザ･グローブ!", "originalTimes": ["13:00","14:45","17:05","18:50"], "actualTimes": ["13:00","14:45","17:05"] }
+      ],
+      "earlyClose": "18:30",
+      "closedAttractions": [],
+      "rawTextSnippet": "..."
+    },
+    { "fetchedAt": "2026-06-05T12:00:00+09:00", ... },
+    { "fetchedAt": "2026-06-05T18:00:00+09:00", ... }
+  ]
+}
+```
+
+**Stage 2 (Phase 3 で検討) : GitHub Actions cron で自動化**
+
+- `.github/workflows/fetch-operation.yml` で 1日3回 cron 実行
+- Playwright を Actions の Ubuntu で動かす (Akamai のリスクあり、ローカル Mac の方が確実かも)
+- 取得 ・ commit & push 自動化
+
+**Stage 3 (将来) : Cloudflare Workers + Browser Rendering API**
+
+- Workers cron で完全自動化 ・ 蓄積を R2 に
+- ただし Browser Rendering は有料の可能性 (CF 課金確認)
+
+#### artifact 側 UI
+
+詳細パネル内の「ショー ・ パレード」セクションの直下に **「当日中止情報」** を追加表示 :
+
+```
+─── 当日中止情報 (xx時時点) ───
+✕ ビリーヴ!〜シー･オブ･ドリームス〜 中止 (天候不良)
+⚠ ダンス･ザ･グローブ! 一部省略 (18:50 公演 中止)
+```
+
+#### package.json script
+
+```
+"scripts": {
+  "fetch-operation": "node scripts/fetch-operation.mjs"
+}
+```
+
+#### 運用フロー (Phase 2 段階)
+
+- Yuka さんが必要時に Mac で `npm run fetch-operation` 実行 (手動)
+- Phase 3 で cron 化検討
+
+#### 該当ファイル
+
+- `scripts/fetch-operation.mjs` (新規)
+- `src/data/operation-log/.gitkeep` (新規ディレクトリ)
+- `src/data/operationLog.js` (新規 ・ 取得結果 import + UI 提供)
+- `src/ui/detailPanel.js` に「当日中止情報」セクション追加
+- `README.md` に運用フロー追加
+
+#### 検証
+
+- `npm run fetch-operation` 実行で当日 JSON が出力
+- 公開ページの詳細パネルに「当日中止情報」セクション表示 (取得済の日)
+- 取得失敗時は表示なし (UI 壊さない)
+- ローカル取得は Akamai 通過確認 (Cowork Chrome MCP 同様の挙動)
+
+### 0.29 Phase 2 第4弾 : 過去予報の的中追跡
+
+概要 : 各天気予報ソース (JMA / Open-Meteo / 環境省 WBGT) の **前日予報** と **当日実測** を比較してログ蓄積 ・ ソース別の平均誤差を出す。最終的にソース信頼度補正 (重み付け) に発展。
+
+#### データ源
+
+- **予報スナップショット** : 既存の予報取得 (artifact 起動時 fetch) を Workers KV or repo に保存
+- **実測値** : 気象庁アメダス `https://www.jma.go.jp/bosai/amedas/data/point/44132/{YYYYMMDD}_{HH}.json` (船橋) ・ 環境省 WBGT 実測
+
+#### 実装方針 (3段階)
+
+**Stage 1 (Phase 2 で実装) : 予報スナップショット保存**
+
+- artifact が予報取得時に **`src/data/forecast-snapshots/{YYYY-MM-DD}.json` に書き込み** (公開ページからは Cloudflare Workers 経由で R2 / KV に書く ・ ローカル開発時はファイル)
+- 1日1回 (午前) スナップショット作成 ・ その日の前日に取得した予報のみ保持
+
+**Stage 2 : 観測値取得 ・ 比較スクリプト**
+
+```
+scripts/track-accuracy.mjs (新規)
+
+動作 :
+  - 引数 (or 今日) の日付について :
+    - src/data/forecast-snapshots/{YYYY-MM-DD}.json (前日の予報) を読む
+    - 気象庁アメダスから当日実測値を取得 (全 24時間 ・ 風速 ・ 降水量 ・ 気温)
+    - 環境省 WBGT 実測値 (取得済) と比較
+    - ソース別の誤差を計算 (RMS / MAE)
+  - 結果を src/data/accuracy-log.json に追記 (日次)
+```
+
+JSON 例 :
+
+```json
+{
+  "2026-06-05": {
+    "park": "TDR",
+    "actualMaxWind": 11.5,
+    "actualMaxPop": 60,
+    "actualMaxTemp": 27,
+    "actualMaxWbgt": 28,
+    "forecasts": {
+      "jma": { "predictedMaxWind": 10, "windError": 1.5, "predictedPop": 50, "popError": 10 },
+      "open-meteo": { "predictedMaxWind": 12, "windError": 0.5, "predictedPop": 65, "popError": 5 },
+      "env-jp": { "predictedMaxWbgt": 27, "wbgtError": 1 }
+    }
+  }
+}
+```
+
+**Stage 3 (将来) : ソース信頼度補正**
+
+- 30日 蓄積 → 各ソースの平均誤差から重み計算
+- スコアリングで weighted average に変更 (`src/score/scoring.js`)
+- artifact に「ソース信頼度」表示 ・ 「JMA は風速を5%過小評価しがち」等
+
+#### artifact 側 UI
+
+別 artifact (or 詳細パネル末尾) に「予報精度ダッシュボード」 :
+
+- 過去N日の各ソース誤差の折れ線グラフ
+- 平均誤差比較
+- 直近の的中例 ・ 外し例
+
+#### package.json script
+
+```
+"scripts": {
+  "track-accuracy": "node scripts/track-accuracy.mjs"
+}
+```
+
+#### 運用フロー
+
+- Yuka さんが Mac で `npm run track-accuracy` を翌日朝に実行 (手動)
+- Phase 3 で GitHub Actions cron で 1日1回自動
+
+#### 該当ファイル
+
+- `scripts/track-accuracy.mjs` (新規)
+- `src/data/forecast-snapshots/.gitkeep` (新規ディレクトリ)
+- `src/data/accuracy-log.json` (新規)
+- 予報スナップショット保存ロジック (Phase 2 では手動取得 ・ 後日 artifact 内自動保存)
+- (Phase 3) artifact に「予報精度ダッシュボード」セクション
+
+#### 検証
+
+- `npm run track-accuracy` 実行で前日の的中ログ作成
+- accuracy-log.json に日次追記
+- 30日蓄積後にソース別平均誤差が見える
+
 ### 0.7 公開ページ化 (Cloudflare Pages) ＋ ランタイム判定
 
 Yuka さん要望 : 「Mac 開いてなくても他の人も見れる公開ページ」
