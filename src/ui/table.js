@@ -92,19 +92,26 @@ function detailPanelHtml(row) {
     for (const s of schedFor(p).shows) {
       let g = byName.get(s.name);
       if (!g) {
-        g = { name: s.name, priority: s.priority, tags: s.tags || [], times: [] };
+        // §0.26.1 : 時刻未定のレストランショー (kind:'show-restaurant') は priority-restaurant 扱い
+        const isRestaurant = s.kind === 'show-restaurant';
+        g = {
+          name: s.name,
+          cls: isRestaurant ? 'restaurant' : s.priority || 'medium',
+          restaurant: isRestaurant,
+          tags: s.tags || [],
+          times: [],
+        };
         byName.set(s.name, g);
         order.push(g);
       }
-      g.times.push(s.time);
+      if (s.time) g.times.push(s.time);
     }
     return order
-      .map(
-        (g) =>
-          `<li class="show-item priority-${g.priority}"><span class="show-name">${esc(g.name)}</span><span class="show-times">${g.times
-            .map(esc)
-            .join(' / ')}</span>${g.tags.length ? `<span class="show-tags">${esc(g.tags.join(' '))}</span>` : ''}</li>`,
-      )
+      .map((g) => {
+        const timesText = g.restaurant && g.times.length === 0 ? '時刻未定' : g.times.map(esc).join(' / ');
+        const tagsHtml = g.tags.length ? `<span class="show-tags">${esc(g.tags.join(' '))}</span>` : '';
+        return `<li class="show-item priority-${g.cls}"><span class="show-name">${esc(g.name)}</span><span class="show-times">${timesText}</span>${tagsHtml}</li>`;
+      })
       .join('');
   };
   // パーク別に official/fallback が混ざりうるが、どちらかが official なら「公式取得済」とする

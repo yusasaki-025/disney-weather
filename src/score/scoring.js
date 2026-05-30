@@ -184,9 +184,11 @@ export function windowPeak(forecasts, hours, field) {
 }
 
 // その日の複数ソースを単純平均して指標オブジェクトを作る
-export function aggregateMetrics(forecasts, park) {
+export function aggregateMetrics(forecasts, park, date = null) {
   const avg = (key) => mean(forecasts.map((f) => f[key]));
-  const highHours = showWindowHours(park, 'high', 1);
+  // §0.8 fix: date を渡してその日の実スケジュール窓でスコア算定する
+  // (渡し忘れると常に FALLBACK 時刻窓になり、日別の実時刻が score に反映されない)
+  const highHours = showWindowHours(park, 'high', 1, date);
   return {
     windMax: avg('windMax'),
     gustMax: avg('gustMax'),

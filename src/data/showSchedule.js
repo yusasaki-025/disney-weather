@@ -33,15 +33,24 @@ for (const [path, mod] of Object.entries(monthFiles)) {
 
 // 月別 JSON の 1 公演 {name, times[], priority, kind, tags} を内部形 {name, time, priority, type} 群へ。
 // times が複数あれば time ごとに展開 (high の複数回公演に対応)。
+// §0.26.1: レストランショー (priority:null / kind:'show-restaurant' で時刻未定) は
+//   time:null の 1 件として残し、一覧に「時刻未定 ・ 要予約」で表示する (算定窓には使わない)。
 function expandShows(shows) {
   const out = [];
   for (const s of shows || []) {
+    const tags = s.tags || [];
+    const validTimes = (s.times || []).filter((t) => t && /^\d{1,2}:\d{2}$/.test(t));
+    if (validTimes.length === 0) {
+      // 時刻未定のレストランショーは情報として 1 件だけ残す (kind を保持して描画側で判別)
+      if (s.kind === 'show-restaurant') {
+        out.push({ name: s.name, time: null, priority: s.priority || null, type: 'restaurant', kind: s.kind, tags });
+      }
+      continue;
+    }
     const priority = s.priority || 'medium';
     const type = (s.kind || '').includes('parade') ? 'parade' : 'show';
-    for (const t of s.times || []) {
-      // レストランショー等は時刻が null/空のことがある。時刻なしは窓計算 ・ 縦線に使えないため除外。
-      if (!t || !/^\d{1,2}:\d{2}$/.test(t)) continue;
-      out.push({ name: s.name, time: t, priority, type, tags: s.tags || [] });
+    for (const t of validTimes) {
+      out.push({ name: s.name, time: t, priority, type, kind: s.kind, tags });
     }
   }
   return out;
@@ -67,7 +76,9 @@ export function toDecimalHour(hhmm) {
 // 指定パーク ･ priority の全時刻 (小数時間) を返す。date 指定時はその日の実スケジュール。
 export function showTimes(park, priority, date = null) {
   const shows = date ? getDaySchedule(date, park).shows : FALLBACK_SCHEDULE[park] || [];
-  return shows.filter((s) => priority == null || s.priority === priority).map((s) => toDecimalHour(s.time));
+  return shows
+    .filter((s) => s.time && (priority == null || s.priority === priority))
+    .map((s) => toDecimalHour(s.time));
 }
 
 // 指定 priority の各時刻 ±windowH の範囲に入る整数時 (hourly データ突合用) の集合を返す。
@@ -85,7 +96,9 @@ export function showWindowHours(park, priority = 'high', windowH = 1, date = nul
 // 縦線ハイライト用: パーク内の全ショーを {hour, time, name, priority, type} で返す。
 export function allShowMarkers(park, date = null) {
   const shows = date ? getDaySchedule(date, park).shows : FALLBACK_SCHEDULE[park] || [];
-  return shows.map((s) => ({
+  return shows
+    .filter((s) => s.time)
+    .map((s) => ({
     hour: toDecimalHour(s.time),
     time: s.time,
     name: s.name,

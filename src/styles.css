@@ -760,6 +760,15 @@ section {
 .show-item.priority-low .show-times {
   color: var(--text-mute);
 }
+/* §0.26.1 : 時刻未定のレストランショー (要予約) は priority-low と同等の控えめ表示 */
+.show-item.priority-restaurant .show-name {
+  font-weight: 400;
+  color: var(--text-mute);
+}
+.show-item.priority-restaurant .show-times {
+  color: var(--text-mute);
+  font-style: italic;
+}
 
 .outfit-list {
   list-style: none;
