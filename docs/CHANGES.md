@@ -1866,6 +1866,145 @@ body { line-height: 1.5; }       /* 1.7 → 1.5 (情報密度↑) */
 - PC でも余白が引き締まって行数増 ・ スクロール量減
 - フォントサイズが2-3段階に整理されて視覚的にまとまる
 
+### 0.25 スマホカード grid 化 ・ inline-block 廃止 (Yuka さん実機スクショ確認)
+
+問題 : §0.24 実装後の実機スクショで以下が崩れている :
+
+- **熱 (WBGT) が左単独配置** → 3列等幅になっていない (風 / 雨 / 熱)
+- **気象庁 / Open-Meteo が縦並び** → 2列横並びになっていない (気象庁の天気アイコンが幅広く Open-Meteo を下に押し出した)
+- Code が「ブラウザ実測」と言っていたが、Chrome DevTools の Device toolbar (375px iPhone エミュレーション) で確認しないと実機の崩れが見えない
+
+#### 原因
+
+- `display: inline-block + width: 33.33% / 50%` はコンテンツ高さ ・ 内部 white-space で行が崩れる
+- table の `tr` が `display: block` でも、子 `td` の inline-block レイアウトは脆い
+- 正解は `display: grid + grid-template-areas` で領域を固定 (コンテンツ依存しない)
+
+#### 修正 CSS (ロバスト版)
+
+```css
+@media (max-width: 767px) {
+  /* table 完全 block 化 */
+  .disney-table,
+  .disney-table tbody {
+    display: block;
+    width: 100%;
+  }
+  .disney-table thead {
+    display: none;
+  }
+
+  /* tr = カード = grid 親 (固定領域) */
+  .disney-table tr.calendar-row {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "date-score date-score"
+      "wind rain"
+      "heat heat"
+      "jma openmeteo"
+      "more more";
+    gap: 8px;
+    padding: 12px;
+    margin-bottom: 8px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--surface);
+    box-shadow: var(--shadow-card);
+    cursor: pointer;
+    transition: box-shadow 0.2s, transform 0.1s;
+  }
+  .disney-table tr.calendar-row:active {
+    transform: scale(0.99);
+    box-shadow: var(--shadow-hover);
+  }
+
+  /* td を grid 子として block 化 */
+  .disney-table td {
+    display: block !important;
+    box-sizing: border-box;
+    width: auto !important;
+    min-width: 0;
+    padding: 0;
+    margin: 0;
+  }
+
+  .disney-table td.cell-date-score { grid-area: date-score; }
+  .disney-table td.cell-wind       { grid-area: wind; }
+  .disney-table td.cell-rain       { grid-area: rain; }
+  .disney-table td.cell-heat       { grid-area: heat; }
+  .disney-table td.cell-jma        { grid-area: jma; text-align: center; }
+  .disney-table td.cell-openmeteo  { grid-area: openmeteo; text-align: center; }
+
+  /* 上段 : 日付＋スコア横並び ・ 下罫線 */
+  .disney-table td.cell-date-score {
+    display: flex !important;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .cell-date-score::before { content: none; }
+  .cell-date-score .date-line { font-size: 15px; font-weight: 600; }
+  .cell-date-score .score-pill { font-size: 14px; padding: 4px 10px; }
+
+  /* 中段 ・ 下段の上罫線 */
+  .disney-table td.cell-jma,
+  .disney-table td.cell-openmeteo {
+    padding-top: 8px;
+    border-top: 1px solid var(--border);
+  }
+  .cell-jma .weather-icon,
+  .cell-openmeteo .weather-icon {
+    font-size: 32px !important;
+    margin-bottom: 2px;
+  }
+
+  /* data-label : 青 ・ 11px ・ 太字 */
+  .disney-table td::before {
+    content: attr(data-label);
+    display: block;
+    font-size: 11px;
+    color: var(--primary);
+    font-weight: 600;
+    margin-bottom: 2px;
+    letter-spacing: 0.3px;
+  }
+
+  /* 末尾の「タップで詳細」 (grid-area: more) */
+  .disney-table tr.calendar-row::after {
+    grid-area: more;
+    content: '› タップで詳細';
+    text-align: center;
+    padding-top: 6px;
+    border-top: 1px dashed var(--border);
+    color: var(--primary);
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .disney-table tr.calendar-row[aria-expanded="true"]::after {
+    content: '✕ 閉じる';
+  }
+}
+```
+
+#### 重要ポイント
+
+- `grid-template-areas` で領域を **明示宣言** ・ コンテンツ高さに左右されない
+- `td` は `display: block` で grid 子に ・ `inline-block` を廃止
+- 熱は1列幅いっぱい (`grid-area: heat` を2カラム占有)、気象庁/Open-Meteo は左右1ずつ確実に
+- `::after` も `grid-area: more` でカード末尾領域に確実配置
+
+#### 検証手順 (Code 必須)
+
+1. **Chrome DevTools の Device toolbar** で iPhone (375x812) エミュレーション
+2. 公開ページ or `npm run preview` で実機サイズ確認
+3. 風 / 雨 / 熱 / 気象庁 / Open-Meteo すべて正しい領域に配置されているか
+4. 各カードの高さがコンテンツに合わせて自動調整されるか
+5. 実機 Safari スクショと比較 (Yuka さん実機テスト前提)
+
+DevTools の通常ウィンドウサイズ (>768px) で「正しく動く」と判断するのは NG ・ Device toolbar 必須。
+
 ### 0.7 公開ページ化 (Cloudflare Pages) ＋ ランタイム判定
 
 Yuka さん要望 : 「Mac 開いてなくても他の人も見れる公開ページ」

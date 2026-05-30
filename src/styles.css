@@ -1642,3 +1642,72 @@ body {
     padding: 16px 24px;
   }
 }
+
+/* =========================================================================
+   §0.25 スマホカード grid 化 ・ 崩れ修正
+   §0.24 の inline-block + width:% は実機 iPhone でコンテンツ高さにより崩れたため、
+   grid + grid-template-areas で領域を固定する。末尾追記で §0.24 を cascade 上書き。
+   ========================================================================= */
+@media (max-width: 767px) {
+  .forecast-table tr.calendar-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      'date date'
+      'wind rain'
+      'heat heat'
+      'jma  om'
+      'more more';
+    column-gap: 10px;
+    row-gap: 8px;
+    align-items: start;
+  }
+
+  /* 各 td を block 化し、領域を割当 (inline-block/width:% を廃止) */
+  .forecast-table tr.calendar-row > td.cell-date-score,
+  .forecast-table tr.calendar-row > td.cell-wind,
+  .forecast-table tr.calendar-row > td.cell-rain,
+  .forecast-table tr.calendar-row > td.cell-heat,
+  .forecast-table tr.calendar-row > td.cell-jma,
+  .forecast-table tr.calendar-row > td.cell-openmeteo {
+    display: block;
+    width: auto;
+    box-sizing: border-box;
+    margin: 0;
+    padding-right: 0;
+    vertical-align: baseline;
+  }
+
+  .forecast-table tr.calendar-row > td.cell-date-score {
+    grid-area: date;
+    /* 日付+スコア横並びは §0.24 のまま維持。下罫で区切る */
+    margin-bottom: 0;
+  }
+  .forecast-table tr.calendar-row > td.cell-wind {
+    grid-area: wind;
+  }
+  .forecast-table tr.calendar-row > td.cell-rain {
+    grid-area: rain;
+  }
+  .forecast-table tr.calendar-row > td.cell-heat {
+    grid-area: heat;
+  }
+  .forecast-table tr.calendar-row > td.cell-jma {
+    grid-area: jma;
+    padding-top: 8px;
+    border-top: 1px solid var(--border);
+    text-align: center;
+  }
+  .forecast-table tr.calendar-row > td.cell-openmeteo {
+    grid-area: om;
+    padding-top: 8px;
+    border-top: 1px solid var(--border);
+    text-align: center;
+  }
+
+  /* 「タップで詳細」を grid-area: more で最下段に確実配置 */
+  .forecast-table tr.calendar-row:not([aria-expanded='true'])::after {
+    grid-area: more;
+    margin-top: 0;
+  }
+}
