@@ -14,7 +14,7 @@ import { dayType } from './data/holidays.js';
 import { evaluateDay } from './score/scoring.js';
 import { renderTop3 } from './ui/top3.js';
 import { renderTable, renderLegend } from './ui/table.js';
-import { loadState, applyFilterSort, wireControls, toggleNg, setDecided } from './ui/filters.js';
+import { loadState, applyFilterSort, wireControls } from './ui/filters.js';
 import { LOCATION } from './config/location.js';
 
 const CONFIG = {
@@ -188,14 +188,7 @@ function render() {
   }
 
   const view = applyFilterSort(rows, state);
-  const ngSet = new Set(state.ngDates);
-  const rowsWithFlags = rows.map((r) => ({
-    ...r,
-    isNg: ngSet.has(r.date),
-    isDecided: r.date === state.decidedDate,
-  }));
-
-  renderTop3(els.top3, rowsWithFlags, { onSelect: openByDate, park: state.park });
+  renderTop3(els.top3, rows, { onSelect: openByDate });
   renderTable(els, view, state, activeSources, sourceStatus, handlers);
   renderLegend(els.legend);
   updateStatus();
@@ -209,16 +202,8 @@ function openByDate(date) {
   }
 }
 
-// --- 詳細パネル内アクション ---
+// --- テーブルのハンドラ (§0.21 で決定/NG は廃止、再試行のみ) ---
 const handlers = {
-  onDecide(date) {
-    setDecided(state, date);
-    render();
-  },
-  onToggleNg(date) {
-    toggleNg(state, date);
-    render();
-  },
   onRetryAll() {
     refresh(true);
   },

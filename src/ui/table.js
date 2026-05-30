@@ -3,12 +3,12 @@
 import {
   esc,
   fmtNum,
-  dateLabel,
   scorePillHtml,
   cancelBadgeHtml,
   subscoreHtml,
   scoreAria,
 } from './components.js';
+import { formatMd, weekday } from '../utils/date.js';
 import { BANDS } from '../score/scoring.js';
 import { renderPopWindChart, renderTempChart } from './chart.js';
 import { suggestOutfit } from './outfit.js';
@@ -28,8 +28,11 @@ const SOURCE_LABEL = { jma: '気象庁', 'open-meteo': 'Open-Meteo', openweather
 const CAT_ICON = { wind: 'air', rain: 'umbrella', wbgt: 'thermostat' };
 
 // 風 / 雨 / 熱セル : カテゴリアイコン(頭) ＋ 実数値(主) ＋ バッジ(副) (§0.5.2 / §0.6.6-3)
+// kind: wind/rain/wbgt。cellClass/label はスマホカード化 (§0.22) 用。
+const METRIC_LABEL = { wind: '風', rain: '雨', wbgt: '熱 (WBGT)' };
 function metricCell(kind, valueHtml, badge, title = '') {
-  return `<td${title ? ` title="${esc(title)}"` : ''}>
+  const cellClass = kind === 'wbgt' ? 'cell-heat' : `cell-${kind}`;
+  return `<td class="${cellClass}" data-label="${esc(METRIC_LABEL[kind])}"${title ? ` title="${esc(title)}"` : ''}>
     <div class="metric-cell">
       <span class="cat-val"><span class="material-symbols-rounded cat-icon" aria-hidden="true">${CAT_ICON[kind]}</span>${valueHtml}</span>
       ${cancelBadgeHtml(badge)}
@@ -53,21 +56,24 @@ function wbgtSourceLabel(forecasts) {
 }
 
 function sourceCellHtml(source, forecast, status) {
+  // スマホカード化 (§0.22) 用のクラス ・ ラベル
+  const cellClass = source === 'jma' ? 'cell-jma' : 'cell-openmeteo';
+  const label = SOURCE_LABEL[source] || source;
   if (status && !status.ok) {
-    return `<td class="source-cell"><span class="cell-fail">取得失敗 <button type="button" data-retry>再試行</button></span></td>`;
+    return `<td class="source-cell ${cellClass}" data-label="${esc(label)}"><span class="cell-fail">取得失敗 <button type="button" data-retry>再試行</button></span></td>`;
   }
   if (!forecast) {
-    return `<td class="source-cell is-empty">—</td>`;
+    return `<td class="source-cell ${cellClass} is-empty" data-label="${esc(label)}">—</td>`;
   }
   const temp =
     forecast.tempMax != null || forecast.tempMin != null
       ? `${tempSpan(forecast.tempMax)} / ${tempSpan(forecast.tempMin)}`
       : '—';
   // 鮮度はステータスバーに集約 (§0.6-4)。セルはホバー title で補助表示のみ。
-  const title = `${SOURCE_LABEL[source] || source} ${freshnessLabel(forecast.fetchedAt)}`;
+  const title = `${label} ${freshnessLabel(forecast.fetchedAt)}`;
   // 大きな天気アイコン (40px) を主役に (§0.6.6-2)
   const wi = getWeatherIcon(forecast.weatherText);
-  return `<td class="source-cell" title="${esc(title)}">
+  return `<td class="source-cell ${cellClass}" data-label="${esc(label)}" title="${esc(title)}">
     <span class="material-symbols-rounded weather-icon" style="color:${wi.color}" aria-hidden="true">${wi.name}</span>
     <div class="sc-sub">${esc(forecast.weatherText || '')}</div>
     <div class="sc-main">${temp}</div>
@@ -92,8 +98,6 @@ function detailPanelHtml(row) {
         `<li><span class="material-symbols-rounded" aria-hidden="true">${o.icon}</span>${esc(o.text)}</li>`,
     )
     .join('');
-  const decided = row.isDecided;
-  const ng = row.isNg;
   // §0.6.8 : 左カラム = 情報、右カラム = グラフ。
   return `<div class="detail-panel">
     <div class="detail-info">
@@ -115,14 +119,6 @@ function detailPanelHtml(row) {
         <ul class="outfit-list">${outfit}</ul>
       </div>
       ${nowcastHtml(row.date)}
-      <div class="detail-actions">
-        <button type="button" class="btn ${decided ? 'btn-primary' : ''}" data-action="decide">
-          <span class="material-symbols-rounded" aria-hidden="true">event_available</span>${decided ? '決定済み' : 'この日に決めた'}
-        </button>
-        <button type="button" class="btn" data-action="ng">
-          <span class="material-symbols-rounded" aria-hidden="true">${ng ? 'undo' : 'block'}</span>${ng ? 'NG 解除' : '同行者 NG'}
-        </button>
-      </div>
     </div>
     <div class="detail-charts">
       <div class="detail-section">
@@ -145,7 +141,6 @@ export function renderTable(els, rows, state, sources, sourceStatus, handlers) {
     `<th><span class="material-symbols-rounded cat-head" aria-hidden="true">${CAT_ICON[kind]}</span><span class="cat-head-label">${label}</span></th>`;
   thead.innerHTML = `<tr>
     <th class="col-date">日付</th>
-    <th>スコア</th>
     ${catHead('wind', '風')}
     ${catHead('rain', '雨')}
     ${catHead('wbgt', '熱 (WBGT)')}
@@ -155,7 +150,7 @@ export function renderTable(els, rows, state, sources, sourceStatus, handlers) {
 
   // フィルター結果が 0 件 (おすすめ日のみ ON で該当無し等) のときは案内を出す
   if (rows.length === 0) {
-    const colspan = 6 + sources.length;
+    const colspan = 5 + sources.length;
     tbody.innerHTML = `<tr><td colspan="${colspan}" class="table-empty">
       今は条件に合う日がありません。フィルターを外すと全日が表示されます。
     </td></tr>`;
@@ -201,24 +196,16 @@ export function renderTable(els, rows, state, sources, sourceStatus, handlers) {
         scoreTitle = `平均値スコア ${ev.rawScore} だが ${reasonBadge} により「${ev.symbol.label}」に格下げ`;
       }
 
-      const cls = [
-        'row-main',
-        row.isDecided ? 'is-decided' : '',
-        row.isNg ? 'is-ng' : '',
-        groupStart ? 'holiday-group-start' : '',
-      ]
-        .filter(Boolean)
-        .join(' ');
+      const cls = ['row-main', groupStart ? 'holiday-group-start' : ''].filter(Boolean).join(' ');
 
-      const mainRow = `<tr class="${cls}" data-date="${row.date}" tabindex="0"
+      // §0.23 : 日付セルにスコアピルを統合 (1 列削減)。§0.22 : data-label でスマホカードのラベル。
+      const mainRow = `<tr class="${cls} calendar-row" data-date="${row.date}" tabindex="0"
         role="button" aria-expanded="false" aria-label="${esc(scoreAria(row.date, row.eval))}">
-        <td class="col-date">
-          <div class="date-cell">
-            <span class="date-main">${esc(dateLabel(row.date))}</span>
-            <span class="date-sub">${dayBadges(dt)}</span>
-          </div>
+        <td class="col-date cell-date-score" data-label="日付"${scoreTitle ? ` title="${esc(scoreTitle)}"` : ''}>
+          <div class="date-line">${esc(formatMd(row.date))} <span class="weekday">(${esc(weekday(row.date))})</span></div>
+          <div class="date-sub">${dayBadges(dt)}</div>
+          ${scorePillHtml(row.eval)}
         </td>
-        <td${scoreTitle ? ` title="${esc(scoreTitle)}"` : ''}>${scorePillHtml(row.eval)}</td>
         ${metricCell('wind', windVal, row.eval.badges.wind, windTitle)}
         ${metricCell('rain', rainVal, row.eval.badges.rain)}
         ${metricCell('wbgt', wbgtVal, row.eval.badges.wbgt, wbgtTitle)}
@@ -226,7 +213,7 @@ export function renderTable(els, rows, state, sources, sourceStatus, handlers) {
         <td class="col-chev"><span class="material-symbols-rounded chevron" aria-hidden="true">expand_more</span></td>
       </tr>`;
 
-      const colspan = 6 + sources.length;
+      const colspan = 5 + sources.length;
       const detailRow = `<tr class="detail-row" data-detail="${row.date}" hidden>
         <td colspan="${colspan}"></td>
       </tr>`;
@@ -268,9 +255,6 @@ export function renderTable(els, rows, state, sources, sourceStatus, handlers) {
       });
     });
 
-    // 詳細内アクション
-    detail.querySelector('[data-action="decide"]').addEventListener('click', () => handlers.onDecide(date));
-    detail.querySelector('[data-action="ng"]').addEventListener('click', () => handlers.onToggleNg(date));
   };
 
   tbody.querySelectorAll('.row-main').forEach((tr) => {

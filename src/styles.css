@@ -457,6 +457,23 @@ section {
   color: var(--text-sub);
 }
 
+/* §0.23 : 日付セルにスコアピルを統合 (上 日付/曜日 ・ 下 スコアピル) */
+.cell-date-score {
+  vertical-align: top;
+}
+.cell-date-score .date-line {
+  font-size: 15px;
+  font-weight: 700;
+}
+.cell-date-score .date-line .weekday {
+  margin-left: 2px;
+  font-size: 0.85em;
+  color: var(--text-sub);
+}
+.cell-date-score .score-pill {
+  margin-top: 6px;
+}
+
 .badge-holiday {
   display: inline-block;
   font-size: 10px;
@@ -958,16 +975,88 @@ section {
   }
 }
 
-/* §0.12 スマホ詳細パネルの横はみ出し防止 (< 768px) */
+/* §0.22 スマホ (< 768px) はテーブルをカード化 (横スクロール解消) + §0.12 詳細はみ出し防止 */
 @media (max-width: 767px) {
-  /* 詳細 td はテーブル (min-width:720px) のセルなので、display:block ＋ sticky left:0 で
-     テーブル幅から切り離し viewport 幅に固定する。 */
+  /* テーブル → block 化。横スクロール不要に。 */
+  .forecast-table {
+    min-width: 0;
+    display: block;
+  }
+  .forecast-table thead {
+    display: none; /* 見出し行は隠し、各セルに data-label で代替 */
+  }
+  .forecast-table tbody {
+    display: block;
+  }
+  .table-scroll {
+    overflow: visible;
+  }
+  /* 各日を 1 カードに (§0.22 / §0.23 の date-score 統合に対応) */
+  .forecast-table tr.calendar-row {
+    display: grid;
+    grid-template-areas:
+      'date-score date-score'
+      'wind rain'
+      'heat heat'
+      'jma openmeteo';
+    gap: 8px;
+    padding: 12px;
+    margin-bottom: 10px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--surface);
+    box-shadow: var(--shadow);
+  }
+  .forecast-table tr.calendar-row > td {
+    display: block;
+    width: auto;
+    border: none;
+    padding: 4px 2px;
+    text-align: left;
+  }
+  .forecast-table td.cell-date-score {
+    grid-area: date-score;
+  }
+  .forecast-table td.cell-wind {
+    grid-area: wind;
+  }
+  .forecast-table td.cell-rain {
+    grid-area: rain;
+  }
+  .forecast-table td.cell-heat {
+    grid-area: heat;
+  }
+  .forecast-table td.cell-jma {
+    grid-area: jma;
+  }
+  .forecast-table td.cell-openmeteo {
+    grid-area: openmeteo;
+  }
+  /* 行末 chevron はカードでは不要 (カードタップで展開) */
+  .forecast-table td.col-chev {
+    display: none;
+  }
+  /* 見出しが無いので各セルにラベル併記 (日付セルは除く) */
+  .forecast-table tr.calendar-row > td:not(.cell-date-score)::before {
+    content: attr(data-label);
+    display: block;
+    font-size: 11px;
+    color: var(--text-sub);
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+  .source-cell .weather-icon {
+    font-size: 30px;
+  }
+
+  /* §0.12 : 詳細行もカードに合わせ block 化し viewport 幅に収める */
+  .detail-row {
+    display: block;
+  }
   .detail-row > td {
     display: block;
-    position: sticky;
-    left: 0;
-    width: calc(100vw - 32px);
-    max-width: calc(100vw - 32px);
+    width: 100%;
+    max-width: 100%;
     overflow-x: hidden;
     box-sizing: border-box;
   }
