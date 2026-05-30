@@ -33,8 +33,25 @@ export function renderStatusBar(el, { sources, sourceStatus, rawBySourceDate, on
     ? `<span class="sb-cache">${anyStale ? 'オフライン ・ キャッシュ表示中' : 'キャッシュ表示中'}</span>`
     : '';
 
+  // WBGT のソースを 1 つ表示 (環境省取得 > 簡易計算)
+  let wbgtSource = null;
+  for (const byDate of Object.values(rawBySourceDate || {})) {
+    for (const f of Object.values(byDate || {})) {
+      if (f.wbgtSource === 'env-jp') wbgtSource = 'env-jp';
+      else if (f.wbgtSource === 'derived' && !wbgtSource) wbgtSource = 'derived';
+    }
+    if (wbgtSource === 'env-jp') break;
+  }
+  const wbgtPill =
+    wbgtSource === 'env-jp'
+      ? '<span class="sb-wbgt env">WBGT 環境省</span>'
+      : wbgtSource === 'derived'
+        ? '<span class="sb-wbgt derived">WBGT 簡易計算</span>'
+        : '';
+
   el.innerHTML = `
     <span class="sb-srcs">${parts.join('<span class="sb-dot" aria-hidden="true">･</span>')}</span>
+    ${wbgtPill}
     ${cachePill}
     <button type="button" class="btn sb-refresh">
       <span class="material-symbols-rounded" aria-hidden="true">refresh</span>強制更新

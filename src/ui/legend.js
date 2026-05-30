@@ -1,9 +1,7 @@
-// スコア凡例カード (§0.6.5)。テーブル上部に常時表示。折りたたみ可、状態は localStorage 保存。
+// スコア凡例 (§0.6.5)。テーブル下部に常時表示 (折りたたみは廃止 = 閉じる利点が無いため)。
 
 import { SYMBOLS } from '../score/scoring.js';
 import { esc } from './components.js';
-
-const KEY = 'disney_weather_legend_open';
 
 const DESC = {
   excellent: '風 ・ 雨 ・ 暑さ全部 OK',
@@ -11,23 +9,6 @@ const DESC = {
   fair: '風バ or 雨バ域',
   bad: '中止リスク高',
 };
-
-function isOpen() {
-  try {
-    const v = localStorage.getItem(KEY);
-    return v == null ? true : v === '1'; // 初回は展開
-  } catch {
-    return true;
-  }
-}
-
-function save(open) {
-  try {
-    localStorage.setItem(KEY, open ? '1' : '0');
-  } catch {
-    /* noop */
-  }
-}
 
 export function renderScoreLegend(el) {
   const pills = SYMBOLS.map(
@@ -37,20 +18,8 @@ export function renderScoreLegend(el) {
         <span class="legend-desc">${esc(DESC[s.key] || '')}</span>
       </span>`,
   ).join('');
-
-  function paint() {
-    const open = isOpen();
-    el.innerHTML = `
-      <button class="legend-toggle" type="button" aria-expanded="${open}" aria-controls="legend-body">
-        <span class="material-symbols-rounded" aria-hidden="true">${open ? 'expand_more' : 'chevron_right'}</span>
-        スコアの見方
-      </button>
-      <div id="legend-body" class="legend-body" ${open ? '' : 'hidden'}>${pills}</div>
-    `;
-    el.querySelector('.legend-toggle').addEventListener('click', () => {
-      save(!isOpen());
-      paint();
-    });
-  }
-  paint();
+  el.innerHTML = `
+    <div class="legend-head"><span class="material-symbols-rounded" aria-hidden="true">info</span>スコアの見方</div>
+    <div class="legend-body">${pills}</div>
+  `;
 }

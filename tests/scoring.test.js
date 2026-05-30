@@ -121,7 +121,7 @@ describe('scoreToSymbol (§5.3)', () => {
 
 describe('windBadge (§5.5)', () => {
   it('境界値', () => {
-    expect(windBadge(7.9).text).toBe('通常運行');
+    expect(windBadge(7.9).text).toBe('通常');
     expect(windBadge(8).text).toBe('風バ可能性あり');
     expect(windBadge(9.9).text).toBe('風バ可能性あり');
     expect(windBadge(10).text).toBe('中止リスク高');
@@ -133,8 +133,8 @@ describe('windBadge (§5.5)', () => {
 
 describe('rainBadge (§5.5)', () => {
   it('境界値', () => {
-    expect(rainBadge(0, 0).text).toBe('雨なし');
-    expect(rainBadge(29, 0.9).text).toBe('雨なし');
+    expect(rainBadge(0, 0).text).toBe('通常');
+    expect(rainBadge(29, 0.9).text).toBe('通常');
     expect(rainBadge(30, 0).text).toBe('雨バ可能性');
     expect(rainBadge(59, 0).text).toBe('雨バ可能性');
     expect(rainBadge(60, 0).text).toBe('雨キャン濃厚');
@@ -146,7 +146,7 @@ describe('rainBadge (§5.5)', () => {
 
 describe('wbgtBadge (§5.6)', () => {
   it('境界値', () => {
-    expect(wbgtBadge(24, null, null).text).toBe('通常運行');
+    expect(wbgtBadge(24, null, null).text).toBe('通常');
     expect(wbgtBadge(25, null, null).text).toBe('暑さ注意');
     expect(wbgtBadge(28, null, null).text).toBe('熱バ可能性あり');
     expect(wbgtBadge(31, null, null).text).toBe('熱キャン濃厚');
@@ -155,7 +155,7 @@ describe('wbgtBadge (§5.6)', () => {
   it('風で 1 段階下げ / 体感 38℃ 以上で 1 段階上げ', () => {
     expect(wbgtBadge(28, 5, null).text).toBe('暑さ注意'); // level2 -1
     expect(wbgtBadge(28, null, 38).text).toBe('熱キャン濃厚'); // level2 +1
-    expect(wbgtBadge(24, 5, null).text).toBe('通常運行'); // 下限クランプ
+    expect(wbgtBadge(24, 5, null).text).toBe('通常'); // 下限クランプ
   });
   it('欠損は —', () => {
     expect(wbgtBadge(null, 0, 0).text).toBe('—');

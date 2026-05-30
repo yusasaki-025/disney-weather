@@ -81,7 +81,7 @@ export function uvDeduction(uvMax) {
 
 export function windBadge(gust) {
   if (gust == null) return { level: 0, text: '—' };
-  if (gust < 8) return { level: 0, text: '通常運行' };
+  if (gust < 8) return { level: 0, text: '通常' };
   if (gust < 10) return { level: 1, text: '風バ可能性あり' };
   if (gust < 13) return { level: 2, text: '中止リスク高' };
   return { level: 3, text: 'ほぼ中止' };
@@ -94,7 +94,7 @@ export function rainBadge(pop, precip) {
   if (r >= 2) return { level: 3, text: 'ほぼ中止' };
   if (p >= 60 || r >= 1) return { level: 2, text: '雨キャン濃厚' };
   if (p >= 30 && r < 1) return { level: 1, text: '雨バ可能性' };
-  return { level: 0, text: '雨なし' };
+  return { level: 0, text: '通常' };
 }
 
 // WBGT バッジ。風で 1 段階下げ、体感 38℃ 以上で 1 段階上げ。
@@ -109,7 +109,7 @@ export function wbgtBadge(wbgt, windShowWindow, feelsLikeMax) {
   if (windShowWindow != null && windShowWindow >= 5) level -= 1;
   if (feelsLikeMax != null && feelsLikeMax >= 38) level += 1;
   level = Math.max(0, Math.min(4, level));
-  const TEXTS = ['通常運行', '暑さ注意', '熱バ可能性あり', '熱キャン濃厚', 'ほぼ中止'];
+  const TEXTS = ['通常', '暑さ注意', '熱バ可能性あり', '熱キャン濃厚', 'ほぼ中止'];
   return { level, text: TEXTS[level] };
 }
 

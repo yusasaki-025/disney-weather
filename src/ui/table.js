@@ -29,11 +29,11 @@ const SOURCE_LABEL = { jma: '気象庁', 'open-meteo': 'Open-Meteo', openweather
 const CAT_ICON = { wind: 'air', rain: 'umbrella', wbgt: 'thermostat' };
 
 // 風 / 雨 / 熱セル : カテゴリアイコン(頭) ＋ 実数値(主) ＋ バッジ(副) (§0.5.2 / §0.6.6-3)
-function metricCell(kind, valueHtml, badge, extra = '') {
-  return `<td>
+function metricCell(kind, valueHtml, badge, title = '') {
+  return `<td${title ? ` title="${esc(title)}"` : ''}>
     <div class="metric-cell">
       <span class="cat-val"><span class="material-symbols-rounded cat-icon" aria-hidden="true">${CAT_ICON[kind]}</span>${valueHtml}</span>
-      ${cancelBadgeHtml(badge)}${extra}
+      ${cancelBadgeHtml(badge)}
     </div>
   </td>`;
 }
@@ -177,10 +177,9 @@ export function renderTable(els, rows, state, sources, sourceStatus, handlers) {
           ? `${fmtNum(pop, 0)}%${m.precipSum != null && m.precipSum >= 0.5 ? ` ${fmtNum(m.precipSum, 1)}mm` : ''}`
           : '—';
       const wbgtLabel = wbgtSourceLabel(Object.values(row.forecasts));
-      const wbgtVal =
-        m.wbgtMax != null
-          ? `WBGT ${fmtNum(m.wbgtMax, 0)}${wbgtLabel === '推定' ? ' (推定)' : ''}`
-          : '—';
+      // セルは数値のみ (列ヘッダーが「熱 (WBGT)」なので WBGT/(推定) は冗長)。詳細は title で補助。
+      const wbgtVal = m.wbgtMax != null ? `${fmtNum(m.wbgtMax, 0)}` : '—';
+      const wbgtTitle = wbgtLabel === '環境省' ? 'WBGT 環境省取得値' : 'WBGT 簡易計算による推定値';
 
       const cls = [
         'row-main',
@@ -202,7 +201,7 @@ export function renderTable(els, rows, state, sources, sourceStatus, handlers) {
         <td>${scorePillHtml(row.eval)}</td>
         ${metricCell('wind', windVal, row.eval.badges.wind)}
         ${metricCell('rain', rainVal, row.eval.badges.rain)}
-        ${metricCell('wbgt', wbgtVal, row.eval.badges.wbgt)}
+        ${metricCell('wbgt', wbgtVal, row.eval.badges.wbgt, wbgtTitle)}
         ${sources.map((s) => sourceCellHtml(s, row.forecasts[s], sourceStatus[s])).join('')}
         <td class="col-chev"><span class="material-symbols-rounded chevron" aria-hidden="true">expand_more</span></td>
       </tr>`;

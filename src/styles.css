@@ -1445,3 +1445,39 @@ h1, h2, h3, h4, .app-title h1 {
 #score-legend {
   margin-top: 4px;
 }
+
+/* §0.10 : 凡例見出し (常時表示・非トグル) と WBGT ソースピル */
+.legend-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--text);
+  padding: 8px 0 4px;
+}
+.legend-head .material-symbols-rounded {
+  color: var(--accent);
+  font-size: 18px;
+}
+.sb-wbgt {
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 11px;
+}
+.sb-wbgt.env {
+  background: #e6f4ea;
+  color: #2e7d3a;
+}
+.sb-wbgt.derived {
+  background: var(--warn-bg);
+  color: #9a6a00;
+}
+[data-theme='dark'] .sb-wbgt.env {
+  background: #1f3a28;
+  color: #7fd49a;
+}
+[data-theme='dark'] .sb-wbgt.derived {
+  color: #e6c06a;
+}
