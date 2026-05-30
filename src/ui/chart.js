@@ -43,14 +43,14 @@ const windBandPlugin = {
 };
 
 // ショー時刻の縦線
-function showLinePlugin(park) {
+function showLinePlugin(park, date) {
   return {
     id: 'showLines',
     afterDatasetsDraw(chart) {
       const x = chart.scales.x;
       const { ctx, chartArea } = chart;
       ctx.save();
-      for (const mk of allShowMarkers(park)) {
+      for (const mk of allShowMarkers(park, date)) {
         if (mk.hour < x.min || mk.hour > x.max) continue;
         const px = x.getPixelForValue(mk.hour);
         ctx.beginPath();
@@ -81,7 +81,7 @@ function baseXScale() {
 }
 
 // 降水確率 + 風速チャート
-export function renderPopWindChart(canvas, forecasts, park) {
+export function renderPopWindChart(canvas, forecasts, park, date = null) {
   if (typeof Chart === 'undefined') return;
   destroy(canvas);
   const withHourly = forecasts.filter((f) => f.hourly && f.hourly.length > 0);
@@ -136,12 +136,12 @@ export function renderPopWindChart(canvas, forecasts, park) {
       },
       plugins: { legend: { labels: { boxWidth: 12, font: { size: 10 } } } },
     },
-    plugins: [windBandPlugin, showLinePlugin(park)],
+    plugins: [windBandPlugin, showLinePlugin(park, date)],
   });
 }
 
 // 気温 / 体感温度チャート
-export function renderTempChart(canvas, forecasts, park) {
+export function renderTempChart(canvas, forecasts, park, date = null) {
   if (typeof Chart === 'undefined') return;
   destroy(canvas);
   const withHourly = forecasts.filter((f) => f.hourly && f.hourly.length > 0);
@@ -180,6 +180,6 @@ export function renderTempChart(canvas, forecasts, park) {
       },
       plugins: { legend: { labels: { boxWidth: 12, font: { size: 10 } } } },
     },
-    plugins: [showLinePlugin(park)],
+    plugins: [showLinePlugin(park, date)],
   });
 }

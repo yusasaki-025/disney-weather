@@ -1489,3 +1489,21 @@ h1, h2, h3, h4, .app-title h1 {
   color: var(--text-sub);
   font-size: 13px;
 }
+
+/* §0.8 : 詳細パネルのショー見出しに付く取得元バッジ */
+.sched-badge {
+  margin-left: 8px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  vertical-align: middle;
+}
+.sched-badge.official {
+  background: #e6f4ea;
+  color: #2e7d3a;
+}
+.sched-badge.fallback {
+  background: var(--warn-bg);
+  color: #9a6a00;
+}

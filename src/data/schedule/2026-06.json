@@ -1,0 +1,70 @@
+{
+  "month": "2026-06",
+  "fetchedAt": "2026-05-30T13:00:00+09:00",
+  "source": "https://www.tokyodisneyresort.jp/{tdl|tds}/daily/calendar/{YYYYMMDD}/",
+  "_note": "手動プレースホルダ (構造サンプル)。実データは `npm run fetch-schedule -- 2026-06` で上書きすること。time は日別変動の例示。",
+  "days": {
+    "2026-06-01": {
+      "TDL": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          { "name": "ディズニー･ハーモニー･イン･カラー", "times": ["13:00"], "priority": "high", "kind": "parade-day", "tags": ["プレミアアクセス"] },
+          { "name": "ジュビレーション！", "times": ["15:30"], "priority": "high", "kind": "parade-day", "tags": [] },
+          { "name": "ジャンボリミッキー！", "times": ["11:00", "14:00"], "priority": "medium", "kind": "show-indoor", "tags": ["エントリー受付"] },
+          { "name": "エレクトリカルパレード･ドリームライツ", "times": ["19:30"], "priority": "low", "kind": "parade-night", "tags": [] }
+        ]
+      },
+      "TDS": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          { "name": "スパークリング･ジュビリー･セレブレーション", "times": ["11:30"], "priority": "high", "kind": "show-day", "tags": ["プレミアアクセス"] },
+          { "name": "ウィッシュ", "times": ["14:00"], "priority": "high", "kind": "show-day", "tags": [] },
+          { "name": "ビリーヴ！～シー･オブ･ドリームス～", "times": ["19:45"], "priority": "low", "kind": "show-night", "tags": [] }
+        ]
+      }
+    },
+    "2026-06-06": {
+      "TDL": {
+        "openHour": "08:00",
+        "closeHour": "22:00",
+        "shows": [
+          { "name": "ディズニー･ハーモニー･イン･カラー", "times": ["13:30"], "priority": "high", "kind": "parade-day", "tags": ["プレミアアクセス"] },
+          { "name": "ジュビレーション！", "times": ["16:00"], "priority": "high", "kind": "parade-day", "tags": [] },
+          { "name": "ジャンボリミッキー！", "times": ["10:30", "12:45", "15:15"], "priority": "medium", "kind": "show-indoor", "tags": ["エントリー受付"] },
+          { "name": "エレクトリカルパレード･ドリームライツ", "times": ["20:00"], "priority": "low", "kind": "parade-night", "tags": [] }
+        ]
+      },
+      "TDS": {
+        "openHour": "08:00",
+        "closeHour": "22:00",
+        "shows": [
+          { "name": "スパークリング･ジュビリー･セレブレーション", "times": ["11:00", "13:45"], "priority": "high", "kind": "show-day", "tags": ["プレミアアクセス"] },
+          { "name": "ウィッシュ", "times": ["15:00"], "priority": "high", "kind": "show-day", "tags": [] },
+          { "name": "ビリーヴ！～シー･オブ･ドリームス～", "times": ["20:30"], "priority": "low", "kind": "show-night", "tags": [] }
+        ]
+      }
+    },
+    "2026-06-13": {
+      "TDL": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          { "name": "ディズニー･ハーモニー･イン･カラー", "times": ["14:00"], "priority": "high", "kind": "parade-day", "tags": ["プレミアアクセス"] },
+          { "name": "ジャンボリミッキー！", "times": ["11:30", "14:45"], "priority": "medium", "kind": "show-indoor", "tags": ["エントリー受付"] },
+          { "name": "エレクトリカルパレード･ドリームライツ", "times": ["19:30"], "priority": "low", "kind": "parade-night", "tags": [] }
+        ]
+      },
+      "TDS": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          { "name": "スパークリング･ジュビリー･セレブレーション", "times": ["12:00"], "priority": "high", "kind": "show-day", "tags": ["プレミアアクセス"] },
+          { "name": "ウィッシュ", "times": ["14:30"], "priority": "high", "kind": "show-day", "tags": [] },
+          { "name": "ビリーヴ！～シー･オブ･ドリームス～", "times": ["19:45"], "priority": "low", "kind": "show-night", "tags": [] }
+        ]
+      }
+    }
+  }
+}

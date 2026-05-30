@@ -1630,6 +1630,242 @@ CSS only で、`@media (max-width: 767px)` のとき table 系要素を block �
 - `src/ui/table.js` : テーブルヘッダー ・ ボディの列定義を6列に
 - `src/styles.css` : `.cell-date-score` スタイル ・ スマホ grid 更新
 
+### 0.24 スマホカードの視認性 ・ タップ可改善 (Yuka さん指摘)
+
+問題 : Yuka さん指摘「スマホのカードのデザインが見づらい、クリックできることも分かりづらい」。
+
+#### 現状の課題
+
+- カード内が密集 ・ 各セクションの区切りが弱い
+- データラベル (data-label「風」「雨」等) が控えめすぎ
+- カードが「クリッカブル」と一目で分からない (PC は行末 chevron で分かるが、スマホでは無い)
+- スコアセルが他と同サイズ ・ 一番大事な情報が目立たない
+
+#### 改善方針
+
+1. **カードを明確に「ボタン感」のあるデザインに**
+   - 明確な border ＋ box-shadow
+   - tap で軽く凹む (`transform: scale(0.99)`) ・ shadow が深くなる
+   - `cursor: pointer` (PC で hover でも有効)
+
+2. **カード末尾に「タップして詳細」インジケータ**
+   - 「詳細を見る ›」 (or chevron) を明示
+   - 展開済みは「閉じる ✕」
+   - ダッシュライン区切りでセクション感
+
+3. **3段構成で情報密度を整理**
+   - 上段 : 日付 (左) ＋ スコアピル (右、大きく)
+   - 中段 : 風 / 雨 / 熱 を 3列等幅で横並び
+   - 下段 : 気象庁 / Open-Meteo を 2列で横並び (天気アイコン中央寄せ)
+   - 各セクション間に薄い区切り線
+
+4. **data-label を強調**
+   - 色 : `var(--primary)` (ブルー)
+   - フォント : 11px ・ 太字 ・ letter-spacing
+   - 各セルの先頭に明示
+
+#### CSS 実装
+
+```css
+@media (max-width: 767px) {
+  /* カード本体 ・ クリッカブル感 */
+  .disney-table tr.calendar-row {
+    display: block;
+    padding: 16px;
+    margin-bottom: 12px;
+    border-radius: var(--radius);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-card);
+    cursor: pointer;
+    transition: box-shadow 0.2s, transform 0.1s;
+  }
+  .disney-table tr.calendar-row:active {
+    transform: scale(0.99);
+    box-shadow: var(--shadow-hover);
+  }
+
+  /* 上段 : 日付 + スコアピル (横並び) */
+  .disney-table td.cell-date-score {
+    display: flex !important;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .cell-date-score::before { content: none; }   /* data-label は不要 */
+  .cell-date-score .date-line {
+    font-size: 1.15rem;
+    font-weight: 600;
+  }
+  .cell-date-score .score-pill {
+    font-size: 1.1rem;
+    padding: 8px 14px;
+  }
+
+  /* 中段 : 風 / 雨 / 熱 を3列横並び */
+  .disney-table td.cell-wind,
+  .disney-table td.cell-rain,
+  .disney-table td.cell-heat {
+    display: inline-block;
+    width: 33.33%;
+    box-sizing: border-box;
+    padding-right: 6px;
+    vertical-align: top;
+    margin-bottom: 12px;
+  }
+
+  /* 下段 : 気象庁 / Open-Meteo を2列横並び */
+  .disney-table td.cell-jma,
+  .disney-table td.cell-openmeteo {
+    display: inline-block;
+    width: 50%;
+    box-sizing: border-box;
+    padding: 12px 4px 0;
+    border-top: 1px solid var(--border);
+    margin-top: 4px;
+    text-align: center;
+  }
+
+  /* data-label を強調 */
+  .disney-table td::before {
+    content: attr(data-label);
+    display: block;
+    font-size: 11px;
+    color: var(--primary);
+    font-weight: 600;
+    margin-bottom: 4px;
+    letter-spacing: 0.5px;
+    text-align: left;
+  }
+
+  /* カード末尾に「タップで詳細」インジケータ */
+  .calendar-row::after {
+    content: '詳細を見る ›';
+    display: block;
+    text-align: center;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px dashed var(--border);
+    color: var(--primary);
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .calendar-row[aria-expanded="true"]::after {
+    content: '閉じる ✕';
+  }
+
+  /* thead 非表示 (data-label で代替) */
+  .disney-table thead {
+    display: none;
+  }
+}
+```
+
+#### DOM (HTML 変更不要)
+
+すでに §0.22 で `data-label` を各 td に設定済の想定。`tr` に `aria-expanded` も §0.6.7 で実装済。
+CSS のみで実現。
+
+#### 視覚イメージ
+
+```
+┌──────────────────────────────────────┐
+│  5/30 (土)            [⊘] 別日 0    │  ← 上段、横並び大きく
+│  ──────────────────────────────────  │
+│  風              雨            熱    │  ← data-label (青)
+│  14m/s          0%            27    │
+│  ほぼ中止       通常          通常   │  ← バッジ
+│  ──────────────────────────────────  │
+│  気象庁            Open-Meteo        │
+│  ☀ 晴れ            ☀ 晴れ           │  ← 天気アイコン中央
+│  29°/29° 雨0%      26°/17° 雨53%    │
+│  ──── 詳細を見る ›  ───────────────  │  ← クリック明示
+└──────────────────────────────────────┘
+```
+
+#### 該当ファイル
+
+- `src/styles.css` の `@media (max-width: 767px)` 修正 (HTML 構造変更不要)
+
+#### 0.24.2 タイポ ・ スペーシング段階を絞る (Yuka さん追加指摘)
+
+Yuka さん指摘 : 「文字サイズや余白が微妙、余白も無駄が多い」 = 全体的に間延び ・ サイズばらつき。
+
+#### スペーシング段階を絞る (CSS 変数で統一)
+
+```css
+:root {
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 12px;
+  --space-lg: 16px;
+  --space-xl: 24px;
+}
+```
+
+過剰な余白を圧縮 :
+
+| 箇所 | 旧 | 新 |
+|---|---|---|
+| カード padding (スマホ) | 16px | **12px** |
+| カード margin-bottom (gap) | 12-16px | **8px** |
+| カード内セクション間 margin | 12px | **8px** |
+| 「詳細を見る ›」 padding-top | 12px | **8px** |
+| data-label と値の gap | 4px | **2px** |
+| スコアピル padding | 8px 14px | **6px 10px** |
+| 風/雨/熱 各セル margin-bottom | 12px | **8px** |
+| ヘッダー帯 padding | 24px | **16px** |
+| 凡例カード padding | 16px | **12px** |
+| テーブル td 上下 padding (PC) | 16px | **10px** |
+
+#### タイポ段階を絞る (CSS 変数で統一)
+
+```css
+:root {
+  --fs-xs: 11px;    /* data-label / 注釈 */
+  --fs-sm: 13px;    /* バッジ / サブテキスト */
+  --fs-md: 14px;    /* 本文 */
+  --fs-lg: 16px;    /* 強調 */
+  --fs-xl: 18px;    /* セクション見出し */
+  --fs-2xl: 22px;   /* H1 タイトル */
+}
+```
+
+サイズばらつきを統一 :
+
+| 用途 | 旧 | 新 |
+|---|---|---|
+| 日付 (スマホカード上段) | 1.15rem | `var(--fs-lg)` 16px |
+| スコアピル (スマホ) | 1.1rem | `var(--fs-md)` 14px |
+| 数値 (風/雨/熱 値) | 1rem | `var(--fs-md)` 14px |
+| バッジラベル | 0.75rem | `var(--fs-xs)` 11px |
+| data-label | 11px | `var(--fs-xs)` 11px (統一) |
+| ヘッダー H1 | 大きすぎ気味 | `var(--fs-2xl)` 22px |
+| 詳細パネル見出し | 1.15rem | `var(--fs-xl)` 18px |
+
+副題 (「舞浜の天気から…」) のスペース ・ サイズも詰め (12px → 11px)。
+
+#### line-height も統一
+
+```css
+body { line-height: 1.5; }       /* 1.7 → 1.5 (情報密度↑) */
+.calendar-row { line-height: 1.4; }
+.score-pill { line-height: 1.2; }
+```
+
+#### 該当ファイル
+
+- `src/styles.css` 全体で `padding` `margin` `font-size` `line-height` を上記スケールに統一
+- 既存の hardcode 値を CSS 変数化
+
+#### 検証
+
+- スマホ 375px で 1画面に 3-4カード見える (旧 : 2カード程度)
+- PC でも余白が引き締まって行数増 ・ スクロール量減
+- フォントサイズが2-3段階に整理されて視覚的にまとまる
+
 ### 0.7 公開ページ化 (Cloudflare Pages) ＋ ランタイム判定
 
 Yuka さん要望 : 「Mac 開いてなくても他の人も見れる公開ページ」

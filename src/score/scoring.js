@@ -264,8 +264,8 @@ export function weightedBandTotal(subscores) {
 }
 
 // --- 1 日分の総合評価 (UI が使う入口) ---
-export function evaluateDay(forecasts, park) {
-  const metrics = aggregateMetrics(forecasts, park);
+export function evaluateDay(forecasts, park, date = null) {
+  const metrics = aggregateMetrics(forecasts, park, date);
   const { score: rawScore, deductions } = scoreFromMetrics(metrics, park);
 
   const subscores = {};

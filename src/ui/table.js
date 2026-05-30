@@ -12,7 +12,7 @@ import { formatMd, weekday } from '../utils/date.js';
 import { BANDS } from '../score/scoring.js';
 import { renderPopWindChart, renderTempChart } from './chart.js';
 import { suggestOutfit } from './outfit.js';
-import { SHOW_SCHEDULE } from '../data/showSchedule.js';
+import { getDaySchedule } from '../data/showSchedule.js';
 import { freshnessLabel } from '../utils/freshness.js';
 import { nowcastHtml } from './nowcast.js';
 import { getTempColor, getTempBandKey } from '../utils/tempColor.js';
@@ -83,15 +83,22 @@ function sourceCellHtml(source, forecast, status) {
 
 function detailPanelHtml(row) {
   const PRIORITY_NOTE = { high: ' (メイン算定窓)', medium: ' (補助)', low: ' (参考)' };
+  // §0.8 : その日の実スケジュール (公式取得があれば official、無ければ fallback)
+  const schedFor = (p) => getDaySchedule(row.date, p);
   const showRowsFor = (p) =>
-    (SHOW_SCHEDULE[p] || [])
-      .map(
+    schedFor(p)
+      .shows.map(
         (s) =>
           `<div class="${s.priority === 'high' ? 'st-high' : ''}">${esc(s.name)} : ${esc(s.time)}${
             PRIORITY_NOTE[s.priority] || ''
           }</div>`,
       )
       .join('');
+  // パーク別に official/fallback が混ざりうるが、どちらかが official なら「公式取得済」とする
+  const isOfficial = schedFor('TDL').source === 'official' || schedFor('TDS').source === 'official';
+  const schedBadge = isOfficial
+    ? '<span class="sched-badge official">公式取得済</span>'
+    : '<span class="sched-badge fallback">典型値で代替</span>';
   const outfit = suggestOutfit(row.eval.metrics)
     .map(
       (o) =>
@@ -106,7 +113,7 @@ function detailPanelHtml(row) {
         <div class="subscore-detail">${subscoreHtml(row.eval.subscores, BANDS)}</div>
       </div>
       <div class="detail-section">
-        <h4><span class="material-symbols-rounded" aria-hidden="true">theater_comedy</span>ショー ･ パレード</h4>
+        <h4><span class="material-symbols-rounded" aria-hidden="true">theater_comedy</span>ショー ･ パレード${schedBadge}</h4>
         <div class="park-tabs" role="tablist" aria-label="パーク切替">
           <button class="park-tab active" role="tab" data-park-tab="TDL" type="button">TDL</button>
           <button class="park-tab" role="tab" data-park-tab="TDS" type="button">TDS</button>
@@ -241,8 +248,8 @@ export function renderTable(els, rows, state, sources, sourceStatus, handlers) {
     main.setAttribute('aria-expanded', 'true');
 
     const forecasts = Object.values(row.forecasts).filter(Boolean);
-    renderPopWindChart(detail.querySelector('[data-chart="popwind"]'), forecasts, state.park);
-    renderTempChart(detail.querySelector('[data-chart="temp"]'), forecasts, state.park);
+    renderPopWindChart(detail.querySelector('[data-chart="popwind"]'), forecasts, state.park, date);
+    renderTempChart(detail.querySelector('[data-chart="temp"]'), forecasts, state.park, date);
 
     // ショー ・ パレードの TDL/TDS タブ切替 (パークが近接のため詳細内タブで分離)
     detail.querySelectorAll('.park-tab').forEach((tab) => {
