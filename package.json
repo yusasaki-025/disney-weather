@@ -14,7 +14,9 @@
     "lint": "eslint .",
     "fetch-schedule": "node scripts/fetch-schedule.mjs",
     "fetch-operation": "node scripts/fetch-operation.mjs",
-    "import-cancel-history": "node scripts/import-cancel-history.mjs"
+    "import-cancel-history": "node scripts/import-cancel-history.mjs",
+    "snapshot-forecast": "node scripts/snapshot-forecast.mjs",
+    "track-accuracy": "node scripts/track-accuracy.mjs"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",

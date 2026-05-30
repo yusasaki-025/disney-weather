@@ -2572,6 +2572,40 @@ pdftotext 出力例 (4月ハーモニー部分) :
 - スコアリングがショー別閾値で動作
 - npm test 緑
 
+#### 将来のデータソース候補 (Phase 3 で検討)
+
+Phase 2 第4弾は **アメブロ PDF 5ヶ月分のみ** で実装。以下は確認済の追加データ源 (今回は見送り、将来取得可能) :
+
+**1. X (Twitter) `@tdr_syopare_can` の熱キャン投稿 (画像)**
+
+- 2024年 7/1 〜 10/10 の **ハーモニー・イン・カラー 熱キャン** データ (約 102日分)
+- 投稿例 :
+  - 気温順 : <https://x.com/tdr_syopare_can/status/1931658617029357857>
+  - 日付順 : <https://x.com/tdr_syopare_can/status/1931696134566859032>
+- 形式 : Excel テーブルの画像投稿 (テキスト抽出不可、画像認識必要)
+- 取得方法 : Yuka さんが Cowork チャットに画像 upload → Claude vision で JSON 化
+- 同様の投稿が他ショー ・ 他年も存在する可能性
+
+**2. Wix サイト `amane66.wixsite.com` のフレンジー (ハロウィーン期間パレード) 記録**
+
+- URL : <https://amane66.wixsite.com/my-site-5/フレンジー-1>
+- 2025年9〜11月の フレンジー (ハロウィーン期間) 中止記録
+- 形式 : 日付順 / 風速順 / 気温順の 3テーブル ・ ただし HTML テキスト取得不可 (Wix の埋め込み画像/iframe)
+- 取得方法 : 同上 (画像 upload → vision)
+- 他のショーのページもサイト内にあるかも (要ナビゲーション確認)
+
+**Phase 3 での運用案** :
+
+- 月初 ・ 季節パレード追加時に、Yuka さんが上記ソースのスクショを Cowork チャットに upload
+- Cowork が vision で読み取り → JSON 化 → `src/data/cancel-history/{YYYY-MM}-{show-key}.json` 追記
+- Code は既存 import-cancel-history.mjs + getCancelHistory(date, show) で参照
+
+**現状の規模感** :
+
+- Phase 2 (PDF のみ) : 900 records (6ショー × 5ヶ月)
+- Phase 3 統合後 : + 約 200 records (熱キャン + フレンジー)
+- ML 分類器 / 過去同条件中止率 表示が可能になる規模
+
 ### 0.7 公開ページ化 (Cloudflare Pages) ＋ ランタイム判定
 
 Yuka さん要望 : 「Mac 開いてなくても他の人も見れる公開ページ」

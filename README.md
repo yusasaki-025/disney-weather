@@ -217,3 +217,12 @@ npm run import-cancel-history -- 2026-04 # 指定月
 ```
 
 実行時に月別の record 数 ・ status 分布をログ出力します ( 固定幅 PDF のパースは完璧ではないため人手チェック用 )。**元 PDF / txt は第三者の成果物のため public リポジトリには含めません** ( `.gitignore` でローカル保持 )。抽出後の JSON ( 事実データ ) のみをコミットします。
+
+## 予報精度の追跡 (§0.29)
+
+各天気予報ソースの「前日予報」と「当日実測」を比較し、ソース別の誤差を蓄積します ( 将来の信頼度補正の素地 )。
+
+- 毎朝 : `npm run snapshot-forecast` — その時点の予報を `src/data/forecast-snapshots/{YYYY-MM-DD}.json` に保存
+- 翌朝 : `npm run track-accuracy` — 前日の予報と当日実測 ( 気象庁アメダス船橋 44132 + 環境省 WBGT ) を比較し `src/data/accuracy-log.json` に日次追記
+
+30 日ほど蓄積すると各ソースの平均誤差が見えてきます ( Phase 3 で「予報精度ダッシュボード」UI ・ GitHub Actions cron 自動化を予定 )。実測が揃っていない当日は記録をスキップし、失敗時もログのみで UI には影響しません。気象庁は突風 ・ 風速を構造化提供しないため風誤差は Open-Meteo 主体です。
