@@ -1,0 +1,64 @@
+{
+  "month": "2026-05",
+  "fetchedAt": "2026-05-30T13:00:00+09:00",
+  "source": "Cowork Chrome MCP (Browser 2) 経由で取得",
+  "note": "5/30〜5/31 (週末2日分) のメインセッション取得分。Akamai Bot Manager 経由でも個人 Chrome では取得成功。週末のため TDL のショー時刻が平日と異なる (イッツ ・ ア ・ スウィーツフルタイム! 15:40、ジャンボリミッキー! 12:30 始まり)。",
+  "days": {
+    "2026-05-30": {
+      "TDL": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          { "name": "ディズニー･ハーモニー･イン･カラー", "times": ["13:00"], "priority": "high", "kind": "parade-day", "tags": ["プレミアアクセス"] },
+          { "name": "イッツ･ア･スウィーツフルタイム!", "times": ["15:40"], "priority": "high", "kind": "show-day", "tags": ["プレミアアクセス"] },
+          { "name": "Reach for the Stars", "times": ["20:50"], "priority": "high", "kind": "show-day", "tags": ["プレミアアクセス"] },
+          { "name": "東京ディズニーランド･エレクトリカルパレード･ドリームライツ", "times": ["19:30"], "priority": "low", "kind": "parade-night", "tags": ["プレミアアクセス"] },
+          { "name": "スカイ･フル･オブ･カラーズ", "times": ["20:30"], "priority": "low", "kind": "fireworks", "tags": [] },
+          { "name": "ジャンボリミッキー!レッツ･ダンス!", "times": ["12:30", "13:45", "15:00", "16:50", "18:05"], "priority": "medium", "kind": "show-indoor", "tags": ["エントリー受付"] },
+          { "name": "ミッキーのレインボー･ルアウ", "times": [], "priority": null, "kind": "show-restaurant", "tags": ["予約必須"] }
+        ]
+      },
+      "TDS": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          { "name": "スカイ･フル･オブ･カラーズ", "times": ["20:30"], "priority": "low", "kind": "fireworks", "tags": [] },
+          { "name": "スパークリング･ジュビリー･セレブレーション", "times": ["11:30", "14:00", "16:00"], "priority": "high", "kind": "harbor-day", "tags": [] },
+          { "name": "【環境演出】スパークリング･ジュビリー･ナイト", "times": ["20:15", "20:40", "20:55"], "priority": "low", "kind": "environment", "tags": [] },
+          { "name": "ビリーヴ!〜シー･オブ･ドリームス〜", "times": ["19:30"], "priority": "low", "kind": "harbor-night", "tags": ["プレミアアクセス"] },
+          { "name": "ダッフィー＆フレンズのワンダフル･フレンドシップ", "times": [], "priority": null, "kind": "show-restaurant", "tags": ["予約必須"] },
+          { "name": "ダンス･ザ･グローブ!", "times": ["13:00", "14:45", "17:05", "18:50"], "priority": "medium", "kind": "show-indoor", "tags": ["エントリー受付", "プレミアアクセス"] },
+          { "name": "ドリームス･テイク･フライト", "times": ["11:00", "12:25", "13:50", "15:55", "17:20"], "priority": "medium", "kind": "show-indoor", "tags": ["エントリー受付", "プレミアアクセス"] }
+        ]
+      }
+    },
+    "2026-05-31": {
+      "TDL": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          { "name": "ディズニー･ハーモニー･イン･カラー", "times": ["13:00"], "priority": "high", "kind": "parade-day", "tags": ["プレミアアクセス"] },
+          { "name": "イッツ･ア･スウィーツフルタイム!", "times": ["15:40"], "priority": "high", "kind": "show-day", "tags": ["プレミアアクセス"] },
+          { "name": "Reach for the Stars", "times": ["20:50"], "priority": "high", "kind": "show-day", "tags": ["プレミアアクセス"] },
+          { "name": "東京ディズニーランド･エレクトリカルパレード･ドリームライツ", "times": ["19:30"], "priority": "low", "kind": "parade-night", "tags": ["プレミアアクセス"] },
+          { "name": "スカイ･フル･オブ･カラーズ", "times": ["20:30"], "priority": "low", "kind": "fireworks", "tags": [] },
+          { "name": "ジャンボリミッキー!レッツ･ダンス!", "times": ["12:30", "13:45", "15:00", "16:50", "18:05"], "priority": "medium", "kind": "show-indoor", "tags": ["エントリー受付"] },
+          { "name": "ミッキーのレインボー･ルアウ", "times": [], "priority": null, "kind": "show-restaurant", "tags": ["予約必須"] }
+        ]
+      },
+      "TDS": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          { "name": "スカイ･フル･オブ･カラーズ", "times": ["20:30"], "priority": "low", "kind": "fireworks", "tags": [] },
+          { "name": "スパークリング･ジュビリー･セレブレーション", "times": ["11:30", "14:00", "16:00"], "priority": "high", "kind": "harbor-day", "tags": [] },
+          { "name": "【環境演出】スパークリング･ジュビリー･ナイト", "times": ["20:15", "20:40", "20:55"], "priority": "low", "kind": "environment", "tags": [] },
+          { "name": "ビリーヴ!〜シー･オブ･ドリームス〜", "times": ["19:30"], "priority": "low", "kind": "harbor-night", "tags": ["プレミアアクセス"] },
+          { "name": "ダッフィー＆フレンズのワンダフル･フレンドシップ", "times": [], "priority": null, "kind": "show-restaurant", "tags": ["予約必須"] },
+          { "name": "ダンス･ザ･グローブ!", "times": ["13:00", "14:45", "17:05", "18:50"], "priority": "medium", "kind": "show-indoor", "tags": ["エントリー受付", "プレミアアクセス"] },
+          { "name": "ドリームス･テイク･フライト", "times": ["11:00", "12:25", "13:50", "15:55", "17:20"], "priority": "medium", "kind": "show-indoor", "tags": ["エントリー受付", "プレミアアクセス"] }
+        ]
+      }
+    }
+  }
+}

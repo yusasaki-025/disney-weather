@@ -39,6 +39,8 @@ function expandShows(shows) {
     const priority = s.priority || 'medium';
     const type = (s.kind || '').includes('parade') ? 'parade' : 'show';
     for (const t of s.times || []) {
+      // レストランショー等は時刻が null/空のことがある。時刻なしは窓計算 ・ 縦線に使えないため除外。
+      if (!t || !/^\d{1,2}:\d{2}$/.test(t)) continue;
       out.push({ name: s.name, time: t, priority, type, tags: s.tags || [] });
     }
   }
