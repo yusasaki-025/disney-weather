@@ -1385,3 +1385,11 @@ h1, h2, h3, h4, .app-title h1 {
   background: var(--warn-bg);
   color: #9a6a00;
 }
+
+/* フィルター 0 件時の案内 */
+.table-empty {
+  padding: 28px 16px !important;
+  text-align: center;
+  color: var(--text-sub);
+  font-size: 13px;
+}

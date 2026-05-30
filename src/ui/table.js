@@ -153,6 +153,15 @@ export function renderTable(els, rows, state, sources, sourceStatus, handlers) {
     <th class="col-chev" aria-hidden="true"></th>
   </tr>`;
 
+  // フィルター結果が 0 件 (おすすめ日のみ ON で該当無し等) のときは案内を出す
+  if (rows.length === 0) {
+    const colspan = 6 + sources.length;
+    tbody.innerHTML = `<tr><td colspan="${colspan}" class="table-empty">
+      今は条件に合う日がありません。フィルターを外すと全日が表示されます。
+    </td></tr>`;
+    return;
+  }
+
   // 連休グルーピング: 直前行も休日なら境界に枠
   tbody.innerHTML = rows
     .map((row, i) => {
