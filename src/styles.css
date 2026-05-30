@@ -139,6 +139,13 @@ h3 {
   font-size: 18px;
 }
 
+.app-subtitle {
+  margin: 2px 0 0;
+  font-size: 12px;
+  color: var(--text-sub);
+  line-height: 1.2;
+}
+
 .header-actions {
   display: flex;
   gap: 8px;
@@ -1146,6 +1153,9 @@ h1, h2, h3, h4, .app-title h1 {
 .app-header .app-title h1,
 .app-header .app-title .material-symbols-rounded {
   color: #fff;
+}
+.app-header .app-subtitle {
+  color: rgba(255, 255, 255, 0.82);
 }
 .app-header .btn {
   background: rgba(255, 255, 255, 0.16);
