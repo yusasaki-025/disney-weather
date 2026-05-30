@@ -105,6 +105,10 @@ function detailPanelHtml(row) {
   return `<div class="detail-panel">
     <div class="detail-info">
       <div class="detail-section">
+        <h4><span class="material-symbols-rounded" aria-hidden="true">schedule</span>時間帯スコア (朝 ･ 昼 ･ 夜)</h4>
+        <div class="subscore-detail">${subscoreHtml(row.eval.subscores, BANDS)}</div>
+      </div>
+      <div class="detail-section">
         <h4><span class="material-symbols-rounded" aria-hidden="true">theater_comedy</span>ショー ･ パレード</h4>
         <div class="park-tabs" role="tablist" aria-label="パーク切替">
           <button class="park-tab active" role="tab" data-park-tab="TDL" type="button">TDL</button>
@@ -150,7 +154,6 @@ export function renderTable(els, rows, state, sources, sourceStatus, handlers) {
   thead.innerHTML = `<tr>
     <th class="col-date">日付</th>
     <th>スコア</th>
-    <th>朝 / 昼 / 夜</th>
     ${catHead('wind', '風')}
     ${catHead('rain', '雨')}
     ${catHead('wbgt', '熱 (WBGT)')}
@@ -197,7 +200,6 @@ export function renderTable(els, rows, state, sources, sourceStatus, handlers) {
           </div>
         </td>
         <td>${scorePillHtml(row.eval)}</td>
-        <td>${subscoreHtml(row.eval.subscores, BANDS)}</td>
         ${metricCell('wind', windVal, row.eval.badges.wind)}
         ${metricCell('rain', rainVal, row.eval.badges.rain)}
         ${metricCell('wbgt', wbgtVal, row.eval.badges.wbgt)}
@@ -205,7 +207,7 @@ export function renderTable(els, rows, state, sources, sourceStatus, handlers) {
         <td class="col-chev"><span class="material-symbols-rounded chevron" aria-hidden="true">expand_more</span></td>
       </tr>`;
 
-      const colspan = 7 + sources.length;
+      const colspan = 6 + sources.length;
       const detailRow = `<tr class="detail-row" data-detail="${row.date}" hidden>
         <td colspan="${colspan}"></td>
       </tr>`;
