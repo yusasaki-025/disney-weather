@@ -6,20 +6,6 @@ TDL ･ TDS に行く日を決めるための天気比較ダッシュボード�
 
 同行者と URL 1 本で共有しながら相談する用途を想定しています。
 
-## Cowork 版と公開版の機能差 (§0.7)
-
-同じ `dist/artifact.html` を 2 系統で使えます。ランタイム判定 (`src/utils/runtime.js` の `isCowork()`) で個人連携ボタンを出し分けます。
-
-| 機能 | Cowork 版 (個人用) | 公開版 (Cloudflare Pages 等・閲覧専用) |
-|---|---|---|
-| 天気比較 ・ スコア ・ グラフ ・ 服装 ・ 雨雲レーダー | 動作 | 動作 |
-| URL コピー ・ ダークモード ・ 印刷 ・ ヘルプ | 動作 | 動作 |
-| Notion 送信 ・ カレンダー登録 | 動作 | 非表示 (Cowork ランタイム必須) |
-
-公開版では `window.cowork` が無いため、個人連携ボタンはそもそも表示されません。
-
----
-
 ## できること
 
 - 今日 ＋ 14 日 (15 日分) の予報を、ソース横並び (気象庁 / Open-Meteo) で比較
@@ -32,15 +18,6 @@ TDL ･ TDS に行く日を決めるための天気比較ダッシュボード�
 - 同行者の都合 NG 日マーク、QR コード共有
 - データ鮮度ラベル (各セル「最終更新◯分前」)、60 秒ごとの自動更新 (タブ非アクティブ時は停止)
 - ダークモード (OS 設定追従 ＋ 手動トグル)、用語集 ・ ヘルプ、当日 ・ 前日の雨雲レーダー、印刷モード
-- Notion 連携 (候補送信)、Google Calendar 連携 (予定追加) ※ Cowork artifact 上で有効
-
----
-
-## いちばん簡単な使い方 (Cowork artifact)
-
-`dist/artifact.html` を Cowork の artifact として登録すると、リロードするたびに最新予報を取得して表示します。
-
-同行者には artifact の共有 URL を渡すか、画面の「QR」ボタンで QR を見せてください。
 
 ---
 
@@ -95,28 +72,6 @@ Claude Code に次のように伝えてください。
 ナイトパレードは通年演目のため参考扱いです。
 
 スコアの詳細ロジックは仕様書 §5 と [src/score/scoring.js](src/score/scoring.js) を参照してください。
-
----
-
-## Notion 連携を有効にする
-
-1. Notion で「ディズニー行く日候補」データベースを作る (プロパティ案は仕様書 §11.1)。
-2. そのデータベースの ID を [src/integrations/notion.js](src/integrations/notion.js) の `NOTION_CONFIG` に設定する。
-3. Cowork の Notion コネクタのツール ID を同じく `NOTION_CONFIG.createTool` に合わせる。
-
-Claude Code にこう伝えれば代わりに設定します。
-
-> 作った Notion DB の URL はこれ : (ここに URL)。disney-weather の Notion 連携を有効にして
-
-設定が未完了の間は「Notion 送信」ボタンを押すとその場でエラー文が出るだけで、他の機能には影響しません。
-
----
-
-## Google Calendar 連携
-
-行を開いて「カレンダー登録」を押すと、確認ダイアログのあと当日 8:00 - 22:00 の予定を追加します。
-
-Cowork の Google Calendar コネクタのツール ID を [src/integrations/gcal.js](src/integrations/gcal.js) の `GCAL_CONFIG.createTool` に合わせてください。
 
 ---
 

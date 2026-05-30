@@ -18,10 +18,7 @@ import { evaluateDay } from './score/scoring.js';
 import { renderTop3 } from './ui/top3.js';
 import { renderTable, renderLegend } from './ui/table.js';
 import { loadState, applyFilterSort, wireControls, toggleNg, setDecided } from './ui/filters.js';
-import { sendCandidatesToNotion, markDecidedInNotion, isNotionConfigured } from './integrations/notion.js';
-import { addToCalendar, confirmText } from './integrations/gcal.js';
 import { LOCATION } from './config/location.js';
-import { isCowork } from './utils/runtime.js';
 
 const CONFIG = {
   coords: LOCATION.coords, // 舞浜駅近辺 (TDL/TDS 共通、§3.13)
@@ -184,29 +181,10 @@ const handlers = {
   onDecide(date) {
     setDecided(state, date);
     render();
-    if (!isNotionConfigured()) return; // DB 未設定なら自動送信しない
-    const row = buildRows().find((r) => r.date === date);
-    if (row) {
-      markDecidedInNotion({ ...row, isDecided: true }, state.park).catch((e) =>
-        alert(`Notion 更新に失敗 : ${e.message}`),
-      );
-    }
   },
   onToggleNg(date) {
     toggleNg(state, date);
     render();
-  },
-  async onCalendar(date) {
-    const rows = buildRows();
-    const row = rows.find((r) => r.date === date);
-    if (!row) return;
-    if (!confirm(confirmText(row, state.park))) return;
-    try {
-      await addToCalendar(row, state.park);
-      alert('Google カレンダーに追加しました');
-    } catch (e) {
-      alert(`カレンダー登録に失敗 : ${e.message}`);
-    }
   },
   onRetryAll() {
     refresh(true);
@@ -242,23 +220,7 @@ function setupHeader() {
   document.getElementById('btn-refresh').addEventListener('click', () => refresh(true));
   document.getElementById('btn-retry-all').addEventListener('click', () => refresh(true));
 
-  document.getElementById('btn-notion').addEventListener('click', async () => {
-    const rows = applyFilterSort(buildRows(), state);
-    try {
-      const res = await sendCandidatesToNotion(rows, state.park);
-      alert(`Notion に候補を送信しました (${res?.length ?? ''})`);
-    } catch (e) {
-      alert(`Notion 送信に失敗 : ${e.message}`);
-    }
-  });
-
   document.getElementById('btn-copy').addEventListener('click', copyUrl);
-
-  // 公開ページ (Cowork 外) では個人連携 (Notion 送信) を隠す (§0.7)
-  if (!isCowork()) {
-    const n = document.getElementById('btn-notion');
-    if (n) n.hidden = true;
-  }
 }
 
 // --- 起動 ---
@@ -276,22 +238,6 @@ async function copyUrl() {
 function buildMenuItems() {
   const click = (id) => document.getElementById(id)?.click();
   const items = [{ label: 'URL をコピー', icon: 'content_copy', onClick: copyUrl }];
-  if (isCowork()) {
-    items.push(
-      { label: 'Notion 送信', icon: 'ios_share', onClick: () => click('btn-notion') },
-      {
-        label: 'カレンダー登録',
-        icon: 'calendar_add_on',
-        onClick: () => {
-          if (!state.decidedDate) {
-            alert('先に行を開いて「この日に決めた」で決定日を選んでください');
-            return;
-          }
-          handlers.onCalendar(state.decidedDate);
-        },
-      },
-    );
-  }
   items.push(
     { label: '印刷', icon: 'print', onClick: () => click('btn-print') },
     { label: '強制更新', icon: 'refresh', onClick: () => refresh(true) },

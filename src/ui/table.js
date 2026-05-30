@@ -17,7 +17,6 @@ import { freshnessLabel } from '../utils/freshness.js';
 import { nowcastHtml } from './nowcast.js';
 import { getTempColor, getTempBandKey } from '../utils/tempColor.js';
 import { getWeatherIcon } from '../utils/weatherIcon.js';
-import { isCowork } from '../utils/runtime.js';
 
 // 気温セルを暖寒色で着色 (§0.6-2)。data-tb はダークモード CSS 上書き用。
 function tempSpan(c) {
@@ -95,13 +94,7 @@ function detailPanelHtml(row) {
     .join('');
   const decided = row.isDecided;
   const ng = row.isNg;
-  // §0.6.8 : 左カラム = 情報、右カラム = グラフ。各ブロックは .detail-section + <h4> 見出し。
-  // 個人連携 (カレンダー登録) は Cowork 版のみ (§0.7)。
-  const calendarBtn = isCowork()
-    ? `<button type="button" class="btn" data-action="calendar">
-        <span class="material-symbols-rounded" aria-hidden="true">calendar_add_on</span>カレンダー登録
-      </button>`
-    : '';
+  // §0.6.8 : 左カラム = 情報、右カラム = グラフ。
   return `<div class="detail-panel">
     <div class="detail-info">
       <div class="detail-section">
@@ -126,7 +119,6 @@ function detailPanelHtml(row) {
         <button type="button" class="btn ${decided ? 'btn-primary' : ''}" data-action="decide">
           <span class="material-symbols-rounded" aria-hidden="true">event_available</span>${decided ? '決定済み' : 'この日に決めた'}
         </button>
-        ${calendarBtn}
         <button type="button" class="btn" data-action="ng">
           <span class="material-symbols-rounded" aria-hidden="true">${ng ? 'undo' : 'block'}</span>${ng ? 'NG 解除' : '同行者 NG'}
         </button>
@@ -248,12 +240,9 @@ export function renderTable(els, rows, state, sources, sourceStatus, handlers) {
       });
     });
 
-    // 詳細内アクション (カレンダーは Cowork 版のみ存在するので null ガード)
+    // 詳細内アクション
     detail.querySelector('[data-action="decide"]').addEventListener('click', () => handlers.onDecide(date));
     detail.querySelector('[data-action="ng"]').addEventListener('click', () => handlers.onToggleNg(date));
-    detail
-      .querySelector('[data-action="calendar"]')
-      ?.addEventListener('click', () => handlers.onCalendar(date));
   };
 
   tbody.querySelectorAll('.row-main').forEach((tr) => {
