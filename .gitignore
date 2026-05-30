@@ -14,3 +14,6 @@ credentials.json
 
 # OS
 .DS_Store
+
+# 第三者 (ブロガー) の風キャン PDF/txt は public repo に再配布しない (§0.30、ローカル保持)
+docs/cancel-history-pdf/

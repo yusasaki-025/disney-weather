@@ -13,7 +13,8 @@
     "coverage": "vitest run --coverage",
     "lint": "eslint .",
     "fetch-schedule": "node scripts/fetch-schedule.mjs",
-    "fetch-operation": "node scripts/fetch-operation.mjs"
+    "fetch-operation": "node scripts/fetch-operation.mjs",
+    "import-cancel-history": "node scripts/import-cancel-history.mjs"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",

@@ -1,0 +1,714 @@
+{
+  "month": "2025-12",
+  "source": "TSUBASA のディズニーパークブログ + X @tdr_syopare_can",
+  "weatherSource": "東京 / 江戸川臨海 アメダス",
+  "fetchedAt": "2026-05-31T00:14:15.512+09:00",
+  "shows": [
+    {
+      "name": "トイズ・ワンダラス・クリスマス！",
+      "park": "TDL",
+      "windCancelThreshold": 12,
+      "records": [
+        {
+          "date": "2025-12-01",
+          "time": "12:45",
+          "avgWind": 1,
+          "maxWind": 1.9,
+          "status": "ok"
+        },
+        {
+          "date": "2025-12-02",
+          "time": "12:45",
+          "avgWind": 3.3,
+          "maxWind": 5.9,
+          "status": "ok"
+        },
+        {
+          "date": "2025-12-03",
+          "time": "12:45",
+          "avgWind": 1.9,
+          "maxWind": 4.1,
+          "status": "cancel",
+          "note": "悪天候のため【キャングリ実施(ダンサー×)】"
+        },
+        {
+          "date": "2025-12-04",
+          "time": "12:45",
+          "avgWind": 3,
+          "maxWind": null,
+          "status": "ok"
+        },
+        {
+          "date": "2025-12-05",
+          "time": "12:45",
+          "avgWind": 1.4,
+          "maxWind": 3.1,
+          "status": "ok"
+        },
+        {
+          "date": "2025-12-06",
+          "time": "12:45",
+          "avgWind": 1.9,
+          "maxWind": 3.1,
+          "status": "ok"
+        },
+        {
+          "date": "2025-12-07",
+          "time": "12:45",
+          "avgWind": 3.3,
+          "maxWind": 4,
+          "status": "ok"
+        },
+        {
+          "date": "2025-12-08",
+          "time": "12:45",
+          "avgWind": 4.1,
+          "maxWind": 5.8,
+          "status": "ok"
+        },
+        {
+          "date": "2025-12-09",
+          "time": "12:45",
+          "avgWind": 3,
+          "maxWind": 6.7,
+          "status": "ok"
+        },
+        {
+          "date": "2025-12-10",
+          "time": "12:45",
+          "avgWind": 1.4,
+          "maxWind": 2.8,
+          "status": "ok"
+        },
+        {
+          "date": "2025-12-11",
+          "time": "12:45",
+          "avgWind": 1.6,
+          "maxWind": 2.8,
+          "status": "ok"
+        },
+        {
+          "date": "2025-12-12",
+          "time": "12:45",
+          "avgWind": 7.2,
+          "maxWind": 13.3,
+          "status": "cancel",
+          "note": "強風のため"
+        },
+        {
+          "date": "2025-12-13",
+          "time": "12:45",
+          "avgWind": 1.7,
+          "maxWind": 3.7,
+          "status": "ok"
+        },
+        {
+          "date": "2025-12-14",
+          "time": "12:45",
+          "avgWind": 3.8,
+          "maxWind": 8.1,
+          "status": "cancel",
+          "note": "悪天候のため"
+        },
+        {
+          "date": "2025-12-15",
+          "time": "12:45",
+          "avgWind": 5.2,
+          "maxWind": 9,
+          "status": "ok"
+        },
+        {
+          "date": "2025-12-16",
+          "time": "12:45",
+          "avgWind": 1.4,
+          "maxWind": 2.5,
+          "status": "ok"
+        },
+        {
+          "date": "2025-12-17",
+          "time": "12:45",
+          "avgWind": 2.6,
+          "maxWind": 3.7,
+          "status": "ok"
+        },
+        {
+          "date": "2025-12-18",
+          "time": "12:45",
+          "avgWind": 4,
+          "maxWind": 8,
+          "status": "partial",
+          "note": "バルーンダンサーカット"
+        },
+        {
+          "date": "2025-12-19",
+          "time": "12:45",
+          "avgWind": 1.7,
+          "maxWind": 3.4,
+          "status": "ok"
+        },
+        {
+          "date": "2025-12-20",
+          "time": "12:45",
+          "avgWind": 0.9,
+          "maxWind": 2.1,
+          "status": "cancel",
+          "note": "悪天候のため【キャングリ実施(ダンサー○)】"
+        },
+        {
+          "date": "2025-12-21",
+          "time": "12:45",
+          "avgWind": 7.4,
+          "maxWind": 9,
+          "status": "ok"
+        },
+        {
+          "date": "2025-12-22",
+          "time": "12:45",
+          "avgWind": 3.8,
+          "maxWind": 7.1,
+          "status": "ok"
+        },
+        {
+          "date": "2025-12-23",
+          "time": "12:45",
+          "avgWind": 3.3,
+          "maxWind": 6.4,
+          "status": "ok"
+        },
+        {
+          "date": "2025-12-24",
+          "time": "12:45",
+          "avgWind": 2.7,
+          "maxWind": 5.5,
+          "status": "cancel",
+          "note": "悪天候のため【キャングリ実施(ダンサー○)】"
+        },
+        {
+          "date": "2025-12-25",
+          "time": "12:45",
+          "avgWind": 2.7,
+          "maxWind": 4.5,
+          "status": "ok"
+        }
+      ]
+    },
+    {
+      "name": "ズートピア２公開記念スペシャルグリーティング",
+      "park": "TDL",
+      "records": [
+        {
+          "date": "2025-12-05",
+          "time": "11:00",
+          "avgWind": 1.4,
+          "maxWind": 3.2,
+          "status": "ok"
+        }
+      ]
+    },
+    {
+      "name": "ビリーヴ！～シー・オブ・ドリームス～",
+      "park": "TDS",
+      "windBaThreshold": 5,
+      "windCancelThreshold": 12,
+      "records": [
+        {
+          "date": "2025-12-01",
+          "time": "19:30",
+          "avgWind": 2.8,
+          "maxWind": 5.5,
+          "status": "ok",
+          "note": "13:10 1.1 2.5 ○ 13:10 1.9 2.9 ○"
+        },
+        {
+          "date": "2025-12-02",
+          "time": "19:30",
+          "avgWind": 1.6,
+          "maxWind": 2.5,
+          "status": "ok",
+          "note": "15:25 8.1 10.1 ○ 15:25 1.7 2.3 ○"
+        },
+        {
+          "date": "2025-12-03",
+          "time": "19:30",
+          "avgWind": 1.7,
+          "maxWind": 2.9,
+          "status": "ok",
+          "note": "13:10 4.1 8.7 ○ 13:10 2.4 3.2 ○"
+        },
+        {
+          "date": "2025-12-04",
+          "time": "19:30",
+          "avgWind": 2.4,
+          "maxWind": 3.5,
+          "status": "partial",
+          "note": "一部内容変更 15:25 2.0 4.7 ○ 15:25 3.9 5.1 ○"
+        },
+        {
+          "date": "2025-12-05",
+          "time": "19:30",
+          "avgWind": 2.5,
+          "maxWind": 5.2,
+          "status": "ok",
+          "note": "13:10 1.8 4.0 ×悪天候のため【キャングリ実施】 13:10 4.0 8.4 ○"
+        },
+        {
+          "date": "2025-12-06",
+          "time": "19:30",
+          "avgWind": 1.7,
+          "maxWind": 1.9,
+          "status": "partial",
+          "note": "個パイロカット 15:25 2.9 6.4 ○ 15:25 2.8 5.8 ○"
+        },
+        {
+          "date": "2025-12-07",
+          "time": "19:30",
+          "avgWind": 1.8,
+          "maxWind": 2.6,
+          "status": "ok",
+          "note": "13:10 4.0 データなし ○ 13:10 1.5 3.1 ○"
+        },
+        {
+          "date": "2025-12-08",
+          "time": "19:30",
+          "avgWind": 3.8,
+          "maxWind": 7.1,
+          "status": "ok",
+          "note": "15:25 2.0 データなし ○ 15:25 1.7 3.2 ○"
+        },
+        {
+          "date": "2025-12-09",
+          "time": "19:30",
+          "avgWind": 2,
+          "maxWind": 2.8,
+          "status": "ok",
+          "note": "13:10 1.3 4.0 ○ 13:10 0.8 1.5 ○"
+        },
+        {
+          "date": "2025-12-10",
+          "time": "19:30",
+          "avgWind": 2,
+          "maxWind": 3.5,
+          "status": "ok",
+          "note": "15:25 2.8 5.1 ○ 15:25 1.1 1.7 ×悪天候のため【キャングリ実施】"
+        },
+        {
+          "date": "2025-12-11",
+          "time": "19:30",
+          "avgWind": 12.2,
+          "maxWind": 15.8,
+          "status": "cancel",
+          "note": "強風のため 13:10 1.5 2.5 ○ 13:10 5.5 7.1 ○シェリーメイ不在"
+        },
+        {
+          "date": "2025-12-12",
+          "time": "19:30",
+          "avgWind": 6.4,
+          "maxWind": 16,
+          "status": "cancel",
+          "note": "強風のため 15:25 1.2 1.7 ○ 15:25 6.5 8.6 ×悪天候のため【キャングリ実施】"
+        },
+        {
+          "date": "2025-12-13",
+          "time": "19:30",
+          "avgWind": 1.8,
+          "maxWind": 2.9,
+          "status": "ok",
+          "note": "13:10 1.8 3.2 ○ 13:10 4.7 9.7 ○"
+        },
+        {
+          "date": "2025-12-14",
+          "time": "19:30",
+          "avgWind": 3.1,
+          "maxWind": 3.8,
+          "status": "ok",
+          "note": "15:25 3.2 3.9 ○ 15:25 3.5 5.6 ○"
+        },
+        {
+          "date": "2025-12-15",
+          "time": "19:30",
+          "avgWind": 3.8,
+          "maxWind": 8.2,
+          "status": "partial",
+          "note": "パイロカット 13:10 3.4 5.0 ○ 13:10 2.8 5.3 ○"
+        },
+        {
+          "date": "2025-12-16",
+          "time": "19:30",
+          "avgWind": 4,
+          "maxWind": 5.9,
+          "status": "ok",
+          "note": "15:25 3.2 5.3 ○ 15:25 2.5 4.7 ○"
+        },
+        {
+          "date": "2025-12-17",
+          "time": "19:30",
+          "avgWind": 1.5,
+          "maxWind": 2.3,
+          "status": "ok",
+          "note": "シス調のため中断 13:10 2.9 5.5 ○ 13:10 2.4 4.6 ×悪天候のため【キャングリ実施】"
+        },
+        {
+          "date": "2025-12-18",
+          "time": "19:30",
+          "avgWind": 2.8,
+          "maxWind": 5,
+          "status": "ok",
+          "note": "15:25 3.2 5.6 ○ 15:25 2.1 4.0 ○"
+        },
+        {
+          "date": "2025-12-19",
+          "time": "19:30",
+          "avgWind": 1.9,
+          "maxWind": 3.4,
+          "status": "ok",
+          "note": "13:10 2.0 4.8 ○ 13:10 2.5 4.4 ○"
+        },
+        {
+          "date": "2025-12-20",
+          "time": "19:30",
+          "avgWind": 1.5,
+          "maxWind": 4.2,
+          "status": "cancel",
+          "note": "悪天候のため 15:25 2.1 3.0 ○ 15:25 1.2 1.9 ○"
+        },
+        {
+          "date": "2025-12-21",
+          "time": "19:30",
+          "avgWind": 3.2,
+          "maxWind": 5.7,
+          "status": "ok",
+          "note": "13:10 1.0 2.1 ○ 13:10 8.1 15.7 ×強風のため"
+        },
+        {
+          "date": "2025-12-22",
+          "time": "19:30",
+          "avgWind": 3.8,
+          "maxWind": 6.6,
+          "status": "partial",
+          "note": "一部パイロカット 15:25 8.6 11.2 ○ 15:25 6.2 13.9 ×強風のため"
+        },
+        {
+          "date": "2025-12-23",
+          "time": "19:30",
+          "avgWind": 2.5,
+          "maxWind": 4.9,
+          "status": "ok",
+          "note": "13:10 7.8 16.5 ×強風のため 13:10 1.3 2.5 ○"
+        },
+        {
+          "date": "2025-12-24",
+          "time": "19:30",
+          "avgWind": 0.2,
+          "maxWind": 0.6,
+          "status": "ok",
+          "note": "15:25 6.3 12.7 ×強風のため 15:25 2.0 3.3 ○"
+        },
+        {
+          "date": "2025-12-25",
+          "time": "19:30",
+          "avgWind": 4.3,
+          "maxWind": 8.9,
+          "status": "cancel",
+          "note": "悪天候のため 13:10 2.0 4.2 ○ 13:10 2.1 4.5 ○"
+        },
+        {
+          "date": "2025-12-26",
+          "time": "19:30",
+          "avgWind": 4.9,
+          "maxWind": 12.4,
+          "status": "cancel",
+          "note": "強風のため 15:25 1.8 2.9 ○ 15:25 2.3 4.6 ○"
+        },
+        {
+          "date": "2025-12-27",
+          "time": "19:30",
+          "avgWind": 0.5,
+          "maxWind": 1,
+          "status": "ok",
+          "note": "13:10 4.0 10.5 ○ 13:10 1.6 2.3 ○"
+        },
+        {
+          "date": "2025-12-28",
+          "time": "19:30",
+          "avgWind": 1.1,
+          "maxWind": 1.3,
+          "status": "ok",
+          "note": "15:25 2.6 4.9 ○ 15:25 1.6 2.6 ○"
+        },
+        {
+          "date": "2025-12-29",
+          "time": "19:30",
+          "avgWind": 3.2,
+          "maxWind": 4.5,
+          "status": "ok",
+          "note": "13:10 4.6 9.6 ○ 13:10 1.1 2.7 ○"
+        },
+        {
+          "date": "2025-12-30",
+          "time": "19:30",
+          "avgWind": 1.3,
+          "maxWind": 1.8,
+          "status": "ok",
+          "note": "15:25 4.4 9.4 ○ 15:25 1.0 1.9 ○"
+        },
+        {
+          "date": "2025-12-31",
+          "time": "19:30",
+          "avgWind": 2.1,
+          "maxWind": 2.5,
+          "status": "ok",
+          "note": "13:10 1.4 3.0 ○"
+        }
+      ]
+    },
+    {
+      "name": "ダッフィーのカラフルハピネスジャーニー",
+      "park": "TDS",
+      "windCancelThreshold": 10,
+      "records": []
+    },
+    {
+      "name": "ディズニー・クリスマス・グリーティング",
+      "park": "TDS",
+      "windCancelThreshold": 12,
+      "records": []
+    },
+    {
+      "name": "スターブライト・クリスマス",
+      "park": "TDS",
+      "windCancelThreshold": 9,
+      "records": [
+        {
+          "date": "2025-12-01",
+          "time": "20:30",
+          "avgWind": 2.1,
+          "maxWind": 2.8,
+          "status": "cancel",
+          "note": "上空の気流が不安定なため"
+        },
+        {
+          "date": "2025-12-02",
+          "time": "20:30",
+          "avgWind": 1.6,
+          "maxWind": 2.6,
+          "status": "ok"
+        },
+        {
+          "date": "2025-12-03",
+          "time": "20:30",
+          "avgWind": null,
+          "maxWind": null,
+          "status": "ok"
+        },
+        {
+          "date": "2025-12-04",
+          "time": "20:30",
+          "avgWind": 1.8,
+          "maxWind": 2.5,
+          "status": "ok"
+        },
+        {
+          "date": "2025-12-05",
+          "time": "20:30",
+          "avgWind": 1.7,
+          "maxWind": 3.5,
+          "status": "ok"
+        },
+        {
+          "date": "2025-12-06",
+          "time": "20:30",
+          "avgWind": 2.5,
+          "maxWind": 3.2,
+          "status": "ok"
+        },
+        {
+          "date": "2025-12-07",
+          "time": "20:30",
+          "avgWind": null,
+          "maxWind": null,
+          "status": "ok"
+        },
+        {
+          "date": "2025-12-08",
+          "time": "20:30",
+          "avgWind": 3.4,
+          "maxWind": 7.8,
+          "status": "ok"
+        },
+        {
+          "date": "2025-12-09",
+          "time": "20:30",
+          "avgWind": 1.4,
+          "maxWind": 1.7,
+          "status": "ok"
+        },
+        {
+          "date": "2025-12-10",
+          "time": "20:30",
+          "avgWind": 1.2,
+          "maxWind": 2.2,
+          "status": "ok"
+        },
+        {
+          "date": "2025-12-11",
+          "time": "20:30",
+          "avgWind": 10.2,
+          "maxWind": 13.3,
+          "status": "cancel",
+          "note": "強風のため"
+        },
+        {
+          "date": "2025-12-12",
+          "time": "20:30",
+          "avgWind": 4.8,
+          "maxWind": 10.3,
+          "status": "cancel",
+          "note": "強風のため"
+        },
+        {
+          "date": "2025-12-13",
+          "time": "20:30",
+          "avgWind": null,
+          "maxWind": null,
+          "status": "ok"
+        },
+        {
+          "date": "2025-12-14",
+          "time": "20:30",
+          "avgWind": 2.9,
+          "maxWind": 3.8,
+          "status": "ok"
+        },
+        {
+          "date": "2025-12-15",
+          "time": "20:30",
+          "avgWind": null,
+          "maxWind": null,
+          "status": "ok"
+        },
+        {
+          "date": "2025-12-16",
+          "time": "20:30",
+          "avgWind": 1.2,
+          "maxWind": 2,
+          "status": "cancel",
+          "note": "上空の気流が不安定なため"
+        },
+        {
+          "date": "2025-12-17",
+          "time": "20:30",
+          "avgWind": 2.5,
+          "maxWind": 3.8,
+          "status": "ok"
+        },
+        {
+          "date": "2025-12-18",
+          "time": "20:30",
+          "avgWind": 2.4,
+          "maxWind": 4.7,
+          "status": "ok"
+        },
+        {
+          "date": "2025-12-19",
+          "time": "20:30",
+          "avgWind": 2.2,
+          "maxWind": 3.6,
+          "status": "ok"
+        },
+        {
+          "date": "2025-12-20",
+          "time": "20:30",
+          "avgWind": 1.9,
+          "maxWind": 3.5,
+          "status": "ok"
+        },
+        {
+          "date": "2025-12-21",
+          "time": "20:30",
+          "avgWind": 2.4,
+          "maxWind": 4.4,
+          "status": "ok"
+        },
+        {
+          "date": "2025-12-22",
+          "time": "20:30",
+          "avgWind": 3.1,
+          "maxWind": 5.2,
+          "status": "ok"
+        },
+        {
+          "date": "2025-12-23",
+          "time": "20:30",
+          "avgWind": 2.2,
+          "maxWind": 3.8,
+          "status": "ok"
+        },
+        {
+          "date": "2025-12-24",
+          "time": "20:30",
+          "avgWind": 0.9,
+          "maxWind": 1.7,
+          "status": "ok"
+        },
+        {
+          "date": "2025-12-25",
+          "time": "20:30",
+          "avgWind": 2.5,
+          "maxWind": 4.8,
+          "status": "ok"
+        }
+      ]
+    },
+    {
+      "name": "ニューデイ、ニュードリームス",
+      "park": "TDS",
+      "windCancelThreshold": 9,
+      "records": [
+        {
+          "date": "2025-12-26",
+          "time": "20:30",
+          "avgWind": 4.1,
+          "maxWind": 9.1,
+          "status": "cancel",
+          "note": "強風のため"
+        },
+        {
+          "date": "2025-12-27",
+          "time": "20:30",
+          "avgWind": 1.1,
+          "maxWind": 1.3,
+          "status": "ok"
+        },
+        {
+          "date": "2025-12-28",
+          "time": "20:30",
+          "avgWind": 1.7,
+          "maxWind": 3.2,
+          "status": "cancel",
+          "note": "上空の気流が不安定なため"
+        },
+        {
+          "date": "2025-12-29",
+          "time": "20:30",
+          "avgWind": 3.3,
+          "maxWind": 4.3,
+          "status": "ok"
+        },
+        {
+          "date": "2025-12-30",
+          "time": "20:30",
+          "avgWind": 2.2,
+          "maxWind": 2.7,
+          "status": "ok"
+        },
+        {
+          "date": "2025-12-31",
+          "time": "20:30",
+          "avgWind": 2.6,
+          "maxWind": 5.1,
+          "status": "ok"
+        }
+      ]
+    }
+  ]
+}

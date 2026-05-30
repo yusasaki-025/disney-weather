@@ -198,3 +198,22 @@ git push
 ```
 
 JSON が無い日 ・ 取得失敗時はセクションを表示しません。
+
+## データ出典
+
+- 気象庁 ( 政府標準利用規約 )
+- Open-Meteo ( CC BY 4.0、非商用 )
+- 環境省 暑さ指数 電子情報提供サービス ( 政府標準利用規約 )
+- 東京ディズニーリゾート公式 ( 出典明記 ・ 個人利用 ・ 月 1 取得 )
+- 過去風キャン記録 : TSUBASA のディズニーパークブログ + X @tdr_syopare_can ( 個人利用 ・ 出典明記 )
+
+### 過去風キャン記録の取り込み (§0.30)
+
+ブロガーがまとめた月別 PDF ( 風キャン基準 ・ 日別の実測風速 ・ 公演実施状況 ) を `docs/cancel-history-pdf/{YYYY-MM}.txt` ( pdftotext で抽出済 ) から構造化し、`src/data/cancel-history/{YYYY-MM}.json` に保存します。Phase 2 第4弾 ( 的中追跡 ) の正解ラベルになります。
+
+```sh
+npm run import-cancel-history            # 全月
+npm run import-cancel-history -- 2026-04 # 指定月
+```
+
+実行時に月別の record 数 ・ status 分布をログ出力します ( 固定幅 PDF のパースは完璧ではないため人手チェック用 )。**元 PDF / txt は第三者の成果物のため public リポジトリには含めません** ( `.gitignore` でローカル保持 )。抽出後の JSON ( 事実データ ) のみをコミットします。

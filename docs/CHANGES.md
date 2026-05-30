@@ -2414,6 +2414,164 @@ JSON 例 :
 - accuracy-log.json に日次追記
 - 30日蓄積後にソース別平均誤差が見える
 
+### 0.30 アメブロ風キャン記録の統合 (Phase 2 第4弾 強化版 ・ Yuka さん発掘)
+
+#### 経緯
+
+Yuka さんが TSUBASA のディズニーパークブログ記事を共有 :
+<https://ameblo.jp/tsu-disney/entry-12962621607.html>
+
+このブロガーが X (旧 Twitter) `@tdr_syopare_can` の投稿をまとめて、月別 PDF で配布している。Google Drive 共有リンクで 5ヶ月分 (2025/12 〜 2026/04) 入手可能。
+
+→ **Phase 2 第4弾 (的中追跡) の本命データソース**。30日待たずに、いきなり 5ヶ月 150日分の正解ラベル + 実測風速取得済 → 即座にショー別中止予測モデル構築可能。
+
+#### データ構造 (PDF 抽出後の構造化案)
+
+各ショーごとに :
+
+- **風キャン閾値** (一次情報) :
+  - ディズニー・ハーモニー・イン・カラー : 風バ 6m〜 / 風キャン 12m〜
+  - イッツ・ア・スウィーツ・フルタイム! : 風キャン 12m〜
+  - Reach for the Stars : **パイロカット 8m〜** (花火部分のみ削除)
+  - エレクトリカル・パレード・ドリームライツ : 風キャン 10m〜
+  - ビリーヴ! : 風バ 5m〜 / 風キャン 12m〜
+  - スパークリング・ジュビリー・セレブレーション : 風キャン 12m〜
+
+- **日別実測 + 公演実施状況** :
+  - date / time / avgWind / maxWind / status (ok / cancel / partial / suspended) / note
+
+#### JSON スキーマ
+
+```json
+{
+  "month": "2026-04",
+  "source": "TSUBASA のディズニーパークブログ + X @tdr_syopare_can",
+  "sourceUrl": "https://drive.google.com/file/d/{fileId}/view",
+  "weatherSource": "東京 / 江戸川臨海 アメダス",
+  "fetchedAt": "ISO8601",
+  "shows": [
+    {
+      "name": "ディズニー･ハーモニー･イン･カラー",
+      "park": "TDL",
+      "windBaThreshold": 6,
+      "windCancelThreshold": 12,
+      "records": [
+        { "date": "2026-04-01", "time": "14:15", "avgWind": 4.1, "maxWind": 6.8, "status": "ok", "note": "雨バージョン (ダンサーあり)" },
+        { "date": "2026-04-03", "time": "14:15", "avgWind": 7.3, "maxWind": 9.6, "status": "ok" },
+        { "date": "2026-04-09", "time": "15:15", "avgWind": 9.7, "maxWind": 13.9, "status": "cancel", "note": "強風のため" },
+        { "date": "2026-04-08", "status": "suspended" }
+      ]
+    },
+    {
+      "name": "Reach for the Stars",
+      "park": "TDL",
+      "pyroLimitThreshold": 8,
+      "records": [
+        { "date": "2026-04-04", "time": "20:35", "avgWind": 10.3, "maxWind": 14.1, "status": "ok", "note": "パイロカット (強風)" }
+      ]
+    }
+  ]
+}
+```
+
+#### ステータス分類
+
+| status | 意味 | パターン例 |
+|---|---|---|
+| `ok` | 通常実施 | ○ |
+| `partial` | 一部省略 ・ 風バ ・ パイロカット | ○パイロカット(強風) / ○※風バの可能性あり / ○強風のため公演内容一部変更 |
+| `cancel` | 中止 | ×強風のため / ×悪天候のため |
+| `partial-cancel` | 途中中止 | ×悪天候のため途中中止 |
+| `suspended` | 休止 (季節入れ替え等) | 休止 |
+| `system-issue` | システム不具合 | ×システム不具合のため |
+
+#### 取得元 PDF (Google Drive ・ ブロガー公開)
+
+| 月 | fileId |
+|---|---|
+| 2025-12 | `1JGnoew4XA8U_L8NlYCYqkbUtIT9fEieD` |
+| 2026-01 | `1d-HdjSiisQ0i0KbGwS9KIrW_V6Uzzbar` |
+| 2026-02 | `1eLc5UOEPC8fZFRd5z61-4-Q4MkltCpFJ` |
+| 2026-03 | `1NHs70ZEzTR9ZI75HHcOeUx41Q4r_diJJ` |
+| 2026-04 | `1EOF8gF_VvAnr7wOMa1iqg0CUB7f5ChUm` |
+
+ダウンロード : `https://drive.google.com/uc?export=download&id={fileId}`
+
+#### 取得 ・ パーサ実装
+
+```
+scripts/import-cancel-history.mjs (新規)
+
+引数 : YYYY-MM (省略時は全月)
+動作 :
+  - 該当月の PDF を Google Drive からダウンロード
+  - pdftotext -layout で抽出 (poppler-utils 必要)
+  - テキスト pattern match で ショー別 ・ 日別レコードに変換
+  - src/data/cancel-history/{YYYY-MM}.json に保存
+  - ショー閾値テーブルも自動生成 (windBaThreshold / windCancelThreshold / pyroLimitThreshold)
+```
+
+pdftotext 出力例 (4月ハーモニー部分) :
+
+```
+4月1日    14:15     4.1    6.8 ○雨バージョン（ダンサーあり）
+4月2日    14:15     2.8    3.9 ○雨バージョン（ダンサーあり）
+4月3日    14:15     7.3    9.6 ○
+4月8日    休止
+4月9日    15:15     9.7   13.9 ×強風のため
+```
+
+正規表現 : `^\s*(\d+)月(\d+)日\s+(?:(\d{1,2}:\d{2})\s+([\d.]+)\s+([\d.]+)\s+(.+))?$`
+
+注 : TDL と TDS が左右2カラム並列 ・ TDS のショースケジュールは更に4カラム並列の月もあり (PDF レイアウト依存)。パーサは「ショー見出し」検出 + 列幅位置 (col offset) で分割が必要。
+
+#### 統合先
+
+`src/data/cancel-history/` に 5ヶ月分 JSON を配置 + `src/data/show-thresholds.js` (ショー別風キャン閾値テーブル)。
+
+#### 予測モデルへの統合
+
+(Phase 3 で実装、まずはデータ蓄積)
+
+1. **ショー別閾値を §5.5 のバッジ判定に反映** :
+   - 現状 : 全ショー一律 `8m/s 風バ / 10m/s 中止`
+   - 新 : ショー別 (例 Reach for the Stars は 8m/s でパイロカット、ハーモニーは 6m/s 風バ)
+   - これだけで判定精度大幅向上
+
+2. **過去同条件の中止率表示** (詳細パネル) :
+   - 「過去 150日のうち、平均風速 8m/s でハーモニーが中止された確率 : 15%」
+   - 各日のスコアセルにツールチップで補助情報
+
+3. **統計予測モデル** (将来) :
+   - 過去 150日 + 気象データで分類器
+   - 「明日のハーモニー中止確率 38%」みたいな予測
+
+#### ライセンス ・ 出典
+
+- データ源 : TSUBASA のディズニーパークブログ + X `@tdr_syopare_can` の投稿
+- 個人利用範囲 ・ 商用利用しない
+- 公開ページ ・ README に出典明記 (リンク含む)
+- スクレイピング頻度 : 月1回程度 (新月分のみダウンロード)
+- ブロガーの記事 ・ X 投稿は二次情報 ・ 一次情報源は X
+- もし削除依頼があれば即時撤去
+
+#### 該当ファイル
+
+- `scripts/import-cancel-history.mjs` (新規 ・ PDF ダウンロード + パース + JSON 化)
+- `src/data/cancel-history/.gitkeep` (新規ディレクトリ)
+- `src/data/cancel-history/2025-12.json` 等 (5ヶ月分)
+- `src/data/show-thresholds.js` (新規 ・ ショー別閾値テーブル)
+- `src/score/scoring.js` (ショー別閾値を反映 ・ §5.5 更新)
+- README に出典セクション追加
+
+#### 検証
+
+- `npm run import-cancel-history -- 2026-04` で 4月 JSON 出力
+- 5ヶ月分すべて出力後、合計 record 数が 150 × 6 = 900 程度
+- ショー別風キャン閾値テーブル生成
+- スコアリングがショー別閾値で動作
+- npm test 緑
+
 ### 0.7 公開ページ化 (Cloudflare Pages) ＋ ランタイム判定
 
 Yuka さん要望 : 「Mac 開いてなくても他の人も見れる公開ページ」

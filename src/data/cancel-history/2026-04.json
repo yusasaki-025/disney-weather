@@ -1,0 +1,828 @@
+{
+  "month": "2026-04",
+  "source": "TSUBASA のディズニーパークブログ + X @tdr_syopare_can",
+  "weatherSource": "東京 / 江戸川臨海 アメダス",
+  "fetchedAt": "2026-05-31T00:14:15.519+09:00",
+  "shows": [
+    {
+      "name": "イッツ・ア・スウィーツ・フルタイム！",
+      "park": "TDL",
+      "windCancelThreshold": 12,
+      "records": [
+        {
+          "date": "2026-04-08",
+          "time": "15:15",
+          "avgWind": 5.6,
+          "maxWind": 7.1,
+          "status": "ok"
+        },
+        {
+          "date": "2026-04-09",
+          "time": "15:15",
+          "avgWind": 9.7,
+          "maxWind": 13.9,
+          "status": "cancel",
+          "note": "強風のため"
+        },
+        {
+          "date": "2026-04-10",
+          "time": "15:30",
+          "avgWind": 8.9,
+          "maxWind": 12.2,
+          "status": "cancel",
+          "note": "悪天候のため"
+        },
+        {
+          "date": "2026-04-11",
+          "time": "15:00",
+          "avgWind": 4.3,
+          "maxWind": 6.3,
+          "status": "ok"
+        },
+        {
+          "date": "2026-04-12",
+          "time": "15:00",
+          "avgWind": 4.7,
+          "maxWind": 8.5,
+          "status": "ok"
+        },
+        {
+          "date": "2026-04-13",
+          "time": "15:00",
+          "avgWind": 6.4,
+          "maxWind": 8.3,
+          "status": "ok"
+        },
+        {
+          "date": "2026-04-14",
+          "time": "15:00",
+          "avgWind": 4.3,
+          "maxWind": 8,
+          "status": "ok"
+        },
+        {
+          "date": "2026-04-15",
+          "time": "15:00",
+          "avgWind": 2.6,
+          "maxWind": 4.4,
+          "status": "ok"
+        },
+        {
+          "date": "2026-04-16",
+          "time": "15:00",
+          "avgWind": 5.3,
+          "maxWind": 9.5,
+          "status": "ok"
+        },
+        {
+          "date": "2026-04-17",
+          "time": "15:00",
+          "avgWind": 2.8,
+          "maxWind": 4.6,
+          "status": "ok"
+        },
+        {
+          "date": "2026-04-18",
+          "time": "15:00",
+          "avgWind": 5.2,
+          "maxWind": 6.6,
+          "status": "ok"
+        },
+        {
+          "date": "2026-04-19",
+          "time": "15:00",
+          "avgWind": 6.6,
+          "maxWind": 8.8,
+          "status": "ok"
+        },
+        {
+          "date": "2026-04-20",
+          "time": "15:00",
+          "avgWind": 7.9,
+          "maxWind": 11.5,
+          "status": "ok"
+        },
+        {
+          "date": "2026-04-21",
+          "time": "15:00",
+          "avgWind": 2.7,
+          "maxWind": 5.2,
+          "status": "ok"
+        },
+        {
+          "date": "2026-04-22",
+          "time": "15:00",
+          "avgWind": 9.8,
+          "maxWind": 13.5,
+          "status": "partial",
+          "note": "強風のため公演内容一部変更（3rd通過）"
+        },
+        {
+          "date": "2026-04-23",
+          "time": "15:00",
+          "avgWind": 1.8,
+          "maxWind": 2.8,
+          "status": "cancel",
+          "note": "悪天候のため【キャングリ実施(ダンサー×)】"
+        },
+        {
+          "date": "2026-04-24",
+          "time": "15:00",
+          "avgWind": 4.7,
+          "maxWind": 7.3,
+          "status": "ok"
+        },
+        {
+          "date": "2026-04-25",
+          "time": "15:00",
+          "avgWind": 3.3,
+          "maxWind": 5.5,
+          "status": "ok"
+        },
+        {
+          "date": "2026-04-26",
+          "time": "15:00",
+          "avgWind": 3.5,
+          "maxWind": 5.2,
+          "status": "ok"
+        },
+        {
+          "date": "2026-04-27",
+          "status": "suspended"
+        },
+        {
+          "date": "2026-04-28",
+          "status": "suspended"
+        },
+        {
+          "date": "2026-04-28",
+          "time": "15:00",
+          "avgWind": 9.8,
+          "maxWind": 13.4,
+          "status": "ok"
+        },
+        {
+          "date": "2026-04-30",
+          "status": "suspended"
+        },
+        {
+          "date": "2026-04-30",
+          "time": "15:00",
+          "avgWind": 1.7,
+          "maxWind": 2.7,
+          "status": "ok"
+        }
+      ]
+    },
+    {
+      "name": "ディズニー・ハーモニー・イン・カラー",
+      "park": "TDL",
+      "windBaThreshold": 6,
+      "windCancelThreshold": 12,
+      "records": [
+        {
+          "date": "2026-04-01",
+          "time": "14:15",
+          "avgWind": 4.1,
+          "maxWind": 6.8,
+          "status": "ok",
+          "note": "雨バージョン（ダンサーあり）"
+        },
+        {
+          "date": "2026-04-02",
+          "time": "14:15",
+          "avgWind": 2.8,
+          "maxWind": 3.9,
+          "status": "ok",
+          "note": "雨バージョン（ダンサーあり）"
+        },
+        {
+          "date": "2026-04-03",
+          "time": "14:15",
+          "avgWind": 7.3,
+          "maxWind": 9.6,
+          "status": "ok"
+        },
+        {
+          "date": "2026-04-04",
+          "time": "14:15",
+          "avgWind": 5.5,
+          "maxWind": 8.6,
+          "status": "ok"
+        },
+        {
+          "date": "2026-04-05",
+          "time": "14:15",
+          "avgWind": 6.9,
+          "maxWind": 9.6,
+          "status": "ok"
+        },
+        {
+          "date": "2026-04-06",
+          "time": "14:15",
+          "avgWind": 5.2,
+          "maxWind": 6.6,
+          "status": "ok"
+        },
+        {
+          "date": "2026-04-07",
+          "time": "14:15",
+          "avgWind": 7.1,
+          "maxWind": 9.9,
+          "status": "ok",
+          "note": "雨バージョン（ダンサーあり）"
+        },
+        {
+          "date": "2026-04-08",
+          "status": "suspended"
+        },
+        {
+          "date": "2026-04-09",
+          "status": "suspended"
+        },
+        {
+          "date": "2026-04-10",
+          "status": "suspended"
+        },
+        {
+          "date": "2026-04-11",
+          "status": "suspended"
+        },
+        {
+          "date": "2026-04-12",
+          "status": "suspended"
+        },
+        {
+          "date": "2026-04-13",
+          "status": "suspended"
+        },
+        {
+          "date": "2026-04-14",
+          "status": "suspended"
+        },
+        {
+          "date": "2026-04-15",
+          "status": "suspended"
+        },
+        {
+          "date": "2026-04-16",
+          "status": "suspended"
+        },
+        {
+          "date": "2026-04-17",
+          "status": "suspended"
+        },
+        {
+          "date": "2026-04-18",
+          "status": "suspended"
+        },
+        {
+          "date": "2026-04-19",
+          "status": "suspended"
+        },
+        {
+          "date": "2026-04-20",
+          "status": "suspended"
+        },
+        {
+          "date": "2026-04-21",
+          "status": "suspended"
+        },
+        {
+          "date": "2026-04-22",
+          "status": "suspended"
+        },
+        {
+          "date": "2026-04-23",
+          "status": "suspended"
+        },
+        {
+          "date": "2026-04-24",
+          "status": "suspended"
+        },
+        {
+          "date": "2026-04-25",
+          "status": "suspended"
+        },
+        {
+          "date": "2026-04-26",
+          "status": "suspended"
+        },
+        {
+          "date": "2026-04-29",
+          "status": "suspended"
+        }
+      ]
+    },
+    {
+      "name": "ビリーヴ！～シー・オブ・ドリームス～",
+      "park": "TDS",
+      "windBaThreshold": 5,
+      "windCancelThreshold": 12,
+      "records": [
+        {
+          "date": "2026-04-01",
+          "time": "19:15",
+          "avgWind": 2.4,
+          "maxWind": 5.1,
+          "status": "cancel",
+          "note": "悪天候のため 11:30 3.5 4.4 ○ 11:30 3.4 7.5 ○"
+        },
+        {
+          "date": "2026-04-02",
+          "time": "19:15",
+          "avgWind": 5.3,
+          "maxWind": 12.6,
+          "status": "cancel",
+          "note": "強風のため"
+        },
+        {
+          "date": "2026-04-03",
+          "time": "19:15",
+          "avgWind": 5,
+          "maxWind": 6.9,
+          "status": "ok",
+          "note": "16:00 4.6 6.6 ○ 16:00 2.5 6.2 ○"
+        },
+        {
+          "date": "2026-04-04",
+          "time": "19:15",
+          "avgWind": 12,
+          "maxWind": 16.1,
+          "status": "cancel",
+          "note": "強風のため 11:30 4.3 5.4 ○ 11:30 9.6 12.6 ○パイロカット（強風）"
+        },
+        {
+          "date": "2026-04-05",
+          "time": "19:15",
+          "avgWind": 7.6,
+          "maxWind": 9.4,
+          "status": "partial",
+          "note": "パイロカット"
+        },
+        {
+          "date": "2026-04-06",
+          "time": "19:15",
+          "avgWind": 6,
+          "maxWind": 8.8,
+          "status": "partial",
+          "note": "16:00 7.6 9.6 ○ 16:00 9.1 12.9 ○パイロカット（強風）"
+        },
+        {
+          "date": "2026-04-07",
+          "time": "19:15",
+          "avgWind": 6.2,
+          "maxWind": 15.6,
+          "status": "partial-cancel",
+          "note": "強風のため 11:30 1.9 2.9 ○ 11:30 2.3 3.3 ×悪天候のため途中中止"
+        },
+        {
+          "date": "2026-04-08",
+          "time": "19:15",
+          "avgWind": 7.5,
+          "maxWind": 10.2,
+          "status": "partial",
+          "note": "一部パイロカット"
+        },
+        {
+          "date": "2026-04-09",
+          "time": "19:15",
+          "avgWind": 9,
+          "maxWind": 11.5,
+          "status": "ok",
+          "note": "16:00 5.9 7.4 ○ 16:00 1.6 2.9 ×悪天候のため"
+        },
+        {
+          "date": "2026-04-10",
+          "status": "suspended"
+        },
+        {
+          "date": "2026-04-11",
+          "time": "19:15",
+          "avgWind": 1.7,
+          "maxWind": 2.9,
+          "status": "ok"
+        },
+        {
+          "date": "2026-04-12",
+          "time": "21:25",
+          "avgWind": 4.2,
+          "maxWind": 5.5,
+          "status": "ok",
+          "note": "16:00 5.8 8.5 ○ 16:00 4.3 6.9 ○"
+        },
+        {
+          "date": "2026-04-13",
+          "time": "19:15",
+          "avgWind": 3.4,
+          "maxWind": 4.5,
+          "status": "ok",
+          "note": "11:30 2.0 2.7 ○ 11:30 2.9 4.9 ○"
+        },
+        {
+          "date": "2026-04-14",
+          "time": "19:15",
+          "avgWind": 5.1,
+          "maxWind": 6.6,
+          "status": "ok"
+        },
+        {
+          "date": "2026-04-15",
+          "time": "19:15",
+          "avgWind": 2.5,
+          "maxWind": 3.8,
+          "status": "ok",
+          "note": "16:00 4.9 6.7 ○ 16:00 3.2 5.1 ○"
+        },
+        {
+          "date": "2026-04-16",
+          "time": "19:15",
+          "avgWind": 7.5,
+          "maxWind": 13.9,
+          "status": "cancel",
+          "note": "強風のため 11:30 6.1 10.1 ○ 11:30 3.0 4.3 ○"
+        },
+        {
+          "date": "2026-04-17",
+          "time": "19:15",
+          "avgWind": 5.2,
+          "maxWind": 7.2,
+          "status": "ok"
+        },
+        {
+          "date": "2026-04-18",
+          "time": "19:15",
+          "avgWind": 4.1,
+          "maxWind": 5.6,
+          "status": "ok",
+          "note": "16:00 6.3 11.1 ×強風のため途中中止 16:00 5.5 7.7 ○"
+        },
+        {
+          "date": "2026-04-19",
+          "time": "19:15",
+          "avgWind": 6.7,
+          "maxWind": 8.8,
+          "status": "ok",
+          "note": "システム不具合のため一時中断 11:30 3.5 6.9 ○ 11:30 5.4 9.2 ×悪天候のため"
+        },
+        {
+          "date": "2026-04-20",
+          "time": "19:15",
+          "avgWind": 7,
+          "maxWind": 9.6,
+          "status": "partial",
+          "note": "一部パイロカット"
+        },
+        {
+          "date": "2026-04-21",
+          "time": "19:15",
+          "avgWind": 3.6,
+          "maxWind": 7.9,
+          "status": "system-issue",
+          "note": "システム不具合のため 16:00 4.3 6.5 ○ 16:00 3.2 7.0 ×悪天候のため"
+        },
+        {
+          "date": "2026-04-22",
+          "time": "19:15",
+          "avgWind": 6.6,
+          "maxWind": 9,
+          "status": "partial",
+          "note": "※風バの可能性あり 12:00 4.4 8.5 ○ 11:30 3.2 4.5 ○ 11:30 9.1 13.0 ○パイ"
+        },
+        {
+          "date": "2026-04-23",
+          "time": "19:15",
+          "avgWind": 3.8,
+          "maxWind": 7.3,
+          "status": "cancel",
+          "note": "悪天候のため"
+        },
+        {
+          "date": "2026-04-24",
+          "time": "21:20",
+          "avgWind": 3,
+          "maxWind": 5.7,
+          "status": "partial",
+          "note": "16:00 5.5 7.1 ○ 16:00 6.5 8.5 ○パイロカット（強風）"
+        },
+        {
+          "date": "2026-04-25",
+          "time": "19:15",
+          "avgWind": 4.7,
+          "maxWind": 6.9,
+          "status": "ok",
+          "note": "11:30 6.8 9.6 ○ 11:30 3.1 4.6 ○ 11:30 4.6 7.5 ○"
+        },
+        {
+          "date": "2026-04-26",
+          "time": "19:15",
+          "avgWind": 4.9,
+          "maxWind": 6.2,
+          "status": "ok"
+        },
+        {
+          "date": "2026-04-27",
+          "time": "19:15",
+          "avgWind": 3.8,
+          "maxWind": 7.1,
+          "status": "ok",
+          "note": "システム不具合のため開始時間5分遅延 16:00 10.4 13.7 ×強風のため 16:00 5.7 7.2 ○ 16"
+        },
+        {
+          "date": "2026-04-28",
+          "time": "19:15",
+          "avgWind": 11.4,
+          "maxWind": 14.5,
+          "status": "partial",
+          "note": "※風バの可能性あり 11:30 11.3 15.2 ×悪天候のため【キャングリ実施】 11:30 3.8 5.0 ○ 1"
+        },
+        {
+          "date": "2026-04-29",
+          "time": "19:15",
+          "avgWind": 4.3,
+          "maxWind": 7.8,
+          "status": "ok"
+        },
+        {
+          "date": "2026-04-30",
+          "time": "19:15",
+          "avgWind": 2.7,
+          "maxWind": 4,
+          "status": "ok",
+          "note": "16:00 7.7 10.9 ×悪天候のため 16:00 6.1 9.9 ○ 16:00 3.1 5.7 ○"
+        }
+      ]
+    },
+    {
+      "name": "スパークリング・ジュビリー・セレブレーション",
+      "park": "TDS",
+      "windCancelThreshold": 12,
+      "records": [
+        {
+          "date": "2026-04-08",
+          "time": "16:00",
+          "avgWind": 5.7,
+          "maxWind": 7.8,
+          "status": "ok"
+        },
+        {
+          "date": "2026-04-09",
+          "time": "14:00",
+          "avgWind": 9.8,
+          "maxWind": 13.3,
+          "status": "cancel",
+          "note": "強風のため"
+        },
+        {
+          "date": "2026-04-10",
+          "time": "14:00",
+          "avgWind": 8.6,
+          "maxWind": 12,
+          "status": "cancel",
+          "note": "悪天候のため【キャングリ実施】"
+        }
+      ]
+    },
+    {
+      "name": "ダンス・ザ・グローブ！",
+      "park": "TDS",
+      "windBaThreshold": 8,
+      "windCancelThreshold": 12,
+      "records": []
+    },
+    {
+      "name": "スカイ・フル・オブ・カラーズ",
+      "park": "TDS",
+      "windCancelThreshold": 9,
+      "records": [
+        {
+          "date": "2026-04-01",
+          "time": "20:15",
+          "avgWind": 2.3,
+          "maxWind": 3.4,
+          "status": "ok"
+        },
+        {
+          "date": "2026-04-02",
+          "time": "20:15",
+          "avgWind": 3.5,
+          "maxWind": 7.8,
+          "status": "cancel",
+          "note": "強風のため"
+        },
+        {
+          "date": "2026-04-03",
+          "time": "20:15",
+          "avgWind": 5.2,
+          "maxWind": 6.6,
+          "status": "cancel",
+          "note": "上空の気流が不安定のため"
+        },
+        {
+          "date": "2026-04-04",
+          "time": "20:15",
+          "avgWind": 9.8,
+          "maxWind": 14.4,
+          "status": "cancel",
+          "note": "強風のため"
+        },
+        {
+          "date": "2026-04-05",
+          "time": "20:15",
+          "avgWind": 5.8,
+          "maxWind": 7.2,
+          "status": "cancel",
+          "note": "上空の気流が不安定なため"
+        },
+        {
+          "date": "2026-04-06",
+          "time": "20:15",
+          "avgWind": 7.2,
+          "maxWind": 9.6,
+          "status": "cancel",
+          "note": "上空の気流が不安定なため"
+        },
+        {
+          "date": "2026-04-07",
+          "time": "20:15",
+          "avgWind": 7.5,
+          "maxWind": 14.9,
+          "status": "cancel",
+          "note": "強風のため"
+        },
+        {
+          "date": "2026-04-08",
+          "time": "20:15",
+          "avgWind": 7.6,
+          "maxWind": 10.4,
+          "status": "cancel",
+          "note": "上空の気流が不安定なため"
+        },
+        {
+          "date": "2026-04-09",
+          "time": "20:15",
+          "avgWind": null,
+          "maxWind": null,
+          "status": "cancel",
+          "note": "強風のため"
+        },
+        {
+          "date": "2026-04-10",
+          "time": "20:50",
+          "avgWind": 8.8,
+          "maxWind": 12.6,
+          "status": "cancel",
+          "note": "悪天候のため"
+        },
+        {
+          "date": "2026-04-11",
+          "time": "20:15",
+          "avgWind": 1.5,
+          "maxWind": 1.9,
+          "status": "ok"
+        },
+        {
+          "date": "2026-04-12",
+          "time": "20:15",
+          "avgWind": 4.5,
+          "maxWind": 6.2,
+          "status": "cancel",
+          "note": "上空の気流が不安定なため"
+        },
+        {
+          "date": "2026-04-13",
+          "time": "20:15",
+          "avgWind": 3.7,
+          "maxWind": 4.7,
+          "status": "cancel",
+          "note": "上空の気流が不安定なため"
+        },
+        {
+          "date": "2026-04-14",
+          "time": "20:15",
+          "avgWind": 4.3,
+          "maxWind": 6.2,
+          "status": "ok"
+        },
+        {
+          "date": "2026-04-15",
+          "time": "20:15",
+          "avgWind": 2.6,
+          "maxWind": 4,
+          "status": "ok"
+        },
+        {
+          "date": "2026-04-16",
+          "time": "20:15",
+          "avgWind": 6.4,
+          "maxWind": 11.9,
+          "status": "cancel",
+          "note": "強風のため"
+        },
+        {
+          "date": "2026-04-17",
+          "time": "20:15",
+          "avgWind": 4.1,
+          "maxWind": 5.5,
+          "status": "ok"
+        },
+        {
+          "date": "2026-04-18",
+          "time": "20:15",
+          "avgWind": 3.7,
+          "maxWind": 5,
+          "status": "cancel",
+          "note": "上空の気流が不安定なため"
+        },
+        {
+          "date": "2026-04-19",
+          "time": "20:15",
+          "avgWind": 2.6,
+          "maxWind": 4.3,
+          "status": "ok"
+        },
+        {
+          "date": "2026-04-20",
+          "time": "20:15",
+          "avgWind": 5.3,
+          "maxWind": 6.9,
+          "status": "cancel",
+          "note": "上空の気流が不安定なため"
+        },
+        {
+          "date": "2026-04-21",
+          "time": "20:15",
+          "avgWind": 1.6,
+          "maxWind": 3.1,
+          "status": "ok"
+        },
+        {
+          "date": "2026-04-22",
+          "time": "20:15",
+          "avgWind": 4.8,
+          "maxWind": 6.4,
+          "status": "cancel",
+          "note": "上空の気流が不安定なため"
+        },
+        {
+          "date": "2026-04-23",
+          "time": "20:15",
+          "avgWind": 3.3,
+          "maxWind": 6.3,
+          "status": "cancel",
+          "note": "悪天候のため"
+        },
+        {
+          "date": "2026-04-24",
+          "time": "20:15",
+          "avgWind": 2.4,
+          "maxWind": 4.3,
+          "status": "ok"
+        },
+        {
+          "date": "2026-04-25",
+          "time": "20:15",
+          "avgWind": 3.9,
+          "maxWind": 6.2,
+          "status": "ok"
+        },
+        {
+          "date": "2026-04-26",
+          "time": "20:15",
+          "avgWind": 3.2,
+          "maxWind": 4.2,
+          "status": "cancel",
+          "note": "上空の気流が不安定なため"
+        },
+        {
+          "date": "2026-04-27",
+          "time": "20:15",
+          "avgWind": 1.9,
+          "maxWind": 3.2,
+          "status": "ok"
+        },
+        {
+          "date": "2026-04-28",
+          "time": "20:15",
+          "avgWind": 11.9,
+          "maxWind": 16.1,
+          "status": "ok"
+        },
+        {
+          "date": "2026-04-29",
+          "time": "20:15",
+          "avgWind": 4.5,
+          "maxWind": 7.6,
+          "status": "ok"
+        },
+        {
+          "date": "2026-04-30",
+          "time": "20:15",
+          "avgWind": 3.1,
+          "maxWind": 5.3,
+          "status": "ok"
+        }
+      ]
+    }
+  ]
+}
