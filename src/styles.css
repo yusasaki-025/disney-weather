@@ -95,6 +95,13 @@ h3 {
   font-size: 28px;
 }
 
+/* ヘッダーのロゴマーク (松の木アイコンから差し替え) */
+.logo-mark {
+  width: 32px;
+  height: 32px;
+  display: block;
+}
+
 .app-title h1 {
   font-size: 18px;
 }

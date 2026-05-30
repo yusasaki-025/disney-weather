@@ -7,6 +7,9 @@ import { resolve } from 'node:path';
 // ローカル JS / CSS だけをインライン化する。
 export default defineConfig({
   root: 'src',
+  // root が src のため publicDir 既定 (src/public) を、プロジェクトルートの public/ に変更。
+  // ここの favicon ・ ロゴ ・ OG 画像 ・ manifest.json が dist/ 直下へコピーされる。
+  publicDir: resolve(import.meta.dirname, 'public'),
   plugins: [viteSingleFile()],
   build: {
     outDir: resolve(import.meta.dirname, 'dist'),
