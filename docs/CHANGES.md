@@ -2005,6 +2005,117 @@ body { line-height: 1.5; }       /* 1.7 → 1.5 (情報密度↑) */
 
 DevTools の通常ウィンドウサイズ (>768px) で「正しく動く」と判断するのは NG ・ Device toolbar 必須。
 
+### 0.26 ショー表示の集約 ・ 内部ラベル削除 (Yuka さん指摘)
+
+問題 :
+
+1. **同ショーが時刻ごとに別行** : 例 ジャンボリミッキー! が 5回別行表示 :
+   ```
+   ジャンボリミッキー!レッツ･ダンス! : 12:30 (補助)
+   ジャンボリミッキー!レッツ･ダンス! : 13:45 (補助)
+   ジャンボリミッキー!レッツ･ダンス! : 15:00 (補助)
+   ジャンボリミッキー!レッツ･ダンス! : 16:50 (補助)
+   ジャンボリミッキー!レッツ･ダンス! : 18:05 (補助)
+   ```
+   現状 JSON の `times: ["12:30","13:45","15:00","16:50","18:05"]` を展開して別行レンダリングしてる。1行にまとめるべき。
+
+2. **「(メイン算定窓) (参考) (補助)」内部用語が混入** : 内部 priority 仕様 (high/medium/low) のラベルがそのままユーザー表示に出てる。ユーザーには意味不明。
+
+#### 対応 (UI レンダリング修正)
+
+**1行集約** :
+
+```
+✕ 旧 :
+  ジャンボリミッキー!レッツ･ダンス! : 12:30 (補助)
+  ジャンボリミッキー!レッツ･ダンス! : 13:45 (補助)
+  ...
+
+○ 新 :
+  ジャンボリミッキー!レッツ･ダンス! : 12:30 / 13:45 / 15:00 / 16:50 / 18:05
+```
+
+`times[]` を `" / "` で join して 1行表示。
+
+**内部ラベル削除** :
+
+- `(メイン算定窓)` ・ `(参考)` ・ `(補助)` の **テキスト併記を全廃**
+- 代わりに **priority 別に色 ・ 太字で視覚区別** (CSS)
+
+| priority | 表示スタイル |
+|---|---|
+| high | 太字 ・ 通常テキスト色 ・ 目立つ |
+| medium | 通常ウェイト ・ 通常色 |
+| low | 通常ウェイト ・ グレー (text-mute) ・ 控えめ |
+| null (ショーレストラン) | 通常 ・ 補足アイコン (予約必須) |
+
+#### 表示例 (1日分)
+
+```
+[ TDL ]
+
+ディズニー･ハーモニー･イン･カラー : 13:00              (太字 ・ 黒 ・ プレミアアクセス)
+イッツ･ア･スウィーツフルタイム! : 15:40                (太字 ・ 黒 ・ プレミアアクセス)
+Reach for the Stars : 20:50                          (太字 ・ 黒 ・ プレミアアクセス)
+ジャンボリミッキー!レッツ･ダンス! : 12:30 / 13:45 / 15:00 / 16:50 / 18:05   (通常 ・ 黒)
+東京ディズニーランド･エレクトリカルパレード･ドリームライツ : 19:30   (通常 ・ グレー)
+スカイ･フル･オブ･カラーズ : 20:30                       (通常 ・ グレー)
+ミッキーのレインボー･ルアウ : 予約必須                  (通常 ・ グレー ・ アイコン)
+```
+
+priority 順序ソート ・ 凡例カードかヘルプモーダルで「太字 = 季節限定 / グレー = 通年 ・ 参考」と説明 (希望者向け)。
+
+#### DOM 構造
+
+```html
+<ul class="show-list">
+  <li class="show-item priority-high">
+    <span class="show-name">ディズニー･ハーモニー･イン･カラー</span>
+    <span class="show-times">13:00</span>
+    <span class="show-tags">プレミアアクセス</span>
+  </li>
+  <li class="show-item priority-medium">
+    <span class="show-name">ジャンボリミッキー!レッツ･ダンス!</span>
+    <span class="show-times">12:30 / 13:45 / 15:00 / 16:50 / 18:05</span>
+    <span class="show-tags">エントリー受付</span>
+  </li>
+  <li class="show-item priority-low">
+    <span class="show-name">東京ディズニーランド･エレクトリカルパレード･ドリームライツ</span>
+    <span class="show-times">19:30</span>
+  </li>
+</ul>
+```
+
+#### CSS
+
+```css
+.show-item { display: flex; align-items: baseline; gap: 8px; padding: 4px 0; }
+.show-name { font-weight: 400; }
+.show-times { color: var(--text-sub); font-variant-numeric: tabular-nums; }
+.show-tags { font-size: 11px; color: var(--text-sub); }
+
+.show-item.priority-high .show-name { font-weight: 600; color: var(--text); }
+.show-item.priority-medium .show-name { font-weight: 400; color: var(--text); }
+.show-item.priority-low .show-name { font-weight: 400; color: var(--text-mute); }
+.show-item.priority-low .show-times { color: var(--text-mute); }
+```
+
+#### 該当ファイル
+
+- `src/ui/detailPanel.js` (or 該当ショースケジュールレンダラ) :
+  - `times[]` を ` / ` で join
+  - `(メイン算定窓)` `(参考)` `(補助)` のテキスト出力を **完全削除**
+  - `priority` プロパティを `<li class="priority-{priority}">` の class 名に反映
+- `src/styles.css` : `.show-item.priority-{high|medium|low}` スタイル追加
+
+#### 検証
+
+- 詳細パネルの「ショー ・ パレード」セクションで :
+  - ジャンボリミッキー!が1行 (5時刻併記) で表示
+  - (メイン算定窓) (参考) (補助) のテキストが消えている
+  - high (季節限定) が太字 ・ low (通年) がグレーで視覚区別される
+  - TDL/TDS タブ両方で同じ修正適用
+
 ### 0.7 公開ページ化 (Cloudflare Pages) ＋ ランタイム判定
 
 Yuka さん要望 : 「Mac 開いてなくても他の人も見れる公開ページ」

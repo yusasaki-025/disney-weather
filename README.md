@@ -60,7 +60,7 @@ Claude Code に次のように伝えてください。
 
 CORS を回避して環境省の実値を使うには、軽量プロキシ Worker をデプロイします。
 
-```
+```sh
 cd workers && npx wrangler deploy --config wrangler.toml
 ```
 

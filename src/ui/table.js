@@ -82,18 +82,31 @@ function sourceCellHtml(source, forecast, status) {
 }
 
 function detailPanelHtml(row) {
-  const PRIORITY_NOTE = { high: ' (メイン算定窓)', medium: ' (補助)', low: ' (参考)' };
   // §0.8 : その日の実スケジュール (公式取得があれば official、無ければ fallback)
   const schedFor = (p) => getDaySchedule(row.date, p);
-  const showRowsFor = (p) =>
-    schedFor(p)
-      .shows.map(
-        (s) =>
-          `<div class="${s.priority === 'high' ? 'st-high' : ''}">${esc(s.name)} : ${esc(s.time)}${
-            PRIORITY_NOTE[s.priority] || ''
-          }</div>`,
+  // §0.26 : 同名ショーを 1 行に集約 (times を " / " 連結)。内部用語 (メイン算定窓/補助/参考) は
+  //          表示せず、priority は CSS class (.priority-high/-medium/-low) で視覚区別する。
+  const showRowsFor = (p) => {
+    const order = [];
+    const byName = new Map();
+    for (const s of schedFor(p).shows) {
+      let g = byName.get(s.name);
+      if (!g) {
+        g = { name: s.name, priority: s.priority, tags: s.tags || [], times: [] };
+        byName.set(s.name, g);
+        order.push(g);
+      }
+      g.times.push(s.time);
+    }
+    return order
+      .map(
+        (g) =>
+          `<li class="show-item priority-${g.priority}"><span class="show-name">${esc(g.name)}</span><span class="show-times">${g.times
+            .map(esc)
+            .join(' / ')}</span>${g.tags.length ? `<span class="show-tags">${esc(g.tags.join(' '))}</span>` : ''}</li>`,
       )
       .join('');
+  };
   // パーク別に official/fallback が混ざりうるが、どちらかが official なら「公式取得済」とする
   const isOfficial = schedFor('TDL').source === 'official' || schedFor('TDS').source === 'official';
   const schedBadge = isOfficial
@@ -118,8 +131,8 @@ function detailPanelHtml(row) {
           <button class="park-tab active" role="tab" data-park-tab="TDL" type="button">TDL</button>
           <button class="park-tab" role="tab" data-park-tab="TDS" type="button">TDS</button>
         </div>
-        <div class="show-times" data-park-shows="TDL">${showRowsFor('TDL')}</div>
-        <div class="show-times" data-park-shows="TDS" hidden>${showRowsFor('TDS')}</div>
+        <ul class="show-list" data-park-shows="TDL">${showRowsFor('TDL')}</ul>
+        <ul class="show-list" data-park-shows="TDS" hidden>${showRowsFor('TDS')}</ul>
       </div>
       <div class="detail-section">
         <h4><span class="material-symbols-rounded" aria-hidden="true">checkroom</span>持ち物 ･ 服装</h4>
