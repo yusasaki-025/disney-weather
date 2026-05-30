@@ -1089,9 +1089,9 @@ section {
   --grad-header: linear-gradient(135deg, #1f4fa3 0%, #2e6bc7 50%, #4a8fd6 100%);
   --grad-top3: linear-gradient(135deg, #fff7e6 0%, #ffe9f2 100%);
   --grad-band: linear-gradient(90deg, #1f4fa3, #e85d9a);
-  --font-head: 'Noto Serif JP', serif;
+  --font-head: 'Noto Sans JP', sans-serif;
   --font-body: 'Noto Sans JP', sans-serif;
-  --font-num: 'Inter', sans-serif;
+  --font-num: 'Noto Sans JP', sans-serif;
 }
 
 [data-theme='dark'] {
@@ -1125,7 +1125,7 @@ body {
     'Yu Gothic', 'Noto Sans JP', sans-serif;
 }
 h1, h2, h3, h4, .app-title h1 {
-  font-family: var(--font-head), -apple-system, 'Hiragino Mincho ProN', 'Yu Mincho', serif;
+  font-family: var(--font-head), -apple-system, 'Hiragino Kaku Gothic ProN', 'Yu Gothic', sans-serif;
 }
 .score-pill .value,
 .subscore-pill .value,

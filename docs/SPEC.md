@@ -403,9 +403,145 @@ TDL :
 
 TDS も同様に実在公演名で。
 
-#### 月初メンテナンス
+#### 月初メンテナンス (重要)
 
-公式は「翌月分は前月 8日頃に掲載」。月初に Yuka さんが `showSchedule.js` を公式 calendar と照合し、新規ショー ・ 終了ショーを差分更新 (README に手順)。Phase 2 で公式取得が動けば自動同期される。
+公式は「翌月分は前月 8日頃に掲載」(Yuka さん確認済)。日別に時刻 ・ 公演数が違う :
+
+- GW ・ 連休 ・ ハロウィン期 ・ クリスマス期は公演数が増える
+- 月の前半と後半で時刻が違う (例 12:00 → 16:00 に切替)
+- 1日だけ違う日がある (代替公演 ・ メンテ等)
+- 季節イベント終了 → 新イベント開始の月またぎ
+
+→ **典型時刻の固定 JSON では再現不能。日別の実スケジュール取得が必須**。
+
+#### Phase 2 : 日別ショースケジュール取得 ・ 保存
+
+##### 運用方針
+
+- **取得頻度** : 月1回 (毎月 9日 〜 10日に翌月分一括取得、公式更新後)
+- **取得対象** : 翌月の1日 〜 月末日の全日 (TDL ・ TDS 別々)
+- **保存先** : repo 内の `src/data/schedule/{YYYY-MM}.json`
+- **反映** : commit & push → Cloudflare Pages 自動再ビルド
+
+##### 取得スクリプト
+
+`scripts/fetch-schedule.mjs` 新規 :
+
+```bash
+# Yuka さんが月初に手動実行
+npm run fetch-schedule -- 2026-07
+
+# 実装内容
+# - Playwright (headless Chrome) で公式 calendar を順次 navigate
+#   https://www.tokyodisneyresort.jp/tdl/daily/calendar/{YYYYMMDD}/
+#   https://www.tokyodisneyresort.jp/tds/daily/calendar/{YYYYMMDD}/
+# - DOM パース (パレード ・ ショー名 ・ 時刻 ・ タグ ・ 開園時間)
+# - src/data/schedule/{YYYY-MM}.json に保存
+# - 規約遵守 : リクエスト間に 2-3秒 sleep、User-Agent 明示
+```
+
+##### JSON スキーマ
+
+`src/data/schedule/2026-06.json` :
+
+```json
+{
+  "month": "2026-06",
+  "fetchedAt": "2026-05-10T03:00:00+09:00",
+  "source": "https://www.tokyodisneyresort.jp/{tdl|tds}/daily/calendar/{YYYYMMDD}/",
+  "days": {
+    "2026-06-04": {
+      "TDL": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          { "name": "ディズニー･ハーモニー･イン･カラー", "times": ["13:00"], "priority": "high", "kind": "parade-day", "tags": ["プレミアアクセス"] },
+          { "name": "イッツ･ア･スウィーツフルタイム!", "times": ["16:25"], "priority": "high", "kind": "show-day", "tags": ["パルパルーザ枠", "季節限定"] },
+          { "name": "Reach for the Stars", "times": ["20:50"], "priority": "high", "kind": "show-day", "tags": ["季節限定"] },
+          { "name": "ジャンボリミッキー!レッツ･ダンス!", "times": ["12:45","14:00","15:15","17:05","18:20"], "priority": "medium", "kind": "show-indoor", "tags": ["エントリー受付"] },
+          { "name": "東京ディズニーランド･エレクトリカルパレード･ドリームライツ", "times": ["19:30"], "priority": "low", "kind": "parade-night", "tags": ["通年"] }
+        ],
+        "greetings": [
+          { "name": "メインストリート･ハウス前", "windows": ["09:20-13:00","14:20-16:00"] }
+        ],
+        "closures": []
+      },
+      "TDS": { "openHour": "09:00", "closeHour": "21:00", "shows": [ ... ] }
+    },
+    "2026-06-05": { ... },
+    "2026-06-29": {
+      "TDL": {
+        "openHour": "09:00",
+        "closeHour": "22:00",
+        "shows": [
+          { "name": "ディズニー･ハーモニー･イン･カラー", "times": ["13:00", "16:00"], "priority": "high" }
+          // 後半は16:00 追加 (例)
+        ]
+      }
+    }
+  }
+}
+```
+
+##### 反映ロジック
+
+`src/data/showSchedule.js` で日付 ＋ パークから JSON を引く :
+
+```js
+import schedule202606 from './schedule/2026-06.json';
+import schedule202607 from './schedule/2026-07.json';
+// ...
+
+const SCHEDULE_BY_MONTH = {
+  '2026-06': schedule202606,
+  '2026-07': schedule202607,
+};
+
+export function getDaySchedule(date, park) {
+  const month = date.slice(0, 7);            // '2026-06'
+  const data = SCHEDULE_BY_MONTH[month];
+  if (!data) return FALLBACK_SCHEDULE[park]; // 取得未済時は典型値
+  return data.days[date]?.[park] ?? FALLBACK_SCHEDULE[park];
+}
+```
+
+スコアリング (§5.1) ・ 詳細パネル (§3.4) は `getDaySchedule()` 経由で **その日の実時刻** を使う。
+
+##### フォールバック
+
+- 月 JSON 未取得 (まだスクリプト走らせてない / 公式未掲載) → `src/data/showSchedule.js` 内の典型値を使う
+- 取得済みでも特定日が欠落 → 同月の他日 or 典型値で補完
+- UI で「公式取得済」「典型値で代替」を区別バッジ (詳細パネル右上小)
+
+##### 月1運用フロー
+
+1. 毎月 10日頃に Yuka さんが Mac で実行 :
+   ```
+   cd ~/claude/personal/disney-weather
+   npm run fetch-schedule -- 2026-07   # 来月分取得
+   git add src/data/schedule/2026-07.json
+   git commit -m "data: 2026-07 schedule"
+   git push
+   ```
+2. CF Pages が自動再ビルド (5分)
+3. 公開ページ ・ artifact 反映
+
+##### Phase 3 : 完全自動化 (将来)
+
+- Cloudflare Workers cron で月1自動取得
+- Browser Rendering API 使用 (Cloudflare 別途料金確認)
+- 取得結果を Workers KV / R2 に保存し、公開ページから直接 fetch
+- GitHub Actions cron でも可 (こちらは無料枠で完結する可能性)
+
+#### 取得方法の代替案
+
+公式の SPA HTML をパースする手法 :
+
+1. **内部 API 探索 (最優先)** : Network タブで `/api/calendar/...` 等の JSON エンドポイントを探す → 見つかれば軽量 fetch のみで完結 (Playwright 不要)
+2. **Playwright** : DOM レンダリング後にセレクタで抽出 (現実的、自動 ・ 手動どちらでも)
+3. **手動コピペ** : 月1で Yuka さんが目視 ＋ JSON 手書き (最も軽量だが手間)
+
+初期は 2 (Playwright) で実装、内部 API が見つかれば 1 に切替。
 
 #### 未知のショー名の priority 判定 (Phase 2)
 

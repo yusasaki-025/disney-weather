@@ -598,6 +598,140 @@ TDL の場合 :
 
 詳細仕様 : §6.9.5 デザイントークン (装飾要素から縦バー言及を削除)。
 
+### 0.8 日別ショースケジュール取得 (Phase 2、Yuka さん指摘)
+
+問題 : Yuka さん指摘「月1で取ってくればいい気がする」「1ヶ月間毎日時間同じではなく、1日違う日や後半が違うなどある」「12時→16時に変わったり」「GW は公演数が増えたり」
+
+現状の固定 JSON では日別の差異 (時刻変動 ・ 公演追加 ・ 連休増) を再現できない。日別の実スケジュールを取得 ・ 反映する。
+
+#### 運用方針
+
+- 取得頻度 : 月1 (毎月 9 - 10日に翌月分一括取得、公式更新後すぐ)
+- 取得対象 : 翌月の全日 (TDL ・ TDS 別々)
+- 保存先 : repo 内 `src/data/schedule/{YYYY-MM}.json`
+- 反映 : commit & push → CF Pages 自動再ビルド
+
+#### スクリプト
+
+`scripts/fetch-schedule.mjs` 新規 :
+
+- Playwright (headless Chrome) で `/tdl/daily/calendar/{YYYYMMDD}/` ・ `/tds/daily/calendar/{YYYYMMDD}/` を順次取得
+- DOM パース → JSON 化
+- リクエスト間 2-3秒 sleep、User-Agent 明示
+
+`package.json` に script 追加 :
+
+```json
+"scripts": {
+  "fetch-schedule": "node scripts/fetch-schedule.mjs"
+}
+```
+
+実行例 : `npm run fetch-schedule -- 2026-07`
+
+#### JSON スキーマ
+
+詳細は SPEC.md §3.10 を参照。要点 :
+
+- `month` ・ `fetchedAt` ・ `source`
+- `days['2026-06-04'].TDL.shows[]` に日別の `name` ・ `times[]` ・ `priority` ・ `kind` ・ `tags[]`
+- `openHour` ・ `closeHour` も日別
+- `greetings` ・ `closures` も日別
+
+#### 反映ロジック
+
+`src/data/showSchedule.js` :
+
+```js
+import schedule202606 from './schedule/2026-06.json';
+import schedule202607 from './schedule/2026-07.json';
+
+const SCHEDULE_BY_MONTH = { '2026-06': schedule202606, '2026-07': schedule202607 };
+
+export function getDaySchedule(date, park) {
+  const month = date.slice(0, 7);
+  const data = SCHEDULE_BY_MONTH[month];
+  if (!data) return FALLBACK_SCHEDULE[park];
+  return data.days[date]?.[park] ?? FALLBACK_SCHEDULE[park];
+}
+```
+
+スコアリング (§5.1) ・ 詳細パネル (§3.4) は `getDaySchedule()` 経由で **その日の実時刻** を使う。
+
+#### UI 表示
+
+詳細パネルの右上にバッジで「公式取得済 ・ 2026/06」or「典型値で代替」を区別表示。
+
+#### 月初運用フロー
+
+```
+cd ~/claude/personal/disney-weather
+npm run fetch-schedule -- 2026-07
+git add src/data/schedule/2026-07.json
+git commit -m "data: 2026-07 schedule"
+git push
+# CF Pages 自動再ビルド (5分) → 公開ページ反映
+```
+
+#### Phase 3 : 完全自動化 (将来)
+
+- GitHub Actions cron (毎月10日 06:00 JST) でスクリプト自動実行 ・ PR 作成
+- Cloudflare Workers cron + Browser Rendering API (CF 課金確認)
+- 内部 API が見つかれば Playwright 不要
+
+### 0.9 Notion / GCal 連携を完全廃止 (Yuka さん指摘)
+
+問題 : Yuka さん指摘「Notion/GCal 連携要らないから消して」。
+
+公開ページ ・ Cowork artifact のどちらでも不要。完全削除でシンプル化。
+
+#### 削除対象
+
+ファイル削除 :
+
+- `src/integrations/notion.js`
+- `src/integrations/gcal.js`
+- `src/integrations/scheduler.js` (3段階自動通知も削除する場合)
+- `src/integrations/slack.js` (上記 scheduler 連動)
+- `src/integrations/` ディレクトリごと削除して可
+
+ファイル更新 :
+
+- `src/ui/header.js` ・ `src/ui/menu.js` から "Notion 送信" "カレンダー登録" ボタン削除
+- `src/ui/menu.js` のドロワー項目から該当2項目削除 (残るは URL コピー / 印刷 / ダーク切替 / 用語集 / 強制更新 / 出典)
+- `src/utils/runtime.js` ・ `isCowork()` は不要になるので削除 (機能差がなくなる)
+- `src/main.js` から isCowork() 関連の import / 分岐削除
+- `README.md` から「Cowork 版 ・ 公開ページ版の機能差」記述削除 (差がなくなる)
+- `disclaimer` の「個人連携機能は Cowork 版でのみ動作」一文削除
+
+仕様書整理 (Code 側では不要、私 (Cowork) が docs/SPEC.md ・ docs/CHANGES.md で並行更新する) :
+
+- §3.6 同行者共有 : Notion 送信ボタン記述削除 → 「URL コピー」「QR」のみ
+- §3.9 決定フロー : Notion ステータス更新 ・ GCal 連携を削除、決定日は localStorage のみ
+- §11 Notion 連携 : セクション全廃 or 「廃止」注記
+- §12 Google Calendar 連携 : セクション全廃 or 「廃止」注記
+- §14 受け入れ基準 : 「Notion 送信ボタン」「カレンダー登録ボタン」「同行者 NG 日」「同行者投票」削除
+- §3.23 同行者投票 : Notion DB のリアクション集計が前提だったので削除 (Phase 2 / 3 で別案検討)
+- §0.7 公開ページ化 : ランタイム判定 (isCowork) は不要に → セクション簡素化 (ただし CF Pages デプロイ手順は残す)
+
+#### Notion DB (作成済みのもの)
+
+`d17f66b8c11b42d5b7e624226e79c6fe` の DB は Yuka さんが Notion 上で削除 (任意)。アプリ側からはアクセスしなくなるので残しても害なし。
+
+#### テスト
+
+- Notion / GCal 関連のテストファイルがあれば削除
+- Vitest 緑のまま維持
+
+#### 同行者と相談する手段は?
+
+Notion を介さずに :
+
+- 「URL コピー」で同行者と Web 共有 (公開ページ)
+- 同行者の都合 NG 日は **localStorage に保存** (個人端末で完結) ・ 同行者と同期しない
+- 「決定した」フラグも localStorage のみ
+- 必要なら共有 Notion ページに Yuka さんが手書きでメモ (アプリ側は関与しない)
+
 ### 0.7 公開ページ化 (Cloudflare Pages) ＋ ランタイム判定
 
 Yuka さん要望 : 「Mac 開いてなくても他の人も見れる公開ページ」
