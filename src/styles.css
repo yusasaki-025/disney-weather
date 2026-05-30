@@ -109,10 +109,8 @@ h3 {
 }
 
 /* --- ヘッダー --- */
+/* sticky はヘッダーではなくテーブル見出し行 (thead) に付ける */
 .app-header {
-  position: sticky;
-  top: 0;
-  z-index: 30;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -346,8 +344,10 @@ section {
 }
 
 /* --- テーブル --- */
+/* 縦スクロールコンテナにして、見出し行 (thead) を内部 sticky で固定する */
 .table-scroll {
-  overflow-x: auto;
+  overflow: auto;
+  max-height: calc(100vh - 150px);
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
