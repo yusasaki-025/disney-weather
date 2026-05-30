@@ -1355,29 +1355,29 @@ h1, h2, h3, h4, .app-title h1 {
 .detail-section {
   margin-bottom: 16px;
 }
+/* §0.6.11/§0.10 : 縦アクセントバー禁止。色 + 下罫線 + 余白だけで区切る。 */
 .detail-section h4 {
-  position: relative;
   display: flex;
   align-items: center;
   gap: 6px;
   font-size: 13px;
-  border-bottom: 2px solid var(--border);
-  padding: 0 0 5px 10px;
-  margin: 0 0 10px;
+  font-weight: 700;
+  color: var(--brand-blue);
+  padding: 0 0 8px;
+  margin: 32px 0 10px;
+  border-bottom: 2px solid var(--brand-pink);
 }
-.detail-section h4::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 1px;
-  bottom: 6px;
-  width: 3px;
-  border-radius: 2px;
-  background: var(--brand-gold);
+.detail-section:first-child h4 {
+  margin-top: 0;
 }
 .detail-section h4 .material-symbols-rounded {
   font-size: 18px;
   color: var(--accent);
+}
+@media (max-width: 767px) {
+  .detail-section h4 {
+    margin-top: 24px;
+  }
 }
 
 /* --- TOP3 カード (グラデーション + ゴールドリボン) --- */

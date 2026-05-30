@@ -781,6 +781,53 @@ JMA 24分前 ・ Open-Meteo 18分前   [WBGT 環境省 or 簡易計算]   [強�
 
 詳細仕様 : §3.14 データ鮮度表示 ・ §5.6 熱バッジ。
 
+### 0.11 プロダクト名変更 ＋ フィルター文言整合 (Yuka さん指摘)
+
+#### 0.11.1 「Disney 行く日きめるダッシュボード」→「マイハマびより」
+
+Yuka さん指摘 : 旧名がダサい。Disney 商標も避けたい。
+
+新名 : **マイハマびより** (やわらか和語 ・ 場所固有 ・ 商標安全)
+
+変更対象 :
+
+- HTML `<title>` : `マイハマびより` (or `マイハマびより ・ ディズニーの天気予報`)
+- ヘッダーロゴ ・ 表示テキスト : `マイハマびより`
+- 説明文 / 副タイトル : `舞浜の天気からショー ・ パレード中止リスクを予測` 等
+- `package.json` の `name` : `maihama-biyori` (kebab-case)
+- `package.json` の `description` : `舞浜 (TDL ・ TDS) の天気予報を比較してショー ・ パレード中止リスクを判定`
+- README タイトル ・ 概要
+- `manifest.json` (PWA) の `name` / `short_name`
+- aria-label, og:title, meta description
+
+維持するもの (技術的な命名 ・ 影響大) :
+
+- GitHub repo : `yusasaki-025/disney-weather` (URL 変えると CF Pages も再連携必要)
+- 公開 URL : `disney-weather.pages.dev` (リネームは別途、希望なら CF Pages 設定で project rename)
+- ローカルディレクトリ : `~/claude/personal/disney-weather/` (お好みで rename 可)
+- ソースの内部識別子 (`disney-weather` 等の変数名) : 影響範囲大ければそのまま
+
+#### 0.11.2 フィルター「◎ ○ のみ」→「行ける日のみ」
+
+Yuka さん指摘 : 「◎ ○ のみって絞り込みがあるけど ◎ とか廃止されたから意味がわからないチェックになっちゃってる」
+
+スコア記号 ◎ ○ △ × を「行くべき / 行ってよい / 微妙 / 別日」テキストラベル化 (§0.6.5) したので、フィルターも記号でなくテキスト基準に :
+
+| 旧 | 新 |
+|---|---|
+| `[ ] ◎ ○ のみ` | `[ ] 行ける日のみ` |
+
+動作 :
+
+- チェック ON 時 : 総合スコアラベルが「行くべき」or「行ってよい」の日のみ表示
+- チェック OFF 時 : 全日表示 (既定)
+
+該当ファイル :
+
+- `src/ui/filters.js` のチェックボックス label ・ フィルター関数
+- ARIA label も「行ける日のみ表示」に更新
+- localStorage キーは互換性のため変更しない (`filterGoodOnly` などのまま)
+
 ### 0.7 公開ページ化 (Cloudflare Pages) ＋ ランタイム判定
 
 Yuka さん要望 : 「Mac 開いてなくても他の人も見れる公開ページ」
