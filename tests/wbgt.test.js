@@ -37,6 +37,18 @@ describe('parseEnvWbgtCsv', () => {
     expect(parseEnvWbgtCsv('')).toEqual({});
     expect(parseEnvWbgtCsv('only one line')).toEqual({});
   });
+
+  it('実データ形式 YYYY/MM/DD HH:MM をパースする (空欄スキップ)', () => {
+    // 環境省 yohou_*.csv の実形式 (3 時間毎、空欄は期間外/未提供)
+    const real = [
+      ',,2026/05/31 09:00,2026/05/31 12:00,2026/05/31 15:00,2026/06/01 12:00',
+      '44132,2026/05/30 09:46, 240, 250, 260, 210',
+    ].join('\n');
+    const out = parseEnvWbgtCsv(real);
+    expect(out['2026-05-31'].wbgtMax).toBe(26.0); // max(24,25,26)
+    expect(out['2026-05-31'].hourly.find((x) => x.hour === 12).wbgt).toBe(25.0);
+    expect(out['2026-06-01'].wbgtMax).toBe(21.0);
+  });
 });
 
 describe('fetchEnvWbgt (§0.10 プロキシ経由)', () => {

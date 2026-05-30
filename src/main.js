@@ -20,7 +20,7 @@ import { LOCATION } from './config/location.js';
 const CONFIG = {
   coords: LOCATION.coords, // 舞浜駅近辺 (TDL/TDS 共通、§3.13)
   openWeatherProxyUrl: '', // 設定すると OpenWeather 列が有効化 (Phase 2)
-  wbgtProxyUrl: '', // 設定すると環境省 WBGT 実値取得が有効化 (workers/wbgt-proxy.js、§0.10)
+  wbgtProxyUrl: 'https://wbgt-proxy.pi-pi-pi-025.workers.dev', // 環境省 WBGT 実値取得 (workers/wbgt-proxy.js、§0.10)
   days: 15,
 };
 

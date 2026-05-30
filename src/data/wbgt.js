@@ -29,9 +29,24 @@ export function deriveWbgt(tempC, rhPercent) {
   return 0.567 * tempC + 0.393 * e + 3.94;
 }
 
+// 環境省 WBGT 予測 CSV のヘッダー時刻 stamp を { date:'YYYY-MM-DD', hour:Number } に正規化。
+// 実データ形式は 'YYYY/MM/DD HH:MM' (3 時間毎、24:00 表記あり)。
+// 旧ドキュメント/テスト互換で 'YYYYMMDDHH' (10 桁) も受ける。対応しない形式は null。
+function parseStamp(stamp) {
+  const slash = stamp.match(/^(\d{4})\/(\d{2})\/(\d{2})\s+(\d{1,2}):\d{2}$/);
+  if (slash) {
+    const [, y, mo, d, h] = slash;
+    return { date: `${y}-${mo}-${d}`, hour: Number(h) };
+  }
+  if (/^\d{10}$/.test(stamp)) {
+    return { date: `${stamp.slice(0, 4)}-${stamp.slice(4, 6)}-${stamp.slice(6, 8)}`, hour: Number(stamp.slice(8, 10)) };
+  }
+  return null;
+}
+
 // 環境省 WBGT 予測 CSV をパースする。
-// 形式: 1 行目ヘッダ ',,YYYYMMDDHH,YYYYMMDDHH,...' / 2 行目 'point,更新時刻,値×10,...'
-// 値は WBGT を 10 倍した整数 (例 260 → 26.0℃)。
+// 形式: 1 行目ヘッダ ',,<時刻>,<時刻>,...' / 2 行目 'point,更新時刻,値×10,...'
+// 値は WBGT を 10 倍した整数 (例 260 → 26.0℃)。空欄 (期間外) はスキップ。
 // 戻り値: { 'YYYY-MM-DD': { wbgtMax, hourly: [{ hour, wbgt }] } }
 export function parseEnvWbgtCsv(text) {
   const lines = text.trim().split(/\r?\n/);
@@ -40,13 +55,12 @@ export function parseEnvWbgtCsv(text) {
   const values = lines[1].split(',');
   const byDate = {};
   for (let i = 2; i < header.length; i += 1) {
-    const stamp = header[i].trim(); // 'YYYYMMDDHH'
+    const parsed = parseStamp(header[i].trim());
     const raw = (values[i] ?? '').trim();
-    if (!/^\d{10}$/.test(stamp) || raw === '') continue;
+    if (!parsed || raw === '') continue;
     const wbgt = Number(raw) / 10;
     if (Number.isNaN(wbgt)) continue;
-    const date = `${stamp.slice(0, 4)}-${stamp.slice(4, 6)}-${stamp.slice(6, 8)}`;
-    const hour = Number(stamp.slice(8, 10));
+    const { date, hour } = parsed;
     if (!byDate[date]) byDate[date] = { wbgtMax: null, hourly: [] };
     byDate[date].hourly.push({ hour, wbgt });
     if (byDate[date].wbgtMax == null || wbgt > byDate[date].wbgtMax) {
