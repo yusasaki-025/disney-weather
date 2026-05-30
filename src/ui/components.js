@@ -22,11 +22,11 @@ export function dateLabel(date) {
   return `${formatMd(date)} (${weekday(date)})`;
 }
 
-// スコアピル HTML (§0.6.5 : テキストラベル ＋ 数値 ＋ 色。記号は廃止)
+// スコアピル HTML (§0.6.5 テキスト + §0.18 評価アイコン併用)
 export function scorePillHtml(ev) {
   const s = ev.symbol;
   return `<span class="score-pill" data-level="${s.key}" style="background:${s.color}">
-    <span class="label">${s.label}</span><span class="value">${ev.score}</span>
+    <span class="material-symbols-rounded" aria-hidden="true">${s.icon}</span><span class="label">${s.label}</span><span class="value">${ev.score}</span>
   </span>`;
 }
 
@@ -50,7 +50,7 @@ export function subscoreHtml(subscores, bands) {
     if (!has) {
       return `<span class="subscore-pill${main}" data-level="none"><span class="time-label">${b.label}</span><span class="value">-</span></span>`;
     }
-    return `<span class="subscore-pill${main}" data-level="${ss.symbol.key}" style="background:${ss.symbol.color}"><span class="time-label">${b.label}</span><span class="value">${ss.score}</span></span>`;
+    return `<span class="subscore-pill${main}" data-level="${ss.symbol.key}" style="background:${ss.symbol.color}"><span class="time-label">${b.label}</span><span class="material-symbols-rounded" aria-hidden="true">${ss.symbol.icon}</span><span class="value">${ss.score}</span></span>`;
   });
   return `<span class="subscore-group" role="img" aria-label="${esc(ariaParts.join('、'))}">${cells.join('')}</span>`;
 }

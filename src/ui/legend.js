@@ -16,7 +16,7 @@ export function renderScoreLegend(el) {
   const pills = SYMBOLS.map(
     (s) =>
       `<span class="legend-item">
-        <span class="score-pill legend-pill" data-level="${s.key}" style="background:${s.color}">${esc(s.label)}</span>
+        <span class="score-pill legend-pill" data-level="${s.key}" style="background:${s.color}"><span class="material-symbols-rounded" aria-hidden="true">${s.icon}</span>${esc(s.label)}</span>
         <span class="legend-desc">${esc(DESC[s.key] || '')}</span>
       </span>`,
   ).join('');

@@ -24,7 +24,7 @@ export function buildReason(row) {
   return parts.join(' ･ ');
 }
 
-export function renderTop3(container, rows, { onSelect, park }) {
+export function renderTop3(container, rows, { onSelect }) {
   // ◎ ○ を優先しつつスコア降順で上位 3 件
   const ranked = [...rows]
     .filter((r) => r.eval && !r.isNg)
@@ -45,12 +45,14 @@ export function renderTop3(container, rows, { onSelect, park }) {
         m.wbgtMax != null && m.wbgtMax >= 25
           ? `<span>WBGT ${fmtNum(m.wbgtMax, 0)}</span>`
           : '';
+      const sym = row.eval.symbol;
       return `<article class="top3-card" role="button" tabindex="0" data-date="${row.date}"
-        aria-label="${esc(dateLabel(row.date))} ${park} おすすめ第${i + 1}位 スコア${row.eval.score}">
+        aria-label="${esc(dateLabel(row.date))} ${esc(sym.label)} スコア${row.eval.score}">
         <span class="rank">第${i + 1}位</span>
         <span class="card-date">${esc(dateLabel(row.date))}</span>
-        <span class="card-symbol" style="color:${row.eval.symbol.color}">
-          <span aria-hidden="true">${row.eval.symbol.symbol}</span> スコア${row.eval.score}
+        <span class="card-symbol" style="color:${sym.color}">
+          <span class="material-symbols-rounded" aria-hidden="true">${sym.icon}</span>
+          <span>${esc(sym.label)}</span> スコア${row.eval.score}
         </span>
         <span class="card-metrics">
           <span>風 ${fmtNum(gust, 0, 'm/s')}</span>

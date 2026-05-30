@@ -179,6 +179,19 @@ export function renderTable(els, rows, state, sources, sourceStatus, handlers) {
       const wbgtPeakTxt = peakTxt(m.wbgtPeak, '');
       const wbgtTitle = wbgtPeakTxt ? `${wbgtBase} ・ ${wbgtPeakTxt}` : wbgtBase;
 
+      // §0.16 : バッジ格下げ時はスコアセルに理由ツールチップ
+      let scoreTitle = '';
+      if (row.eval.capped) {
+        const ev = row.eval;
+        const worstBadge = [
+          ['wind', ev.badges.wind, peakTxt(m.gustPeak, 'm/s')],
+          ['rain', ev.badges.rain, peakTxt(m.popPeak, '%')],
+          ['wbgt', ev.badges.wbgt, peakTxt(m.wbgtPeak, '')],
+        ].find(([, b]) => `${b.text}` && b.level >= 2 && b.text !== '—');
+        const reasonBadge = worstBadge ? `バッジ「${worstBadge[1].text}」${worstBadge[2] ? ` (${worstBadge[2]})` : ''}` : 'バッジ判定';
+        scoreTitle = `平均値スコア ${ev.rawScore} だが ${reasonBadge} により「${ev.symbol.label}」に格下げ`;
+      }
+
       const cls = [
         'row-main',
         row.isDecided ? 'is-decided' : '',
@@ -196,7 +209,7 @@ export function renderTable(els, rows, state, sources, sourceStatus, handlers) {
             <span class="date-sub">${dayBadges(dt)}</span>
           </div>
         </td>
-        <td>${scorePillHtml(row.eval)}</td>
+        <td${scoreTitle ? ` title="${esc(scoreTitle)}"` : ''}>${scorePillHtml(row.eval)}</td>
         ${metricCell('wind', windVal, row.eval.badges.wind, windTitle)}
         ${metricCell('rain', rainVal, row.eval.badges.rain)}
         ${metricCell('wbgt', wbgtVal, row.eval.badges.wbgt, wbgtTitle)}

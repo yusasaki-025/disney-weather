@@ -24,44 +24,6 @@
   --shadow: 0 1px 3px rgba(20, 30, 45, 0.08), 0 4px 12px rgba(20, 30, 45, 0.05);
 }
 
-/* ダークモード (§6.6)。◎ ○ の緑はやや明るめ、× の赤も視認性確保。 */
-[data-theme='dark'] {
-  --bg: #161b22;
-  --surface: #1f262e;
-  --surface-2: #2a323c;
-  --border: #38424e;
-  --text: #e6ebf0;
-  --text-sub: #9aa7b4;
-  --accent: #4a9eea;
-  --accent-dark: #66b0f0;
-  --score-excellent: #3fae50;
-  --score-good: #9ed46f;
-  --score-fair: #f0b454;
-  --score-bad: #e26464;
-  --risk-bg: #3a2222;
-  --warn-bg: #38301a;
-  --shadow: 0 1px 3px rgba(0, 0, 0, 0.5), 0 4px 12px rgba(0, 0, 0, 0.35);
-}
-
-[data-theme='dark'] .cancel-lv2 {
-  background: #3a2c1e;
-  color: #e6a06a;
-}
-
-[data-theme='dark'] .badge-vacation {
-  background: #232a44;
-  color: #aab2e8;
-}
-
-[data-theme='dark'] .row-main.is-decided {
-  background: #1d2c3d;
-}
-
-[data-theme='dark'] .skeleton {
-  background: linear-gradient(90deg, #2a323c 25%, #333d48 50%, #2a323c 75%);
-  background-size: 200% 100%;
-}
-
 * {
   box-sizing: border-box;
 }
@@ -344,12 +306,11 @@ section {
 }
 
 /* --- テーブル --- */
-/* §0.15 : 見出し行 (thead) を sticky で固定。横スクロール(スマホ)と両立させるため、
-   テーブル領域を縦スクロールコンテナにし、その中で thead を top:0 に貼り付ける。
-   (overflow を持つ要素内では sticky がそのコンテナ基準で効く) */
+/* §0.19 : 全行表示 (内部スクロール無し)。コンテナは overflow:visible に保ち、
+   thead をページ (body) スクロールに sticky 追従させる。
+   sticky は親に overflow:auto/scroll/hidden があると body 追従しないため visible 必須。 */
 .table-scroll {
-  overflow: auto;
-  max-height: calc(100vh - 140px);
+  overflow: visible;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
@@ -363,11 +324,13 @@ section {
   min-width: 720px;
 }
 
+/* §0.20 : sticky 見出しを最前面に (z-index 100) ＋ 不透明背景でアイコンの貫通を防ぐ */
 .forecast-table thead th {
   position: sticky;
   top: 0;
-  z-index: 10;
+  z-index: 100;
   background: var(--surface-2);
+  background-clip: padding-box;
   color: var(--text-sub);
   font-weight: 600;
   text-align: center;
@@ -376,8 +339,41 @@ section {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
   white-space: nowrap;
 }
-[data-theme='dark'] .forecast-table thead th {
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+
+/* §0.20 : アイコン ・ ピル類が stacking context を作って見出しの上に出ないようリセット */
+.forecast-table tbody .material-symbols-rounded,
+.forecast-table tbody .weather-icon,
+.forecast-table tbody .cat-icon,
+.forecast-table tbody .score-pill,
+.forecast-table tbody .subscore-pill,
+.forecast-table tbody .cancel-badge {
+  position: static;
+  z-index: auto;
+  transform: none;
+}
+
+/* §0.19 : スマホは横はみ出し時のみテーブル内で横スクロール (縦は body 全行表示) */
+@media (max-width: 767px) {
+  .table-scroll {
+    overflow-x: auto;
+  }
+}
+
+/* §0.18 : スコアピルの評価アイコン */
+.score-pill .material-symbols-rounded {
+  font-size: 18px;
+  margin-right: 2px;
+}
+.subscore-pill .material-symbols-rounded {
+  font-size: 13px;
+}
+.legend-pill .material-symbols-rounded {
+  font-size: 16px;
+  margin-right: 2px;
+  vertical-align: text-bottom;
+}
+.top3-card .card-symbol .material-symbols-rounded {
+  font-size: 22px;
 }
 
 .forecast-table th.col-date,
@@ -587,15 +583,6 @@ section {
 .tcolor {
   font-weight: 700;
 }
-
-[data-theme='dark'] .tcolor[data-tb='h3'] { color: #f28b82 !important; }
-[data-theme='dark'] .tcolor[data-tb='h2'] { color: #f0938f !important; }
-[data-theme='dark'] .tcolor[data-tb='h1'] { color: #f0a95e !important; }
-[data-theme='dark'] .tcolor[data-tb='cf'] { color: #6fcb7e !important; }
-[data-theme='dark'] .tcolor[data-tb='w1'] { color: #6fb8dd !important; }
-[data-theme='dark'] .tcolor[data-tb='w2'] { color: #7fa6db !important; }
-[data-theme='dark'] .tcolor[data-tb='w3'] { color: #7e9bd8 !important; }
-[data-theme='dark'] .tcolor[data-tb='w4'] { color: #9aaedc !important; }
 
 .tlg {
   display: inline-block;
@@ -926,74 +913,6 @@ section {
   }
 }
 
-/* --- ハンバーガーメニュー / ドロワー (§0.6-3) --- */
-.menu-toggle {
-  display: none; /* PC では非表示 */
-}
-
-.menu-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 40;
-  background: rgba(20, 30, 45, 0.45);
-  opacity: 0;
-  transition: opacity 0.2s ease;
-}
-
-.menu-overlay.open {
-  opacity: 1;
-}
-
-.menu-drawer {
-  position: fixed;
-  top: 0;
-  right: 0;
-  z-index: 41;
-  width: 270px;
-  max-width: 80vw;
-  height: 100%;
-  background: var(--surface);
-  box-shadow: -4px 0 18px rgba(20, 30, 45, 0.18);
-  display: flex;
-  flex-direction: column;
-  padding: 16px 10px;
-  gap: 2px;
-  transform: translateX(100%);
-  transition: transform 0.2s ease;
-  overflow-y: auto;
-}
-
-.menu-drawer.open {
-  transform: translateX(0);
-}
-
-.menu-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  width: 100%;
-  padding: 12px 14px;
-  font-size: 15px;
-  font-family: inherit;
-  font-weight: 600;
-  color: var(--text);
-  background: none;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  text-align: left;
-}
-
-.menu-item:hover,
-.menu-item:focus-visible {
-  background: var(--surface-2);
-}
-
-.menu-item .material-symbols-rounded {
-  font-size: 20px;
-  color: var(--accent);
-}
-
 /* --- スマホ (375px) --- */
 @media (max-width: 720px) {
   .app-title h1 {
@@ -1015,13 +934,7 @@ section {
 
 /* 狭幅 : ヘッダー操作をハンバーガーに集約 (§0.6-3、< 768px) */
 @media (max-width: 767px) {
-  .desktop-actions {
-    display: none;
   }
-  .menu-toggle {
-    display: inline-flex;
-  }
-}
 
 /* =========================================================================
    §0.6.5 - §0.6.10 UI overhaul (末尾追記で既存ルールを cascade 上書き)
@@ -1059,31 +972,6 @@ section {
   --font-head: 'Noto Sans JP', sans-serif;
   --font-body: 'Noto Sans JP', sans-serif;
   --font-num: 'Noto Sans JP', sans-serif;
-}
-
-[data-theme='dark'] {
-  --bg: #0e1626;
-  --surface: #18233a;
-  --surface-2: #1f2d49;
-  --border: #2d3e5e;
-  --text: #e6ecf5;
-  --text-sub: #9fb0cb;
-  --brand-blue: #4a8fd6;
-  --accent: #4a8fd6;
-  --accent-dark: #66a5e0;
-  --score-excellent: #3fb862;
-  --score-good: #9ed46f;
-  --score-fair: #f5bd5e;
-  --score-bad: #ec6a64;
-  --warn-bg: #38301a;
-  --risk-bg: #3a2222;
-  --row-hover: #1f2d49;
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
-  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
-  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.5);
-  --shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
-  --grad-header: linear-gradient(135deg, #142f5e 0%, #1f4170 100%);
-  --grad-top3: linear-gradient(135deg, #1f2d49 0%, #2a2036 100%);
 }
 
 /* --- フォント (system fallback 付き) --- */
@@ -1278,9 +1166,6 @@ h1, h2, h3, h4, .app-title h1 {
   background: var(--surface-2);
   color: var(--brand-blue-dark);
 }
-[data-theme='dark'] .forecast-table thead th {
-  color: #cfe0f5;
-}
 
 /* --- §0.6.7 行クリック可視化 (chevron) --- */
 .row-main {
@@ -1443,11 +1328,4 @@ h1, h2, h3, h4, .app-title h1 {
 .sb-wbgt.derived {
   background: var(--warn-bg);
   color: #9a6a00;
-}
-[data-theme='dark'] .sb-wbgt.env {
-  background: #1f3a28;
-  color: #7fd49a;
-}
-[data-theme='dark'] .sb-wbgt.derived {
-  color: #e6c06a;
 }

@@ -2,10 +2,7 @@
 import './styles.css';
 import { candidateDates, todayJst } from './utils/date.js';
 import { loadCacheFresh, loadCacheRaw, saveCache } from './utils/cache.js';
-import { setupTheme } from './ui/theme.js';
 import { setupHelp } from './ui/help.js';
-import { setupPrint } from './ui/print.js';
-import { setupMenu } from './ui/menu.js';
 import { renderScoreLegend } from './ui/legend.js';
 import { freshnessLabel, UPDATE_CYCLE } from './utils/freshness.js';
 import { logger } from './utils/logger.js';
@@ -257,44 +254,11 @@ function setupHeader() {
   document.getElementById('btn-refresh').addEventListener('click', () => refresh(true));
   document.getElementById('btn-retry-all').addEventListener('click', () => refresh(true));
 
-  document.getElementById('btn-copy').addEventListener('click', copyUrl);
-}
-
-// --- 起動 ---
-async function copyUrl() {
-  try {
-    await navigator.clipboard.writeText(window.location.href);
-    alert('URL をコピーしました');
-  } catch {
-    alert(window.location.href);
-  }
-}
-
-// 狭幅用ドロワーの項目 (ヘッダーボタンへ委譲 ＋ 一部は直接処理)。
-// QR は廃止 (§0.4)。Notion 送信 ・ カレンダー登録は Cowork 版のみ (§0.7)。
-function buildMenuItems() {
-  const click = (id) => document.getElementById(id)?.click();
-  const items = [{ label: 'URL をコピー', icon: 'content_copy', onClick: copyUrl }];
-  items.push(
-    { label: '印刷', icon: 'print', onClick: () => click('btn-print') },
-    { label: '更新 (最新を取得)', icon: 'refresh', onClick: () => refresh(true) },
-    { label: 'ダークモード切替', icon: 'dark_mode', onClick: () => click('btn-theme') },
-    { label: '用語集 / ヘルプ', icon: 'help', onClick: () => click('btn-help') },
-    {
-      label: '出典 ・ 注意書き',
-      icon: 'info',
-      onClick: () => document.querySelector('.disclaimer')?.scrollIntoView({ behavior: 'smooth' }),
-    },
-  );
-  return items;
 }
 
 async function init() {
   setupHeader();
-  setupTheme();
   setupHelp();
-  setupPrint({ getDecidedDate: () => state.decidedDate, openDetail: openByDate });
-  setupMenu(buildMenuItems());
   renderScoreLegend(document.getElementById('score-legend'));
   wireControls(state, render);
   renderSkeleton();

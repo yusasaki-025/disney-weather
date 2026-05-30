@@ -1264,6 +1264,146 @@ ARIA は `aria-label="6月2日 ベスト スコア92"` でテキスト記号を�
 - フォント未読み込み時も Unicode (★ ✓ ⚠ ⊘) で判別可能
 - npm test 緑、npm run build 通る
 
+### 0.19 テーブル全行表示 ＋ sticky 見出し再実装 (Yuka さん指摘)
+
+問題 : Yuka さん指摘「表が範囲内スクロールするの嫌だ ・ 全部表示して」。
+
+原因 : §0.15 sticky 見出し実装時に `.calendar-container` or `.table-wrapper` に `overflow-y: auto` ＋ `max-height` を入れた可能性 (sticky を効かせるため)。結果、表が内部スクロールになり 15日分が見切れる。
+
+対応 : **テーブル全行表示** + **見出しはページ全体スクロールに対して sticky**。
+
+#### CSS 修正
+
+```css
+/* テーブルコンテナから overflow / max-height を削除 (全行表示) */
+.calendar-container,
+.table-wrapper,
+.disney-table {
+  /* overflow-y: auto;  ← 削除 */
+  /* max-height: ...;   ← 削除 */
+  overflow: visible;
+  height: auto;
+  max-height: none;
+}
+
+/* thead だけ sticky (ページ全体スクロールで body に追従) */
+table thead,
+table thead th,
+.table-header-row {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--surface);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+}
+
+/* スクロール親は body (or html) になる、テーブル親は overflow:visible 必須 */
+body, html, #app {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+```
+
+#### 重要なポイント (Code 側)
+
+- `position: sticky` は **「親要素のスクロール領域」に対して** 効く
+- 親要素に `overflow: auto/scroll/hidden` があると、その親内でしか sticky しない (＝ ページ全体スクロールに追従しない)
+- 「全行表示 + body スクロールで sticky」 にするには、テーブル親には `overflow: visible` を維持
+
+#### モバイル横スクロール
+
+- 列が画面幅より広い場合 (スマホで気象庁/Open-Meteo 列が見切れる場合) は **テーブル本体に `overflow-x: auto`** を入れる
+- ただし `overflow-y` は入れない (縦スクロールは body 側)
+- これで横スクロールは表内、縦スクロールはページ全体
+
+```css
+@media (max-width: 767px) {
+  .disney-table {
+    overflow-x: auto;
+    overflow-y: visible;
+  }
+}
+```
+
+#### 検証
+
+- PC で 15日分が縦に全部並ぶ (内部スクロールなし)
+- ページを下スクロールすると見出し行が画面上部に固定
+- スマホでも縦は全行表示 ・ 横はみ出る場合だけ横スクロール
+- 詳細パネル開いて行数が増えてもスクロール問題なし
+
+#### 該当ファイル
+
+- `src/styles.css` のテーブルコンテナ系セレクタから overflow / max-height 削除
+- thead の sticky スタイルは維持
+
+### 0.20 sticky 見出しの z-index 競合修正 (Yuka さん指摘)
+
+問題 : Yuka さん指摘「スクロールすると、アイコンが sticky の上に出るバグありそう」
+
+原因 (典型) :
+
+- アイコン要素 (天気 / 評価 / カテゴリ) や行に `position: relative` ・ `z-index` ・ `transform` ・ `opacity < 1` ・ `filter` などが付いて、**新しい stacking context** を作っている
+- sticky 見出しの `z-index` (現状 10 程度) が低すぎてアイコンの上に来れない
+- もしくは sticky 親要素の stacking context により、`z-index` が比較対象にならない
+
+#### 対策
+
+1. **sticky 見出しの z-index を引き上げ** :
+
+```css
+table thead, table thead th,
+.calendar-header-row, .table-header-row {
+  position: sticky;
+  top: 0;
+  z-index: 100;                  /* 10 → 100 */
+  background: var(--surface);    /* 不透明背景必須 */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+}
+```
+
+2. **アイコン側の stacking context リセット** :
+
+```css
+.material-symbols-rounded,
+.weather-icon,
+.score-icon,
+.cat-icon,
+.score-pill,
+.calendar-row .badge {
+  position: static;
+  z-index: auto;
+  transform: none;
+  /* opacity: 1 (半透明にしない) */
+  /* filter: none */
+}
+```
+
+3. **sticky 見出しの背景を不透明に** :
+
+```css
+table thead th {
+  background: var(--surface);    /* 透けない */
+  background-clip: padding-box;
+}
+```
+
+4. **行や行コンテナに transform を入れない** (詳細パネル開閉アニメで `transform` 使う場合は注意) :
+
+- 開閉アニメには `max-height` + `opacity` だけを使い、`transform: scaleY()` 等は避ける
+- どうしても transform が必要なら、sticky 親の z-index を 1000 以上に
+
+#### 検証
+
+- スクロール中にアイコン (天気/評価/カテゴリ/バッジ) が見出しの下に潜る (上に出ない)
+- 詳細パネル開いた時のグラフ ・ 服装サジェスト ・ ショースケジュール要素も同じ挙動
+- スマホ 375px でも sticky 見出しが最前面
+- 「行クリックで開いたパネル内のアイコン」も sticky 見出しを超えない
+
+#### 該当ファイル
+
+- `src/styles.css` のみ (HTML 構造変更不要)
+
 ### 0.7 公開ページ化 (Cloudflare Pages) ＋ ランタイム判定
 
 Yuka さん要望 : 「Mac 開いてなくても他の人も見れる公開ページ」

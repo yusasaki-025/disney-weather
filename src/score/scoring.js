@@ -7,11 +7,12 @@ import { showWindowHours } from '../data/showSchedule.js';
 
 // --- スコア → レベル (§5.3, §0.6.5) ---
 // ◎ ○ △ × の記号は廃止。用途が直感的に伝わる日本語テキストラベル + 色で表現する。
+// 評価系アイコン (§0.18-2)。4 種とも Unicode 形状が異なり、フォント未読込時も判別可。
 export const SYMBOLS = [
-  { min: 85, key: 'excellent', label: 'ベスト', color: '#2D8F3E' },
-  { min: 70, key: 'good', label: 'OK', color: '#88C057' },
-  { min: 50, key: 'fair', label: '微妙', color: '#F2A93B' },
-  { min: -Infinity, key: 'bad', label: '別日', color: '#D24A4A' },
+  { min: 85, key: 'excellent', label: 'ベスト', color: '#2D8F3E', icon: 'star' },
+  { min: 70, key: 'good', label: 'OK', color: '#88C057', icon: 'done' },
+  { min: 50, key: 'fair', label: '微妙', color: '#F2A93B', icon: 'warning' },
+  { min: -Infinity, key: 'bad', label: '別日', color: '#D24A4A', icon: 'block' },
 ];
 
 export function scoreToSymbol(score) {
@@ -111,6 +112,32 @@ export function wbgtBadge(wbgt, windShowWindow, feelsLikeMax) {
   level = Math.max(0, Math.min(4, level));
   const TEXTS = ['通常', '暑さ注意', '熱バ可能性あり', '熱キャン濃厚', 'ほぼ中止'];
   return { level, text: TEXTS[level] };
+}
+
+// --- バッジ severity と スコア上限ガード (§0.16) ---
+// スコアは平均値ベース (§0.13.2)、バッジはピーク (最大) ベースなので、
+// 「OK 75 なのに 雨ほぼ中止」のような矛盾が出る。バッジの危険度でスコアに上限キャップを掛ける。
+const SEVERITY_RANK = { normal: 0, warn: 1, danger: 2, critical: 3 };
+const SEVERITY_CAP = { critical: 25, danger: 45, warn: 65 };
+
+export function badgeSeverity(text) {
+  if (text === 'ほぼ中止') return 'critical';
+  if (text === '中止リスク高' || text === '雨キャン濃厚' || text === '熱キャン濃厚') return 'danger';
+  if (text === '風バ可能性あり' || text === '雨バ可能性' || text === '熱バ可能性あり' || text === '暑さ注意')
+    return 'warn';
+  return 'normal';
+}
+
+// rawScore とバッジ群から、最悪 severity に応じてキャップした最終スコアを返す。
+export function applyBadgeGuard(rawScore, badges) {
+  let worst = 'normal';
+  for (const b of Object.values(badges)) {
+    const s = badgeSeverity(b.text);
+    if (SEVERITY_RANK[s] > SEVERITY_RANK[worst]) worst = s;
+  }
+  const cap = SEVERITY_CAP[worst];
+  const score = cap != null ? Math.min(rawScore, cap) : rawScore;
+  return { score, rawScore, worstSeverity: worst, capped: score < rawScore };
 }
 
 // --- 指標の集計 (§5.1) ---
@@ -239,7 +266,7 @@ export function weightedBandTotal(subscores) {
 // --- 1 日分の総合評価 (UI が使う入口) ---
 export function evaluateDay(forecasts, park) {
   const metrics = aggregateMetrics(forecasts, park);
-  const { score, deductions, symbol } = scoreFromMetrics(metrics, park);
+  const { score: rawScore, deductions } = scoreFromMetrics(metrics, park);
 
   const subscores = {};
   for (const b of BANDS) subscores[b.key] = bandSubscore(forecasts, b, park);
@@ -247,18 +274,26 @@ export function evaluateDay(forecasts, park) {
   const gustForBadge = metrics.gustShowWindow != null ? metrics.gustShowWindow : metrics.gustMax;
   const popForBadge = metrics.popShowWindow != null ? metrics.popShowWindow : metrics.popMax;
   const wbgtForBadge = metrics.wbgtShowWindow != null ? metrics.wbgtShowWindow : metrics.wbgtMax;
+  const badges = {
+    wind: windBadge(gustForBadge),
+    rain: rainBadge(popForBadge, metrics.precipSum),
+    wbgt: wbgtBadge(wbgtForBadge, metrics.windShowWindow, metrics.feelsLikeMax),
+  };
+
+  // §0.16 : バッジ危険度でスコアに上限キャップ (スコアとバッジの矛盾解消)
+  const guard = applyBadgeGuard(rawScore, badges);
+  const score = guard.score;
 
   return {
     score,
-    symbol,
+    rawScore,
+    capped: guard.capped,
+    worstSeverity: guard.worstSeverity,
+    symbol: scoreToSymbol(score),
     deductions,
     metrics,
     subscores,
     weightedTotal: weightedBandTotal(subscores),
-    badges: {
-      wind: windBadge(gustForBadge),
-      rain: rainBadge(popForBadge, metrics.precipSum),
-      wbgt: wbgtBadge(wbgtForBadge, metrics.windShowWindow, metrics.feelsLikeMax),
-    },
+    badges,
   };
 }

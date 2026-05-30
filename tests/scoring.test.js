@@ -17,6 +17,8 @@ import {
   bandSubscore,
   weightedBandTotal,
   evaluateDay,
+  badgeSeverity,
+  applyBadgeGuard,
   BANDS,
 } from '../src/score/scoring.js';
 
@@ -118,6 +120,16 @@ describe('scoreToSymbol (§5.3)', () => {
     expect(scoreToSymbol(50).label).toBe('微妙');
     expect(scoreToSymbol(49).label).toBe('別日');
     expect(scoreToSymbol(0).label).toBe('別日');
+  });
+  it('全レベルに label ・ icon ・ color があり undefined が無い (§0.18)', () => {
+    for (const s of [100, 80, 60, 0]) {
+      const sym = scoreToSymbol(s);
+      expect(sym.label).toBeTruthy();
+      expect(sym.icon).toBeTruthy();
+      expect(sym.color).toMatch(/^#/);
+      expect(sym.symbol).toBeUndefined(); // 旧 symbol.symbol 参照は廃止済み
+    }
+    expect(['star', 'done', 'warning', 'block']).toContain(scoreToSymbol(100).icon);
   });
 });
 
@@ -270,7 +282,7 @@ describe('scoreFromMetrics は show-window を優先', () => {
     const r = scoreFromMetrics(m, 'TDL');
     // wind 10 + rain 15 = 25 → score 75 → OK
     expect(r.score).toBe(75);
-    expect(r.symbol.label).toBe('行ってよい');
+    expect(r.symbol.label).toBe('OK');
   });
 });
 
@@ -302,6 +314,38 @@ describe('bandSubscore / weightedBandTotal', () => {
         night: { score: 0, hasData: false },
       }),
     ).toBeNull();
+  });
+});
+
+describe('badgeSeverity / applyBadgeGuard (§0.16)', () => {
+  it('text から severity を判定', () => {
+    expect(badgeSeverity('ほぼ中止')).toBe('critical');
+    expect(badgeSeverity('中止リスク高')).toBe('danger');
+    expect(badgeSeverity('雨キャン濃厚')).toBe('danger');
+    expect(badgeSeverity('熱キャン濃厚')).toBe('danger');
+    expect(badgeSeverity('風バ可能性あり')).toBe('warn');
+    expect(badgeSeverity('暑さ注意')).toBe('warn');
+    expect(badgeSeverity('通常')).toBe('normal');
+    expect(badgeSeverity('—')).toBe('normal');
+  });
+  it('最悪 severity に応じて上限キャップ (上限のみ・引き上げない)', () => {
+    const g = (raw, text) =>
+      applyBadgeGuard(raw, { wind: { text: '通常' }, rain: { text }, wbgt: { text: '通常' } }).score;
+    expect(g(80, 'ほぼ中止')).toBe(25); // critical
+    expect(g(80, '雨キャン濃厚')).toBe(45); // danger
+    expect(g(80, '雨バ可能性')).toBe(65); // warn
+    expect(g(80, '通常')).toBe(80); // normal はキャップなし
+    expect(g(20, 'ほぼ中止')).toBe(20); // キャップは上限のみ (引き下げ済みは保持)
+  });
+  it('最も厳しいバッジが効く', () => {
+    const r = applyBadgeGuard(80, {
+      wind: { text: '風バ可能性あり' }, // warn
+      rain: { text: 'ほぼ中止' }, // critical
+      wbgt: { text: '通常' },
+    });
+    expect(r.worstSeverity).toBe('critical');
+    expect(r.score).toBe(25);
+    expect(r.capped).toBe(true);
   });
 });
 
