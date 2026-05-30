@@ -123,7 +123,7 @@ function buildRows() {
       date,
       dayType: dayType(date),
       forecasts,
-      eval: list.length ? evaluateDay(list, state.park) : null,
+      eval: list.length ? evaluateDay(list, state.park, date) : null,
     });
   }
   return rows.filter((r) => r.eval); // 全ソース欠損日は除外 (通常は起きない)
