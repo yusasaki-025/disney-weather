@@ -108,14 +108,14 @@ describe('uvDeduction (§5.2)', () => {
 
 describe('scoreToSymbol (§5.3)', () => {
   it('境界値', () => {
-    expect(scoreToSymbol(100).symbol).toBe('◎');
-    expect(scoreToSymbol(85).symbol).toBe('◎');
-    expect(scoreToSymbol(84).symbol).toBe('○');
-    expect(scoreToSymbol(70).symbol).toBe('○');
-    expect(scoreToSymbol(69).symbol).toBe('△');
-    expect(scoreToSymbol(50).symbol).toBe('△');
-    expect(scoreToSymbol(49).symbol).toBe('×');
-    expect(scoreToSymbol(0).symbol).toBe('×');
+    expect(scoreToSymbol(100).label).toBe('行くべき');
+    expect(scoreToSymbol(85).label).toBe('行くべき');
+    expect(scoreToSymbol(84).label).toBe('行ってよい');
+    expect(scoreToSymbol(70).label).toBe('行ってよい');
+    expect(scoreToSymbol(69).label).toBe('微妙');
+    expect(scoreToSymbol(50).label).toBe('微妙');
+    expect(scoreToSymbol(49).label).toBe('別日');
+    expect(scoreToSymbol(0).label).toBe('別日');
   });
 });
 
@@ -223,7 +223,7 @@ describe('scoreFromMetrics は show-window を優先', () => {
     expect(r.deductions.wind).toBe(60);
     expect(r.deductions.rain).toBe(50);
     expect(r.score).toBe(0);
-    expect(r.symbol.symbol).toBe('×');
+    expect(r.symbol.label).toBe('別日');
   });
   it('show-window が無ければ daily 最大にフォールバック', () => {
     const m = {
@@ -233,9 +233,9 @@ describe('scoreFromMetrics は show-window を優先', () => {
       precipSum: 0, feelsLikeMax: 22, tempMax: 25, windShowWindow: null, uvMax: 0,
     };
     const r = scoreFromMetrics(m, 'TDL');
-    // wind 10 + rain 15 = 25 → score 75 → ○
+    // wind 10 + rain 15 = 25 → score 75 → 行ってよい
     expect(r.score).toBe(75);
-    expect(r.symbol.symbol).toBe('○');
+    expect(r.symbol.label).toBe('行ってよい');
   });
 });
 
@@ -247,7 +247,7 @@ describe('bandSubscore / weightedBandTotal', () => {
     ]);
     const s = bandSubscore([f], noon, 'TDL');
     expect(s.score).toBe(100);
-    expect(s.symbol.symbol).toBe('◎');
+    expect(s.symbol.label).toBe('行くべき');
     expect(s.hasData).toBe(true);
   });
   it('重み付き平均 (昼が最重要)', () => {
@@ -288,6 +288,6 @@ describe('evaluateDay (統合)', () => {
     expect(r.badges.wind.text).toBe('中止リスク高'); // gust window 12
     expect(r.badges.rain.text).toBe('雨キャン濃厚'); // pop window 70
     expect(r.subscores.noon).toBeTruthy();
-    expect(['◎', '○', '△', '×']).toContain(r.subscores.noon.symbol.symbol);
+    expect(['行くべき', '行ってよい', '微妙', '別日']).toContain(r.subscores.noon.symbol.label);
   });
 });

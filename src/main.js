@@ -7,6 +7,7 @@ import { setupHelp } from './ui/help.js';
 import { setupPrint } from './ui/print.js';
 import { setupMenu } from './ui/menu.js';
 import { renderStatusBar } from './ui/statusBar.js';
+import { renderScoreLegend } from './ui/legend.js';
 import { logger } from './utils/logger.js';
 import { fetchJma, SOURCE_ID as JMA } from './data/jma.js';
 import { fetchOpenMeteo, SOURCE_ID as OM } from './data/openMeteo.js';
@@ -20,6 +21,7 @@ import { loadState, applyFilterSort, wireControls, toggleNg, setDecided } from '
 import { sendCandidatesToNotion, markDecidedInNotion, isNotionConfigured } from './integrations/notion.js';
 import { addToCalendar, confirmText } from './integrations/gcal.js';
 import { LOCATION } from './config/location.js';
+import { isCowork } from './utils/runtime.js';
 
 const CONFIG = {
   coords: LOCATION.coords, // 舞浜駅近辺 (TDL/TDS 共通、§3.13)
@@ -250,28 +252,13 @@ function setupHeader() {
     }
   });
 
-  document.getElementById('btn-qr').addEventListener('click', showQr);
-  document.getElementById('qr-close').addEventListener('click', () => {
-    document.getElementById('qr-modal').hidden = true;
-  });
-  document.getElementById('qr-modal').addEventListener('click', (e) => {
-    if (e.target.id === 'qr-modal') e.currentTarget.hidden = true;
-  });
-}
+  document.getElementById('btn-copy').addEventListener('click', copyUrl);
 
-function showQr() {
-  const box = document.getElementById('qr-canvas');
-  box.innerHTML = '';
-  try {
-    // eslint-disable-next-line no-undef
-    const qr = qrcode(0, 'M');
-    qr.addData(window.location.href);
-    qr.make();
-    box.innerHTML = qr.createImgTag(5, 8);
-  } catch {
-    box.textContent = window.location.href;
+  // 公開ページ (Cowork 外) では個人連携 (Notion 送信) を隠す (§0.7)
+  if (!isCowork()) {
+    const n = document.getElementById('btn-notion');
+    if (n) n.hidden = true;
   }
-  document.getElementById('qr-modal').hidden = false;
 }
 
 // --- 起動 ---
@@ -284,24 +271,28 @@ async function copyUrl() {
   }
 }
 
-// 狭幅用ドロワーの項目 (ヘッダーボタンへ委譲 ＋ 一部は直接処理)
+// 狭幅用ドロワーの項目 (ヘッダーボタンへ委譲 ＋ 一部は直接処理)。
+// QR は廃止 (§0.4)。Notion 送信 ・ カレンダー登録は Cowork 版のみ (§0.7)。
 function buildMenuItems() {
   const click = (id) => document.getElementById(id)?.click();
-  return [
-    { label: 'URL をコピー', icon: 'content_copy', onClick: copyUrl },
-    { label: 'QR を表示', icon: 'qr_code_2', onClick: () => click('btn-qr') },
-    { label: 'Notion 送信', icon: 'ios_share', onClick: () => click('btn-notion') },
-    {
-      label: 'カレンダー登録',
-      icon: 'calendar_add_on',
-      onClick: () => {
-        if (!state.decidedDate) {
-          alert('先に行を開いて「この日に決めた」で決定日を選んでください');
-          return;
-        }
-        handlers.onCalendar(state.decidedDate);
+  const items = [{ label: 'URL をコピー', icon: 'content_copy', onClick: copyUrl }];
+  if (isCowork()) {
+    items.push(
+      { label: 'Notion 送信', icon: 'ios_share', onClick: () => click('btn-notion') },
+      {
+        label: 'カレンダー登録',
+        icon: 'calendar_add_on',
+        onClick: () => {
+          if (!state.decidedDate) {
+            alert('先に行を開いて「この日に決めた」で決定日を選んでください');
+            return;
+          }
+          handlers.onCalendar(state.decidedDate);
+        },
       },
-    },
+    );
+  }
+  items.push(
     { label: '印刷', icon: 'print', onClick: () => click('btn-print') },
     { label: '強制更新', icon: 'refresh', onClick: () => refresh(true) },
     { label: 'ダークモード切替', icon: 'dark_mode', onClick: () => click('btn-theme') },
@@ -311,7 +302,8 @@ function buildMenuItems() {
       icon: 'info',
       onClick: () => document.querySelector('.disclaimer')?.scrollIntoView({ behavior: 'smooth' }),
     },
-  ];
+  );
+  return items;
 }
 
 async function init() {
@@ -320,6 +312,7 @@ async function init() {
   setupHelp();
   setupPrint({ getDecidedDate: () => state.decidedDate, openDetail: openByDate });
   setupMenu(buildMenuItems());
+  renderScoreLegend(document.getElementById('score-legend'));
   wireControls(state, render);
   renderSkeleton();
   await loadAll(false);

@@ -36,7 +36,7 @@ const HELP_HTML = `
   <h3>よくある質問</h3>
   <ul>
     <li><strong>予報が外れたら?</strong> 天気予報なので外れることがあります。複数ソースを横並びにして傾向で判断してください。</li>
-    <li><strong>同行者と共有するには?</strong> 右上の「QR」ボタンか、Cowork の共有 URL を渡してください。</li>
+    <li><strong>同行者と共有するには?</strong> 右上の「URL をコピー」ボタンで URL を渡してください。QR が必要なときはコピーした URL を https://www.qr-code-generator.com 等に貼ると QR 化できます。</li>
     <li><strong>WBGT の「推定」って?</strong> 環境省データが取れないときは気温 ・ 湿度からの簡易計算値です (誤差 ±1.5℃ 程度)。</li>
   </ul>
 `;

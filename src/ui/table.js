@@ -16,6 +16,8 @@ import { SHOW_SCHEDULE } from '../data/showSchedule.js';
 import { freshnessLabel } from '../utils/freshness.js';
 import { nowcastHtml } from './nowcast.js';
 import { getTempColor, getTempBandKey } from '../utils/tempColor.js';
+import { getWeatherIcon } from '../utils/weatherIcon.js';
+import { isCowork } from '../utils/runtime.js';
 
 // 気温セルを暖寒色で着色 (§0.6-2)。data-tb はダークモード CSS 上書き用。
 function tempSpan(c) {
@@ -24,6 +26,17 @@ function tempSpan(c) {
 }
 
 const SOURCE_LABEL = { jma: '気象庁', 'open-meteo': 'Open-Meteo', openweather: 'OpenWeather' };
+const CAT_ICON = { wind: 'air', rain: 'umbrella', wbgt: 'thermostat' };
+
+// 風 / 雨 / 熱セル : カテゴリアイコン(頭) ＋ 実数値(主) ＋ バッジ(副) (§0.5.2 / §0.6.6-3)
+function metricCell(kind, valueHtml, badge, extra = '') {
+  return `<td>
+    <div class="metric-cell">
+      <span class="cat-val"><span class="material-symbols-rounded cat-icon" aria-hidden="true">${CAT_ICON[kind]}</span>${valueHtml}</span>
+      ${cancelBadgeHtml(badge)}${extra}
+    </div>
+  </td>`;
+}
 
 function dayBadges(dt) {
   const out = [];
@@ -51,23 +64,25 @@ function sourceCellHtml(source, forecast, status) {
     forecast.tempMax != null || forecast.tempMin != null
       ? `${tempSpan(forecast.tempMax)} / ${tempSpan(forecast.tempMin)}`
       : '—';
-  const subParts = [`降水 ${fmtNum(forecast.popMax, 0, '%')}`];
-  if (forecast.gustMax != null) subParts.push(`風 ${fmtNum(forecast.gustMax, 0)}`);
   // 鮮度はステータスバーに集約 (§0.6-4)。セルはホバー title で補助表示のみ。
   const title = `${SOURCE_LABEL[source] || source} ${freshnessLabel(forecast.fetchedAt)}`;
+  // 大きな天気アイコン (40px) を主役に (§0.6.6-2)
+  const wi = getWeatherIcon(forecast.weatherText);
   return `<td class="source-cell" title="${esc(title)}">
-    <div class="sc-main">${temp}</div>
+    <span class="material-symbols-rounded weather-icon" style="color:${wi.color}" aria-hidden="true">${wi.name}</span>
     <div class="sc-sub">${esc(forecast.weatherText || '')}</div>
-    <div class="sc-sub">${subParts.join(' ')}</div>
+    <div class="sc-main">${temp}</div>
+    <div class="sc-sub">雨 ${fmtNum(forecast.popMax, 0, '%')}</div>
   </td>`;
 }
 
 function detailPanelHtml(row, park) {
+  const PRIORITY_NOTE = { high: ' (メイン算定窓)', medium: ' (補助)', low: ' (参考)' };
   const showRows = (SHOW_SCHEDULE[park] || [])
     .map(
       (s) =>
-        `<div class="${s.priority === 'high' ? 'st-high' : ''}">${esc(s.type)} : ${s.times.join(' / ')}${
-          s.priority === 'high' ? ' (メイン算定窓)' : ' (参考)'
+        `<div class="${s.priority === 'high' ? 'st-high' : ''}">${esc(s.name)} : ${esc(s.time)}${
+          PRIORITY_NOTE[s.priority] || ''
         }</div>`,
     )
     .join('');
@@ -79,20 +94,21 @@ function detailPanelHtml(row, park) {
     .join('');
   const decided = row.isDecided;
   const ng = row.isNg;
+  // §0.6.8 : 左カラム = 情報、右カラム = グラフ。各ブロックは .detail-section + <h4> 見出し。
+  // 個人連携 (カレンダー登録) は Cowork 版のみ (§0.7)。
+  const calendarBtn = isCowork()
+    ? `<button type="button" class="btn" data-action="calendar">
+        <span class="material-symbols-rounded" aria-hidden="true">calendar_add_on</span>カレンダー登録
+      </button>`
+    : '';
   return `<div class="detail-panel">
-    <div class="detail-charts">
-      <h3>時系列 (降水確率 ･ 風速)</h3>
-      <div class="chart-box"><div style="position:relative;height:240px"><canvas data-chart="popwind"></canvas></div></div>
-      <h3 style="margin-top:14px">気温 ･ 体感温度</h3>
-      <div class="chart-box"><div style="position:relative;height:200px"><canvas data-chart="temp"></canvas></div></div>
-    </div>
-    <div class="detail-side">
-      <div>
-        <h3>${esc(park)} のショー ･ パレード時刻</h3>
+    <div class="detail-info">
+      <div class="detail-section">
+        <h4><span class="material-symbols-rounded" aria-hidden="true">theater_comedy</span>${esc(park)} のショー ･ パレード</h4>
         <div class="show-times">${showRows}</div>
       </div>
-      <div>
-        <h3>持ち物 ･ 服装</h3>
+      <div class="detail-section">
+        <h4><span class="material-symbols-rounded" aria-hidden="true">checkroom</span>持ち物 ･ 服装</h4>
         <ul class="outfit-list">${outfit}</ul>
       </div>
       ${nowcastHtml(row.date)}
@@ -100,12 +116,20 @@ function detailPanelHtml(row, park) {
         <button type="button" class="btn ${decided ? 'btn-primary' : ''}" data-action="decide">
           <span class="material-symbols-rounded" aria-hidden="true">event_available</span>${decided ? '決定済み' : 'この日に決めた'}
         </button>
-        <button type="button" class="btn" data-action="calendar">
-          <span class="material-symbols-rounded" aria-hidden="true">calendar_add_on</span>カレンダー登録
-        </button>
+        ${calendarBtn}
         <button type="button" class="btn" data-action="ng">
           <span class="material-symbols-rounded" aria-hidden="true">${ng ? 'undo' : 'block'}</span>${ng ? 'NG 解除' : '同行者 NG'}
         </button>
+      </div>
+    </div>
+    <div class="detail-charts">
+      <div class="detail-section">
+        <h4><span class="material-symbols-rounded" aria-hidden="true">water_drop</span>時系列 (降水確率 ･ 風速)</h4>
+        <div class="chart-box"><div style="position:relative;height:240px"><canvas data-chart="popwind"></canvas></div></div>
+      </div>
+      <div class="detail-section">
+        <h4><span class="material-symbols-rounded" aria-hidden="true">thermostat</span>気温 ･ 体感温度</h4>
+        <div class="chart-box"><div style="position:relative;height:200px"><canvas data-chart="temp"></canvas></div></div>
       </div>
     </div>
   </div>`;
@@ -115,14 +139,17 @@ export function renderTable(els, rows, state, sources, sourceStatus, handlers) {
   const { thead, tbody } = els;
 
   // ヘッダー
+  const catHead = (kind, label) =>
+    `<th><span class="material-symbols-rounded cat-head" aria-hidden="true">${CAT_ICON[kind]}</span><span class="cat-head-label">${label}</span></th>`;
   thead.innerHTML = `<tr>
     <th class="col-date">日付</th>
     <th>スコア</th>
     <th>朝 / 昼 / 夜</th>
-    <th>風</th>
-    <th>雨</th>
-    <th>熱 (WBGT)</th>
+    ${catHead('wind', '風')}
+    ${catHead('rain', '雨')}
+    ${catHead('wbgt', '熱 (WBGT)')}
     ${sources.map((s) => `<th>${esc(SOURCE_LABEL[s] || s)}</th>`).join('')}
+    <th class="col-chev" aria-hidden="true"></th>
   </tr>`;
 
   // 連休グルーピング: 直前行も休日なら境界に枠
@@ -131,12 +158,20 @@ export function renderTable(els, rows, state, sources, sourceStatus, handlers) {
       const dt = row.dayType;
       const prevOff = i > 0 ? rows[i - 1].dayType.isOff : false;
       const groupStart = dt.isOff && !prevOff && state.sortBy === 'date';
+      // 風 / 雨 / 熱の実数値 (ショー窓優先) (§0.5.2)
+      const m = row.eval.metrics;
+      const gust = m.gustShowWindow != null ? m.gustShowWindow : m.gustMax;
+      const pop = m.popShowWindow != null ? m.popShowWindow : m.popMax;
+      const windVal = gust != null ? `${fmtNum(gust, 0)}<span class="unit">m/s</span>` : '—';
+      const rainVal =
+        pop != null
+          ? `${fmtNum(pop, 0)}%${m.precipSum != null && m.precipSum >= 0.5 ? ` ${fmtNum(m.precipSum, 1)}mm` : ''}`
+          : '—';
       const wbgtLabel = wbgtSourceLabel(Object.values(row.forecasts));
-      const wbgtVal = row.eval.metrics.wbgtMax;
-      const wbgtTag =
-        wbgtVal != null
-          ? `<div class="wbgt-tag ${wbgtLabel === '推定' ? 'derived' : ''}">WBGT ${fmtNum(wbgtVal, 0)} (${wbgtLabel})</div>`
-          : '';
+      const wbgtVal =
+        m.wbgtMax != null
+          ? `WBGT ${fmtNum(m.wbgtMax, 0)}${wbgtLabel === '推定' ? ' (推定)' : ''}`
+          : '—';
 
       const cls = [
         'row-main',
@@ -157,13 +192,14 @@ export function renderTable(els, rows, state, sources, sourceStatus, handlers) {
         </td>
         <td>${scorePillHtml(row.eval)}</td>
         <td>${subscoreHtml(row.eval.subscores, BANDS)}</td>
-        <td>${cancelBadgeHtml('wind', row.eval.badges.wind)}</td>
-        <td>${cancelBadgeHtml('rain', row.eval.badges.rain)}</td>
-        <td>${cancelBadgeHtml('wbgt', row.eval.badges.wbgt)}${wbgtTag}</td>
+        ${metricCell('wind', windVal, row.eval.badges.wind)}
+        ${metricCell('rain', rainVal, row.eval.badges.rain)}
+        ${metricCell('wbgt', wbgtVal, row.eval.badges.wbgt)}
         ${sources.map((s) => sourceCellHtml(s, row.forecasts[s], sourceStatus[s])).join('')}
+        <td class="col-chev"><span class="material-symbols-rounded chevron" aria-hidden="true">expand_more</span></td>
       </tr>`;
 
-      const colspan = 6 + sources.length;
+      const colspan = 7 + sources.length;
       const detailRow = `<tr class="detail-row" data-detail="${row.date}" hidden>
         <td colspan="${colspan}"></td>
       </tr>`;
@@ -228,19 +264,13 @@ export function renderTable(els, rows, state, sources, sourceStatus, handlers) {
   });
 }
 
-// 凡例 (§6.3 : 記号 ＋ アイコン ＋ 色)
+// 下部凡例 : スコアは上部カード (legend.js) に移したので、ここは気温色 ＋ 注記のみ。
 export function renderLegend(el) {
-  const item = (icon, color, text) =>
-    `<span class="lg"><span class="material-symbols-rounded" style="color:${color}" aria-hidden="true">${icon}</span>${text}</span>`;
   const tempLegend = `<span class="lg">気温色 :
     <span class="tlg" style="background:#D24A4A"></span>暑い
     <span class="tlg" style="background:#2D8F3E"></span>快適
     <span class="tlg" style="background:#3F6FAE"></span>寒い</span>`;
   el.innerHTML = [
-    item('check_circle', '#2D8F3E', '◎ 行くべき (85+)'),
-    item('check', '#88C057', '○ 行ってよい (70+)'),
-    item('warning', '#F2A93B', '△ 微妙 (50+)'),
-    item('block', '#D24A4A', '× 別日推奨 (50 未満)'),
     '<span class="lg">昼パレード時刻 ±1h を最重視</span>',
     tempLegend,
   ].join('');

@@ -22,58 +22,40 @@ export function dateLabel(date) {
   return `${formatMd(date)} (${weekday(date)})`;
 }
 
-// スコアピル HTML (アイコン → 記号 → 数値 の順、§6.3)
+// スコアピル HTML (§0.6.5 : テキストラベル ＋ 数値 ＋ 色。記号は廃止)
 export function scorePillHtml(ev) {
   const s = ev.symbol;
-  return `<span class="score-pill" style="background:${s.color}">
-    <span class="material-symbols-rounded" aria-hidden="true">${s.icon}</span>
-    <span aria-hidden="true">${s.symbol}</span>
-    <span>${ev.score}</span>
+  return `<span class="score-pill" data-level="${s.key}" style="background:${s.color}">
+    <span class="label">${s.label}</span><span class="value">${ev.score}</span>
   </span>`;
 }
 
-const BADGE_ICON = { wind: 'air', rain: 'umbrella', wbgt: 'thermostat' };
-
-// 風 / 雨 / 熱 のキャンセルバッジ HTML
-export function cancelBadgeHtml(kind, badge) {
-  const icon = BADGE_ICON[kind] || 'info';
-  return `<span class="cancel-badge cancel-lv${badge.level}">
-    <span class="material-symbols-rounded" aria-hidden="true">${icon}</span>${esc(badge.text)}
-  </span>`;
+// 風 / 雨 / 熱 のキャンセルバッジ HTML (§0.6.6 でセル側にカテゴリアイコンを持つためバッジ内アイコンは廃止)
+export function cancelBadgeHtml(badge) {
+  return `<span class="cancel-badge cancel-lv${badge.level}">${esc(badge.text)}</span>`;
 }
 
-// 朝/昼/夜 サブスコア HTML。
-// 時間帯ラベルを必ず併記。昼は枠 ＋ 太字 ＋ 数値併記で強調。朝 ・ 夜は記号のみ + ホバーで数値。
-// アイコンは使わない (フォント未読み込み時のフォールバック問題回避)。
+// 朝/昼/夜 サブスコア HTML (§0.6.5 : 記号廃止、色付き数値ピル)。
+// 背景色 = スコア帯。数値のみ表示。昼は subscore-main で少し大きく強調。未取得は灰色ピル + "-"。
 export function subscoreHtml(subscores, bands) {
   const ariaParts = bands.map((b) => {
     const ss = subscores[b.key];
     if (!ss || !ss.hasData) return `${b.label} データなし`;
-    if (b.key === 'noon') return `${b.label} ${ss.symbol.label} スコア${ss.score}`;
-    return `${b.label} ${ss.symbol.label}`;
+    return `${b.label} ${ss.symbol.label} ${ss.score}`;
   });
   const cells = bands.map((b) => {
     const ss = subscores[b.key];
     const has = ss && ss.hasData;
-    const sym = has ? ss.symbol.symbol : '—';
-    const color = has ? ss.symbol.color : '#b4bcc6';
-    if (b.key === 'noon') {
-      return `<span class="subscore subscore-main">
-        <span class="time-label">${b.label}</span>
-        <span class="symbol" style="color:${color}" aria-hidden="true">${sym}</span>
-        <span class="value">${has ? ss.score : '—'}</span>
-      </span>`;
+    const main = b.key === 'noon' ? ' subscore-main' : '';
+    if (!has) {
+      return `<span class="subscore-pill${main}" data-level="none"><span class="time-label">${b.label}</span><span class="value">-</span></span>`;
     }
-    const title = has ? `${b.label} ${ss.symbol.label} スコア${ss.score}` : `${b.label} データなし`;
-    return `<span class="subscore" title="${esc(title)}">
-      <span class="time-label">${b.label}</span>
-      <span class="symbol" style="color:${color}" aria-hidden="true">${sym}</span>
-    </span>`;
+    return `<span class="subscore-pill${main}" data-level="${ss.symbol.key}" style="background:${ss.symbol.color}"><span class="time-label">${b.label}</span><span class="value">${ss.score}</span></span>`;
   });
   return `<span class="subscore-group" role="img" aria-label="${esc(ariaParts.join('、'))}">${cells.join('')}</span>`;
 }
 
-// スコアの読み上げ用ラベル
+// スコアの読み上げ用ラベル (記号なし)
 export function scoreAria(date, ev) {
-  return `${formatMd(date).replace('/', '月')}日 ${weekday(date)}曜日 スコア${ev.score} ${ev.symbol.symbol} ${ev.symbol.label}`;
+  return `${formatMd(date).replace('/', '月')}日 ${weekday(date)}曜日 スコア${ev.score} ${ev.symbol.label}`;
 }
