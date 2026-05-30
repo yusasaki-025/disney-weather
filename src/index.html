@@ -3,7 +3,11 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Disney 行く日きめるダッシュボード</title>
+    <title>マイハマびより</title>
+    <meta name="description" content="舞浜 (TDL ・ TDS) の天気予報を比較してショー ・ パレード中止リスクを判定" />
+    <meta property="og:title" content="マイハマびより" />
+    <meta property="og:description" content="舞浜の天気からショー ・ パレード中止リスクを予測" />
+    <meta name="theme-color" content="#1f4fa3" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -26,7 +30,10 @@
     <header class="app-header">
       <div class="app-title">
         <span class="material-symbols-rounded" aria-hidden="true">park</span>
-        <h1>Disney 行く日きめるダッシュボード</h1>
+        <div class="app-title-text">
+          <h1>マイハマびより</h1>
+          <p class="app-subtitle">舞浜の天気からショー ・ パレード中止リスクを予測</p>
+        </div>
       </div>
       <div class="header-actions">
         <div class="desktop-actions">
@@ -77,8 +84,8 @@
           </div>
         </div>
         <label class="check">
-          <input type="checkbox" id="only-good" />
-          <span>◎ ○ のみ</span>
+          <input type="checkbox" id="only-good" aria-label="行ける日のみ表示" />
+          <span>行ける日のみ</span>
         </label>
       </section>
 

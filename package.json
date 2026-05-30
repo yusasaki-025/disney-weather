@@ -1,9 +1,9 @@
 {
-  "name": "disney-weather",
+  "name": "maihama-biyori",
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "description": "TDL/TDS に行く日を決めるための天気比較ダッシュボード (単一 HTML artifact)",
+  "description": "舞浜 (TDL・TDS) の天気予報を比較してショー・パレード中止リスクを判定",
   "scripts": {
     "dev": "vite",
     "build": "vite build && cp dist/index.html dist/artifact.html",

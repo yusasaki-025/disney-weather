@@ -828,6 +828,88 @@ Yuka さん指摘 : 「◎ ○ のみって絞り込みがあるけど ◎ と�
 - ARIA label も「行ける日のみ表示」に更新
 - localStorage キーは互換性のため変更しない (`filterGoodOnly` などのまま)
 
+### 0.12 スマホ詳細パネルの横はみ出し修正 (Yuka さん指摘)
+
+問題 : 行タップで詳細パネルは開くが、スマホ (375px) で **画面から横にはみ出る**。
+
+原因仮説 :
+
+- 詳細パネル grid が PC の 2カラムのままで強制 1カラム化されてない
+- Chart.js コンテナの `min-width: auto` (flex/grid 親のデフォルト) で canvas がはみ出る
+- ショースケジュールのテキストや見出しが折り返さない
+- TDL/TDS タブが幅にフィットしてない
+
+対応 (`src/styles.css` の `@media (max-width: 767px)`) :
+
+```css
+@media (max-width: 767px) {
+  /* 1. 詳細パネル grid を 1カラム強制 */
+  .detail-row .panel-grid,
+  .detail-panel .panel-grid {
+    grid-template-columns: 1fr !important;
+    display: block;
+    gap: 16px;
+  }
+
+  /* 2. パネル本体 ・ 子要素に overflow ・ max-width 制御 */
+  .detail-row,
+  .detail-panel,
+  .detail-row > *,
+  .detail-panel > * {
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+  .detail-row,
+  .detail-panel {
+    overflow-x: hidden;
+  }
+
+  /* 3. Chart.js コンテナ ・ min-width: 0 で grid/flex 子の収縮を許可 */
+  .chart-container,
+  .chart-wrapper,
+  .detail-panel .chart {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
+  canvas {
+    max-width: 100% !important;
+    height: auto !important;
+  }
+
+  /* 4. ショースケジュール ・ 見出し ・ 長い名前の折り返し */
+  .detail-panel h3,
+  .detail-panel h4,
+  .show-name,
+  .panel-heading {
+    word-break: break-word;
+    overflow-wrap: anywhere;
+  }
+
+  /* 5. TDL/TDS タブをコンパクトに */
+  .park-tab,
+  .park-tabs button {
+    flex: 1 1 0;
+    min-width: 0;
+    padding: 8px 4px;
+    font-size: 13px;
+  }
+}
+```
+
+検証 :
+
+- 実機 iPhone Safari or Chrome DevTools (375px) で行タップ
+- 詳細パネル開いて 横スクロールバーが出ない (`document.body.scrollWidth === 375`)
+- グラフが幅にフィット
+- 見出しが折り返す
+- TDL / TDS タブが画面幅に収まる
+- 「キャラクターグリーティング」「ハーモニー ・ イン ・ カラー」等の長い名前が折り返される
+
+該当ファイル :
+
+- `src/styles.css` の @media クエリのみ修正 (HTML 構造変更不要)
+
 ### 0.7 公開ページ化 (Cloudflare Pages) ＋ ランタイム判定
 
 Yuka さん要望 : 「Mac 開いてなくても他の人も見れる公開ページ」
