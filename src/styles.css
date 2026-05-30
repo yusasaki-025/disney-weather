@@ -319,8 +319,8 @@ section {
   pointer-events: none;
 }
 
-/* ON 状態 = 塗りつぶし */
-.check:has(input:checked) {
+/* ON 状態 = 塗りつぶし (JS で is-on を付与。:has 非対応環境でも確実に効く) */
+.check.is-on {
   background: var(--accent);
   border-color: var(--accent);
   color: #fff;

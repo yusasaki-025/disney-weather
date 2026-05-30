@@ -82,7 +82,10 @@ export function wireControls(state, onChange) {
 
   syncSeg('sort-seg', 'sort', state.sortBy);
   syncSeg('dayfilter-seg', 'dayfilter', state.dayFilter);
-  document.getElementById('only-good').checked = state.onlyGood;
+  const onlyGood = document.getElementById('only-good');
+  onlyGood.checked = state.onlyGood;
+  // 塗りつぶしトグルの ON クラス (:has 非対応環境でも確実に効かせる)
+  onlyGood.closest('.check')?.classList.toggle('is-on', state.onlyGood);
 
   const bind = (segId, attr, key) => {
     document.querySelectorAll(`#${segId} .seg-btn`).forEach((btn) => {
@@ -97,8 +100,9 @@ export function wireControls(state, onChange) {
   bind('sort-seg', 'sort', 'sortBy');
   bind('dayfilter-seg', 'dayfilter', 'dayFilter');
 
-  document.getElementById('only-good').addEventListener('change', (e) => {
+  onlyGood.addEventListener('change', (e) => {
     state.onlyGood = e.target.checked;
+    e.target.closest('.check')?.classList.toggle('is-on', state.onlyGood);
     saveState(state);
     onChange();
   });

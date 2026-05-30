@@ -1531,6 +1531,105 @@ CSS only で、`@media (max-width: 767px)` のとき table 系要素を block �
 - `src/styles.css` の @media (max-width: 767px) にカード化スタイル
 - thead 非表示なので sticky は PC のみ
 
+### 0.23 日付セル内にスコア統合 ・ 1列削減 (Yuka さん指摘)
+
+問題 : Yuka さん指摘「日付の下にスコア入れちゃえば1列減らせるのでは」
+
+現状 7列 (日付 / スコア / 風 / 雨 / 熱 / 気象庁 / Open-Meteo) → **6列に削減**。横幅余裕 ・ スマホでも見やすい。
+
+#### 統合後の列構成
+
+| 列 | 内容 |
+|---|---|
+| 日付 + スコア | 上 : 日付 ・ 曜日 ／ 下 : スコアピル |
+| 風 | 風速 + バッジ |
+| 雨 | 降水確率 + バッジ |
+| 熱 (WBGT) | WBGT 値 + バッジ |
+| 気象庁 | 天気アイコン + 概況 + 気温 + 降水確率 |
+| Open-Meteo | 同上 |
+
+#### DOM 構造
+
+```html
+<thead>
+  <tr>
+    <th>日付</th>              <!-- 「スコア」列ヘッダー削除 -->
+    <th>風</th>
+    <th>雨</th>
+    <th>熱 (WBGT)</th>
+    <th>気象庁</th>
+    <th>Open-Meteo</th>
+  </tr>
+</thead>
+<tbody>
+  <tr class="calendar-row">
+    <td class="cell-date-score" data-label="日付">
+      <div class="date-line">5/30 <span class="weekday">(土)</span></div>
+      <div class="score-pill score-poor">
+        <span class="material-symbols-rounded" aria-hidden="true">block</span>
+        <span class="label">別日</span>
+        <span class="value">0</span>
+      </div>
+    </td>
+    <td class="cell-wind" data-label="風">14 m/s ほぼ中止</td>
+    ...
+  </tr>
+</tbody>
+```
+
+#### CSS
+
+```css
+.cell-date-score {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-start;
+}
+.cell-date-score .date-line {
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+.cell-date-score .weekday {
+  margin-left: 2px;
+  font-size: 0.85rem;
+  color: var(--text-sub);
+}
+.cell-date-score .score-pill {
+  align-self: flex-start;
+}
+```
+
+#### スマホ (< 768px) カード形式 (§0.22 と整合)
+
+`grid-template-areas` も更新 :
+
+```css
+.disney-table tr.calendar-row {
+  display: grid;
+  grid-template-areas:
+    "date-score date-score"
+    "wind rain"
+    "heat heat"
+    "jma openmeteo";
+  gap: 8px;
+}
+.disney-table td.cell-date-score { grid-area: date-score; }
+```
+
+#### 検証
+
+- PC で 6列構成 ・ 横幅余裕
+- スマホで日付 + スコアが1ブロック内に縦並び
+- ARIA は日付セル全体を1つの role="cell" ・ 内部のスコアピルに既存の aria-label
+- スクロール時の sticky 見出しも 6列に追従
+- npm test 緑、npm run build 通る
+
+#### 該当ファイル
+
+- `src/ui/table.js` : テーブルヘッダー ・ ボディの列定義を6列に
+- `src/styles.css` : `.cell-date-score` スタイル ・ スマホ grid 更新
+
 ### 0.7 公開ページ化 (Cloudflare Pages) ＋ ランタイム判定
 
 Yuka さん要望 : 「Mac 開いてなくても他の人も見れる公開ページ」
