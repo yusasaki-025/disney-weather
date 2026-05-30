@@ -20,6 +20,7 @@ import { LOCATION } from './config/location.js';
 const CONFIG = {
   coords: LOCATION.coords, // 舞浜駅近辺 (TDL/TDS 共通、§3.13)
   openWeatherProxyUrl: '', // 設定すると OpenWeather 列が有効化 (Phase 2)
+  wbgtProxyUrl: '', // 設定すると環境省 WBGT 実値取得が有効化 (workers/wbgt-proxy.js、§0.10)
   days: 15,
 };
 
@@ -97,9 +98,9 @@ async function loadAll(force = false) {
     rawBySourceDate[src] = indexByDate(results[i]);
   });
 
-  // WBGT 優先ソース (環境省) を試行 (CORS で失敗したら派生計算のまま)
+  // WBGT 優先ソース (環境省) を試行 (プロキシ経由なら実値、失敗したら派生計算のまま)
   try {
-    applyEnvWbgt(await fetchEnvWbgt());
+    applyEnvWbgt(await fetchEnvWbgt(undefined, { proxyUrl: CONFIG.wbgtProxyUrl }));
   } catch (e) {
     logger.info('環境省 WBGT スキップ', e.message);
   }

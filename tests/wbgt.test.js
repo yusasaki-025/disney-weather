@@ -1,5 +1,5 @@
-import { describe, it, expect } from 'vitest';
-import { deriveWbgt, parseEnvWbgtCsv } from '../src/data/wbgt.js';
+import { describe, it, expect, vi, afterEach } from 'vitest';
+import { deriveWbgt, parseEnvWbgtCsv, fetchEnvWbgt } from '../src/data/wbgt.js';
 
 describe('deriveWbgt (§3.11 簡易式)', () => {
   it('欠損は null', () => {
@@ -36,5 +36,35 @@ describe('parseEnvWbgtCsv', () => {
   it('空 ・ 不正は空オブジェクト', () => {
     expect(parseEnvWbgtCsv('')).toEqual({});
     expect(parseEnvWbgtCsv('only one line')).toEqual({});
+  });
+});
+
+describe('fetchEnvWbgt (§0.10 プロキシ経由)', () => {
+  const csv = [',,2026053009,2026053012', '44132,2026/05/30 01:25, 250, 310'].join('\n');
+  afterEach(() => vi.unstubAllGlobals());
+
+  it('proxyUrl 指定時はプロキシ URL を叩いてパース結果を返す', async () => {
+    const fetchMock = vi.fn(async () => ({ ok: true, text: async () => csv }));
+    vi.stubGlobal('fetch', fetchMock);
+    const out = await fetchEnvWbgt('44132', { proxyUrl: 'https://wbgt-proxy.example.workers.dev' });
+    expect(fetchMock).toHaveBeenCalledWith('https://wbgt-proxy.example.workers.dev/wbgt?point=44132');
+    expect(out['2026-05-30'].wbgtMax).toBe(31.0);
+  });
+
+  it('proxyUrl 末尾スラッシュは正規化される', async () => {
+    const fetchMock = vi.fn(async () => ({ ok: true, text: async () => csv }));
+    vi.stubGlobal('fetch', fetchMock);
+    await fetchEnvWbgt('44132', { proxyUrl: 'https://x.workers.dev/' });
+    expect(fetchMock).toHaveBeenCalledWith('https://x.workers.dev/wbgt?point=44132');
+  });
+
+  it('取得失敗 (例外) は null を返しフォールバック可能にする', async () => {
+    vi.stubGlobal('fetch', vi.fn(async () => { throw new Error('CORS'); }));
+    expect(await fetchEnvWbgt('44132', { proxyUrl: 'https://x.workers.dev' })).toBeNull();
+  });
+
+  it('!res.ok は null', async () => {
+    vi.stubGlobal('fetch', vi.fn(async () => ({ ok: false })));
+    expect(await fetchEnvWbgt('44132', { proxyUrl: 'https://x.workers.dev' })).toBeNull();
   });
 });

@@ -16,6 +16,8 @@ export const WBGT_SOURCE = {
 export const ENV_WBGT_POINT = '44132';
 const ENV_WBGT_URL = (point) =>
   `https://www.wbgt.env.go.jp/prev15WG/dl/yohou_${point}.csv`;
+// プロキシ経由の URL (workers/wbgt-proxy.js)。CONFIG.wbgtProxyUrl が設定されていれば使う。
+const PROXY_URL = (base, point) => `${base.replace(/\/$/, '')}/wbgt?point=${point}`;
 
 // 簡易 WBGT 推定 (屋外、日射 ・ 風補正なし)。
 //   e    = (RH/100) × 6.105 × exp(17.27·Ta / (237.7 + Ta))   [水蒸気圧 hPa]
@@ -55,15 +57,18 @@ export function parseEnvWbgtCsv(text) {
 }
 
 // 環境省 CSV を取得してパース。失敗 (CORS / 期間外 / ネットワーク) は null を返す。
-export async function fetchEnvWbgt(point = ENV_WBGT_POINT) {
+// proxyUrl を渡すと workers/wbgt-proxy.js 経由で取得する (CORS 回避、実値取得の主経路)。
+// proxyUrl 無し時は直 fetch を試みる (通常 CORS でブロックされ派生計算にフォールバック)。
+export async function fetchEnvWbgt(point = ENV_WBGT_POINT, { proxyUrl = '' } = {}) {
+  const target = proxyUrl ? PROXY_URL(proxyUrl, point) : ENV_WBGT_URL(point);
   try {
-    const res = await fetch(ENV_WBGT_URL(point));
+    const res = await fetch(target);
     if (!res.ok) return null;
     const text = await res.text();
     const parsed = parseEnvWbgtCsv(text);
     return Object.keys(parsed).length > 0 ? parsed : null;
   } catch (e) {
-    // CORS 等で失敗するのは想定内。派生計算へフォールバックする。
+    // CORS / 期間外 等で失敗するのは想定内。派生計算へフォールバックする。
     logger.info('環境省 WBGT 取得は不可 (派生計算にフォールバック):', e.message);
     return null;
   }

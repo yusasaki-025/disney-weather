@@ -1,0 +1,6 @@
+# 環境省 WBGT プロキシ Worker のデプロイ設定 (§0.10 / SPEC §4.4)。
+# デプロイ: cd workers && npx wrangler deploy --config wrangler.toml
+# デプロイ後に表示される URL を artifact 側 CONFIG.wbgtProxyUrl ( src/main.js ) に設定する。
+name = "wbgt-proxy"
+main = "wbgt-proxy.js"
+compatibility_date = "2025-01-01"
