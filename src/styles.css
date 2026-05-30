@@ -932,9 +932,38 @@ section {
   }
 }
 
-/* 狭幅 : ヘッダー操作をハンバーガーに集約 (§0.6-3、< 768px) */
+/* §0.12 スマホ詳細パネルの横はみ出し防止 (< 768px) */
 @media (max-width: 767px) {
+  /* 詳細 td はテーブル (min-width:720px) のセルなので、display:block ＋ sticky left:0 で
+     テーブル幅から切り離し viewport 幅に固定する。 */
+  .detail-row > td {
+    display: block;
+    position: sticky;
+    left: 0;
+    width: calc(100vw - 32px);
+    max-width: calc(100vw - 32px);
+    overflow-x: hidden;
+    box-sizing: border-box;
   }
+  .detail-panel,
+  .detail-info,
+  .detail-charts,
+  .detail-section,
+  .detail-panel > * {
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+  .chart-box,
+  .chart-box > div {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
+  .chart-box canvas {
+    max-width: 100% !important;
+  }
+}
 
 /* =========================================================================
    §0.6.5 - §0.6.10 UI overhaul (末尾追記で既存ルールを cascade 上書き)

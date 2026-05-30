@@ -1404,6 +1404,133 @@ table thead th {
 
 - `src/styles.css` のみ (HTML 構造変更不要)
 
+### 0.21 「この日に決めた」「同行者 NG」ボタン削除 (Yuka さん指摘)
+
+Yuka さん指摘 : 使わないので削除。
+
+#### 削除対象
+
+- 詳細パネル下部の「この日に決めた」ボタン
+- 詳細パネル下部の「同行者 NG」ボタン
+- 関連 CSS / state / localStorage キー (掃除)
+- §3.5 フィルター中の「同行者 NG マーキング」記述
+- §3.9 決定フロー : セクション全廃 or「廃止」注記
+
+#### 該当ファイル
+
+- `src/ui/detailPanel.js` の決定ボタン ・ NG ボタン削除
+- `src/styles.css` 関連スタイル削除
+- `src/main.js` から状態管理コード削除
+- README から「決定フロー」記述削除
+
+### 0.22 スマホ可変レイアウト (カード化、Yuka さん指摘)
+
+問題 : Yuka さん指摘 ・ スマホ実機スクショ確認 :
+
+- テーブル本体で「日付 / スコア / 風 / 雨」しか見えず、「熱 / 気象庁 / Open-Meteo」が右見切れ
+- 横スクロールで見るのは不便 ・ 主要情報 (天気アイコン) が一目で分からない
+
+対応 : スマホ (< 768px) 時、テーブルを **カード形式** に変換 (各日が1枚カード)。
+
+#### カード形式 (スマホ)
+
+```
+┌─ 5/30 (土) ────────────────┐
+│ [block] 別日 0   (中央大)   │
+│ 朝(40) 昼(5) 夜(50)         │
+├─────────────────────────────┤
+│ 風 14m/s ほぼ中止          │
+│ 雨 0% 通常                 │
+│ 熱 27 通常                 │
+├─────────────────────────────┤
+│ 気象庁 ☀ 29°/29° 雨0%     │
+│ Open-Meteo ☀ 26°/17° 雨53%│
+│                  [chevron] →│
+└─────────────────────────────┘
+```
+
+#### 実装方針
+
+CSS only で、`@media (max-width: 767px)` のとき table 系要素を block 系に切替 :
+
+```css
+@media (max-width: 767px) {
+  /* table → block 化 */
+  .disney-table,
+  .disney-table tbody,
+  .disney-table tr,
+  .disney-table td,
+  .disney-table th {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* header は非表示 (各行内にラベル付きで表示) */
+  .disney-table thead {
+    display: none;
+  }
+
+  /* 各行をカード化 */
+  .disney-table tr.calendar-row {
+    display: grid;
+    grid-template-areas:
+      "date score"
+      "subscores subscores"
+      "wind rain"
+      "heat heat"
+      "jma openmeteo";
+    gap: 8px;
+    padding: 12px;
+    margin-bottom: 8px;
+    border-radius: var(--radius);
+    background: var(--surface);
+    box-shadow: var(--shadow-card);
+  }
+
+  .disney-table td.cell-date     { grid-area: date; }
+  .disney-table td.cell-score    { grid-area: score; }
+  .disney-table td.cell-subscores{ grid-area: subscores; }
+  .disney-table td.cell-wind     { grid-area: wind; }
+  .disney-table td.cell-rain     { grid-area: rain; }
+  .disney-table td.cell-heat     { grid-area: heat; }
+  .disney-table td.cell-jma      { grid-area: jma; }
+  .disney-table td.cell-openmeteo{ grid-area: openmeteo; }
+
+  /* 各セル内にラベル併記 (ヘッダーが見えないので) */
+  .disney-table td::before {
+    content: attr(data-label);
+    display: block;
+    font-size: 11px;
+    color: var(--text-sub);
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+}
+```
+
+#### HTML 側
+
+`td` に `data-label="風"` 等を追加 (`::before` で表示するため) :
+
+```html
+<td class="cell-wind" data-label="風">14 m/s ほぼ中止</td>
+```
+
+#### 検証
+
+- スマホ 375px で全7セル (日付 / スコア / サブスコア / 風 / 雨 / 熱 / 気象庁 / Open-Meteo) が1カード内に収まる
+- 横スクロールなし ・ 縦に全日カードが並ぶ
+- 行末 chevron で詳細パネル展開
+- 詳細パネルも縦1カラム (§0.12 と整合)
+- スクロール時に sticky 見出しは無効化 (カード化したので不要)
+
+#### 該当ファイル
+
+- `src/ui/table.js` の td 生成箇所に `data-label` 追加
+- `src/styles.css` の @media (max-width: 767px) にカード化スタイル
+- thead 非表示なので sticky は PC のみ
+
 ### 0.7 公開ページ化 (Cloudflare Pages) ＋ ランタイム判定
 
 Yuka さん要望 : 「Mac 開いてなくても他の人も見れる公開ページ」
