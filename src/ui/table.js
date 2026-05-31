@@ -16,6 +16,7 @@ import { getDaySchedule } from '../data/showSchedule.js';
 import { latestOperation } from '../data/operationLog.js';
 import { getCancelProbability } from '../score/cancelProbability.js';
 import { extremeWarning } from '../score/extremeWarning.js';
+import { getScoreReason } from '../score/scoreReason.js';
 import { freshnessLabel } from '../utils/freshness.js';
 import { nowcastHtml } from './nowcast.js';
 import { getTempColor, getTempBandKey } from '../utils/tempColor.js';
@@ -305,6 +306,7 @@ export function renderTable(els, rows, state, sources, sourceStatus, handlers) {
           <div class="date-line">${esc(formatMd(row.date))} <span class="weekday">(${esc(weekday(row.date))})</span></div>
           <div class="date-sub">${dayBadges(dt)}</div>
           ${scorePillHtml(row.eval)}${extremeHtml}
+          <div class="score-reason">${esc(getScoreReason(row.eval.metrics, row.eval.badges))}</div>
         </td>
         ${metricCell('wind', windVal, row.eval.badges.wind, windTitle)}
         ${metricCell('rain', rainVal, row.eval.badges.rain)}

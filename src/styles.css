@@ -2296,3 +2296,11 @@ body {
     padding-bottom: 8px;
   }
 }
+
+/* §0.37-10 : スコア理由の 1 行解説 (スコアピル直下) */
+.score-reason {
+  margin-top: 4px;
+  font-size: 11px;
+  color: var(--text-sub);
+  line-height: 1.4;
+}
