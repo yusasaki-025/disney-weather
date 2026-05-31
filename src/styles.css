@@ -2304,3 +2304,16 @@ body {
   color: var(--text-sub);
   line-height: 1.4;
 }
+
+/* §0.37-9 : 曜日フィルターは PC で「平日のみ」スマホで「平日」 (label-long/short) */
+.seg-btn .label-short {
+  display: none;
+}
+@media (max-width: 767px) {
+  .seg-btn .label-long {
+    display: none;
+  }
+  .seg-btn .label-short {
+    display: inline;
+  }
+}
