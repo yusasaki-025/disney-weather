@@ -174,7 +174,14 @@ function detailPanelHtml(row) {
     }
     return order
       .map((g) => {
-        const timesText = g.restaurant && g.times.length === 0 ? '予約必須' : g.times.map(esc).join(' / ');
+        const allTimes = g.times.map(esc);
+        const fullTimesText = g.restaurant && g.times.length === 0 ? '予約必須' : allTimes.join(' / ');
+        // §0.41.1 : 4 つ以上の時刻は「最初の 2 つ + ほか N 回」に畳む (全時刻は title と展開内に)
+        const folded = allTimes.length >= 4;
+        const timesText = folded
+          ? `${allTimes.slice(0, 2).join(' / ')} ほか ${allTimes.length - 2} 回`
+          : fullTimesText;
+        const timesTitle = folded ? ` title="${fullTimesText}"` : '';
         // §0.40.5 : DPA / 抽選 / 季節限定 (priority high) をそれぞれ独立タグ (バッジ) で表示。
         const TAG_CLASS = { DPA: 'tag-dpa', 抽選: 'tag-chusen' };
         const tagList = [...(g.cls === 'high' ? ['期間限定'] : []), ...g.tags];
@@ -184,9 +191,14 @@ function detailPanelHtml(row) {
               `<span class="show-tag ${t === '期間限定' ? 'tag-season' : TAG_CLASS[t] || 'tag-note'}">${esc(t)}</span>`,
           )
           .join('');
-        const summary = `<span class="show-name">${esc(g.name)}</span><span class="show-times">${timesText}</span>${tagsHtml}`;
+        const summary = `<span class="show-name">${esc(g.name)}</span><span class="show-times"${timesTitle}>${timesText}</span>${tagsHtml}`;
         // §0.38-21 : 過去中止率などの詳細は既定で折りたたみ、行クリックで展開 (details/summary, a11y)。
-        const detail = cancelProbHtml(g.name, p, predWind);
+        // §0.38-21 + §0.41.1 : 過去中止率 ・ 畳んだ全時刻を既定で折りたたみ、行クリックで展開。
+        const detailParts = [];
+        if (folded) detailParts.push(`<div class="show-alltimes">全 ${allTimes.length} 回 : ${fullTimesText}</div>`);
+        const cp = cancelProbHtml(g.name, p, predWind);
+        if (cp) detailParts.push(cp);
+        const detail = detailParts.join('');
         if (!detail) return `<li class="show-item priority-${g.cls}">${summary}</li>`;
         return `<li class="show-item priority-${g.cls}"><details class="show-toggle"><summary>${summary}</summary><div class="show-detail">${detail}</div></details></li>`;
       })
