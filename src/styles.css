@@ -2335,3 +2335,13 @@ body {
     flex-wrap: nowrap;
   }
 }
+
+/* §0.38-16 : 曜日色付け (土=青 ・ 日祝=赤、カレンダー慣習) */
+.weekday.day-sat {
+  color: var(--saturday);
+  font-weight: 600;
+}
+.weekday.day-sun {
+  color: var(--sunday);
+  font-weight: 600;
+}

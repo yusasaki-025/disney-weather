@@ -303,7 +303,7 @@ export function renderTable(els, rows, state, sources, sourceStatus, handlers) {
       const mainRow = `<tr class="${cls} calendar-row" data-date="${row.date}" tabindex="0"
         role="button" aria-expanded="false" aria-label="${esc(scoreAria(row.date, row.eval))}">
         <td class="col-date cell-date-score" data-label="日付"${scoreTitle ? ` title="${esc(scoreTitle)}"` : ''}>
-          <div class="date-line">${esc(formatMd(row.date))} <span class="weekday">(${esc(weekday(row.date))})</span></div>
+          <div class="date-line">${esc(formatMd(row.date))} <span class="weekday ${dt.isHoliday || dt.weekday === 0 ? 'day-sun' : dt.weekday === 6 ? 'day-sat' : 'day-weekday'}">(${esc(weekday(row.date))})</span></div>
           <div class="date-sub">${dayBadges(dt)}</div>
           ${scorePillHtml(row.eval)}${extremeHtml}
           <div class="score-reason">${esc(getScoreReason(row.eval.metrics, row.eval.badges))}</div>
