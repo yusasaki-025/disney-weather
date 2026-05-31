@@ -99,10 +99,10 @@ describe('showSchedule', () => {
   });
 });
 
-describe('suggestOutfit (§3.8)', () => {
+describe('suggestOutfit (§0.38.1)', () => {
   const texts = (m) => suggestOutfit(m).map((o) => o.text).join(' | ');
   it('閾値ごとの提案', () => {
-    expect(texts({ tempMax: 10 })).toContain('ヒートテック');
+    expect(texts({ tempMax: 3 })).toContain('ヒートテック'); // < 5℃
     expect(texts({ tempMax: 30 })).toContain('日傘');
     expect(texts({ popMax: 60 })).toContain('ポンチョ');
     expect(texts({ uvMax: 8 })).toContain('日焼け止め');
@@ -111,7 +111,10 @@ describe('suggestOutfit (§3.8)', () => {
   it('show-window の降水を優先', () => {
     expect(texts({ popShowWindow: 60, popMax: 0 })).toContain('ポンチョ');
   });
-  it('該当なしは不要メッセージ', () => {
-    expect(texts({ tempMax: 22, popMax: 10, uvMax: 3 })).toContain('特別な対策は不要');
+  it('該当条件なしでも全日共通アイテムは必ず出る', () => {
+    // §0.38.1 : 「特別な対策は不要」は廃止 ・ 共通アイテム (靴 ・ バッテリー) を常時表示
+    const t = texts({ tempMax: 22, popMax: 10, uvMax: 3 });
+    expect(t).toContain('歩きやすい靴');
+    expect(t).toContain('モバイルバッテリー');
   });
 });
