@@ -2250,3 +2250,16 @@ body {
 .help-panel a {
   color: var(--accent);
 }
+
+/* §0.37-1 : バッジラベルを PC で長文 ・ スマホで短縮 (cancelBadgeHtml が両方を持つ) */
+.cancel-badge .badge-short {
+  display: none;
+}
+@media (max-width: 767px) {
+  .cancel-badge .badge-long {
+    display: none;
+  }
+  .cancel-badge .badge-short {
+    display: inline;
+  }
+}

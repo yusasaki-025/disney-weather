@@ -64,25 +64,26 @@ describe('rainDeduction (§5.2)', () => {
 });
 
 describe('heatDeduction (§5.2)', () => {
-  it('境界値', () => {
+  it('§0.37 4階層 : <25 通常(0) / 25-31 熱バ(30) / 31-33 熱キャン(60) / ≥33 中止(90)', () => {
     expect(heatDeduction(24, null, null)).toBe(0);
-    expect(heatDeduction(25, null, null)).toBe(10);
-    expect(heatDeduction(27, null, null)).toBe(10);
-    expect(heatDeduction(28, null, null)).toBe(30);
+    expect(heatDeduction(25, null, null)).toBe(30);
+    expect(heatDeduction(27, null, null)).toBe(30);
     expect(heatDeduction(30, null, null)).toBe(30);
     expect(heatDeduction(31, null, null)).toBe(60);
-    expect(heatDeduction(32, null, null)).toBe(60);
     expect(heatDeduction(33, null, null)).toBe(90);
+    expect(heatDeduction(35, null, null)).toBe(90);
+    expect(heatDeduction(null, null, null)).toBe(0);
   });
   it('体感 35℃ 以上で +10', () => {
-    expect(heatDeduction(31, 35, null)).toBe(70);
+    expect(heatDeduction(28, 36, null)).toBe(40); // 30 + 10
+    expect(heatDeduction(33, 36, null)).toBe(100); // 90 + 10
   });
-  it('風 5m/s 以上で -5 (0 未満にはしない)', () => {
-    expect(heatDeduction(28, null, 5)).toBe(25);
-    expect(heatDeduction(24, null, 5)).toBe(0);
+  it('風 (show window) 5m/s 以上で緩和 -5', () => {
+    expect(heatDeduction(28, null, 5)).toBe(25); // 30 - 5
+    expect(heatDeduction(33, null, 8)).toBe(85); // 90 - 5
   });
   it('欠損は 0', () => {
-    expect(heatDeduction(null, 40, 0)).toBe(0);
+    expect(heatDeduction(null, null, null)).toBe(0);
   });
 });
 

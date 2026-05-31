@@ -49,14 +49,14 @@ export function rainDeduction(pop, precipSum) {
 }
 
 // 熱中症減点 (wbgt_show_window 優先、無ければ wbgt_max)。風で緩和、体感高で悪化。
+// §0.37 : バッジ 4 階層に合わせ < 25 通常 / 25-31 熱バ / 31-33 熱キャン / ≥ 33 中止 にマッピング。
 export function heatDeduction(wbgt, feelsLikeMax, windShowWindow) {
   if (wbgt == null) return 0;
   let d;
   if (wbgt < 25) d = 0;
-  else if (wbgt < 28) d = 10; // 警戒
-  else if (wbgt < 31) d = 30; // 厳重警戒・熱バ域
-  else if (wbgt < 33) d = 60; // 危険・熱キャン域
-  else d = 90; // 極めて危険
+  else if (wbgt < 31) d = 30; // 熱バ域 (旧 警戒 + 厳重警戒 を merge)
+  else if (wbgt < 33) d = 60; // 熱キャン域
+  else d = 90; // 中止域
   if (feelsLikeMax != null && feelsLikeMax >= 35) d += 10;
   if (windShowWindow != null && windShowWindow >= 5) d -= 5; // 風で緩和
   return Math.max(0, d);
@@ -104,19 +104,19 @@ export function rainBadge(pop, precip) {
   return { level: 0, text: '通常' };
 }
 
-// WBGT バッジ。風で 1 段階下げ、体感 38℃ 以上で 1 段階上げ。
+// WBGT バッジ。§0.37 で風 ・ 雨と同じ 4 階層に統一 (旧「暑さ注意」を熱バに merge)。
+// < 25 通常 / 25-31 熱バ / 31-33 熱キャン / ≥ 33 中止。風で 1 段階下げ、体感 38℃ 以上で 1 段階上げ。
 export function wbgtBadge(wbgt, windShowWindow, feelsLikeMax) {
   if (wbgt == null) return { level: 0, text: '—' };
   let level;
   if (wbgt < 25) level = 0;
-  else if (wbgt < 28) level = 1;
-  else if (wbgt < 31) level = 2;
-  else if (wbgt < 33) level = 3;
-  else level = 4;
+  else if (wbgt < 31) level = 1;
+  else if (wbgt < 33) level = 2;
+  else level = 3;
   if (windShowWindow != null && windShowWindow >= 5) level -= 1;
   if (feelsLikeMax != null && feelsLikeMax >= 38) level += 1;
-  level = Math.max(0, Math.min(4, level));
-  const TEXTS = ['通常', '暑さ注意', '熱バ', '熱キャン', '中止'];
+  level = Math.max(0, Math.min(3, level));
+  const TEXTS = ['通常', '熱バ', '熱キャン', '中止'];
   return { level, text: TEXTS[level] };
 }
 
@@ -130,7 +130,7 @@ export function badgeSeverity(text) {
   // §0.36 でラベル短縮 (ほぼ中止→中止 / 中止リスク高→中止リスク / 雨キャン濃厚→雨キャン 等)
   if (text === '中止') return 'critical';
   if (text === '中止リスク' || text === '雨キャン' || text === '熱キャン') return 'danger';
-  if (text === '風バ' || text === '雨バ' || text === '熱バ' || text === '暑さ注意') return 'warn';
+  if (text === '風バ' || text === '雨バ' || text === '熱バ') return 'warn';
   return 'normal';
 }
 
