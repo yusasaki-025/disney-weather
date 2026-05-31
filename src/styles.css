@@ -741,11 +741,19 @@ section {
   gap: 4px;
   font-size: 13px;
 }
+/* §0.37-3 : 各ショーを 1 カードに (priority high は薄いアクセント背景、左縦バーは使わない) */
 .show-item {
   display: flex;
+  flex-wrap: wrap;
   align-items: baseline;
   gap: 8px;
-  padding: 4px 0;
+  padding: 10px 12px;
+  margin-bottom: 8px;
+  background: var(--surface-2);
+  border-radius: 8px;
+}
+.show-item.priority-high {
+  background: var(--warn-bg);
 }
 .show-name {
   font-weight: 400;
