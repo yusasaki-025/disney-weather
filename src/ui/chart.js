@@ -108,7 +108,6 @@ export function renderPopWindChart(canvas, forecasts, park, date = null) {
       pointRadius: 0,
     });
   }
-  // eslint-disable-next-line no-undef
   canvas._chart = new Chart(canvas, {
     type: 'line',
     data: { datasets },
@@ -166,7 +165,6 @@ export function renderTempChart(canvas, forecasts, park, date = null) {
       pointRadius: 0,
     });
   }
-  // eslint-disable-next-line no-undef
   canvas._chart = new Chart(canvas, {
     type: 'line',
     data: { datasets },

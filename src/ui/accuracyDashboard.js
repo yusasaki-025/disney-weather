@@ -66,7 +66,6 @@ function drawChart(canvas, ts) {
       pointRadius: 2,
     });
   }
-  // eslint-disable-next-line no-undef
   new Chart(canvas, {
     type: 'line',
     data: { labels: ts.dates, datasets },

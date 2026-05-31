@@ -6,7 +6,7 @@
   "description": "舞浜 (TDL・TDS) の天気予報を比較してショー・パレード中止リスクを判定",
   "scripts": {
     "dev": "vite",
-    "build": "vite build && cp dist/index.html dist/artifact.html",
+    "build": "vite build && vite build --config vite.accuracy.config.js && cp dist/index.html dist/artifact.html",
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
