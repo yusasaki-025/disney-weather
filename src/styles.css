@@ -2369,3 +2369,12 @@ body {
   font-size: 9px;
   font-weight: 700;
 }
+
+/* §0.38-8 : 熱 (WBGT) 見出しの info アイコン (tooltip は title 属性) */
+.wbgt-info {
+  font-size: 15px;
+  color: var(--text-sub);
+  cursor: help;
+  margin-left: 2px;
+  vertical-align: middle;
+}

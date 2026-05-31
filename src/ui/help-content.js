@@ -42,12 +42,15 @@ export const HELP_SECTIONS = [
     html: `
       <ul>
         <li><strong>風バ</strong> : 風で演出が一部変更される可能性 (風バージョン)</li>
-        <li><strong>風キャン</strong> : 強風による公演中止</li>
-        <li><strong>熱バ ・ 熱キャン</strong> : 暑さによる演出変更 ・ 中止</li>
+        <li><strong>雨キャン</strong> : 雨を理由とする中止 (公式「雨天により中止」)</li>
+        <li><strong>風キャン</strong> : 強風を理由とする中止 (公式「強風により中止」)</li>
+        <li><strong>熱バ ・ 熱キャン</strong> : 暑さによる演出変更 ・ 熱中症対策の中止</li>
+        <li><strong>中止</strong> : 雨 ・ 風 ・ 熱いずれかで公演が行われないこと (本ツールは「キャンセル」でなく「中止」に統一)</li>
         <li><strong>パイロカット</strong> : 強風で花火 (パイロ) 部分のみ省略</li>
         <li><strong>キャングリ</strong> : 公演中止時に代わりに行われるグリーティング</li>
-        <li><strong>プレミアアクセス</strong> : 有料の鑑賞 ・ 体験エリア</li>
-        <li><strong>エントリー受付</strong> : 抽選 ・ 先着の鑑賞枠申込</li>
+        <li><strong>ディズニープレミアアクセス (DPA)</strong> : 時刻指定の鑑賞 ・ 体験枠を購入できる有料サービス。本ツールでは「DPA」と表記</li>
+        <li><strong>抽選</strong> : 公式アプリの「エントリー受付」のこと。当落式の鑑賞枠申込</li>
+        <li><strong>確定情報</strong> : 公式アプリ / 公式サイトから取得した公式発表の時刻 ・ 演目 (本ツールの推測値ではない)</li>
       </ul>
     `,
   },

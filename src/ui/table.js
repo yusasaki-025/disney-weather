@@ -237,7 +237,7 @@ export function renderTable(els, rows, state, sources, sourceStatus, handlers) {
     <th class="col-date">日付</th>
     ${catHead('wind', '風')}
     ${catHead('rain', '雨')}
-    ${catHead('wbgt', '熱 (WBGT)')}
+    <th><span class="material-symbols-rounded cat-head" aria-hidden="true">${CAT_ICON.wbgt}</span><span class="cat-head-label">熱 (WBGT)</span><span class="material-symbols-rounded wbgt-info" tabindex="0" role="img" title="暑さ指数 (WBGT)。気温 + 湿度 + 日射から算出する熱中症リスク指標。28+ で警戒、31+ で危険。" aria-label="暑さ指数 (WBGT) とは : 気温 ・ 湿度 ・ 日射から算出する熱中症リスク指標。28 以上で警戒、31 以上で危険。">info</span></th>
     ${sources
       .map(
         (s) =>
