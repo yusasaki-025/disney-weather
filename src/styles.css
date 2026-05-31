@@ -769,8 +769,9 @@ section {
   font-size: 11px;
   color: var(--text-sub);
 }
+/* §0.40.5 : priority high の太字は廃止 (区別は「期間限定」タグのみ) */
 .show-item.priority-high .show-name {
-  font-weight: 600;
+  font-weight: 400;
   color: var(--text);
 }
 .show-item.priority-low .show-name {
