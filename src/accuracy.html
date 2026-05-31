@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>予報精度ダッシュボード ・ マイハマびより</title>
+    <meta name="description" content="気象庁 ・ Open-Meteo ・ 環境省 WBGT の予報精度 (誤差 ・ バイアス) を可視化" />
+    <meta name="theme-color" content="#4A90D2" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400..600,0..1,0&display=swap"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.min.js"
+      integrity="sha384-XcdcwHqIPULERb2yDEM4R0XaQKU3YnDsrTmjACBZyfdVVqjh6xQ4/DCMd7XLcA6Y"
+      crossorigin="anonymous"
+    ></script>
+    <script type="module" src="/accuracy.js"></script>
+  </head>
+  <body>
+    <header class="app-header">
+      <div class="app-title">
+        <img src="/logo-mark.svg" alt="マイハマびより" class="logo-mark" width="32" height="32" />
+        <div class="app-title-text">
+          <h1>予報精度ダッシュボード</h1>
+          <p class="app-subtitle">気象庁 ・ Open-Meteo ・ 環境省 WBGT の的中度を比較</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <a class="btn" href="/">← 天気予報に戻る</a>
+      </div>
+    </header>
+    <main class="app-main" id="dashboard"></main>
+  </body>
+</html>
