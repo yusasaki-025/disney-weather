@@ -175,7 +175,15 @@ function detailPanelHtml(row) {
     return order
       .map((g) => {
         const timesText = g.restaurant && g.times.length === 0 ? '予約必須' : g.times.map(esc).join(' / ');
-        const tagsHtml = g.tags.length ? `<span class="show-tags">${esc(g.tags.join(' '))}</span>` : '';
+        // §0.40.5 : DPA / 抽選 / 季節限定 (priority high) をそれぞれ独立タグ (バッジ) で表示。
+        const TAG_CLASS = { DPA: 'tag-dpa', 抽選: 'tag-chusen' };
+        const tagList = [...(g.cls === 'high' ? ['期間限定'] : []), ...g.tags];
+        const tagsHtml = tagList
+          .map(
+            (t) =>
+              `<span class="show-tag ${t === '期間限定' ? 'tag-season' : TAG_CLASS[t] || 'tag-note'}">${esc(t)}</span>`,
+          )
+          .join('');
         const summary = `<span class="show-name">${esc(g.name)}</span><span class="show-times">${timesText}</span>${tagsHtml}`;
         // §0.38-21 : 過去中止率などの詳細は既定で折りたたみ、行クリックで展開 (details/summary, a11y)。
         const detail = cancelProbHtml(g.name, p, predWind);

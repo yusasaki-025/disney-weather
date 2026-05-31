@@ -744,18 +744,19 @@ section {
   font-size: 13px;
 }
 /* §0.37-3 : 各ショーを 1 カードに (priority high は薄いアクセント背景、左縦バーは使わない) */
+/* §0.40.5 : ショーは全て同形式の行 (背景 ・ カードなし ・ 左寄せ)。priority 区別はタグで。 */
 .show-item {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
-  gap: 8px;
-  padding: 10px 12px;
-  margin-bottom: 8px;
-  background: var(--surface-2);
-  border-radius: 8px;
+  gap: 6px 8px;
+  padding: 6px 0;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
 }
+/* §0.40.5 : priority high の背景色は廃止 (区別は「期間限定」タグで) */
 .show-item.priority-high {
-  background: var(--warn-bg);
+  background: none;
 }
 .show-name {
   font-weight: 400;
@@ -2469,4 +2470,27 @@ button.extreme-warn {
     justify-content: center;
     margin-top: 4px;
   }
+}
+
+/* §0.40.5 : ショータグ (DPA / 抽選 / 期間限定 / 注記) のバッジ */
+.show-tag {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: var(--surface-2);
+  color: var(--text-sub);
+  white-space: nowrap;
+}
+.show-tag.tag-dpa {
+  background: var(--accent);
+  color: #fff;
+}
+.show-tag.tag-chusen {
+  background: #6b4fa3;
+  color: #fff;
+}
+.show-tag.tag-season {
+  background: var(--ok-green);
+  color: #fff;
 }
