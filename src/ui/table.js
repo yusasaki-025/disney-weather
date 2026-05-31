@@ -163,6 +163,41 @@ function forecastHistoryHtml(date, park, currentScore) {
       </div>`;
 }
 
+// §0.41.5 : 「この日の概要」セクション。スコア理由 (§0.37.10) ・ (要確認) の理由 ・ 天気概況を
+//           詳細パネル冒頭に集約 (カード上の score-reason は撤去し、ここに一本化)。
+function dayOverviewHtml(row, today) {
+  const m = row.eval.metrics;
+  const reason = getScoreReason(m, row.eval.badges);
+  // (要確認) の理由 : 単独ソースの極端値 + 6 日先以降の予報誤差
+  const checks = [];
+  const precipMaxHourly = Math.max(
+    0,
+    ...Object.values(row.forecasts)
+      .filter(Boolean)
+      .flatMap((f) => (f.hourly || []).map((h) => h.precip ?? 0)),
+  );
+  const ex = extremeWarning({ gustMax: m.gustMax, precipMaxHourly });
+  if (ex) checks.push(ex.title || ex.text);
+  const daysAhead = Math.round((new Date(row.date) - new Date(today)) / 86400000);
+  if (daysAhead >= 6) checks.push('6 日先以降は予報の誤差が大きめ ・ 当日朝に再確認を');
+  // 天気概況 (主要ソースの天気 + 気温レンジ)
+  const f =
+    row.forecasts.jma || row.forecasts['open-meteo'] || Object.values(row.forecasts).filter(Boolean)[0];
+  const t = (v) => (v != null ? `${Math.round(v)}°` : '—');
+  const overview = f ? `${normalizeWeatherText(f.weatherText)} ・ 最高 ${t(f.tempMax)} / 最低 ${t(f.tempMin)}` : '';
+  const parts = [
+    `<p class="ds-line"><span class="ds-key">スコア理由</span><span class="score-reason ds-val">${esc(reason)}</span></p>`,
+  ];
+  if (checks.length)
+    parts.push(`<p class="ds-line ds-check"><span class="ds-key">(要確認)</span><span class="ds-val">${esc(checks.join(' ・ '))}</span></p>`);
+  if (overview)
+    parts.push(`<p class="ds-line"><span class="ds-key">天気概況</span><span class="ds-val">${esc(overview)}</span></p>`);
+  return `<div class="detail-section day-summary js-day-summary">
+        <h4><span class="material-symbols-rounded" aria-hidden="true">summarize</span>この日の概要</h4>
+        ${parts.join('\n        ')}
+      </div>`;
+}
+
 function detailPanelHtml(row, park) {
   // §0.8 : その日の実スケジュール (公式取得があれば official、無ければ fallback)
   const schedFor = (p) => getDaySchedule(row.date, p);
@@ -241,6 +276,7 @@ function detailPanelHtml(row, park) {
   // §0.6.8 : 左カラム = 情報、右カラム = グラフ。
   return `<div class="detail-panel">
     <div class="detail-info">
+      ${dayOverviewHtml(row, todayJst())}
       <div class="detail-section">
         <h4><span class="material-symbols-rounded" aria-hidden="true">schedule</span>時間帯スコア (昼を最重視)</h4>
         <div class="subscore-detail">${subscoreHtml(row.eval.subscores, BANDS)}</div>
@@ -367,15 +403,13 @@ export function renderTable(els, rows, state, sources, sourceStatus, handlers) {
         : '';
       // §0.23 : 日付セルにスコアピルを統合 (1 列削減)。§0.22 : data-label でスマホカードのラベル。
       // §0.37.4 : PC は独立スコア列 (cell-score-pc) ・ スマホはカード内 (.card-score) に統合 (CSS で出し分け)。
-      const scoreInner = `<div class="score-row">${scorePillHtml(row.eval)}${diffHtml}${extremeHtml}</div>
-          <div class="score-reason">${esc(getScoreReason(row.eval.metrics, row.eval.badges))}</div>`;
+      const scoreInner = `<div class="score-row">${scorePillHtml(row.eval)}${diffHtml}${extremeHtml}</div>`;
       const mainRow = `<tr class="${cls} calendar-row" data-date="${row.date}" tabindex="0"
         role="button" aria-expanded="false" aria-label="${esc(scoreAria(row.date, row.eval))}">
         <td class="col-date cell-date-score" data-label="日付"${scoreTitle ? ` title="${esc(scoreTitle)}"` : ''}>
           <div class="date-line">${state.sortBy === 'score' && i < 3 ? `<span class="rank-badge">${i + 1}位</span>` : ''}${esc(formatMd(row.date))} <span class="weekday ${dt.isHoliday || dt.weekdayIndex === 0 ? 'day-sun' : dt.weekdayIndex === 6 ? 'day-sat' : 'day-weekday'}">(${esc(weekday(row.date))})</span></div>
           <div class="date-sub">${dayBadges(dt)}</div>
           <div class="score-row card-score">${scorePillHtml(row.eval)}${diffHtml}${extremeHtml}</div>
-          <div class="score-reason card-score">${esc(getScoreReason(row.eval.metrics, row.eval.badges))}</div>
         </td>
         <td class="col-score cell-score-pc" data-label="スコア">${scoreInner}</td>
         ${metricCell('wind', windVal, row.eval.badges.wind, windTitle)}
@@ -436,7 +470,13 @@ export function renderTable(els, rows, state, sources, sourceStatus, handlers) {
         handlers.onRetrySource(e.target.closest('[data-retry]'));
         return;
       }
+      const toCheck = e.target.closest('.extreme-warn');
       openDetail(date);
+      // §0.41.5 : (要確認) クリックは詳細を開いて「この日の概要」へスクロール
+      if (toCheck) {
+        const d = tbody.querySelector(`.detail-row[data-detail="${date}"]`);
+        d?.querySelector('.js-day-summary')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
     });
     tr.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' || e.key === ' ') {

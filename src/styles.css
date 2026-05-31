@@ -2445,9 +2445,24 @@ button.extreme-warn {
   .cell-date-score .score-row.card-score {
     display: flex;
   }
-  .cell-date-score .score-reason.card-score {
-    display: block;
-  }
+}
+
+/* §0.41.5 : 「この日の概要」(スコア理由 ・ 要確認 ・ 天気概況を集約) */
+.day-summary .ds-line {
+  display: flex;
+  gap: 8px;
+  margin: 0 0 6px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.day-summary .ds-key {
+  flex: 0 0 auto;
+  min-width: 4.5em;
+  font-weight: 700;
+  color: var(--text-sub);
+}
+.day-summary .ds-check .ds-val {
+  color: var(--score-bad);
 }
 
 /* §0.37.8 : スマホヘッダー再構成
