@@ -14,7 +14,7 @@ export function normalizeShowName(name) {
   return (name || '')
     .replace(/[・･·]/g, '') // 全角/半角中黒を除去
     .replace(/[！!]/g, '') // 感嘆符を除去
-    .replace(/[\s　]/g, '') // 空白除去
+    .replace(/\s/g, '') // 空白除去 (\s は全角空白 U+3000 も含む)
     .replace(/[～〜~]/g, '') // 波ダッシュ除去
     .toLowerCase();
 }
