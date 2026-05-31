@@ -9,12 +9,17 @@ export const UPDATE_CYCLE = {
   openweather: 'OpenWeather は数十分ごとに更新',
 };
 
-// '今' / '◯分前' / '◯時間前'
+// '今' / '◯分前' / 'HH:MM' (§0.36-12)。
+// 60 分以上経過したら「◯時間前」でなく取得時刻そのもの (JST HH:MM) を表示する。
 export function freshnessLabel(iso) {
   if (!iso) return '';
   const min = Math.floor(ageMs(iso) / 60000);
   if (min <= 0) return '今';
   if (min < 60) return `${min}分前`;
-  const hour = Math.floor(min / 60);
-  return `${hour}時間前`;
+  // JST の取得時刻を HH:MM で表示
+  const d = new Date(iso);
+  const jst = new Date(d.getTime() + (d.getTimezoneOffset() + 540) * 60000);
+  const hh = String(jst.getHours()).padStart(2, '0');
+  const mm = String(jst.getMinutes()).padStart(2, '0');
+  return `${hh}:${mm}`;
 }

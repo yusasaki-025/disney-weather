@@ -2047,3 +2047,83 @@ body {
     grid-template-columns: 1fr;
   }
 }
+
+/* =========================================================================
+   §0.36 UI 微調整 (末尾追記オーバーライド)
+   ========================================================================= */
+
+/* §0.36-5 気象庁/Open-Meteo セル高さ詰め */
+.source-cell .weather-icon {
+  font-size: 32px;
+}
+.source-cell {
+  padding: 6px 8px;
+}
+.src-temp,
+.src-pop {
+  font-size: 12px;
+}
+
+/* §0.36-10 PC 詳細パネル chevron 視認性 */
+@media (min-width: 768px) {
+  .row-main .chevron {
+    color: var(--accent);
+    transition: transform 0.15s;
+  }
+  .row-main:hover {
+    background: var(--surface-2);
+  }
+  .row-main:hover .chevron {
+    transform: scale(1.25);
+    color: var(--accent-dark);
+  }
+}
+
+/* §0.36-9 スマホカード間隔拡大 (8→12) */
+@media (max-width: 767px) {
+  .forecast-table tr.calendar-row {
+    margin-bottom: 12px;
+  }
+}
+
+/* §0.36-7 極端値の信頼度ヒント */
+.extreme-warn {
+  display: inline-block;
+  margin-left: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #9a6a00;
+  cursor: help;
+}
+
+/* §0.36-13 副題: PC はフル、スマホは短縮 */
+.subtitle-short {
+  display: none;
+}
+@media (max-width: 767px) {
+  .subtitle-full {
+    display: none;
+  }
+  .subtitle-short {
+    display: inline;
+  }
+}
+
+/* §0.36-11 「おすすめ日のみ」を先頭配置 + star + 選択時強調 */
+.check-recommend {
+  order: -1;
+  gap: 4px;
+}
+.check-recommend .material-symbols-rounded {
+  font-size: 16px;
+  color: var(--score-fair);
+}
+.check-recommend.is-on {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+  box-shadow: 0 2px 6px rgba(31, 79, 163, 0.25);
+}
+.check-recommend.is-on .material-symbols-rounded {
+  color: #fff;
+}

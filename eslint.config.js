@@ -4,6 +4,7 @@ import globals from 'globals';
 export default [
   js.configs.recommended,
   {
+    // ブラウザ artifact (メイン UI ・ ダッシュボード)
     files: ['src/**/*.js', 'workers/**/*.js'],
     languageOptions: {
       ecmaVersion: 2023,
@@ -22,13 +23,15 @@ export default [
     },
   },
   {
-    // Node 実行のスクリプト ・ ビルド設定。console/process/fetch 等は Node グローバル。
-    files: ['scripts/**/*.mjs', 'scripts/**/*.js', 'vite.config.js', 'vite.accuracy.config.js'],
+    // Node 実行のスクリプト (取得 ・ データ取込)。console/process/fetch は Node、
+    // page.evaluate に渡す関数内で document 等を使うため browser globals も付与。
+    files: ['scripts/**/*.mjs', 'scripts/**/*.js'],
     languageOptions: {
       ecmaVersion: 2023,
       sourceType: 'module',
       globals: {
         ...globals.node,
+        ...globals.browser,
       },
     },
     rules: {
@@ -36,8 +39,8 @@ export default [
     },
   },
   {
-    // Vitest テスト。describe/it/expect/vi 等のテストグローバル + Node + browser。
-    files: ['tests/**/*.js'],
+    // Vitest テスト + ビルド設定
+    files: ['tests/**/*.js', 'vite.config.js', 'vite.accuracy.config.js'],
     languageOptions: {
       ecmaVersion: 2023,
       sourceType: 'module',

@@ -115,7 +115,7 @@ function parseMonth(text, ym) {
 
   const ensureShow = (rawName, park2, thresholds) => {
     // 表記ゆれ吸収: 前後空白 ・ 全角空白除去。同名 (同 park) は records を集約。
-    const name = rawName.replace(/[\s　]+/g, ' ').trim();
+    const name = rawName.replace(/\s+/g, ' ').trim();
     const key = `${park2}:${name}`;
     if (!showsByName.has(key)) {
       const s = { name, park: park2, ...thresholds, records: [] };

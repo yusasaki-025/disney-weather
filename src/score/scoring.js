@@ -89,18 +89,18 @@ export function windBadge(gust, threshold = DEFAULT_THRESHOLD) {
   const ba = threshold.windBa ?? DEFAULT_THRESHOLD.windBa;
   const cancel = threshold.windCancel ?? DEFAULT_THRESHOLD.windCancel;
   if (gust < ba) return { level: 0, text: '通常' };
-  if (gust < cancel) return { level: 1, text: '風バ可能性あり' };
-  if (gust < cancel + 2) return { level: 2, text: '中止リスク高' };
-  return { level: 3, text: 'ほぼ中止' };
+  if (gust < cancel) return { level: 1, text: '風バ' };
+  if (gust < cancel + 2) return { level: 2, text: '中止リスク' };
+  return { level: 3, text: '中止' };
 }
 
 export function rainBadge(pop, precip) {
   if (pop == null && precip == null) return { level: 0, text: '—' };
   const p = pop ?? 0;
   const r = precip ?? 0;
-  if (r >= 2) return { level: 3, text: 'ほぼ中止' };
-  if (p >= 60 || r >= 1) return { level: 2, text: '雨キャン濃厚' };
-  if (p >= 30 && r < 1) return { level: 1, text: '雨バ可能性' };
+  if (r >= 2) return { level: 3, text: '中止' };
+  if (p >= 60 || r >= 1) return { level: 2, text: '雨キャン' };
+  if (p >= 30 && r < 1) return { level: 1, text: '雨バ' };
   return { level: 0, text: '通常' };
 }
 
@@ -116,7 +116,7 @@ export function wbgtBadge(wbgt, windShowWindow, feelsLikeMax) {
   if (windShowWindow != null && windShowWindow >= 5) level -= 1;
   if (feelsLikeMax != null && feelsLikeMax >= 38) level += 1;
   level = Math.max(0, Math.min(4, level));
-  const TEXTS = ['通常', '暑さ注意', '熱バ可能性あり', '熱キャン濃厚', 'ほぼ中止'];
+  const TEXTS = ['通常', '暑さ注意', '熱バ', '熱キャン', '中止'];
   return { level, text: TEXTS[level] };
 }
 
@@ -127,10 +127,10 @@ const SEVERITY_RANK = { normal: 0, warn: 1, danger: 2, critical: 3 };
 const SEVERITY_CAP = { critical: 25, danger: 45, warn: 65 };
 
 export function badgeSeverity(text) {
-  if (text === 'ほぼ中止') return 'critical';
-  if (text === '中止リスク高' || text === '雨キャン濃厚' || text === '熱キャン濃厚') return 'danger';
-  if (text === '風バ可能性あり' || text === '雨バ可能性' || text === '熱バ可能性あり' || text === '暑さ注意')
-    return 'warn';
+  // §0.36 でラベル短縮 (ほぼ中止→中止 / 中止リスク高→中止リスク / 雨キャン濃厚→雨キャン 等)
+  if (text === '中止') return 'critical';
+  if (text === '中止リスク' || text === '雨キャン' || text === '熱キャン') return 'danger';
+  if (text === '風バ' || text === '雨バ' || text === '熱バ' || text === '暑さ注意') return 'warn';
   return 'normal';
 }
 

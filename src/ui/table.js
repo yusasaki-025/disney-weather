@@ -15,10 +15,12 @@ import { suggestOutfit } from './outfit.js';
 import { getDaySchedule } from '../data/showSchedule.js';
 import { latestOperation } from '../data/operationLog.js';
 import { getCancelProbability } from '../score/cancelProbability.js';
+import { extremeWarning } from '../score/extremeWarning.js';
 import { freshnessLabel } from '../utils/freshness.js';
 import { nowcastHtml } from './nowcast.js';
 import { getTempColor, getTempBandKey } from '../utils/tempColor.js';
 import { getWeatherIcon } from '../utils/weatherIcon.js';
+import { normalizeWeatherText } from '../utils/weatherText.js';
 
 // 気温セルを暖寒色で着色 (§0.6-2)。data-tb はダークモード CSS 上書き用。
 function tempSpan(c) {
@@ -57,6 +59,18 @@ function wbgtSourceLabel(forecasts) {
   return null;
 }
 
+// §0.36-1/5 : 雨表示。pop% ＋ 時間最大 mm/h。pop=0 は省略 (非表示)。日合計は title。
+function rainSub(forecast) {
+  const pop = forecast.popMax;
+  if (pop == null || pop <= 0) return ''; // 雨 0% は非表示
+  const hourlyPrecip = (forecast.hourly || []).map((h) => h.precip ?? 0);
+  const precipMax = hourlyPrecip.length ? Math.max(...hourlyPrecip) : 0;
+  const mmh = precipMax > 0 ? ` ${fmtNum(precipMax, 0)}mm/h` : '';
+  const title =
+    forecast.precipSum != null && forecast.precipSum > 0 ? ` title="日合計 ${fmtNum(forecast.precipSum, 1)}mm"` : '';
+  return `<div class="sc-sub"${title}>${fmtNum(pop, 0)}%${mmh}</div>`;
+}
+
 function sourceCellHtml(source, forecast, status) {
   // スマホカード化 (§0.22) 用のクラス ・ ラベル
   const cellClass = source === 'jma' ? 'cell-jma' : 'cell-openmeteo';
@@ -77,9 +91,9 @@ function sourceCellHtml(source, forecast, status) {
   const wi = getWeatherIcon(forecast.weatherText);
   return `<td class="source-cell ${cellClass}" data-label="${esc(label)}" title="${esc(title)}">
     <span class="material-symbols-rounded weather-icon" style="color:${wi.color}" aria-hidden="true">${wi.name}</span>
-    <div class="sc-sub">${esc(forecast.weatherText || '')}</div>
+    <div class="sc-sub">${esc(normalizeWeatherText(forecast.weatherText))}</div>
     <div class="sc-main">${temp}</div>
-    <div class="sc-sub">雨 ${fmtNum(forecast.popMax, 0, '%')}</div>
+    ${rainSub(forecast)}
   </td>`;
 }
 
@@ -272,13 +286,25 @@ export function renderTable(els, rows, state, sources, sourceStatus, handlers) {
 
       const cls = ['row-main', groupStart ? 'holiday-group-start' : ''].filter(Boolean).join(' ');
 
+      // §0.36-7 : 極端値の信頼度ヒント (単独ソースの外れ値で誤判断しないよう「(要確認)」)
+      const precipMaxHourly = Math.max(
+        0,
+        ...Object.values(row.forecasts)
+          .filter(Boolean)
+          .flatMap((f) => (f.hourly || []).map((h) => h.precip ?? 0)),
+      );
+      const extreme = extremeWarning({ gustMax: m.gustMax, precipMaxHourly });
+      const extremeHtml = extreme
+        ? `<span class="extreme-warn" title="${esc(extreme.title)}">${esc(extreme.text)}</span>`
+        : '';
+
       // §0.23 : 日付セルにスコアピルを統合 (1 列削減)。§0.22 : data-label でスマホカードのラベル。
       const mainRow = `<tr class="${cls} calendar-row" data-date="${row.date}" tabindex="0"
         role="button" aria-expanded="false" aria-label="${esc(scoreAria(row.date, row.eval))}">
         <td class="col-date cell-date-score" data-label="日付"${scoreTitle ? ` title="${esc(scoreTitle)}"` : ''}>
           <div class="date-line">${esc(formatMd(row.date))} <span class="weekday">(${esc(weekday(row.date))})</span></div>
           <div class="date-sub">${dayBadges(dt)}</div>
-          ${scorePillHtml(row.eval)}
+          ${scorePillHtml(row.eval)}${extremeHtml}
         </td>
         ${metricCell('wind', windVal, row.eval.badges.wind, windTitle)}
         ${metricCell('rain', rainVal, row.eval.badges.rain)}

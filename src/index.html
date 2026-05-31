@@ -48,7 +48,7 @@
         <img src="/logo-mark.svg" alt="マイハマびより" class="logo-mark" width="32" height="32" />
         <div class="app-title-text">
           <h1>マイハマびより</h1>
-          <p class="app-subtitle">舞浜の天気からショー ・ パレード中止リスクを予測</p>
+          <p class="app-subtitle"><span class="subtitle-full">舞浜の天気からショー ・ パレード中止リスクを予測</span><span class="subtitle-short">舞浜のショー ・ パレード中止予測</span></p>
         </div>
       </div>
       <div class="header-actions">
@@ -63,6 +63,10 @@
 
     <main class="app-main">
       <section id="controls" aria-label="表示の絞り込みと並び替え">
+        <label class="check check-recommend">
+          <input type="checkbox" id="only-good" aria-label="おすすめ日のみ表示" />
+          <span class="material-symbols-rounded" aria-hidden="true">star</span><span>おすすめ日のみ</span>
+        </label>
         <div class="control-group" role="group" aria-label="並び順">
           <span class="control-label">並び順</span>
           <div class="seg" id="sort-seg">
@@ -78,10 +82,6 @@
             <button class="seg-btn" data-dayfilter="holiday" type="button">土日祝のみ</button>
           </div>
         </div>
-        <label class="check">
-          <input type="checkbox" id="only-good" aria-label="おすすめ日のみ表示" />
-          <span>おすすめ日のみ</span>
-        </label>
       </section>
 
       <section id="table-section" aria-label="候補日の予報比較">
