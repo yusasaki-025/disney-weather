@@ -139,7 +139,10 @@ function cancelProbHtml(showName, park, predWind) {
   if (!r) return '';
   const cls = r.probability >= 50 ? 'cp-danger' : r.probability >= 30 ? 'cp-warn' : 'cp-mute';
   const wind = fmtNum(predWind, 0);
-  return `<span class="cancel-prob ${cls}" title="予報 max ${wind}m/s ・ 過去同条件 ${r.sampleSize}件中 ${r.cancelCount}件中止">予報 ${wind}m/s → 過去 ${r.sampleSize}件中 ${r.cancelCount}件中止 (${r.probability}%)</span>`;
+  // §0.38-11 : 「予報 12m/s ［過去中止 43% (3/7件)］」形式に短縮 (% を先出し ・ コンパクト)。
+  // 件数 3 件未満は信頼度が低いので (要確認) を併記 (§0.38-10 と連動)。
+  const lowSample = r.sampleSize < 3 ? '<span class="cp-check">(要確認)</span>' : '';
+  return `<span class="cancel-prob ${cls}" title="予報 max ${wind}m/s ・ 過去同条件 ${r.sampleSize}件中 ${r.cancelCount}件中止">予報 ${wind}m/s ［過去中止 ${r.probability}% (${r.cancelCount}/${r.sampleSize}件)］${lowSample}</span>`;
 }
 
 function detailPanelHtml(row) {

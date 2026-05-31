@@ -2345,3 +2345,15 @@ body {
   color: var(--sunday);
   font-weight: 600;
 }
+
+/* §0.38-11 : 中止確率の (要確認) マーク (サンプル < 3 件) */
+.cp-check {
+  margin-left: 4px;
+  font-size: 10px;
+  color: var(--text-sub);
+}
+@media (max-width: 767px) {
+  .cancel-prob {
+    font-size: 11px;
+  }
+}
