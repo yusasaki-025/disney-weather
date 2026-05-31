@@ -366,15 +366,24 @@ export function renderTable(els, rows, state, sources, sourceStatus, handlers) {
         ? `<span class="score-diff ${diff.delta > 0 ? 'up' : 'down'}" title="前回予報 (${esc(diff.snapDate)}) ${diff.prev}点 から ${diff.delta > 0 ? '改善' : '悪化'}">${diff.delta > 0 ? '↑' : '↓'}${diff.delta > 0 ? '+' : ''}${diff.delta}</span>`
         : '';
 
+      // §0.39.1 : 前日スナップショットとのスコア差分マーク (改善↑ / 悪化↓)。比較対象が無ければ非表示。
+      const diff = getScoreDiff(row.date, state.park, row.eval.score, todayJst());
+      const diffHtml = diff
+        ? `<span class="score-diff ${diff.delta > 0 ? 'up' : 'down'}" title="前回予報 (${esc(diff.snapDate)}) ${diff.prev}点 から ${diff.delta > 0 ? '改善' : '悪化'}">${diff.delta > 0 ? '↑' : '↓'}${diff.delta > 0 ? '+' : ''}${diff.delta}</span>`
+        : '';
       // §0.23 : 日付セルにスコアピルを統合 (1 列削減)。§0.22 : data-label でスマホカードのラベル。
+      // §0.37.4 : PC は独立スコア列 (cell-score-pc) ・ スマホはカード内 (.card-score) に統合 (CSS で出し分け)。
+      const scoreInner = `<div class="score-row">${scorePillHtml(row.eval)}${diffHtml}${extremeHtml}</div>
+          <div class="score-reason">${esc(getScoreReason(row.eval.metrics, row.eval.badges))}</div>`;
       const mainRow = `<tr class="${cls} calendar-row" data-date="${row.date}" tabindex="0"
         role="button" aria-expanded="false" aria-label="${esc(scoreAria(row.date, row.eval))}">
         <td class="col-date cell-date-score" data-label="日付"${scoreTitle ? ` title="${esc(scoreTitle)}"` : ''}>
           <div class="date-line">${state.sortBy === 'score' && i < 3 ? `<span class="rank-badge">${i + 1}位</span>` : ''}${esc(formatMd(row.date))} <span class="weekday ${dt.isHoliday || dt.weekdayIndex === 0 ? 'day-sun' : dt.weekdayIndex === 6 ? 'day-sat' : 'day-weekday'}">(${esc(weekday(row.date))})</span></div>
           <div class="date-sub">${dayBadges(dt)}</div>
-          <div class="score-row">${scorePillHtml(row.eval)}${extremeHtml}</div>
-          <div class="score-reason">${esc(getScoreReason(row.eval.metrics, row.eval.badges))}</div>
+          <div class="score-row card-score">${scorePillHtml(row.eval)}${diffHtml}${extremeHtml}</div>
+          <div class="score-reason card-score">${esc(getScoreReason(row.eval.metrics, row.eval.badges))}</div>
         </td>
+        <td class="col-score cell-score-pc" data-label="スコア">${scoreInner}</td>
         ${metricCell('wind', windVal, row.eval.badges.wind, windTitle)}
         ${metricCell('rain', rainVal, row.eval.badges.rain)}
         ${metricCell('wbgt', wbgtVal, row.eval.badges.wbgt, wbgtTitle)}

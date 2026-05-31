@@ -94,7 +94,6 @@ export function renderPopWindChart(canvas, forecasts, park, date = null) {
     datasets.push(makeDataset(f, 'pop', '降水確率', 'pop'));
     datasets.push(makeDataset(f, 'wind', '風速', 'wind'));
   }
-  // eslint-disable-next-line no-undef
   canvas._chart = new Chart(canvas, {
     type: 'line',
     data: { datasets },
@@ -130,7 +129,6 @@ export function renderTempChart(canvas, forecasts, park, date = null) {
     datasets.push(makeDataset(f, 'temp', '気温', undefined));
     datasets.push(makeDataset(f, 'feelsLike', '体感', undefined));
   }
-  // eslint-disable-next-line no-undef
   canvas._chart = new Chart(canvas, {
     type: 'line',
     data: { datasets },
