@@ -1,9 +1,9 @@
 // 用語集 ・ ヘルプ (§3.16 / §0.35)。モーダルで 8 セクションをタブ式に表示する。
-// 開閉は main.js が制御。内容は help-content.js に集約 (固定テキスト、外部入力なし)。
+// 内容は help-content.js に集約 (固定テキスト、外部入力なし)。setupHelp() が開閉 ・ タブ切替を結線。
 
 import { HELP_SECTIONS } from './help-content.js';
 
-export function helpHtml() {
+function helpHtml() {
   const tabs = HELP_SECTIONS.map(
     (s, i) =>
       `<button type="button" class="help-tab${i === 0 ? ' active' : ''}" role="tab" data-help-tab="${s.id}">${s.label}</button>`,
@@ -19,15 +19,34 @@ export function helpHtml() {
   </div>`;
 }
 
-// タブ切替を結線する (モーダルを開いて innerHTML 設定後に呼ぶ)。
-export function wireHelpTabs(root) {
-  root.querySelectorAll('.help-tab').forEach((tab) => {
+export function setupHelp() {
+  const modal = document.getElementById('help-modal');
+  const body = document.getElementById('help-body');
+  body.innerHTML = helpHtml();
+
+  // タブ切替
+  body.querySelectorAll('.help-tab').forEach((tab) => {
     tab.addEventListener('click', () => {
       const id = tab.dataset.helpTab;
-      root.querySelectorAll('.help-tab').forEach((t) => t.classList.toggle('active', t === tab));
-      root.querySelectorAll('.help-panel').forEach((p) => {
+      body.querySelectorAll('.help-tab').forEach((t) => t.classList.toggle('active', t === tab));
+      body.querySelectorAll('.help-panel').forEach((p) => {
         p.hidden = p.dataset.helpPanel !== id;
       });
     });
+  });
+
+  const open = () => {
+    modal.hidden = false;
+  };
+  const close = () => {
+    modal.hidden = true;
+  };
+  document.getElementById('btn-help').addEventListener('click', open);
+  document.getElementById('help-close').addEventListener('click', close);
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) close();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !modal.hidden) close();
   });
 }

@@ -3,6 +3,7 @@ import './styles.css';
 import { candidateDates, todayJst } from './utils/date.js';
 import { loadCacheFresh, loadCacheRaw, saveCache } from './utils/cache.js';
 import { setupHelp } from './ui/help.js';
+import { initInstallBanner } from './ui/installBanner.js';
 import { renderScoreLegend } from './ui/legend.js';
 import { freshnessLabel, UPDATE_CYCLE } from './utils/freshness.js';
 import { logger } from './utils/logger.js';
@@ -245,6 +246,7 @@ function setupHeader() {
 async function init() {
   setupHeader();
   setupHelp();
+  initInstallBanner(); // §0.34 iOS PWA インストール促進バナー (条件を満たす時のみ表示)
   renderScoreLegend(document.getElementById('score-legend'));
   wireControls(state, render);
   renderSkeleton();
