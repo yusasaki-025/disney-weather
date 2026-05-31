@@ -76,7 +76,7 @@ export function subscoreHtml(subscores, bands) {
     if (!has) {
       return `<span class="subscore-pill${main}" data-level="none">${labelHtml(b)}<span class="value">-</span></span>`;
     }
-    return `<span class="subscore-pill${main}" data-level="${ss.symbol.key}" style="background:${ss.symbol.color}">${labelHtml(b)}<span class="material-symbols-rounded" aria-hidden="true">${ss.symbol.icon}</span><span class="value">${ss.score}</span></span>`;
+    return `<span class="subscore-pill${main}" data-level="${ss.symbol.key}" style="background:${ss.symbol.color}">${labelHtml(b)}<span class="material-symbols-rounded" aria-hidden="true">${ss.symbol.icon}</span><span class="value">${ss.score}<span class="unit">点</span></span></span>`;
   });
   return `<span class="subscore-group" role="img" aria-label="${esc(ariaParts.join('、'))}">${cells.join('')}</span>`;
 }

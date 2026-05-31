@@ -744,15 +744,16 @@ section {
   font-size: 13px;
 }
 /* §0.37-3 : 各ショーを 1 カードに (priority high は薄いアクセント背景、左縦バーは使わない) */
-/* §0.40.5 : ショーは全て同形式の行 (背景 ・ カードなし ・ 左寄せ)。priority 区別はタグで。 */
+/* §0.40.5 / §0.41.2 : ショーは全て同形式の行 (背景 ・ カードなし ・ 左寄せ)。priority 区別はタグで。
+   §0.41.2 : カード感を完全排除するため余白を圧縮し、下罫線を極薄に。 */
 .show-item {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
-  gap: 6px 8px;
-  padding: 6px 0;
+  gap: 4px 8px;
+  padding: 4px 0;
   text-align: left;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
 /* §0.40.5 : priority high の背景色は廃止 (区別は「期間限定」タグで) */
 .show-item.priority-high {
@@ -2494,4 +2495,11 @@ button.extreme-warn {
 .show-tag.tag-season {
   background: var(--ok-green);
   color: #fff;
+}
+
+/* §0.41.4 : 時間帯スコアの凡例 (点数の満点を明示) */
+.subscore-note {
+  margin: 4px 0 0;
+  font-size: 11px;
+  color: var(--text-sub);
 }

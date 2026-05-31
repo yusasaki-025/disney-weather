@@ -221,6 +221,7 @@ function detailPanelHtml(row) {
       <div class="detail-section">
         <h4><span class="material-symbols-rounded" aria-hidden="true">schedule</span>時間帯スコア (昼を最重視)</h4>
         <div class="subscore-detail">${subscoreHtml(row.eval.subscores, BANDS)}</div>
+        <p class="subscore-note">各時間帯の快適度 (100点満点)</p>
       </div>
       <div class="detail-section">
         <h4><span class="material-symbols-rounded" aria-hidden="true">theater_comedy</span>ショー ･ パレード${schedBadge}</h4>
