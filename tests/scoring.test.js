@@ -156,11 +156,11 @@ describe('rainBadge (§5.5)', () => {
   it('境界値', () => {
     expect(rainBadge(0, 0).text).toBe('通常');
     expect(rainBadge(29, 0.9).text).toBe('通常');
-    expect(rainBadge(30, 0).text).toBe('雨バ可能性');
-    expect(rainBadge(59, 0).text).toBe('雨バ可能性');
-    expect(rainBadge(60, 0).text).toBe('雨キャン濃厚');
-    expect(rainBadge(0, 1).text).toBe('雨キャン濃厚');
-    expect(rainBadge(0, 2).text).toBe('ほぼ中止');
+    expect(rainBadge(30, 0).text).toBe('雨バ');
+    expect(rainBadge(59, 0).text).toBe('雨バ');
+    expect(rainBadge(60, 0).text).toBe('雨キャン');
+    expect(rainBadge(0, 1).text).toBe('雨キャン');
+    expect(rainBadge(0, 2).text).toBe('中止');
     expect(rainBadge(null, null).text).toBe('—');
   });
 });
@@ -169,13 +169,13 @@ describe('wbgtBadge (§5.6)', () => {
   it('境界値', () => {
     expect(wbgtBadge(24, null, null).text).toBe('通常');
     expect(wbgtBadge(25, null, null).text).toBe('暑さ注意');
-    expect(wbgtBadge(28, null, null).text).toBe('熱バ可能性あり');
-    expect(wbgtBadge(31, null, null).text).toBe('熱キャン濃厚');
-    expect(wbgtBadge(33, null, null).text).toBe('ほぼ中止');
+    expect(wbgtBadge(28, null, null).text).toBe('熱バ');
+    expect(wbgtBadge(31, null, null).text).toBe('熱キャン');
+    expect(wbgtBadge(33, null, null).text).toBe('中止');
   });
   it('風で 1 段階下げ / 体感 38℃ 以上で 1 段階上げ', () => {
     expect(wbgtBadge(28, 5, null).text).toBe('暑さ注意'); // level2 -1
-    expect(wbgtBadge(28, null, 38).text).toBe('熱キャン濃厚'); // level2 +1
+    expect(wbgtBadge(28, null, 38).text).toBe('熱キャン'); // level2 +1
     expect(wbgtBadge(24, 5, null).text).toBe('通常'); // 下限クランプ
   });
   it('欠損は —', () => {
@@ -228,10 +228,10 @@ describe('windowMean (§0.13.2 平均ベース算定窓)', () => {
     { hour: 18, gust: 20, wind: 10 },
   ]);
   it('窓内の平均を取る (一瞬の突風で評価が落ちない)', () => {
-    // 12,13 の gust 平均 = (6+12)/2 = 9 → 風バ可能性域
+    // 12,13 の gust 平均 = (6+12)/2 = 9 → 風バ域
     expect(windowMean([f], new Set([12, 13]), 'gust')).toBe(9);
-    expect(windBadge(windowMean([f], new Set([12, 13]), 'gust')).text).toBe('風バ可能性あり');
-    // max なら 12 で「中止リスク高」になるところ、平均で緩和
+    expect(windBadge(windowMean([f], new Set([12, 13]), 'gust')).text).toBe('風バ');
+    // max なら 12 で「中止リスク」になるところ、平均で緩和
     expect(windowMax([f], new Set([12, 13]), 'gust')).toBe(12);
   });
   it('全欠損は null', () => {
@@ -326,11 +326,11 @@ describe('bandSubscore / weightedBandTotal', () => {
 
 describe('badgeSeverity / applyBadgeGuard (§0.16)', () => {
   it('text から severity を判定', () => {
-    expect(badgeSeverity('ほぼ中止')).toBe('critical');
-    expect(badgeSeverity('中止リスク高')).toBe('danger');
-    expect(badgeSeverity('雨キャン濃厚')).toBe('danger');
-    expect(badgeSeverity('熱キャン濃厚')).toBe('danger');
-    expect(badgeSeverity('風バ可能性あり')).toBe('warn');
+    expect(badgeSeverity('中止')).toBe('critical');
+    expect(badgeSeverity('中止リスク')).toBe('danger');
+    expect(badgeSeverity('雨キャン')).toBe('danger');
+    expect(badgeSeverity('熱キャン')).toBe('danger');
+    expect(badgeSeverity('風バ')).toBe('warn');
     expect(badgeSeverity('暑さ注意')).toBe('warn');
     expect(badgeSeverity('通常')).toBe('normal');
     expect(badgeSeverity('—')).toBe('normal');
@@ -338,16 +338,16 @@ describe('badgeSeverity / applyBadgeGuard (§0.16)', () => {
   it('最悪 severity に応じて上限キャップ (上限のみ・引き上げない)', () => {
     const g = (raw, text) =>
       applyBadgeGuard(raw, { wind: { text: '通常' }, rain: { text }, wbgt: { text: '通常' } }).score;
-    expect(g(80, 'ほぼ中止')).toBe(25); // critical
-    expect(g(80, '雨キャン濃厚')).toBe(45); // danger
-    expect(g(80, '雨バ可能性')).toBe(65); // warn
+    expect(g(80, '中止')).toBe(25); // critical
+    expect(g(80, '雨キャン')).toBe(45); // danger
+    expect(g(80, '雨バ')).toBe(65); // warn
     expect(g(80, '通常')).toBe(80); // normal はキャップなし
-    expect(g(20, 'ほぼ中止')).toBe(20); // キャップは上限のみ (引き下げ済みは保持)
+    expect(g(20, '中止')).toBe(20); // キャップは上限のみ (引き下げ済みは保持)
   });
   it('最も厳しいバッジが効く', () => {
     const r = applyBadgeGuard(80, {
-      wind: { text: '風バ可能性あり' }, // warn
-      rain: { text: 'ほぼ中止' }, // critical
+      wind: { text: '風バ' }, // warn
+      rain: { text: '中止' }, // critical
       wbgt: { text: '通常' },
     });
     expect(r.worstSeverity).toBe('critical');

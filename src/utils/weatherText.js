@@ -11,12 +11,11 @@ export function normalizeWeatherText(raw) {
   let s = String(raw).trim();
   // 表記統一
   s = s.replace(/くもり/g, '曇り');
-  // 全角/半角の余分な空白を一旦すべて除去 (日本語天気概況に語間スペースは不要)
-  s = s.replace(/[\s　]+/g, '');
-  // 時間帯語の前に読点を挿入 (文頭は除く)。長い語から先に処理して部分一致の取りこぼしを防ぐ。
+  // 余分な空白 (半角 ・ 全角) を除去。\s は全角空白 U+3000 も含む。
+  s = s.replace(/\s+/g, '');
+  // 時間帯語の前に読点を挿入 (文頭は除く)。長い語から先に処理。
   for (const w of TIME_WORDS) {
     s = s.replace(new RegExp(`(.)(${w})`, 'g'), (match, prev, word) => {
-      // 直前が既に読点 ・ 区切りならそのまま
       if (prev === '、' || prev === '。') return match;
       return `${prev}、${word}`;
     });
