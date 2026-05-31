@@ -1782,7 +1782,7 @@ body {
     grid-template-columns: repeat(6, 1fr);
     grid-template-areas:
       'date-score date-score date-score date-score date-score date-score'
-      'wind wind rain rain heat heat'
+      'wind rain rain rain heat heat'
       'jma jma jma openmeteo openmeteo openmeteo'
       'more more more more more more';
     gap: 8px;
@@ -2323,5 +2323,15 @@ body {
   }
   .seg-btn .label-short {
     display: inline;
+  }
+}
+
+/* §0.37-7 : スマホで雨セルを広げ (grid rain 3/6) アイコン + % + mm を 1 行に収める */
+@media (max-width: 767px) {
+  .forecast-table tr.calendar-row > td.cell-rain .metric-cell {
+    white-space: nowrap;
+  }
+  .forecast-table tr.calendar-row > td.cell-rain .cat-val {
+    flex-wrap: nowrap;
   }
 }
