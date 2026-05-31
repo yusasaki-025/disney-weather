@@ -247,5 +247,5 @@ npm run import-cancel-history -- 2026-04 # 指定月
 未消化の機能 ・ 改善は [GitHub Issues](https://github.com/yusasaki-025/disney-weather/issues) で管理しています。
 詳細仕様は [docs/CHANGES.md](docs/CHANGES.md) を参照。
 
-- Milestone : [§0.39 機能拡張 第3弾](https://github.com/yusasaki-025/disney-weather/milestones)
+- Milestone : [§0.39 機能拡張 第3弾 / §0.40 / §0.41 UI 改善](https://github.com/yusasaki-025/disney-weather/milestones)
 - 持ち越し : [carry-over ラベル](https://github.com/yusasaki-025/disney-weather/issues?q=is%3Aopen+label%3Acarry-over)
