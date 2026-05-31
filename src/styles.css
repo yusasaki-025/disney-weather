@@ -601,10 +601,10 @@ section {
   font-size: 14px;
 }
 
-/* §0.40.4 : 通常 (リスクなし) タグを緑にして「OK」感を出す */
+/* §0.41.1 : 通常タグは薄色背景 + 濃色文字に (白文字撤廃 ・ ベスト/期間限定の塗り緑と区別) */
 .cancel-lv0 {
-  background: var(--ok-green);
-  color: #fff;
+  background: #e6f4ea;
+  color: var(--ok-green);
 }
 
 .cancel-lv1 {
@@ -2492,8 +2492,9 @@ button.extreme-warn {
   background: #6b4fa3;
   color: #fff;
 }
+/* §0.41.3 : 期間限定タグは紫系に (ベストの緑と被らない) */
 .show-tag.tag-season {
-  background: var(--ok-green);
+  background: #7c3aed;
   color: #fff;
 }
 
