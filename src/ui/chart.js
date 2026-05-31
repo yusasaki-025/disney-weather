@@ -44,9 +44,15 @@ function showLinePlugin(park, date) {
         ctx.lineTo(px, chartArea.bottom);
         ctx.stroke();
         ctx.setLineDash([]);
-        ctx.fillStyle = mk.priority === 'high' ? '#2f6fb0' : '#888';
-        ctx.font = '10px sans-serif';
-        ctx.fillText(mk.time, px + 3, chartArea.top + 10);
+        // §0.38-12 : 時刻ラベルの水平重なりを避けるため、グラフ上は ▼ マーカーのみ。
+        // 時刻一覧はグラフ下の chips (showTimeChipsHtml) に出す。
+        ctx.fillStyle = mk.priority === 'high' ? '#2f6fb0' : '#999';
+        ctx.beginPath();
+        ctx.moveTo(px - 4, chartArea.top);
+        ctx.lineTo(px + 4, chartArea.top);
+        ctx.lineTo(px, chartArea.top + 6);
+        ctx.closePath();
+        ctx.fill();
       }
       ctx.restore();
     },
