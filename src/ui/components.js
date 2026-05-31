@@ -30,9 +30,25 @@ export function scorePillHtml(ev) {
   </span>`;
 }
 
+// §0.37-1 : バッジは PC で長文 ・ スマホで短縮 (CSS @media で .badge-long/.badge-short 切替)。
+// badge.text は短縮形 (§0.36)。長文はここで対応付ける。
+const BADGE_LONG = {
+  通常: '通常',
+  風バ: '風バ可能性あり',
+  中止リスク: '中止リスク高',
+  中止: 'ほぼ中止',
+  雨バ: '雨バ可能性',
+  雨キャン: '雨キャン濃厚',
+  熱バ: '熱バ可能性あり',
+  熱キャン: '熱キャン濃厚',
+  '—': '—',
+};
+
 // 風 / 雨 / 熱 のキャンセルバッジ HTML (§0.6.6 でセル側にカテゴリアイコンを持つためバッジ内アイコンは廃止)
 export function cancelBadgeHtml(badge) {
-  return `<span class="cancel-badge cancel-lv${badge.level}">${esc(badge.text)}</span>`;
+  const short = badge.text;
+  const long = BADGE_LONG[short] || short;
+  return `<span class="cancel-badge cancel-lv${badge.level}"><span class="badge-long">${esc(long)}</span><span class="badge-short">${esc(short)}</span></span>`;
 }
 
 // 朝/昼/夜 サブスコア HTML (§0.6.5 : 記号廃止、色付き数値ピル)。

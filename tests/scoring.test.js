@@ -168,15 +168,16 @@ describe('rainBadge (§5.5)', () => {
 
 describe('wbgtBadge (§5.6)', () => {
   it('境界値', () => {
+    // §0.37 : 4 階層 (< 25 通常 / 25-31 熱バ / 31-33 熱キャン / ≥ 33 中止)
     expect(wbgtBadge(24, null, null).text).toBe('通常');
-    expect(wbgtBadge(25, null, null).text).toBe('暑さ注意');
-    expect(wbgtBadge(28, null, null).text).toBe('熱バ');
+    expect(wbgtBadge(25, null, null).text).toBe('熱バ');
+    expect(wbgtBadge(30, null, null).text).toBe('熱バ');
     expect(wbgtBadge(31, null, null).text).toBe('熱キャン');
     expect(wbgtBadge(33, null, null).text).toBe('中止');
   });
   it('風で 1 段階下げ / 体感 38℃ 以上で 1 段階上げ', () => {
-    expect(wbgtBadge(28, 5, null).text).toBe('暑さ注意'); // level2 -1
-    expect(wbgtBadge(28, null, 38).text).toBe('熱キャン'); // level2 +1
+    expect(wbgtBadge(28, 5, null).text).toBe('通常'); // 熱バ(level1) を風で -1 → 通常
+    expect(wbgtBadge(28, null, 38).text).toBe('熱キャン'); // 熱バ(level1) を体感で +1 → 熱キャン
     expect(wbgtBadge(24, 5, null).text).toBe('通常'); // 下限クランプ
   });
   it('欠損は —', () => {
@@ -332,7 +333,7 @@ describe('badgeSeverity / applyBadgeGuard (§0.16)', () => {
     expect(badgeSeverity('雨キャン')).toBe('danger');
     expect(badgeSeverity('熱キャン')).toBe('danger');
     expect(badgeSeverity('風バ')).toBe('warn');
-    expect(badgeSeverity('暑さ注意')).toBe('warn');
+    expect(badgeSeverity('熱バ')).toBe('warn');
     expect(badgeSeverity('通常')).toBe('normal');
     expect(badgeSeverity('—')).toBe('normal');
   });
