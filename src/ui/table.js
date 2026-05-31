@@ -169,7 +169,7 @@ function detailPanelHtml(row) {
     }
     return order
       .map((g) => {
-        const timesText = g.restaurant && g.times.length === 0 ? '時刻未定' : g.times.map(esc).join(' / ');
+        const timesText = g.restaurant && g.times.length === 0 ? '予約必須' : g.times.map(esc).join(' / ');
         const tagsHtml = g.tags.length ? `<span class="show-tags">${esc(g.tags.join(' '))}</span>` : '';
         return `<li class="show-item priority-${g.cls}"><span class="show-name">${esc(g.name)}</span><span class="show-times">${timesText}</span>${tagsHtml}${cancelProbHtml(g.name, p, predWind)}</li>`;
       })
@@ -178,7 +178,7 @@ function detailPanelHtml(row) {
   // パーク別に official/fallback が混ざりうるが、どちらかが official なら「公式取得済」とする
   const isOfficial = schedFor('TDL').source === 'official' || schedFor('TDS').source === 'official';
   const schedBadge = isOfficial
-    ? '<span class="sched-badge official">公式取得済</span>'
+    ? '<span class="sched-badge official">確定情報</span>'
     : '<span class="sched-badge fallback">典型値で代替</span>';
   const outfit = suggestOutfit(row.eval.metrics)
     .map(
