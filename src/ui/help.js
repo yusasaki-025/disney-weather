@@ -35,11 +35,14 @@ export function setupHelp() {
     });
   });
 
+  // §0.38-2 : モーダル open 中は背面スクロールをロック (sticky thead が裏に潜るのは z-index で担保済)
   const open = () => {
     modal.hidden = false;
+    document.body.style.overflow = 'hidden';
   };
   const close = () => {
     modal.hidden = true;
+    document.body.style.overflow = '';
   };
   document.getElementById('btn-help').addEventListener('click', open);
   document.getElementById('help-close').addEventListener('click', close);

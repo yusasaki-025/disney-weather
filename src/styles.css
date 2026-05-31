@@ -2357,3 +2357,15 @@ body {
     font-size: 11px;
   }
 }
+
+/* §0.38-4 : 時間帯ピルの時刻範囲 ・ 最重視ラベル */
+.subscore-pill .time-range {
+  display: block;
+  font-size: 9px;
+  opacity: 0.85;
+  font-weight: 400;
+}
+.subscore-pill .time-key {
+  font-size: 9px;
+  font-weight: 700;
+}

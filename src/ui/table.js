@@ -195,7 +195,7 @@ function detailPanelHtml(row) {
   return `<div class="detail-panel">
     <div class="detail-info">
       <div class="detail-section">
-        <h4><span class="material-symbols-rounded" aria-hidden="true">schedule</span>時間帯スコア (朝 ･ 昼 ･ 夜)</h4>
+        <h4><span class="material-symbols-rounded" aria-hidden="true">schedule</span>時間帯スコア (昼を最重視)</h4>
         <div class="subscore-detail">${subscoreHtml(row.eval.subscores, BANDS)}</div>
       </div>
       <div class="detail-section">
