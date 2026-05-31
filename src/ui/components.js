@@ -54,8 +54,13 @@ export function cancelBadgeHtml(badge) {
 // 朝/昼/夜 サブスコア HTML (§0.6.5 : 記号廃止、色付き数値ピル)。
 // 背景色 = スコア帯。数値のみ表示。昼は subscore-main で少し大きく強調。未取得は灰色ピル + "-"。
 export function subscoreHtml(subscores, bands) {
-  // §0.38-4 : 各時間帯に時刻範囲を併記 (朝 8-11時 等)。昼は重み最大なので「最重視」表示。
-  const range = (b) => (b.start != null && b.end != null ? `${b.start}-${b.end}時` : '');
+  // §0.38-4 : 各時間帯に時刻範囲を併記 (朝 9-12時 等)。昼は重み最大なので「最重視」表示。
+  // BANDS は hours (Set) を持つので min〜max+1 で時刻範囲を導出する。
+  const range = (b) => {
+    if (!b.hours || b.hours.size === 0) return '';
+    const hs = [...b.hours];
+    return `${Math.min(...hs)}-${Math.max(...hs) + 1}時`;
+  };
   const labelHtml = (b) =>
     `<span class="time-label">${b.label}${b.key === 'noon' ? ' <span class="time-key">最重視</span>' : ''}<span class="time-range">${range(b)}</span></span>`;
   const ariaParts = bands.map((b) => {
