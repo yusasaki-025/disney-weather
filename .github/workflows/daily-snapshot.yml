@@ -1,0 +1,35 @@
+# §0.39.8 : 毎朝の予報スナップショット + 精度トラッキングを自動化。
+# 手動実行していた snapshot-forecast / track-accuracy を GitHub Actions の cron で回す。
+# 生成物 (src/data/forecast-snapshots/*.json, src/data/accuracy-log.json) を自動コミット。
+name: daily-snapshot
+
+on:
+  schedule:
+    # UTC 22:00 = JST 翌 07:00。GitHub Actions cron は最大数時間遅延しうる (idempotent な上書きなし設計で許容)。
+    - cron: '0 22 * * *'
+  workflow_dispatch: {} # 手動トリガーも可能に
+
+permissions:
+  contents: write # git-auto-commit のため
+
+concurrency:
+  group: daily-snapshot
+  cancel-in-progress: false
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm ci
+      # その時点の予報を保存 (1 日 1 スナップショット ・ 既存は上書きしない)
+      - run: npm run snapshot-forecast
+      # 前日予報 vs 当日実測の精度を accuracy-log に追記 (実測が揃わない当日はスキップ)
+      - run: npm run track-accuracy
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: 'chore: daily forecast snapshot + accuracy tracking [skip ci]'
+          file_pattern: 'src/data/forecast-snapshots/*.json src/data/accuracy-log.json'
