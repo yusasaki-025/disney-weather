@@ -2410,14 +2410,15 @@ button.extreme-warn {
 .show-toggle > summary::-webkit-details-marker {
   display: none;
 }
+/* §0.40.6 : ショー toggle 文言を「開催予想」に (中身は風 ・ 過去中止率) */
 .show-toggle > summary::after {
-  content: "詳細";
+  content: "開催予想 ▶";
   font-size: 10px;
   color: var(--accent);
   margin-left: auto;
 }
 .show-toggle[open] > summary::after {
-  content: "閉じる";
+  content: "開催予想 ▼";
 }
 .show-detail {
   margin-top: 6px;
