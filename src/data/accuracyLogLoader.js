@@ -40,7 +40,6 @@ export function computeStats(log = getAccuracyLog()) {
       }
     }
   }
-  // errs/biases を rms/bias/n に畳む
   for (const src of Object.keys(out)) {
     for (const k of Object.keys(out[src])) {
       const { errs, biases } = out[src][k];
@@ -55,7 +54,7 @@ export function timeSeries(log = getAccuracyLog()) {
   const dates = log.map((d) => d.date);
   const series = {};
   for (const day of log) {
-    for (const [src, f] of Object.entries(day.forecasts || {})) {
+    for (const src of Object.keys(day.forecasts || {})) {
       series[src] = series[src] || {};
       for (const m of METRICS) {
         series[src][m.key] = series[src][m.key] || [];
@@ -75,7 +74,7 @@ export function timeSeries(log = getAccuracyLog()) {
   return { dates, series };
 }
 
-// 直近の的中例 ・ 外し例 (|誤差| 上位 = 外し / 下位 = 的中)。風速基準で notable を抽出。
+// 直近の的中例 ・ 外し例 (|誤差| 上位 = 外し / 下位 = 的中)。風速基準で抽出。
 export function notableExamples(log = getAccuracyLog(), limit = 5) {
   const rows = [];
   for (const day of log) {

@@ -1922,3 +1922,128 @@ body {
 .cancel-prob.cp-mute {
   color: var(--text-mute);
 }
+
+/* §0.32 予報精度ダッシュボード */
+.app-footer-link {
+  text-align: center;
+  margin: 0 0 8px;
+}
+.app-footer-link a {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--accent);
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+}
+.app-footer-link a:hover {
+  text-decoration: underline;
+}
+.app-footer-link .material-symbols-rounded {
+  font-size: 18px;
+}
+.acc-section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 16px;
+}
+.acc-section h2 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  margin: 0 0 12px;
+}
+.acc-section h3 {
+  font-size: 13px;
+  color: var(--text-sub);
+  margin: 0 0 6px;
+}
+.acc-note {
+  font-size: 12px;
+  color: var(--text-sub);
+  margin: 0 0 12px;
+}
+.acc-chart {
+  position: relative;
+  height: 280px;
+}
+.acc-table-wrap {
+  overflow-x: auto;
+}
+.acc-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.acc-table th,
+.acc-table td {
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--border);
+  text-align: right;
+  white-space: nowrap;
+}
+.acc-table thead th {
+  color: var(--text-sub);
+  font-weight: 600;
+}
+.acc-table .acc-src {
+  text-align: left;
+  font-weight: 700;
+}
+.acc-n {
+  color: var(--text-mute);
+  font-size: 11px;
+}
+.acc-examples {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.acc-ex-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: 12px;
+}
+.acc-ex-list li {
+  padding: 4px 0;
+  border-bottom: 1px solid var(--border);
+}
+.acc-date {
+  font-weight: 600;
+  margin-right: 6px;
+}
+.acc-ex-src {
+  color: var(--text-sub);
+  margin-right: 6px;
+}
+.acc-err {
+  color: var(--score-bad);
+}
+.acc-empty {
+  text-align: center;
+  padding: 48px 16px;
+  color: var(--text-sub);
+}
+.acc-empty .material-symbols-rounded {
+  font-size: 48px;
+  color: var(--text-mute);
+}
+.acc-empty h2 {
+  font-size: 18px;
+  margin: 12px 0 8px;
+}
+.acc-disclaimer {
+  font-size: 11px;
+  color: var(--text-mute);
+  text-align: center;
+}
+@media (max-width: 767px) {
+  .acc-examples {
+    grid-template-columns: 1fr;
+  }
+}
