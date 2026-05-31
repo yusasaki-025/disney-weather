@@ -1,1 +1,25 @@
-{}
+{
+  "2026-05-31": {
+    "actualMaxWind": 6.1,
+    "actualMaxTemp": 29.7,
+    "actualMaxWbgt": null,
+    "forecasts": {
+      "jma": {
+        "predictedMaxWind": null,
+        "windError": null,
+        "predictedMaxTemp": 28,
+        "tempError": 1.7,
+        "predictedMaxWbgt": null,
+        "wbgtError": null
+      },
+      "open-meteo": {
+        "predictedMaxWind": 9.9,
+        "windError": 3.8,
+        "predictedMaxTemp": 25.4,
+        "tempError": 4.3,
+        "predictedMaxWbgt": 27,
+        "wbgtError": null
+      }
+    }
+  }
+}
