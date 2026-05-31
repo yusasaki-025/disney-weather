@@ -2127,3 +2127,126 @@ body {
 .check-recommend.is-on .material-symbols-rounded {
   color: #fff;
 }
+
+/* §0.34 iOS PWA インストール促進バナー */
+.install-banner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  box-shadow: 0 -2px 8px rgba(20, 30, 45, 0.08);
+  z-index: 50;
+}
+.install-banner-text {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+.install-banner-add {
+  margin-left: auto;
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: inherit;
+  color: #fff;
+  background: var(--accent);
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+}
+.install-banner-close {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px;
+  color: var(--text-sub);
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+.install-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(20, 30, 45, 0.45);
+}
+.install-modal-card {
+  width: 100%;
+  max-width: 360px;
+  padding: 20px;
+  background: var(--surface);
+  border-radius: var(--radius);
+}
+.install-modal-card h2 {
+  font-size: 16px;
+  margin: 0 0 12px;
+}
+.install-modal-card ol {
+  margin: 0 0 16px;
+  padding-left: 20px;
+  font-size: 14px;
+  line-height: 1.8;
+}
+.install-modal-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+/* §0.35 ヘルプモーダル タブ式 8 セクション */
+.help-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 12px 0;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 8px;
+}
+.help-tab {
+  padding: 6px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: inherit;
+  color: var(--text-sub);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  cursor: pointer;
+}
+.help-tab.active {
+  color: #fff;
+  background: var(--accent);
+  border-color: var(--accent);
+}
+.help-panel {
+  font-size: 14px;
+  line-height: 1.7;
+}
+.help-panel ul,
+.help-panel ol {
+  margin: 0 0 8px;
+  padding-left: 20px;
+}
+.help-panel li {
+  margin-bottom: 4px;
+}
+.help-faq dt {
+  font-weight: 700;
+  margin-top: 8px;
+}
+.help-faq dd {
+  margin: 2px 0 0;
+  color: var(--text-sub);
+}
+.help-panel a {
+  color: var(--accent);
+}

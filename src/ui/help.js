@@ -1,64 +1,33 @@
-// 用語集 ・ ヘルプモーダル (§3.16)。バッジの意味・スコア根拠・中止判断タイミング・FAQ・用語集。
+// 用語集 ・ ヘルプ (§3.16 / §0.35)。モーダルで 8 セクションをタブ式に表示する。
+// 開閉は main.js が制御。内容は help-content.js に集約 (固定テキスト、外部入力なし)。
 
-const HELP_HTML = `
-  <h2>用語集 ・ ヘルプ</h2>
+import { HELP_SECTIONS } from './help-content.js';
 
-  <h3>スコアの見方</h3>
-  <ul>
-    <li><strong>◎ (85+)</strong> 行くべき / <strong>○ (70+)</strong> 行ってよい / <strong>△ (50+)</strong> 微妙 / <strong>× (50 未満)</strong> 別日推奨</li>
-    <li>総合スコア ＝ 100 - (風減点 ＋ 雨減点 ＋ 熱中症減点 ＋ 寒さ減点 ＋ UV減点)</li>
-    <li>風 ・ 雨 ・ 熱は <strong>季節限定の昼パレード時刻 (TDL 13:00 / 14:30 ・ TDS 11:30 / 14:00) の前後 1 時間</strong>を最優先で評価します。</li>
-    <li>朝 / 昼 / 夜のサブスコアは重みが違い、昼 (季節パレード) を最重視します。</li>
-  </ul>
+export function helpHtml() {
+  const tabs = HELP_SECTIONS.map(
+    (s, i) =>
+      `<button type="button" class="help-tab${i === 0 ? ' active' : ''}" role="tab" data-help-tab="${s.id}">${s.label}</button>`,
+  ).join('');
+  const panels = HELP_SECTIONS.map(
+    (s, i) =>
+      `<div class="help-panel" data-help-panel="${s.id}"${i === 0 ? '' : ' hidden'}>${s.html}</div>`,
+  ).join('');
+  return `<div class="help-content">
+    <h2>マイハマびより の使い方</h2>
+    <div class="help-tabs" role="tablist">${tabs}</div>
+    <div class="help-panels">${panels}</div>
+  </div>`;
+}
 
-  <h3>3 つのバッジ</h3>
-  <ul>
-    <li><strong>風バッジ</strong> : 突風から、パレード中止リスクの目安 (通常 → 風バ → 中止リスク → 中止)</li>
-    <li><strong>雨バッジ</strong> : 降水確率 ・ 雨量から (通常 → 雨バ → 雨キャン → 中止)</li>
-    <li><strong>熱バッジ (WBGT)</strong> : 暑さ指数から (通常 → 暑さ注意 → 熱バ → 熱キャン → 中止)</li>
-  </ul>
-
-  <h3>用語</h3>
-  <ul>
-    <li><strong>風バ</strong> : 強風でパレード ・ ショーが一部省略バージョンになること</li>
-    <li><strong>風キャン</strong> : 強風 (目安 風速 10m/s 前後) でパレード ・ ショーが中止になること</li>
-    <li><strong>熱バ</strong> : 暑さでショー ・ パレードが一部省略になること</li>
-    <li><strong>熱キャン</strong> : 暑さ (目安 WBGT 31 以上 ・ 気温 35℃ 以上) でショー ・ パレードが中止になること</li>
-    <li><strong>キャングリ</strong> : キャラクターグリーティング (キャラクターと触れ合えるイベント)</li>
-  </ul>
-
-  <h3>中止判断のタイミング</h3>
-  <ul>
-    <li>当日の中止 ・ 変更は、東京ディズニーリゾート公式サイト ・ アプリ ・ 公式 X で発表されます。</li>
-    <li>このツールは事前の <strong>目安</strong> です。最終的な運営状況は必ず公式でご確認ください。</li>
-  </ul>
-
-  <h3>よくある質問</h3>
-  <ul>
-    <li><strong>予報が外れたら?</strong> 天気予報なので外れることがあります。複数ソースを横並びにして傾向で判断してください。</li>
-    <li><strong>同行者と共有するには?</strong> 右上の「URL をコピー」ボタンで URL を渡してください。QR が必要なときはコピーした URL を https://www.qr-code-generator.com 等に貼ると QR 化できます。</li>
-    <li><strong>WBGT の「推定」って?</strong> 環境省データが取れないときは気温 ・ 湿度からの簡易計算値です (誤差 ±1.5℃ 程度)。</li>
-  </ul>
-`;
-
-export function setupHelp() {
-  const modal = document.getElementById('help-modal');
-  const body = document.getElementById('help-body');
-  body.innerHTML = HELP_HTML;
-
-  const open = () => {
-    modal.hidden = false;
-  };
-  const close = () => {
-    modal.hidden = true;
-  };
-
-  document.getElementById('btn-help').addEventListener('click', open);
-  document.getElementById('help-close').addEventListener('click', close);
-  modal.addEventListener('click', (e) => {
-    if (e.target === modal) close();
-  });
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && !modal.hidden) close();
+// タブ切替を結線する (モーダルを開いて innerHTML 設定後に呼ぶ)。
+export function wireHelpTabs(root) {
+  root.querySelectorAll('.help-tab').forEach((tab) => {
+    tab.addEventListener('click', () => {
+      const id = tab.dataset.helpTab;
+      root.querySelectorAll('.help-tab').forEach((t) => t.classList.toggle('active', t === tab));
+      root.querySelectorAll('.help-panel').forEach((p) => {
+        p.hidden = p.dataset.helpPanel !== id;
+      });
+    });
   });
 }

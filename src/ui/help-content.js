@@ -1,0 +1,105 @@
+// ヘルプモーダルの 8 セクション内容 (§0.35)。
+// テキストを一箇所に集約し、help.js がタブ UI として描画する。HTML 文字列で持つ
+// (リンク ・ 強調を含むため)。値は固定で外部入力を含まないため esc 不要。
+
+export const HELP_SECTIONS = [
+  {
+    id: 'about',
+    label: 'このアプリは?',
+    html: `
+      <p>舞浜 (東京ディズニーランド ・ シー) の天気予報を比較して、ショー ・ パレードの<strong>中止リスクを判定</strong>するツールです。</p>
+      <p>複数の予報を横並びで見て、「風 ・ 雨 ・ 暑さ」の観点から行く日を選ぶのに使います。</p>
+    `,
+  },
+  {
+    id: 'score',
+    label: 'スコアの見方',
+    html: `
+      <ul>
+        <li><strong>ベスト (85+)</strong> : 風 ・ 雨 ・ 暑さすべて問題なし</li>
+        <li><strong>OK (70+)</strong> : 軽微な注意のみ</li>
+        <li><strong>微妙 (50+)</strong> : 風バ or 雨バ域、要検討</li>
+        <li><strong>別日 (50未満)</strong> : 中止リスク高、別日推奨</li>
+      </ul>
+      <p>スコアは、季節限定の昼パレード時刻の前後 1 時間の<strong>平均値</strong>で、風 ・ 雨 ・ 熱を減点して算出します。</p>
+      <p>バッジが「中止」級のときは、平均スコアが高くてもスコアに上限を掛けます (バッジとスコアの矛盾を防ぐため)。</p>
+    `,
+  },
+  {
+    id: 'badge',
+    label: 'バッジ',
+    html: `
+      <ul>
+        <li><strong>風</strong> : 通常 → 風バ → 中止リスク → 中止 (ショー別の風閾値。過去の中止記録に基づく)</li>
+        <li><strong>雨</strong> : 通常 → 雨バ → 雨キャン → 中止</li>
+        <li><strong>熱 (WBGT)</strong> : 通常 → 暑さ注意 → 熱バ → 熱キャン → 中止</li>
+      </ul>
+    `,
+  },
+  {
+    id: 'glossary',
+    label: '用語集',
+    html: `
+      <ul>
+        <li><strong>風バ</strong> : 風で演出が一部変更される可能性 (風バージョン)</li>
+        <li><strong>風キャン</strong> : 強風による公演中止</li>
+        <li><strong>熱バ ・ 熱キャン</strong> : 暑さによる演出変更 ・ 中止</li>
+        <li><strong>パイロカット</strong> : 強風で花火 (パイロ) 部分のみ省略</li>
+        <li><strong>キャングリ</strong> : 公演中止時に代わりに行われるグリーティング</li>
+        <li><strong>プレミアアクセス</strong> : 有料の鑑賞 ・ 体験エリア</li>
+        <li><strong>エントリー受付</strong> : 抽選 ・ 先着の鑑賞枠申込</li>
+      </ul>
+    `,
+  },
+  {
+    id: 'sources',
+    label: 'データソース',
+    html: `
+      <ul>
+        <li>気象庁 (政府標準利用規約)</li>
+        <li>Open-Meteo (CC BY 4.0)</li>
+        <li>環境省 暑さ指数 電子情報提供サービス (政府標準利用規約)</li>
+        <li>東京ディズニーリゾート公式 (ショースケジュール ・ 出典明記)</li>
+        <li>過去風キャン記録 : TSUBASA のディズニーパークブログ + X @tdr_syopare_can</li>
+      </ul>
+      <p>いずれも出典を明記した個人利用です。</p>
+    `,
+  },
+  {
+    id: 'frequency',
+    label: '取得頻度',
+    html: `
+      <ul>
+        <li><strong>天気</strong> : リロードで最新 (約 10 分キャッシュ)</li>
+        <li><strong>ショースケジュール</strong> : 月 1 回 手動更新</li>
+        <li><strong>WBGT</strong> : 4 - 10 月は環境省実値、期間外は気温 ・ 湿度からの簡易計算</li>
+      </ul>
+    `,
+  },
+  {
+    id: 'faq',
+    label: 'FAQ',
+    html: `
+      <dl class="help-faq">
+        <dt>なぜ今日が「別日」?</dt>
+        <dd>風 ・ 雨 ・ 熱のいずれかで中止リスクが高いと判定されたためです。</dd>
+        <dt>公式と公演時刻が違う</dt>
+        <dd>スケジュールは月 1 取得のため遅延があります。当日は公式アプリも併用してください。</dd>
+        <dt>印刷したい</dt>
+        <dd>ブラウザの印刷機能をご利用ください。</dd>
+        <dt>同行者と共有したい</dt>
+        <dd>この URL を LINE ・ メッセージで送ると同じ画面を共有できます。</dd>
+        <dt>バグ ・ 要望</dt>
+        <dd>GitHub の Issues へお寄せください。</dd>
+      </dl>
+    `,
+  },
+  {
+    id: 'contact',
+    label: '連絡先',
+    html: `
+      <p>ソースコード ・ Issues : <a href="https://github.com/yusasaki-025/disney-weather" target="_blank" rel="noopener">GitHub (yusasaki-025/disney-weather)</a></p>
+      <p class="help-note">本ツールは個人制作で、東京ディズニーリゾート公式とは無関係です。表示は公開予報からの推定であり、当日の運営状況は公式でご確認ください。</p>
+    `,
+  },
+];
