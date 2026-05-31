@@ -1129,6 +1129,27 @@ section {
     overflow-x: hidden;
     box-sizing: border-box;
   }
+  /* §0.41.6 : 展開時はカードと詳細を 1 枚の白カードに連結 (背景 ・ 影 ・ border を継続) */
+  .forecast-table tr.calendar-row[aria-expanded='true'] {
+    margin-bottom: 0;
+    border-bottom: none;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    box-shadow: none;
+  }
+  .forecast-table tr.detail-row:not([hidden]) {
+    margin: 0 0 10px;
+    border: 1px solid var(--border);
+    border-top: none;
+    border-bottom-left-radius: var(--radius);
+    border-bottom-right-radius: var(--radius);
+    background: var(--surface);
+    box-shadow: var(--shadow);
+  }
+  .forecast-table tr.detail-row:not([hidden]) > td {
+    background: var(--surface);
+    padding: 0 12px 12px;
+  }
   .detail-panel,
   .detail-info,
   .detail-charts,
