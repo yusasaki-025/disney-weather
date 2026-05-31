@@ -239,6 +239,7 @@ export function renderTable(els, rows, state, sources, sourceStatus, handlers) {
     `<th><span class="material-symbols-rounded cat-head" aria-hidden="true">${CAT_ICON[kind]}</span><span class="cat-head-label">${label}</span></th>`;
   thead.innerHTML = `<tr>
     <th class="col-date">日付</th>
+    <th class="col-score">スコア</th>
     ${catHead('wind', '風')}
     ${catHead('rain', '雨')}
     <th><span class="material-symbols-rounded cat-head" aria-hidden="true">${CAT_ICON.wbgt}</span><span class="cat-head-label">熱 (WBGT)</span><span class="material-symbols-rounded wbgt-info" tabindex="0" role="img" title="暑さ指数 (WBGT)。気温 + 湿度 + 日射から算出する熱中症リスク指標。28+ で警戒、31+ で危険。" aria-label="暑さ指数 (WBGT) とは : 気温 ・ 湿度 ・ 日射から算出する熱中症リスク指標。28 以上で警戒、31 以上で危険。">info</span></th>
@@ -253,7 +254,7 @@ export function renderTable(els, rows, state, sources, sourceStatus, handlers) {
 
   // フィルター結果が 0 件 (おすすめ日のみ ON で該当無し等) のときは案内を出す
   if (rows.length === 0) {
-    const colspan = 5 + sources.length;
+    const colspan = 6 + sources.length;
     tbody.innerHTML = `<tr><td colspan="${colspan}" class="table-empty">
       今は条件に合う日がありません。フィルターを外すと全日が表示されます。
     </td></tr>`;
@@ -330,7 +331,7 @@ export function renderTable(els, rows, state, sources, sourceStatus, handlers) {
         <td class="col-chev"><span class="material-symbols-rounded chevron" aria-hidden="true">expand_more</span></td>
       </tr>`;
 
-      const colspan = 5 + sources.length;
+      const colspan = 6 + sources.length;
       const detailRow = `<tr class="detail-row" data-detail="${row.date}" hidden>
         <td colspan="${colspan}"></td>
       </tr>`;

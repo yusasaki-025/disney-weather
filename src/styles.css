@@ -2423,3 +2423,23 @@ button.extreme-warn {
   margin-top: 6px;
   padding-left: 2px;
 }
+
+/* §0.37.4 : PC はスコア独立列 (7列) ・ スマホはカード内 (cell-date-score) に統合維持 */
+.cell-date-score .card-score {
+  display: none;
+}
+.cell-score-pc {
+  vertical-align: top;
+}
+@media (max-width: 767px) {
+  th.col-score,
+  .forecast-table tr.calendar-row > td.cell-score-pc {
+    display: none;
+  }
+  .cell-date-score .score-row.card-score {
+    display: flex;
+  }
+  .cell-date-score .score-reason.card-score {
+    display: block;
+  }
+}
