@@ -12,6 +12,7 @@
   --text-mute: #8a93a0;
   --accent: #2f6fb0;
   --accent-dark: #245a90;
+  --ok-green: #2e7d32;
 
   --score-excellent: #2d8f3e;
   --score-good: #88c057;
@@ -600,9 +601,10 @@ section {
   font-size: 14px;
 }
 
+/* §0.40.4 : 通常 (リスクなし) タグを緑にして「OK」感を出す */
 .cancel-lv0 {
-  background: var(--surface-2);
-  color: var(--text-sub);
+  background: var(--ok-green);
+  color: #fff;
 }
 
 .cancel-lv1 {
