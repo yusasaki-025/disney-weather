@@ -176,7 +176,11 @@ function detailPanelHtml(row) {
       .map((g) => {
         const timesText = g.restaurant && g.times.length === 0 ? '予約必須' : g.times.map(esc).join(' / ');
         const tagsHtml = g.tags.length ? `<span class="show-tags">${esc(g.tags.join(' '))}</span>` : '';
-        return `<li class="show-item priority-${g.cls}"><span class="show-name">${esc(g.name)}</span><span class="show-times">${timesText}</span>${tagsHtml}${cancelProbHtml(g.name, p, predWind)}</li>`;
+        const summary = `<span class="show-name">${esc(g.name)}</span><span class="show-times">${timesText}</span>${tagsHtml}`;
+        // §0.38-21 : 過去中止率などの詳細は既定で折りたたみ、行クリックで展開 (details/summary, a11y)。
+        const detail = cancelProbHtml(g.name, p, predWind);
+        if (!detail) return `<li class="show-item priority-${g.cls}">${summary}</li>`;
+        return `<li class="show-item priority-${g.cls}"><details class="show-toggle"><summary>${summary}</summary><div class="show-detail">${detail}</div></details></li>`;
       })
       .join('');
   };
