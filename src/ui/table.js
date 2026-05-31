@@ -182,14 +182,19 @@ function detailPanelHtml(row) {
           ? `${allTimes.slice(0, 2).join(' / ')} ほか ${allTimes.length - 2} 回`
           : fullTimesText;
         const timesTitle = folded ? ` title="${fullTimesText}"` : '';
-        // §0.40.5 : DPA / 抽選 / 季節限定 (priority high) をそれぞれ独立タグ (バッジ) で表示。
-        const TAG_CLASS = { DPA: 'tag-dpa', 抽選: 'tag-chusen' };
+        // §0.40.5 / §0.41.4 : DPA / 抽選 / 期間限定 を独立タグ化。
+        //   schedule の内部表記 (プレミアアクセス / エントリー受付) を表示用 (DPA / 抽選) にマップ。
+        const TAG_MAP = {
+          プレミアアクセス: { label: 'DPA', cls: 'tag-dpa' },
+          エントリー受付: { label: '抽選', cls: 'tag-chusen' },
+          期間限定: { label: '期間限定', cls: 'tag-season' },
+        };
         const tagList = [...(g.cls === 'high' ? ['期間限定'] : []), ...g.tags];
         const tagsHtml = tagList
-          .map(
-            (t) =>
-              `<span class="show-tag ${t === '期間限定' ? 'tag-season' : TAG_CLASS[t] || 'tag-note'}">${esc(t)}</span>`,
-          )
+          .map((t) => {
+            const m = TAG_MAP[t] || { label: t, cls: 'tag-note' };
+            return `<span class="show-tag ${m.cls}">${esc(m.label)}</span>`;
+          })
           .join('');
         const summary = `<span class="show-name">${esc(g.name)}</span><span class="show-times"${timesTitle}>${timesText}</span>${tagsHtml}`;
         // §0.38-21 : 過去中止率などの詳細は既定で折りたたみ、行クリックで展開 (details/summary, a11y)。
