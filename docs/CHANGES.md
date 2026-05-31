@@ -2606,6 +2606,445 @@ Phase 2 第4弾は **アメブロ PDF 5ヶ月分のみ** で実装。以下は�
 - Phase 3 統合後 : + 約 200 records (熱キャン + フレンジー)
 - ML 分類器 / 過去同条件中止率 表示が可能になる規模
 
+### 0.31 過去 N 日中 X% 中止表示 (Phase 3 第1弾)
+
+概要 : §0.30 で取り込んだ cancel-history JSON (5ヶ月 2,111件) を使い、各日の予報に対して「過去同条件で何% 中止だったか」を表示。バッジだけでは伝わらない予測信頼度をユーザーに直接見せる。
+
+#### ロジック (src/score/cancelProbability.js 新規)
+
+```js
+export function getCancelProbability(showName, predictedAvgWind, predictedMaxWind, currentMonth) {
+  // 1. cancel-history からショー別 records を取得
+  const records = getAllRecordsForShow(showName);
+  if (records.length < 20) return null;   // サンプル少なすぎ → 表示しない
+  
+  // 2. 同条件フィルタ : 風速 ±2m/s
+  const similar = records.filter(r =>
+    r.maxWind != null &&
+    Math.abs(r.maxWind - predictedMaxWind) <= 2.0
+  );
+  
+  // 3. (オプション) 同月フィルタも適用 (季節性)
+  // const sameMonth = similar.filter(r => r.date.slice(5,7) === currentMonth);
+  
+  if (similar.length < 5) return null;
+  
+  // 4. 中止率算出
+  const cancelStatuses = ['cancel', 'partial-cancel'];
+  const cancelCount = similar.filter(r => cancelStatuses.includes(r.status)).length;
+  const probability = cancelCount / similar.length;
+  
+  return {
+    probability: Math.round(probability * 100),  // %
+    sampleSize: similar.length,
+    cancelCount,
+    conditionWind: predictedMaxWind,
+  };
+}
+```
+
+#### 表示位置 (詳細パネル内 ・ ショー別)
+
+```
+┌─ ショー ・ パレード TDL ─────────────────────┐
+│ ディズニー・ハーモニー・イン・カラー 13:00      │
+│   ↳ 予報 max 9m/s → 過去同条件 18件中 4件中止  │
+│      (22% 中止リスク)                         │
+│                                              │
+│ イッツ ・ ア ・ スウィーツフルタイム! 16:25      │
+│   ↳ 予報 max 9m/s → 過去同条件 12件中 1件中止  │
+│      (8% 中止リスク)                          │
+└──────────────────────────────────────────────┘
+```
+
+#### 表示パターン
+
+- サンプル 20件以上 ・ 同条件 5件以上 : 「過去 N件中 M件中止 (X%)」表示
+- サンプル不足 : 表示しない (誤情報回避)
+- 中止率 ≧ 50% : 赤系警告
+- 中止率 30 - 49% : 黄系注意
+- 中止率 < 30% : グレー (参考表示)
+
+#### スコアセル ・ サマリへの統合 (オプション)
+
+- スコアセル右側に小さく「中止 22%」バッジ
+- TOP3 のサマリにも「中止リスク 20%」併記
+
+#### 該当ファイル
+
+- `src/score/cancelProbability.js` 新規
+- `src/data/cancelHistoryLoader.js` 新規 (or 既存) ・ cancel-history JSON を統合読み込み
+- `src/ui/table.js` の詳細パネル ショー表示部に中止確率追加
+- `src/score/scoring.js` の総合スコアにも中止確率を反映 (オプション ・ Phase 3.5)
+
+#### 検証
+
+- 公開ページの詳細パネル内、各ショーに「過去 N件中 M件中止 (X%)」表示
+- サンプル少ない日 (台風レベルの極端風 等) は表示なし
+- npm test 緑
+
+### 0.32 予報精度ダッシュボード (Phase 3 第2弾)
+
+概要 : §0.29 で蓄積される accuracy-log.json を可視化。30日以上溜まれば各ソース (JMA / Open-Meteo / 環境省 WBGT) の平均誤差 ・ バイアスが見える。
+
+#### UI (別 artifact or 詳細パネル拡張)
+
+**案A : 別 artifact「マイハマびより 予報精度ダッシュボード」** (推奨)
+
+- 公開ページとは別 URL (例 `disney-weather.pages.dev/accuracy`)
+- 毎日 accuracy-log.json から自動更新
+- Yuka さんが時々見て「JMA より Open-Meteo の方が風速を当ててる」みたいな知見得る
+
+**案B : 詳細パネル拡張**
+
+- 既存詳細パネルに「予報精度 (ベータ)」セクション
+- その日の各ソースの過去30日平均誤差を小さく表示
+- 「JMA : 風速 RMS 1.2m/s ・ Open-Meteo : 1.5m/s」
+
+#### 表示要素
+
+1. **時系列グラフ** (Chart.js) :
+   - 横軸 : 過去 30日
+   - 縦軸 : 各ソースの誤差 (RMS)
+   - 系列 : JMA wind / Open-Meteo wind / 環境省 WBGT
+
+2. **平均誤差 ・ バイアス表** :
+   ```
+   | ソース      | wind RMS | wind バイアス | pop RMS | WBGT RMS |
+   | JMA        | 1.2 m/s  | +0.3 (過大評価)| 12%    | -        |
+   | Open-Meteo | 1.5 m/s  | -0.5 (過小評価)| 8%     | -        |
+   | 環境省 WBGT |  -      |  -            |  -      | 0.8     |
+   ```
+
+3. **直近の的中例 ・ 外し例**
+   - 「6/5 風予報 8m/s ・ 実測 12m/s ・ JMA 4m/s 外し」
+   - 「6/8 ピタリ ・ 全ソース誤差 < 0.5」
+
+4. **インサイト自動生成** (Claude askClaude で簡易)
+   - 「JMA は雨予報を 5% 過小評価しがち、傘持参を推奨」
+   - 「Open-Meteo は風速のピークを 1m/s 過大評価しがち、安心係数として使える」
+
+#### 該当ファイル
+
+- `src/ui/accuracyDashboard.js` 新規 (別 artifact or 詳細パネル拡張)
+- `dist/accuracy.html` 新規 (別 artifact の場合)
+- `src/data/accuracyLogLoader.js` 新規 (or 既存) ・ accuracy-log.json 統合読み込み + 集計関数
+
+#### 検証
+
+- accuracy-log.json に最低 7日分溜まればグラフ描画開始
+- 30日以上で各ソース平均誤差表示
+- Chart.js 時系列描画 OK
+- npm test 緑
+
+#### 運用前提
+
+- Yuka さんが毎朝 (or 隔日) `npm run snapshot-forecast` + 翌日 `npm run track-accuracy` を Mac で実行
+- (Phase 3.5) GitHub Actions cron で自動化検討
+
+### 0.33 (α) 熱キャン / フレンジー追加運用 (Yuka さん画像 upload → Cowork vision 読み取り)
+
+概要 : §0.30 で見送った X 熱キャン画像 + Wix フレンジー HTML (画像) を、運用ベースで追加取り込む仕組み。Yuka さんが画像をチャットに添付 → Cowork (Claude vision) が読み取り → JSON 化 → 既存 cancel-history と統合。
+
+#### Yuka さん運用フロー
+
+1. X (`@tdr_syopare_can`) や Wix amane66 サイトで気になる画像を見つけたら、スクショを Cowork チャットに添付
+2. 1行コメントで補足 (例「2024年7-10月のハーモニー熱キャン、気温順」)
+3. Cowork が vision で表構造を読み取り → 一次確認のため JSON サンプルを表示
+4. Yuka さん OK → Cowork が `src/data/cancel-history/{YYYY-MM}-{show-key}.json` に保存
+5. Yuka さんが git commit & push (or Cowork から PR)
+
+#### ファイル命名規則
+
+```
+src/data/cancel-history/
+├── 2025-12.json          (アメブロ PDF ・ 全ショー風キャン)
+├── 2026-01.json
+├── ...
+├── 2024-07-harmony-heat.json    (X 熱キャン ・ ハーモニー ・ 月別)
+├── 2024-08-harmony-heat.json
+├── 2025-09-frenzy-wind.json     (Wix ・ フレンジー)
+└── 2025-10-frenzy-wind.json
+```
+
+スキーマは §0.30 と同じ (`shows[].records[]`)、ファイル単位で「ショー × 月 × 種別」で分割。
+
+#### Code 側修正 (Phase 3 で必要なら)
+
+- `src/data/cancelHistoryLoader.js` が `src/data/cancel-history/*.json` を全部マージして `getAllRecordsForShow(showName)` で取得できれば、ファイル分割しても何もせず統合される
+- 既に §0.30 で全 JSON マージ実装済なら追加コード不要
+
+#### Cowork (vision) 読み取り精度
+
+- Excel 風細セル : 約 85-95% (Claude Sonnet vision)
+- 不明セル / 欠損は `null` ・ 取り込まない (誤情報回避)
+- Yuka さんが事前に確認 → 怪しい値は手動修正
+
+#### 出典明記
+
+- README ・ 公開ページのデータ出典に X `@tdr_syopare_can` + Wix amane66 を追加 (既に §0.30 末尾に記載済)
+
+### 0.34 (ν) iOS PWA インストール促進バナー
+
+概要 : iOS Safari で公開ページを開いた初回ユーザーに「ホーム画面に追加してアプリのように使う」案内を表示。リピート利用 ・ 同行者シェア時の体験向上。
+
+#### 表示条件
+
+- ブラウザ : iOS Safari (UA 判定)
+- PWA 環境ではない (`display-mode: standalone` false)
+- localStorage で `pwaBannerDismissed !== 'true'`
+- 訪問 2回目以降 (1回目はバナー邪魔なので非表示、`visitCount >= 2`)
+
+#### バナー UI
+
+画面下部 (sticky) に控えめなバナー :
+
+```
+┌─────────────────────────────────────────────┐
+│ アプリのように使えます ・ ホーム画面に追加 ›  ✕ │
+└─────────────────────────────────────────────┘
+```
+
+- 「ホーム画面に追加 ›」 タップ → モーダルで手順案内
+- 「✕」 タップ → 1週間非表示 (localStorage に dismissedUntil)
+- 「もう表示しない」 (モーダル内) → 永続非表示
+
+#### モーダル内 案内
+
+```
+ホーム画面に追加する方法 (iPhone Safari)
+
+1. 画面下部の共有ボタン (□↑) をタップ
+2. 「ホーム画面に追加」を選ぶ
+3. 名前 (デフォルト : マイハマびより) を確認して「追加」
+
+→ ホーム画面のアイコンから アプリのように起動できます
+   (フルスクリーン / オフライン対応 / 通信が軽い)
+```
+
+(可能なら手順の動画 GIF or イラスト併記、Phase 3.5 で実装)
+
+#### 該当ファイル
+
+- `src/ui/installBanner.js` 新規
+- `src/utils/visitTracker.js` 新規 (or 既存) ・ 訪問回数カウント
+- `src/styles.css` バナー + モーダルスタイル
+- `src/main.js` から初期化
+
+#### 検証
+
+- iOS Safari で2回目訪問にバナー表示
+- 「ホーム画面に追加」モーダル動作
+- ✕ で1週間非表示 ・ 「もう表示しない」で永続非表示
+- PWA 環境 (ホーム画面から起動) では非表示
+- Android Chrome / PC では非表示
+
+### 0.35 (ξ) ヘルプ ・ FAQ 充実 (用語集 ・ 同行者向け案内)
+
+概要 : 既存のヘルプモーダルを拡張、同行者 ・ 初見ユーザーが「これ何?」と思う点を全部解消。
+
+#### セクション構成
+
+1. **このアプリは何?**
+   - 「舞浜 (TDL ・ TDS) の天気予報を比較して、ショー ・ パレード中止リスクを判定するツール」
+   - 1-2文で
+
+2. **スコアの見方**
+   - ベスト / OK / 微妙 / 別日 の意味 (色 + アイコン併記)
+   - 算定根拠 (風 ・ 雨 ・ 熱 を昼パレード時刻 ±1h の平均値で評価)
+
+3. **各バッジの説明**
+   - 風 : 通常 / 風バ / 中止リスク高 / ほぼ中止 (閾値はショー別、過去風キャン記録に基づく)
+   - 雨 : 通常 / 雨バ / 雨キャン濃厚 / ほぼ中止
+   - 熱 (WBGT) : 通常 / 暑さ注意 / 熱バ / 熱キャン濃厚 / ほぼ中止
+
+4. **用語集**
+   - 風バ ・ 風キャン ・ 熱バ ・ 熱キャン ・ パイロカット ・ キャングリ ・ プレミアアクセス ・ エントリー受付
+
+5. **データソース**
+   - 気象庁 / Open-Meteo / 環境省 WBGT / TDR 公式 / TSUBASA のブログ + X
+   - 各リンク + 出典明記
+
+6. **取得頻度**
+   - 天気 : リロードのたびに最新 (10分キャッシュ)
+   - ショースケジュール : 月1 (Yuka さん手動更新)
+   - 過去風キャン記録 : 月1追加 (Yuka さん手動)
+   - WBGT : 環境省実値 (4-10月) ・ 期間外は簡易計算
+
+7. **FAQ**
+   - Q. 同行者と共有するには? → A. ヘッダー「URL コピー」 (既に削除済 ・ 案内変更要) → URL を直接コピー or QR
+   - Q. なぜ今日「別日」表示? → A. 風 ・ 雨 ・ 熱のいずれかでショー中止リスクが高いから
+   - Q. 公式公演時刻と違う日がある → A. 公式更新を月1で取得しているため、直近の変更は反映遅延
+   - Q. 印刷したい → A. ブラウザの印刷機能で OK (印刷モードは廃止済)
+   - Q. 通知が欲しい → A. (Phase 3 LINE 通知 が来たら案内)
+   - Q. バグ ・ 要望 → A. GitHub Issues or Yuka さんに直接
+
+8. **連絡先 ・ ソースコード**
+   - GitHub repo リンク
+   - Yuka さん連絡先 (or 任意)
+   - 「個人ツールとして開発」明記 (公式 TDR とは無関係)
+
+#### 該当ファイル
+
+- `src/ui/help.js` の拡張 (新セクション追加)
+- `src/data/help-content.js` 新規 (or インライン)
+- `src/styles.css` ヘルプモーダルのレイアウト (タブ式 or アコーディオン)
+
+#### 検証
+
+- ヘッダー右の「ヘルプ」ボタンでモーダル開く
+- 全 8セクション表示
+- 同行者向けに「これ何?」が全部解消
+- スマホでもスクロール可
+
+### 0.36 UI 微調整 11点 (公開ページ確認後 ・ Yuka さん指摘)
+
+公開ページ実機確認で見つかった改善点を 1 PR にまとめる。
+(TOP3 sticky と連続赤サマリは見送り)
+
+#### 1. 雨量の単位明示 + 集計幅整理
+
+問題 : 雨セル「86% 113.6mm」 ・ 113.6mm が日合計か時間量か曖昧。判定 (「ほぼ中止」) は時間ピーク値で行うが、表示が日合計だと整合しない。
+
+対応 :
+
+- セル表記 : `pop% precip_max_mm/h` のみ (例「86% 6mm/h」)
+- 日合計は **ホバー title** で「日合計 113.6mm」と補助表示
+- 「ほぼ中止」判定は引き続き precip_max ベース
+- precip_max が 0 (今後降る予定なし) の時は「86% 雨なし」or 「86%」のみ
+
+該当ファイル :
+- `src/ui/table.js` の雨セルレンダラ
+- `src/data/openMeteo.js` 等の正規化で precip_max (precipitation_max_hourly) を確実に取得
+
+#### 2-3. バッジラベル短縮
+
+問題 : 「風バ可能性あり」「雨キャン濃厚」「熱キャン濃厚」「ほぼ中止」「中止リスク高」 ・ 長くてカード幅圧迫。
+
+| 旧 | 新 |
+|---|---|
+| 風バ可能性あり | **風バ** |
+| 中止リスク高 | **中止リスク** |
+| ほぼ中止 | **中止** |
+| 雨バ可能性 | **雨バ** |
+| 雨キャン濃厚 | **雨キャン** |
+| 暑さ注意 | **暑さ注意** (維持) |
+| 熱バ可能性あり | **熱バ** |
+| 熱キャン濃厚 | **熱キャン** |
+| 通常 | **通常** (維持) |
+
+該当 : `src/score/scoring.js` のバッジラベル定義 + テスト更新。
+
+#### 4. 天気概況の日本語整形
+
+問題 : 「くもり 夕方 から 晴れ」のような raw 文字列が出る (Open-Meteo / 気象庁 はスペース区切り)。
+
+対応 : `src/utils/weatherText.js` 新規 ・ 正規化関数 :
+
+```js
+export function normalizeWeatherText(raw) {
+  return raw
+    .replace(/\s+/g, '')                    // 不要な空白削除
+    .replace(/から/g, 'から')               // 接続詞前後の整形
+    .replace(/時々/g, '時々')
+    .replace(/(.+?)(夕方|朝晩|昼前|昼過ぎ|夜)/, '$1、$2')   // 句読点
+    .replace(/^くもり/, '曇り');            // 表記統一
+}
+```
+
+例 :
+- `くもり 夕方 から 晴れ` → `曇り、夕方から晴れ`
+- `晴れ 時々 曇り` → `晴れ時々曇り`
+- `晴れ 朝晩 くもり` → `晴れ、朝晩曇り`
+
+該当 : `src/ui/table.js` の気象庁/Open-Meteo セルレンダラで `normalizeWeatherText(forecast.weatherText)` を経由。
+
+#### 5. 気象庁 / Open-Meteo セル高さ詰め
+
+問題 : 天気アイコン 40px + 概況 + 気温 + 雨% でセル縦に長い ・ 1日の縦幅が増えて行数減る。
+
+対応 :
+
+- 天気アイコン : `40px → 32px`
+- セル内 padding : `8px → 6px`
+- 気温 ・ 雨% フォントサイズ : `13px → 12px`
+- 概況テキスト : `13px → 12px`
+- 雨 0% は表示しない (precip_sum 0 なら省略)
+
+該当 : `src/styles.css` の `.weather-icon` `.cell-jma` `.cell-openmeteo` `.temp-row` `.pop`
+
+#### 7. 極端値の信頼度ヒント
+
+問題 : 6/3 のような風 23m/s 雨 113mm は気象的に台風レベル ・ 予報単独で出てると誤情報の可能性。
+
+対応 : 極端値 (`gust_max ≧ 20 m/s` or `precip_max ≧ 30 mm/h`) の場合、セルに小さく `(要確認)` バッジ追加 ・ ホバーで「○○ の単独予報 ・ 他ソースを確認推奨」表示。
+
+該当 : `src/score/extremeWarning.js` 新規 + `src/ui/table.js` セルに表示組込み。
+
+#### 9. カード gap 拡大 (スマホ)
+
+問題 : カード間 margin-bottom 8px がやや窮屈。
+
+対応 : `src/styles.css` @media (max-width: 767px) の `.calendar-row { margin-bottom: 12px }` (8→12)。
+
+#### 10. PC 詳細パネル chevron 視認性
+
+問題 : PC で行末 chevron `›` が薄い (var(--text-mute)) ・ クリック可と分かりづらい。
+
+対応 :
+
+- chevron 色を `var(--primary)` (ブルー) に
+- ホバー時に行背景がもう少し濃く + chevron が一回り大きく
+- カーソル `pointer` 維持
+
+該当 : `src/styles.css` のテーブル行 + chevron スタイル。
+
+#### 11. 「おすすめ日のみ」位置 ・ 強調
+
+問題 : フィルター行の右端 ・ 控えめ。
+
+対応 :
+
+- 位置 : 並び順 ・ 曜日 の **左** に移動 (最も使う絞り込み)
+- ラベル前にアイコン (`star`) 追加
+- 選択時 : 背景塗りつぶし強め (現在のアクティブピル と同等)
+
+該当 : `src/ui/filters.js` の DOM 並び + `src/styles.css` のチェックボックススタイル。
+
+#### 12. 更新ボタンの鮮度具体化
+
+問題 : 「更新 ・ 今」だと「いつ更新したか」が曖昧。
+
+対応 :
+
+- 取得直後 (< 1分) : 「更新 ・ 今」(維持)
+- 1分以上経過 : 「更新 ・ 2分前」「更新 ・ 12分前」
+- 60分以上 : 「更新 ・ 14:23」(時刻)
+- ホバー title で詳細「気象庁 2分前 ・ Open-Meteo 5分前 ・ WBGT 環境省」(既存維持)
+
+該当 : `src/utils/freshness.js` (or 同等) の「経過時間 → 表示文字列」関数を拡張。
+
+#### 13. 副題短縮 (スマホ)
+
+問題 : スマホでヘッダー副題「舞浜の天気からショー・パレード中止リスクを予測」が長い (21文字) ・ 折り返しの恐れ。
+
+対応 : メディアクエリで切替 :
+
+- PC (≧ 768px) : 「舞浜の天気からショー・パレード中止リスクを予測」(維持)
+- スマホ (< 768px) : **「舞浜のショー・パレード中止予測」** (15文字)
+
+該当 : `src/ui/header.js` で `window.matchMedia('(max-width: 767px)')` 判定して切替 + `src/styles.css` で `.subtitle-mobile` / `.subtitle-pc` を媒体別表示。
+
+#### 検証
+
+- 公開ページで各項目反映確認
+- スマホ 375px DevTools エミュ + 実機両方
+- バッジ短縮で全行が画面内に収まる
+- 天気概況「曇り、夕方から晴れ」のように自然な日本語
+- 極端値日 (6/3 等) に「(要確認)」表示
+- 更新ボタンが「2分前」「14:23」と変動
+- npm test 緑、build 通る
+
 ### 0.7 公開ページ化 (Cloudflare Pages) ＋ ランタイム判定
 
 Yuka さん要望 : 「Mac 開いてなくても他の人も見れる公開ページ」

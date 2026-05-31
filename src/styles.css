@@ -1817,6 +1817,8 @@ body {
     width: auto;
     margin: 0;
     padding-right: 0;
+    /* §0.31 : 風 ・ 雨 ・ 熱も気象庁 / Open-Meteo と同じく中央寄せ */
+    text-align: center;
   }
 
   .cell-date-score::before {

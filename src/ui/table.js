@@ -13,6 +13,7 @@ import { BANDS } from '../score/scoring.js';
 import { renderPopWindChart, renderTempChart } from './chart.js';
 import { suggestOutfit } from './outfit.js';
 import { getDaySchedule } from '../data/showSchedule.js';
+import { latestOperation } from '../data/operationLog.js';
 import { freshnessLabel } from '../utils/freshness.js';
 import { nowcastHtml } from './nowcast.js';
 import { getTempColor, getTempBandKey } from '../utils/tempColor.js';
