@@ -305,8 +305,9 @@ export function renderTable(els, rows, state, sources, sourceStatus, handlers) {
           .flatMap((f) => (f.hourly || []).map((h) => h.precip ?? 0)),
       );
       const extreme = extremeWarning({ gustMax: m.gustMax, precipMaxHourly });
+      // §0.38-10 : (要確認) はクリック / フォーカスで理由を表示するボタンに (詳細はヘルプ FAQ)。
       const extremeHtml = extreme
-        ? `<span class="extreme-warn" title="${esc(extreme.title)}">${esc(extreme.text)}</span>`
+        ? `<button type="button" class="extreme-warn" title="${esc(extreme.title)} ／ 詳細はヘルプ「(要確認) って何 ?」参照">${esc(extreme.text)}</button>`
         : '';
 
       // §0.23 : 日付セルにスコアピルを統合 (1 列削減)。§0.22 : data-label でスマホカードのラベル。
@@ -315,7 +316,7 @@ export function renderTable(els, rows, state, sources, sourceStatus, handlers) {
         <td class="col-date cell-date-score" data-label="日付"${scoreTitle ? ` title="${esc(scoreTitle)}"` : ''}>
           <div class="date-line">${esc(formatMd(row.date))} <span class="weekday ${dt.isHoliday || dt.weekdayIndex === 0 ? 'day-sun' : dt.weekdayIndex === 6 ? 'day-sat' : 'day-weekday'}">(${esc(weekday(row.date))})</span></div>
           <div class="date-sub">${dayBadges(dt)}</div>
-          ${scorePillHtml(row.eval)}${extremeHtml}
+          <div class="score-row">${scorePillHtml(row.eval)}${extremeHtml}</div>
           <div class="score-reason">${esc(getScoreReason(row.eval.metrics, row.eval.badges))}</div>
         </td>
         ${metricCell('wind', windVal, row.eval.badges.wind, windTitle)}
