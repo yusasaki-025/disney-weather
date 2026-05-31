@@ -1876,7 +1876,7 @@ body {
     font-weight: 600;
   }
   .forecast-table tr.calendar-row[aria-expanded='true']::after {
-    content: '✕ 閉じる';
+    content: 'expand_less';
   }
 }
 
