@@ -241,3 +241,11 @@ npm run import-cancel-history -- 2026-04 # 指定月
 - 翌朝 : `npm run track-accuracy` — 前日の予報と当日実測 ( 気象庁アメダス船橋 44132 + 環境省 WBGT ) を比較し `src/data/accuracy-log.json` に日次追記
 
 30 日ほど蓄積すると各ソースの平均誤差が見えてきます ( Phase 3 で「予報精度ダッシュボード」UI ・ GitHub Actions cron 自動化を予定 )。実測が揃っていない当日は記録をスキップし、失敗時もログのみで UI には影響しません。気象庁は突風 ・ 風速を構造化提供しないため風誤差は Open-Meteo 主体です。
+
+## ロードマップ
+
+未消化の機能 ・ 改善は [GitHub Issues](https://github.com/yusasaki-025/disney-weather/issues) で管理しています。
+詳細仕様は [docs/CHANGES.md](docs/CHANGES.md) を参照。
+
+- Milestone : [§0.39 機能拡張 第3弾](https://github.com/yusasaki-025/disney-weather/milestones)
+- 持ち越し : [carry-over ラベル](https://github.com/yusasaki-025/disney-weather/issues?q=is%3Aopen+label%3Acarry-over)
