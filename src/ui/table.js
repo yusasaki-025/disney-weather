@@ -266,7 +266,7 @@ export function renderTable(els, rows, state, sources, sourceStatus, handlers) {
       const windVal = gust != null ? `${fmtNum(gust, 0)}<span class="unit">m/s</span>` : '—';
       const rainVal =
         pop != null
-          ? `${fmtNum(pop, 0)}%${m.precipSum != null && m.precipSum >= 0.5 ? ` ${fmtNum(m.precipSum, 1)}mm` : ''}`
+          ? `${fmtNum(pop, 0)}<span class="unit">%</span>${m.precipSum != null && m.precipSum >= 0.5 ? ` ${fmtNum(m.precipSum, 1)}<span class="unit">mm</span>` : ''}`
           : '—';
       const wbgtLabel = wbgtSourceLabel(Object.values(row.forecasts));
       // セルは数値のみ (列ヘッダーが「熱 (WBGT)」なので WBGT/(推定) は冗長)。詳細は title で補助。
