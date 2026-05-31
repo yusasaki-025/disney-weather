@@ -193,6 +193,15 @@ section {
   gap: 8px;
 }
 
+/* §0.37-12 : TOP3 をテーブルから視覚的に分離 (上余白 ・ 上罫線 ・ 薄背景) */
+#top3-section {
+  margin-top: 48px;
+  padding: 24px 16px 16px;
+  border-top: 2px solid var(--border);
+  background: var(--surface-2);
+  border-radius: var(--radius);
+}
+
 /* --- TOP3 --- */
 .top3-grid {
   display: grid;
@@ -2261,5 +2270,29 @@ body {
   }
   .cancel-badge .badge-short {
     display: inline;
+  }
+}
+
+/* §0.37-6 : スマホでテーブルコンテナの影 ・ 背景 ・ 枠を消し、カードの影だけにする (二重シャドウ解消) */
+@media (max-width: 767px) {
+  .table-scroll {
+    background: transparent;
+    box-shadow: none;
+    border: none;
+  }
+}
+
+/* §0.37-5 : スマホ詳細パネルの各セクションを surface-2 背景 + 見出し下罫で色統一 */
+@media (max-width: 767px) {
+  .detail-section {
+    background: var(--surface-2);
+    padding: 12px;
+    border-radius: var(--radius);
+    margin-bottom: 8px;
+  }
+  .detail-section h4 {
+    color: var(--text);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 8px;
   }
 }
