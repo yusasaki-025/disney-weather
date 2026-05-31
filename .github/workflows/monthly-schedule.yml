@@ -1,0 +1,51 @@
+# §0.39.9 : 月初に翌月分ショースケジュールの取得リマインダーを自動起票。
+# 公式 TDR は Akamai Bot Manager で自動取得を全ブロックするため (curl/WebFetch/headless 全不可)、
+# CI での自動 fetch は成立しない。代わりに「Cowork Chrome MCP で手動取得してください」という
+# リマインダー Issue を毎月初に自動作成する (GITHUB_TOKEN のみで完結 ・ 外部 secret 不要)。
+name: monthly-schedule
+
+on:
+  schedule:
+    # 1日 22:00 UTC = 2日 07:00 JST。月初の手動取得を促す。
+    - cron: '0 22 1 * *'
+  workflow_dispatch: {}
+
+permissions:
+  issues: write
+
+jobs:
+  remind:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            const now = new Date();
+            // 翌月 (YYYY-MM) を算出
+            const d = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() + 1, 1));
+            const ym = `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, '0')}`;
+            const title = `[reminder] ${ym} 分ショースケジュールの取得`;
+            // 同月の重複起票を避ける
+            const existing = await github.rest.search.issuesAndPullRequests({
+              q: `repo:${context.repo.owner}/${context.repo.repo} in:title "${title}" state:open`,
+            });
+            if (existing.data.total_count > 0) {
+              core.info('既に同月のリマインダー Issue があるためスキップ');
+              return;
+            }
+            const body = [
+              `${ym} 分のショー ・ パレードスケジュールを取得する時期です。`,
+              '',
+              '公式 TDR は Akamai Bot Manager により自動取得 (curl / WebFetch / headless) が全てブロックされるため、',
+              'Cowork Chrome MCP で手動取得し `src/data/schedule/' + ym + '.json` を更新してください。',
+              '',
+              '手順 : docs/CHANGES.md §0.8 / README「ショー ・ パレード時刻のメンテナンス」参照。',
+            ].join('\n');
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title,
+              body,
+              labels: ['data'],
+            });
+            core.info(`リマインダー Issue を作成: ${title}`);
