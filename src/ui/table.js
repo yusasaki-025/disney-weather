@@ -8,7 +8,8 @@ import {
   subscoreHtml,
   scoreAria,
 } from './components.js';
-import { formatMd, weekday } from '../utils/date.js';
+import { formatMd, weekday, todayJst } from '../utils/date.js';
+import { getScoreDiff, getScoreHistory } from '../data/forecastSnapshots.js';
 import { BANDS } from '../score/scoring.js';
 import { renderPopWindChart, renderTempChart } from './chart.js';
 import { suggestOutfit } from './outfit.js';
@@ -145,7 +146,24 @@ function cancelProbHtml(showName, park, predWind) {
   return `<span class="cancel-prob ${cls}" title="予報 max ${wind}m/s ・ 過去同条件 ${r.sampleSize}件中 ${r.cancelCount}件中止">予報 ${wind}m/s ［過去中止 ${r.probability}% (${r.cancelCount}/${r.sampleSize}件)］${lowSample}</span>`;
 }
 
-function detailPanelHtml(row) {
+// §0.39.1 : 予報変更履歴 (直近 7 スナップショットのスコア推移)。点が 2 未満なら非表示。
+function forecastHistoryHtml(date, park, currentScore) {
+  const hist = getScoreHistory(date, park, currentScore, todayJst(), 7);
+  if (hist.length < 2) return '';
+  const rows = hist
+    .map((p) => {
+      const w = Math.max(2, Math.round(p.score)); // 0-100 を % 幅に
+      const label = p.current ? '今日' : esc(formatMd(p.date));
+      return `<div class="fh-row${p.current ? ' fh-current' : ''}"><span class="fh-date">${label}</span><span class="fh-bar" style="width:${w}%"></span><span class="fh-val">${p.score}</span></div>`;
+    })
+    .join('');
+  return `<div class="detail-section">
+        <h4><span class="material-symbols-rounded" aria-hidden="true">trending_up</span>予報変更履歴 (スコア推移)</h4>
+        <div class="forecast-history">${rows}</div>
+      </div>`;
+}
+
+function detailPanelHtml(row, park) {
   // §0.8 : その日の実スケジュール (公式取得があれば official、無ければ fallback)
   const schedFor = (p) => getDaySchedule(row.date, p);
   // §0.26 : 同名ショーを 1 行に集約 (times を " / " 連結)。内部用語 (メイン算定窓/補助/参考) は
@@ -228,6 +246,7 @@ function detailPanelHtml(row) {
         <div class="subscore-detail">${subscoreHtml(row.eval.subscores, BANDS)}</div>
         <p class="subscore-note">各時間帯の快適度 (100点満点)</p>
       </div>
+      ${forecastHistoryHtml(row.date, park || 'TDL', row.eval.score)}
       <div class="detail-section">
         <h4><span class="material-symbols-rounded" aria-hidden="true">theater_comedy</span>ショー ･ パレード${schedBadge}</h4>
         <div class="park-tabs" role="tablist" aria-label="パーク切替">
@@ -341,6 +360,12 @@ export function renderTable(els, rows, state, sources, sourceStatus, handlers) {
         ? `<button type="button" class="extreme-warn" title="${esc(extreme.title)} ／ 詳細はヘルプ「(要確認) って何 ?」参照">${esc(extreme.text)}</button>`
         : '';
 
+      // §0.39.1 : 前日スナップショットとのスコア差分マーク (改善↑ / 悪化↓)。比較対象が無ければ非表示。
+      const diff = getScoreDiff(row.date, state.park, row.eval.score, todayJst());
+      const diffHtml = diff
+        ? `<span class="score-diff ${diff.delta > 0 ? 'up' : 'down'}" title="前回予報 (${esc(diff.snapDate)}) ${diff.prev}点 から ${diff.delta > 0 ? '改善' : '悪化'}">${diff.delta > 0 ? '↑' : '↓'}${diff.delta > 0 ? '+' : ''}${diff.delta}</span>`
+        : '';
+
       // §0.23 : 日付セルにスコアピルを統合 (1 列削減)。§0.22 : data-label でスマホカードのラベル。
       const mainRow = `<tr class="${cls} calendar-row" data-date="${row.date}" tabindex="0"
         role="button" aria-expanded="false" aria-label="${esc(scoreAria(row.date, row.eval))}">
@@ -380,7 +405,7 @@ export function renderTable(els, rows, state, sources, sourceStatus, handlers) {
     if (!willOpen) return;
 
     const row = rows.find((r) => r.date === date);
-    detail.firstElementChild.innerHTML = detailPanelHtml(row);
+    detail.firstElementChild.innerHTML = detailPanelHtml(row, state.park);
     detail.hidden = false;
     main.setAttribute('aria-expanded', 'true');
 

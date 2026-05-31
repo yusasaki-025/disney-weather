@@ -2504,3 +2504,45 @@ button.extreme-warn {
   font-size: 11px;
   color: var(--text-sub);
 }
+
+/* §0.39.1 : スコア前日比マーク (カード ・ スコア列) */
+.score-diff {
+  font-size: 11px;
+  font-weight: 700;
+  margin-left: 4px;
+}
+.score-diff.up {
+  color: var(--ok-green);
+}
+.score-diff.down {
+  color: var(--score-bad);
+}
+/* §0.39.1 : 予報変更履歴 (スコア推移バー) */
+.forecast-history {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.fh-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+}
+.fh-date {
+  width: 48px;
+  color: var(--text-sub);
+  flex-shrink: 0;
+}
+.fh-bar {
+  height: 8px;
+  background: var(--accent);
+  border-radius: 4px;
+  min-width: 2px;
+}
+.fh-current .fh-bar {
+  background: var(--ok-green);
+}
+.fh-val {
+  font-weight: 600;
+}
