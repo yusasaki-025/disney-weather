@@ -173,6 +173,9 @@ function updateStatus() {
 
   const fresh = freshnessLabel(oldest);
   label.textContent = allFail ? '更新' : fresh ? `更新 ・ ${fresh}` : '更新';
+  // §0.37-8 : スマホ全幅更新ボタンの鮮度ラベル ("天気データを更新 ・ <鮮度>")
+  const labelMobile = document.getElementById('refresh-label-mobile');
+  if (labelMobile) labelMobile.textContent = allFail ? '取得失敗' : fresh || '今';
   btn.title = detail.join(' ・ ');
   btn.classList.toggle('is-cached', anyCached && !allFail);
 }
@@ -240,7 +243,9 @@ function renderSkeleton() {
 function setupHeader() {
   document.getElementById('btn-refresh').addEventListener('click', () => refresh(true));
   document.getElementById('btn-retry-all').addEventListener('click', () => refresh(true));
-
+  // §0.37-8 : スマホはフィルター下の全幅更新ボタン (ヘッダー refresh は CSS で非表示)
+  const btnRefreshMobile = document.getElementById('btn-refresh-mobile');
+  if (btnRefreshMobile) btnRefreshMobile.addEventListener('click', () => refresh(true));
 }
 
 async function init() {

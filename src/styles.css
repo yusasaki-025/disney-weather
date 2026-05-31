@@ -2335,3 +2335,27 @@ body {
     flex-wrap: nowrap;
   }
 }
+
+/* §0.37-8 : スマホヘッダー再構成
+   - 右上はヘルプ (アイコンのみ、文字を隠す) ・ ヘッダーの更新ボタンは隠す
+   - 更新はフィルター下の全幅ボタン「天気データを更新 ・ <鮮度>」に集約 */
+.refresh-mobile {
+  display: none;
+}
+@media (max-width: 767px) {
+  #btn-refresh {
+    display: none;
+  }
+  .btn-label-text {
+    display: none;
+  }
+  #btn-help {
+    padding: 8px;
+  }
+  .refresh-mobile {
+    display: inline-flex;
+    width: 100%;
+    justify-content: center;
+    margin-top: 4px;
+  }
+}
