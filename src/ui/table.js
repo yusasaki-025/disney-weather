@@ -14,6 +14,7 @@ import { renderPopWindChart, renderTempChart } from './chart.js';
 import { suggestOutfit } from './outfit.js';
 import { getDaySchedule } from '../data/showSchedule.js';
 import { latestOperation } from '../data/operationLog.js';
+import { getCancelProbability } from '../score/cancelProbability.js';
 import { freshnessLabel } from '../utils/freshness.js';
 import { nowcastHtml } from './nowcast.js';
 import { getTempColor, getTempBandKey } from '../utils/tempColor.js';
@@ -115,11 +116,22 @@ function operationHtml(date) {
       </div>`;
 }
 
+// §0.31 : 過去同条件 (max 風速 ±2m/s) での中止率。サンプル不足は表示しない (誤情報回避)。
+function cancelProbHtml(showName, park, predWind) {
+  const r = getCancelProbability(showName, park, predWind);
+  if (!r) return '';
+  const cls = r.probability >= 50 ? 'cp-danger' : r.probability >= 30 ? 'cp-warn' : 'cp-mute';
+  const wind = fmtNum(predWind, 0);
+  return `<span class="cancel-prob ${cls}" title="予報 max ${wind}m/s ・ 過去同条件 ${r.sampleSize}件中 ${r.cancelCount}件中止">予報 ${wind}m/s → 過去 ${r.sampleSize}件中 ${r.cancelCount}件中止 (${r.probability}%)</span>`;
+}
+
 function detailPanelHtml(row) {
   // §0.8 : その日の実スケジュール (公式取得があれば official、無ければ fallback)
   const schedFor = (p) => getDaySchedule(row.date, p);
   // §0.26 : 同名ショーを 1 行に集約 (times を " / " 連結)。内部用語 (メイン算定窓/補助/参考) は
   //          表示せず、priority は CSS class (.priority-high/-medium/-low) で視覚区別する。
+  // §0.31 : 中止確率に使う予報 max 風速 (ショー窓優先、無ければ日最大)
+  const predWind = row.eval.metrics.gustShowWindow ?? row.eval.metrics.gustMax;
   const showRowsFor = (p) => {
     const order = [];
     const byName = new Map();
@@ -144,7 +156,7 @@ function detailPanelHtml(row) {
       .map((g) => {
         const timesText = g.restaurant && g.times.length === 0 ? '時刻未定' : g.times.map(esc).join(' / ');
         const tagsHtml = g.tags.length ? `<span class="show-tags">${esc(g.tags.join(' '))}</span>` : '';
-        return `<li class="show-item priority-${g.cls}"><span class="show-name">${esc(g.name)}</span><span class="show-times">${timesText}</span>${tagsHtml}</li>`;
+        return `<li class="show-item priority-${g.cls}"><span class="show-name">${esc(g.name)}</span><span class="show-times">${timesText}</span>${tagsHtml}${cancelProbHtml(g.name, p, predWind)}</li>`;
       })
       .join('');
   };

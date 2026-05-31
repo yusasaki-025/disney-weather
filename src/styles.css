@@ -1903,3 +1903,22 @@ body {
   font-weight: 400;
   color: var(--text-sub);
 }
+
+/* §0.31 : ショー別の過去中止率表示 (詳細パネル) */
+.cancel-prob {
+  display: block;
+  width: 100%;
+  margin-top: 2px;
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+.cancel-prob.cp-danger {
+  color: var(--score-bad);
+  font-weight: 600;
+}
+.cancel-prob.cp-warn {
+  color: #9a6a00;
+}
+.cancel-prob.cp-mute {
+  color: var(--text-mute);
+}
