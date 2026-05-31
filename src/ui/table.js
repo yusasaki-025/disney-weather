@@ -220,7 +220,7 @@ function detailPanelHtml(row) {
     </div>
     <div class="detail-charts">
       <div class="detail-section">
-        <h4><span class="material-symbols-rounded" aria-hidden="true">water_drop</span>時系列 (降水確率 ･ 風速)</h4>
+        <h4><span class="material-symbols-rounded" aria-hidden="true">water_drop</span>降水確率 ･ 風速 (時系列)</h4>
         <div class="chart-box"><div style="position:relative;height:240px"><canvas data-chart="popwind"></canvas></div></div>
       </div>
       <div class="detail-section">
