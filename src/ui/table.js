@@ -605,26 +605,7 @@ export function renderLegend(el) {
   ].join('');
 }
 
-// §0.39.3 (#21) : 気象庁の現在発表中の警報 ・ 注意報を「当日」カードに表示する。
-// この API は日別予報ではないため当日のみ。再描画のたびに呼ぶ前提で既存要素を作り直す。
+// §0.39.3 (#21) : 気象庁の警報 ・ 注意報のアイコン。レベル別。
+// §0.50 : 旧 renderTodayWarning (カード上のバッジ表示) は廃止。警報は「この日の概要」(toggle 内) のみに
+//   集約する (§0.44.2 の本来意図 ・「カード上は現状維持」は Cowork 仕様文ミスだった)。dayOverviewHtml が使用。
 const WARN_ICON = { emergency: 'crisis_alert', warning: 'warning', advisory: 'info' };
-export function renderTodayWarning(els, todayDate, warningData) {
-  els.tbody.querySelectorAll('.jma-warning').forEach((e) => e.remove());
-  if (!warningData || !warningData.warnings || warningData.warnings.length === 0) return;
-  const row = els.tbody.querySelector(`.row-main[data-date="${todayDate}"]`);
-  const cell = row && row.querySelector('.cell-date-score');
-  if (!cell) return;
-  const badges = warningData.warnings
-    .map(
-      (w) =>
-        `<span class="jma-warn-badge ${w.level === 'advisory' ? 'jw-advisory' : 'jw-warning'}"><span class="material-symbols-rounded" aria-hidden="true">${WARN_ICON[w.level] || 'info'}</span>${esc(w.label)}</span>`,
-    )
-    .join('');
-  const ttl = warningData.reportDatetime
-    ? ` title="${esc(warningData.reportDatetime.slice(0, 16).replace('T', ' '))} 発表"`
-    : '';
-  const el = document.createElement('div');
-  el.className = 'jma-warning';
-  el.innerHTML = `<span class="jw-source"${ttl}>気象庁</span>${badges}`;
-  cell.appendChild(el);
-}

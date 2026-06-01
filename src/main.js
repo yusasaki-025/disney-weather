@@ -15,7 +15,7 @@ import { fetchJmaWarning } from './data/jmaWarning.js';
 import { dayType } from './data/holidays.js';
 import { evaluateDay } from './score/scoring.js';
 import { renderTop3 } from './ui/top3.js';
-import { renderTable, renderLegend, renderTodayWarning } from './ui/table.js';
+import { renderTable, renderLegend } from './ui/table.js';
 import { loadState, applyFilterSort, wireControls } from './ui/filters.js';
 import { initFontSize, wireFontSizeControl } from './ui/fontSize.js';
 import { LOCATION } from './config/location.js';
@@ -202,7 +202,6 @@ function render() {
   renderTop3(els.top3, rows, { onSelect: openByDate });
   renderTable(els, view, state, activeSources, sourceStatus, handlers, warningData);
   renderLegend(els.legend);
-  renderTodayWarning(els, todayJst(), warningData);
   updateStatus();
 }
 
