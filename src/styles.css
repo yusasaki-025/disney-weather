@@ -194,13 +194,14 @@ section {
   gap: 8px;
 }
 
-/* §0.37-12 : TOP3 をテーブルから視覚的に分離 (上余白 ・ 上罫線 ・ 薄背景) */
+/* §0.42.1 : TOP3 セクションの枠 (border ・ 角丸) ・ 薄背景 ・ padding を撤廃し、
+   上余白だけで区切る (箱で囲まずメイン領域から浮かせない / §0.37-12 を上書き)。 */
 #top3-section {
   margin-top: 48px;
-  padding: 24px 16px 16px;
-  border-top: 2px solid var(--border);
-  background: var(--surface-2);
-  border-radius: var(--radius);
+  padding: 0;
+  background: transparent;
+  border-top: none;
+  border-radius: 0;
 }
 
 /* --- TOP3 --- */
