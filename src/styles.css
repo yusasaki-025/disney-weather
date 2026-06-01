@@ -2863,4 +2863,21 @@ button.extreme-warn {
   }
 }
 
-/* §0.54-PLACEHOLDER */
+/* §0.54 : スマホのカード (toggle 外 = 一覧サマリー) の文字をデフォルトで 1.15× に拡大。
+   詳細パネル (toggle 内 = detail-row) は現状維持。zoom なので文字サイズ機能 (§0.46.12) と複合し、
+   小=カード1.15/詳細1.0 ・ 中=1.32/1.15 ・ 大=1.50/1.30 と全段階に反映される。
+   grid セル全体でなくセル内コンテンツに zoom を当て、グリッド幅 (横スクロール) を保つ。 */
+@media (max-width: 767px) {
+  .forecast-table tr.calendar-row > td.cell-date-score .date-line,
+  .forecast-table tr.calendar-row > td.cell-date-score .score-row,
+  .forecast-table tr.calendar-row > td.cell-wind .metric-cell,
+  .forecast-table tr.calendar-row > td.cell-rain .metric-cell,
+  .forecast-table tr.calendar-row > td.cell-heat .metric-cell {
+    zoom: 1.15;
+  }
+  /* ソースセル (気象庁 / Open-Meteo) は内部ラッパー無しなのでセル直接 zoom (3 列幅で収まる) */
+  .forecast-table tr.calendar-row > td.cell-jma,
+  .forecast-table tr.calendar-row > td.cell-openmeteo {
+    zoom: 1.15;
+  }
+}
