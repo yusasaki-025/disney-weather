@@ -6,6 +6,14 @@
     <title>マイハマびより</title>
     <meta name="description" content="舞浜 (TDL ・ TDS) の天気予報を比較してショー ・ パレード中止リスクを判定" />
     <meta name="theme-color" content="#4A90D2" />
+    <!-- §0.46.12 : 文字サイズ設定を描画前に復元 (拡大率のちらつき防止) -->
+    <script>
+      try {
+        document.documentElement.dataset.fontSize = localStorage.getItem('fontSize') || 'small';
+      } catch (e) {
+        document.documentElement.dataset.fontSize = 'small';
+      }
+    </script>
 
     <!-- favicon ・ アイコン -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -52,6 +60,12 @@
         </div>
       </div>
       <div class="header-actions">
+        <div class="fontsize-control" role="radiogroup" aria-label="文字サイズ">
+          <span class="material-symbols-rounded fontsize-icon" aria-hidden="true">text_increase</span>
+          <button type="button" class="fontsize-btn" data-size="small" role="radio" aria-checked="true" aria-label="文字サイズ 小">小</button>
+          <button type="button" class="fontsize-btn" data-size="medium" role="radio" aria-checked="false" aria-label="文字サイズ 中">中</button>
+          <button type="button" class="fontsize-btn" data-size="large" role="radio" aria-checked="false" aria-label="文字サイズ 大">大</button>
+        </div>
         <button id="btn-refresh" class="btn" type="button">
           <span class="material-symbols-rounded" aria-hidden="true">refresh</span><span id="refresh-label">更新</span>
         </button>

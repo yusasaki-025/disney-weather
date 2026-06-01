@@ -17,6 +17,7 @@ import { evaluateDay } from './score/scoring.js';
 import { renderTop3 } from './ui/top3.js';
 import { renderTable, renderLegend, renderTodayWarning } from './ui/table.js';
 import { loadState, applyFilterSort, wireControls } from './ui/filters.js';
+import { initFontSize, wireFontSizeControl } from './ui/fontSize.js';
 import { LOCATION } from './config/location.js';
 
 const CONFIG = {
@@ -247,6 +248,9 @@ function renderSkeleton() {
 }
 
 function setupHeader() {
+  // §0.46.12 : 文字サイズ切替 (小/中/大) を復元 + 結線
+  initFontSize();
+  wireFontSizeControl(document.querySelector('.fontsize-control'));
   document.getElementById('btn-refresh').addEventListener('click', () => refresh(true));
   document.getElementById('btn-retry-all').addEventListener('click', () => refresh(true));
   // §0.37.8 : スマホはフィルター下の全幅更新ボタン (ヘッダー refresh は CSS で非表示)
