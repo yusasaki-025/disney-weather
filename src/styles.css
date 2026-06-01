@@ -2317,13 +2317,14 @@ body {
   }
 }
 
-/* §0.37-5 : スマホ詳細パネルの各セクションを surface-2 背景 + 見出し下罫で色統一 */
+/* §0.42.2 : スマホ詳細セクションの水色背景 ・ 枠 (角丸) を撤廃しカードの白全幅に統一。
+   区切りは h4 の下罫線 + 余白で表現する (背景箱で囲まない / §0.37-5 を上書き)。 */
 @media (max-width: 767px) {
   .detail-section {
-    background: var(--surface-2);
-    padding: 12px;
-    border-radius: var(--radius);
-    margin-bottom: 8px;
+    background: transparent;
+    padding: 0;
+    border-radius: 0;
+    margin-bottom: 16px;
   }
   .detail-section h4 {
     color: var(--text);
