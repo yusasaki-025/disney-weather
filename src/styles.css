@@ -2450,6 +2450,12 @@ button.extreme-warn {
   margin-top: 6px;
   padding-left: 2px;
 }
+/* §0.38.21+ (#18) : ショー個別の時刻別リスク (風 ・ 熱) */
+.show-risk {
+  font-size: 12px;
+  color: var(--text-sub);
+  margin-bottom: 2px;
+}
 
 /* §0.37.4 : PC はスコア独立列 (7列) ・ スマホはカード内 (cell-date-score) に統合維持 */
 .cell-date-score .card-score {

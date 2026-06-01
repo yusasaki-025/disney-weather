@@ -18,6 +18,7 @@ import { latestOperation } from '../data/operationLog.js';
 import { getCancelProbability } from '../score/cancelProbability.js';
 import { extremeWarning } from '../score/extremeWarning.js';
 import { getScoreReason } from '../score/scoreReason.js';
+import { showRiskInfo } from '../score/showRisk.js';
 import { freshnessLabel } from '../utils/freshness.js';
 import { nowcastHtml } from './nowcast.js';
 import { getTempColor, getTempBandKey } from '../utils/tempColor.js';
@@ -254,6 +255,14 @@ function detailPanelHtml(row, park) {
         // §0.38-21 + §0.41.1 : 過去中止率 ・ 畳んだ全時刻を既定で折りたたみ、行クリックで展開。
         const detailParts = [];
         if (folded) detailParts.push(`<div class="show-alltimes">全 ${allTimes.length} 回 : ${fullTimesText}</div>`);
+        // §0.38.21+ (#18) : このショーの開催時刻における 風 ・ 熱 (時刻別 WBGT) を toggle 内に表示
+        const risk = showRiskInfo(Object.values(row.forecasts).filter(Boolean), g.times);
+        if (risk) {
+          const rp = [];
+          if (risk.wind != null) rp.push(`風 ${risk.wind}m/s`);
+          if (risk.wbgt != null) rp.push(`熱 WBGT${risk.wbgt}`);
+          if (rp.length) detailParts.push(`<div class="show-risk">${rp.join(' ・ ')}</div>`);
+        }
         const cp = cancelProbHtml(g.name, p, predWind);
         if (cp) detailParts.push(cp);
         const detail = detailParts.join('');
