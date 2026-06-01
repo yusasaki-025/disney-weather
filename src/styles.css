@@ -2499,6 +2499,33 @@ button.extreme-warn {
   vertical-align: -4px;
   margin-right: 2px;
 }
+/* §0.39.4 (#22) : アトラクション運休予測 */
+.attraction-note {
+  font-size: 12px;
+  color: var(--text-sub);
+  margin: 0 0 8px;
+}
+.attraction-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.attraction-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  padding: 3px 0;
+}
+.attraction-item .material-symbols-rounded {
+  font-size: 18px;
+  color: var(--score-bad);
+}
+.attraction-cut {
+  margin-left: auto;
+  color: var(--text-sub);
+  font-size: 12px;
+}
 
 /* §0.37.8 : スマホヘッダー再構成
    右上はヘルプ (アイコンのみ) ・ ヘッダー更新ボタンは隠す

@@ -19,6 +19,7 @@ import { getCancelProbability } from '../score/cancelProbability.js';
 import { extremeWarning } from '../score/extremeWarning.js';
 import { getScoreReason } from '../score/scoreReason.js';
 import { showRiskInfo } from '../score/showRisk.js';
+import { getAttractionClosures } from '../score/attractionForecast.js';
 import { freshnessLabel } from '../utils/freshness.js';
 import { nowcastHtml } from './nowcast.js';
 import { getTempColor, getTempBandKey } from '../utils/tempColor.js';
@@ -161,6 +162,24 @@ function forecastHistoryHtml(date, park, currentScore) {
   return `<div class="detail-section">
         <h4><span class="material-symbols-rounded" aria-hidden="true">trending_up</span>予報変更履歴 (スコア推移)</h4>
         <div class="forecast-history">${rows}</div>
+      </div>`;
+}
+
+// §0.39.4 (#22) : その日の予報 max 風速で運休が予測される屋外アトラクション一覧。
+// 風が穏やか (該当なし) のときはセクションごと非表示。閾値は推定値なので UI に明記。
+function attractionHtml(park, gust) {
+  const closures = getAttractionClosures(park, gust);
+  if (!closures.length) return '';
+  const items = closures
+    .map(
+      (a) =>
+        `<li class="attraction-item"><span class="material-symbols-rounded" aria-hidden="true">block</span><span class="attraction-name">${esc(a.name)}</span><span class="attraction-cut">${a.windCutoff}m/s〜</span></li>`,
+    )
+    .join('');
+  return `<div class="detail-section">
+        <h4><span class="material-symbols-rounded" aria-hidden="true">attractions</span>アトラクション運休予測 (${esc(park)})</h4>
+        <p class="attraction-note">予報 max ${Math.round(gust)}m/s ・ 屋外コースター ・ 水上系は強風で運休することがあります (推定閾値)</p>
+        <ul class="attraction-list">${items}</ul>
       </div>`;
 }
 
@@ -308,6 +327,7 @@ function detailPanelHtml(row, park) {
         <ul class="show-list" data-park-shows="TDS" hidden>${showRowsFor('TDS')}</ul>
       </div>
       ${operationHtml(row.date)}
+      ${attractionHtml(park || 'TDL', row.eval.metrics.gustShowWindow ?? row.eval.metrics.gustMax)}
       <div class="detail-section">
         <h4><span class="material-symbols-rounded" aria-hidden="true">checkroom</span>持ち物 ･ 服装</h4>
         <ul class="outfit-list">${outfit}</ul>
