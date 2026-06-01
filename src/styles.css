@@ -2598,13 +2598,14 @@ button.extreme-warn {
   color: var(--text-sub);
   white-space: nowrap;
 }
+/* §0.44.14 : DPA ・ 抽選タグの文字白を撤廃し「薄色背景 + 濃色文字」に統一 (確定情報タグと同方針) */
 .show-tag.tag-dpa {
-  background: var(--accent);
-  color: #fff;
+  background: #e1f5fe;
+  color: #0277bd;
 }
 .show-tag.tag-chusen {
-  background: #6b4fa3;
-  color: #fff;
+  background: #f3e5f5;
+  color: #6a1b9a;
 }
 /* §0.41.3 : 期間限定タグは紫系に (ベストの緑と被らない) */
 .show-tag.tag-season {
