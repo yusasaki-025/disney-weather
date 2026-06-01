@@ -334,7 +334,7 @@ function detailPanelHtml(row, park) {
       ${dayOverviewHtml(row, todayJst())}
       <div class="detail-section">
         <h4><span class="material-symbols-rounded" aria-hidden="true">schedule</span>時間帯スコア (昼を最重視)</h4>
-        <div class="subscore-detail">${subscoreHtml(row.eval.subscores, BANDS)}</div>
+        <div class="subscore-detail">${subscoreHtml(row.eval.subscores, BANDS, row.eval)}</div>
         <p class="subscore-note">各時間帯の快適度 (100点満点)</p>
       </div>
       ${forecastHistoryHtml(row.date, park || 'TDL', row.eval.score)}

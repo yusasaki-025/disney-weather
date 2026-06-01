@@ -1313,6 +1313,17 @@ h1, h2, h3, h4, .app-title h1 {
 .subscore-main .value {
   font-size: 15px;
 }
+/* §0.44.1 : 「日全体」スコアは時間帯スコアの基準なので強調 (濃い枠 + 太字 + 区切りの右マージン) */
+.subscore-day {
+  border: 2px solid rgba(0, 0, 0, 0.4);
+  padding: 4px 10px;
+  margin-right: 4px;
+  font-weight: 700;
+}
+.subscore-day .time-label {
+  font-weight: 700;
+  opacity: 1;
+}
 
 /* --- §0.6.5 スコア凡例カード --- */
 .score-legend {

@@ -60,7 +60,7 @@ export function cancelBadgeHtml(badge) {
 
 // 朝/昼/夜 サブスコア HTML (§0.6.5 : 記号廃止、色付き数値ピル)。
 // 背景色 = スコア帯。数値のみ表示。昼は subscore-main で少し大きく強調。未取得は灰色ピル + "-"。
-export function subscoreHtml(subscores, bands) {
+export function subscoreHtml(subscores, bands, dayEval = null) {
   // §0.38-4 : 各時間帯に時刻範囲を併記 (朝 9-12時 等)。昼は重み最大なので「最重視」表示。
   // BANDS は hours (Set) を持つので min〜max+1 で時刻範囲を導出する。
   const range = (b) => {
@@ -70,12 +70,20 @@ export function subscoreHtml(subscores, bands) {
   };
   const labelHtml = (b) =>
     `<span class="time-label">${b.label}${b.key === 'noon' ? ' <span class="time-key">最重視</span>' : ''}<span class="time-range">${range(b)}</span></span>`;
-  const ariaParts = bands.map((b) => {
-    const ss = subscores[b.key];
-    const r = range(b) ? ` (${range(b)})` : '';
-    if (!ss || !ss.hasData) return `${b.label}${r} データなし`;
-    return `${b.label}${r} ${ss.symbol.label} ${ss.score}`;
-  });
+  // §0.44.1 : 時間帯スコアの先頭に「日全体」スコアを併記し、時間帯 ≦ 日 のクランプ (§0.42.4) を一目で確認できるように。
+  const dayHtml = dayEval
+    ? `<span class="subscore-pill subscore-day" data-level="${dayEval.symbol.key}" style="background:${dayEval.symbol.color}"><span class="time-label">日全体</span><span class="material-symbols-rounded" aria-hidden="true">${dayEval.symbol.icon}</span><span class="value">${dayEval.score}<span class="unit">点</span></span></span>`
+    : '';
+  const dayAria = dayEval ? [`日全体 ${dayEval.symbol.label} ${dayEval.score}`] : [];
+  const ariaParts = [
+    ...dayAria,
+    ...bands.map((b) => {
+      const ss = subscores[b.key];
+      const r = range(b) ? ` (${range(b)})` : '';
+      if (!ss || !ss.hasData) return `${b.label}${r} データなし`;
+      return `${b.label}${r} ${ss.symbol.label} ${ss.score}`;
+    }),
+  ];
   const cells = bands.map((b) => {
     const ss = subscores[b.key];
     const has = ss && ss.hasData;
@@ -85,7 +93,7 @@ export function subscoreHtml(subscores, bands) {
     }
     return `<span class="subscore-pill${main}" data-level="${ss.symbol.key}" style="background:${ss.symbol.color}">${labelHtml(b)}<span class="material-symbols-rounded" aria-hidden="true">${ss.symbol.icon}</span><span class="value">${ss.score}<span class="unit">点</span></span></span>`;
   });
-  return `<span class="subscore-group" role="img" aria-label="${esc(ariaParts.join('、'))}">${cells.join('')}</span>`;
+  return `<span class="subscore-group" role="img" aria-label="${esc(ariaParts.join('、'))}">${dayHtml}${cells.join('')}</span>`;
 }
 
 // スコアの読み上げ用ラベル (記号なし)
