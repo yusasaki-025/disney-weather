@@ -1408,6 +1408,8 @@ h1, h2, h3, h4, .app-title h1 {
   font-size: 10px;
   font-weight: 600;
   color: var(--text-sub);
+  /* §0.44.4 : 数字と単位の間を詰める (cat-val の gap 4px を相殺し実質 1px に)。「7% 0.5mm」の冗長な空きを解消 */
+  margin-left: -3px;
 }
 
 /* テーブルヘッダーを薄いブルーに */
