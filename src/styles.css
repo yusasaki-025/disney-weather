@@ -2446,6 +2446,11 @@ button.extreme-warn {
   width: auto;
   margin: 0;
 }
+/* §0.44.12 : 屋内ショー ・ プロジェクションの「屋内 ・ 天候影響なし」マーク */
+.sr-indoor {
+  color: var(--text-mute);
+  font-size: 11px;
+}
 
 /* §0.37.4 : PC はスコア独立列 (7列) ・ スマホはカード内 (cell-date-score) に統合維持 */
 .cell-date-score .card-score {

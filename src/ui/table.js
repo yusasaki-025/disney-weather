@@ -20,6 +20,7 @@ import { extremeWarning } from '../score/extremeWarning.js';
 import { getScoreReason } from '../score/scoreReason.js';
 import { showRiskInfo } from '../score/showRisk.js';
 import { getAttractionClosures } from '../score/attractionForecast.js';
+import { isWeatherless } from '../data/show-thresholds.js';
 import { heatAlertLevel } from '../score/heatAlert.js';
 import { freshnessLabel } from '../utils/freshness.js';
 import { nowcastHtml } from './nowcast.js';
@@ -140,29 +141,36 @@ function operationHtml(date) {
 // §0.43.1 : ショー詳細のリスク表示を 1 行に統合 (#18 per-show と §0.31 過去中止率の風速 2 重表示を解消)。
 //   風 : avg = ショー時刻ピンポイント (#18 showRisk) / max = ショー窓 ±1h 最大 (§0.31 中止率の参照値)
 //   熱 : ショー時刻の WBGT (#18) ・ ［過去中止 N%］: 過去同条件 (max ±2m/s) の中止率 (§0.31)
-function showRiskLineHtml(showName, park, risk, predWind) {
+function showRiskLineHtml(showName, park, risk, predWind, weatherless = false) {
   const riskParts = [];
-  // §0.43.2 : 平均風速 (sustained ・ windspeed_10m) と 突風 (gust ・ wind_gusts_10m) を気象用語で併記。
-  //           突風 ≧ 平均風速 が通常だが、算出窓の違いで逆転もあり得る (別物なので違和感なし)。
-  const windPieces = [];
-  if (risk && risk.wind != null) windPieces.push(`風 ${risk.wind}m/s`);
-  if (predWind != null) windPieces.push(`突風 ${fmtNum(predWind, 0)}m/s`);
-  if (windPieces.length) {
-    riskParts.push(
-      `<span class="sr-wind" title="風 (平均風速) = ショー時刻の 1時間平均 (sustained) / 突風 = 1時間最大瞬間風速 (gust)。突風は中止判定 ・ 過去事例検索のベースです">${windPieces.join(' ・ ')}</span>`,
-    );
+  // §0.44.12 : 屋内ショー ・ プロジェクションは突風の影響を受けないため風 ・ 過去中止率を出さない (熱は継続)。
+  if (!weatherless) {
+    // §0.43.2 : 平均風速 (sustained ・ windspeed_10m) と 突風 (gust ・ wind_gusts_10m) を気象用語で併記。
+    //           突風 ≧ 平均風速 が通常だが、算出窓の違いで逆転もあり得る (別物なので違和感なし)。
+    const windPieces = [];
+    if (risk && risk.wind != null) windPieces.push(`風 ${risk.wind}m/s`);
+    if (predWind != null) windPieces.push(`突風 ${fmtNum(predWind, 0)}m/s`);
+    if (windPieces.length) {
+      riskParts.push(
+        `<span class="sr-wind" title="風 (平均風速) = ショー時刻の 1時間平均 (sustained) / 突風 = 1時間最大瞬間風速 (gust)。突風は中止判定 ・ 過去事例検索のベースです">${windPieces.join(' ・ ')}</span>`,
+      );
+    }
   }
   if (risk && risk.wbgt != null) riskParts.push(`熱 WBGT${risk.wbgt}`);
   // 過去中止率 (§0.31)。サンプル不足は表示せず (誤情報回避)、3 件未満は (要確認) 併記 (§0.38-10)。
-  const r = getCancelProbability(showName, park, predWind);
   let cancelHtml = '';
-  if (r) {
-    const cls = r.probability >= 50 ? 'cp-danger' : r.probability >= 30 ? 'cp-warn' : 'cp-mute';
-    const lowSample = r.sampleSize < 3 ? '<span class="cp-check">(要確認)</span>' : '';
-    cancelHtml = `<span class="cancel-prob ${cls}" title="過去同条件 (突風 ${fmtNum(predWind, 0)}m/s ±2m/s) ${r.sampleSize}件中 ${r.cancelCount}件中止">［過去中止 ${r.probability}% (${r.cancelCount}/${r.sampleSize}件)］${lowSample}</span>`;
+  if (!weatherless) {
+    const r = getCancelProbability(showName, park, predWind);
+    if (r) {
+      const cls = r.probability >= 50 ? 'cp-danger' : r.probability >= 30 ? 'cp-warn' : 'cp-mute';
+      const lowSample = r.sampleSize < 3 ? '<span class="cp-check">(要確認)</span>' : '';
+      cancelHtml = `<span class="cancel-prob ${cls}" title="過去同条件 (突風 ${fmtNum(predWind, 0)}m/s ±2m/s) ${r.sampleSize}件中 ${r.cancelCount}件中止">［過去中止 ${r.probability}% (${r.cancelCount}/${r.sampleSize}件)］${lowSample}</span>`;
+    }
   }
-  if (riskParts.length === 0 && !cancelHtml) return '';
-  const body = [riskParts.join(' ・ '), cancelHtml].filter(Boolean).join(' ');
+  // §0.44.12 : 屋内ショーは「屋内 ・ 天候影響なし」を明示 (空欄だと未取得と紛らわしいため)。
+  const indoorNote = weatherless ? '<span class="sr-indoor">屋内 ・ 天候影響なし</span>' : '';
+  if (riskParts.length === 0 && !cancelHtml && !indoorNote) return '';
+  const body = [riskParts.join(' ・ '), indoorNote, cancelHtml].filter(Boolean).join(' ');
   return `<div class="show-risk-line">${body}</div>`;
 }
 
@@ -300,7 +308,7 @@ function detailPanelHtml(row, park) {
         const detailParts = [];
         // §0.43.1 : per-show 時刻別リスク (#18) と過去中止率 (§0.31) を 1 行に統合し風速の 2 重表示を解消
         const risk = showRiskInfo(Object.values(row.forecasts).filter(Boolean), g.times);
-        const riskLine = showRiskLineHtml(g.name, p, risk, predWind);
+        const riskLine = showRiskLineHtml(g.name, p, risk, predWind, isWeatherless(g.name));
         if (riskLine) detailParts.push(riskLine);
         const detail = detailParts.join('');
         // §0.44.9 : 「開催予想」 toggle (details/summary) を撤廃し、風 / 突風 / 熱 / 過去中止率を常時表示。

@@ -18,6 +18,22 @@ const SHOW_THRESHOLDS = [
   { match: /スパークリング[・･]ジュビリー[・･]セレブレーション/, windCancel: 12 },
 ];
 
+// §0.44.12 : 屋内ショー ・ プロジェクションマッピングは突風の影響を受けないため、
+//   風バッジ ・ 過去中止率を出さない (熱バッジは屋内でも夏は暑いので継続)。name 部分一致で判定。
+const WEATHERLESS_SHOWS = [
+  /レインボー[・･]ルアウ/,
+  /マジカルミュージックワールド/,
+  /ワンダフル[・･]フレンドシップ/,
+  /ドリームス[・･]テイク[・･]フライト/,
+  /スパークリング[・･]ジュビリー[・･]ナイト/,
+];
+
+// その演目が屋内 ・ 天候影響なし (weatherless) かを返す。
+export function isWeatherless(name) {
+  if (!name) return false;
+  return WEATHERLESS_SHOWS.some((re) => re.test(name));
+}
+
 // ショー名から閾値を返す (見つからなければ DEFAULT)。
 export function thresholdForShow(name) {
   if (!name) return { ...DEFAULT_THRESHOLD };
