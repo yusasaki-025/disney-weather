@@ -1500,6 +1500,13 @@ h1, h2, h3, h4, .app-title h1 {
   /* §0.44.4 : 数字と単位の間を詰める (cat-val の gap 4px を相殺し実質 1px に)。「7% 0.5mm」の冗長な空きを解消 */
   margin-left: -3px;
 }
+/* スマホ : §0.56.1 の .vg グループ化で数字 + 単位は同一グループ (gap 0) になったため、
+   -3px だと「%」等が数字に食い込む。スマホでは負マージンを解除する。 */
+@media (max-width: 767px) {
+  .cat-val .unit {
+    margin-left: 0;
+  }
+}
 
 /* テーブルヘッダーを薄いブルーに */
 .forecast-table thead th {
@@ -2918,7 +2925,8 @@ button.extreme-warn {
     margin-bottom: 2px;
     letter-spacing: 0.3px;
   }
+  /* スマホ見出しの晴れマーク (wb_sunny) は不要との指摘で非表示 (テキスト「天気 (...)」のみ) */
   .card-col-head .cch-icon {
-    font-size: 1.15em;
+    display: none;
   }
 }
