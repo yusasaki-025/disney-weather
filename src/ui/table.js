@@ -279,6 +279,26 @@ function dayOverviewHtml(row, today, warningData = null) {
     parts.push(`<p class="ds-line ds-check"><span class="ds-key">(要確認)</span><span class="ds-val">${esc(checks.join(' ・ '))}</span></p>`);
   if (overview)
     parts.push(`<p class="ds-line"><span class="ds-key">天気概況</span><span class="ds-val">${wIconsHtml}${esc(overview)}</span></p>`);
+  // §0.57.1c (Yuka 提案 ・ 根本解決) : 風 ・ 雨 ・ 熱の「最低 〜 最高」レンジ (1 日の振れ幅)。
+  //   カード上はショー時刻ピンポイント値 (ShowWindow) なので、レンジを併記することで
+  //   「カード値 vs スコア理由 vs 時刻別」の食い違いを「幅の中」として理解できるようにする。
+  const rng = (r, digits = 0) => (r ? `${fmtNum(r.min, digits)} 〜 ${fmtNum(r.max, digits)}` : null);
+  if (m.windRange) {
+    const gustTxt = m.gustRange ? ` (突風 ${rng(m.gustRange)} m/s)` : '';
+    parts.push(
+      `<p class="ds-line ds-range"><span class="ds-key">風速</span><span class="ds-val">${rng(m.windRange)} m/s${gustTxt}</span></p>`,
+    );
+  }
+  if (m.popRange) {
+    const precipTxt = m.precipRange ? ` / 雨量 ${rng(m.precipRange, 1)} mm/h` : '';
+    parts.push(
+      `<p class="ds-line ds-range"><span class="ds-key">雨</span><span class="ds-val">確率 ${rng(m.popRange)}%${precipTxt}</span></p>`,
+    );
+  }
+  if (m.wbgtRange)
+    parts.push(
+      `<p class="ds-line ds-range"><span class="ds-key">熱 (WBGT)</span><span class="ds-val">${rng(m.wbgtRange)}</span></p>`,
+    );
   // §0.48.3 : 霧雨 (drizzle) は長時間弱雨でショーは原則開催のため、その旨を注釈する。
   const drizzle = Object.values(row.forecasts).filter(Boolean).some((fc) => /霧雨/.test(fc.weatherText || ''));
   if (drizzle)
@@ -473,7 +493,10 @@ export function renderTable(els, rows, state, sources, sourceStatus, handlers, w
           : '—';
       const wbgtLabel = wbgtSourceLabel(Object.values(row.forecasts));
       // セルは数値のみ (列ヘッダーが「熱 (WBGT)」なので WBGT/(推定) は冗長)。詳細は title で補助。
-      const wbgtVal = m.wbgtMax != null ? `${fmtNum(m.wbgtMax, 0)}` : '—';
+      // §0.57.1 : バッジ判定 ・ スコア理由と同じ wbgtShowWindow (ショー時刻帯) に統一し、
+      // 「熱バなのに数値が低い」食い違いを解消 (hourly が無い日は wbgtMax にフォールバック)。
+      const wbgt = m.wbgtShowWindow != null ? m.wbgtShowWindow : m.wbgtMax;
+      const wbgtVal = wbgt != null ? `${fmtNum(wbgt, 0)}` : '—';
       // §0.13.2 : スコアは平均ベース。ピーク (最大) は補助ツールチップに表示。
       const peakTxt = (peak, unit) =>
         peak ? `ピーク ${fmtNum(peak.value, 0)}${unit} (${peak.hour}時)` : '';
