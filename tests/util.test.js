@@ -111,10 +111,10 @@ describe('suggestOutfit (§0.38.1)', () => {
   it('show-window の降水を優先', () => {
     expect(texts({ popShowWindow: 60, popMax: 0 })).toContain('ポンチョ');
   });
-  it('該当条件なしでも全日共通アイテムは必ず出る', () => {
-    // §0.38.1 : 「特別な対策は不要」は廃止 ・ 共通アイテム (靴 ・ バッテリー) を常時表示
+  it('§0.44.6 : 天気不変の常備品 (靴 ・ バッテリー) はサジェストに出さない', () => {
+    // 天気依存の提案のみ表示し、天候に関わらず必携の常備品はヘルプで別途案内する
     const t = texts({ tempMax: 22, popMax: 10, uvMax: 3 });
-    expect(t).toContain('歩きやすい靴');
-    expect(t).toContain('モバイルバッテリー');
+    expect(t).not.toContain('歩きやすい靴');
+    expect(t).not.toContain('モバイルバッテリー');
   });
 });

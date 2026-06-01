@@ -23,10 +23,15 @@ describe('suggestOutfit (§0.38.1)', () => {
     expect(has(r, 'カイロ')).toBe(true);
   });
 
-  it('全日共通アイテム (靴 ・ バッテリー) は常に出る', () => {
-    const r = suggestOutfit({ popMax: 10, precipSum: 0, tempMax: 24, tempMin: 20 });
-    expect(has(r, '歩きやすい靴')).toBe(true);
-    expect(has(r, 'モバイルバッテリー')).toBe(true);
+  it('§0.44.6 : 天気不変の常備品 (靴 ・ バッテリー) はサジェストに出さない', () => {
+    const r = suggestOutfit({ popMax: 90, precipSum: 25, tempMax: 36, wbgtMax: 32, uvMax: 9, gustMax: 11, tempMin: 18 });
+    expect(has(r, '歩きやすい靴')).toBe(false);
+    expect(has(r, 'モバイルバッテリー')).toBe(false);
+  });
+
+  it('天気が穏やかなら提案ゼロもあり得る (常備品で埋めない)', () => {
+    const r = suggestOutfit({ popMax: 10, precipSum: 0, tempMax: 24, tempMin: 20, uvMax: 2 });
+    expect(r.length).toBe(0);
   });
 
   it('8件を超えたら「他 N点」にまとめる', () => {

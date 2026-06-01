@@ -118,9 +118,8 @@ export function suggestOutfit(m) {
     ...uvGear(m.uvMax),
     ...windGear(gust),
     ...tempDiffGear(m.feelsLikeMax, m.feelsLikeMin),
-    // 全日共通
-    { icon: 'directions_run', text: '歩きやすい靴' },
-    { icon: 'battery_charging_full', text: 'モバイルバッテリー' },
+    // §0.44.6 : 天気に依存する提案のみ表示。天気不変の常備品 (歩きやすい靴 ・ モバイルバッテリー) は
+    //           サジェストから除外し、ヘルプの「常備品」で別途案内する。
   ];
   // テキストで重複削除 (先勝ち)
   const seen = new Set();
