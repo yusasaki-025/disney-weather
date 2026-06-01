@@ -113,26 +113,28 @@ describe('uvDeduction (§5.2)', () => {
   });
 });
 
-describe('scoreToSymbol (§5.3)', () => {
-  it('境界値', () => {
-    expect(scoreToSymbol(100).label).toBe('ベスト');
-    expect(scoreToSymbol(85).label).toBe('ベスト');
-    expect(scoreToSymbol(84).label).toBe('OK');
-    expect(scoreToSymbol(70).label).toBe('OK');
-    expect(scoreToSymbol(69).label).toBe('微妙');
-    expect(scoreToSymbol(50).label).toBe('微妙');
-    expect(scoreToSymbol(49).label).toBe('別日');
-    expect(scoreToSymbol(0).label).toBe('別日');
+describe('scoreToSymbol (§5.3 / §0.52 5 段階)', () => {
+  it('境界値 (BEST 90+ / GOOD 75-89 / OK 60-74 / FAIR 40-59 / NG 0-39)', () => {
+    expect(scoreToSymbol(100).label).toBe('BEST');
+    expect(scoreToSymbol(90).label).toBe('BEST');
+    expect(scoreToSymbol(89).label).toBe('GOOD');
+    expect(scoreToSymbol(75).label).toBe('GOOD');
+    expect(scoreToSymbol(74).label).toBe('OK');
+    expect(scoreToSymbol(60).label).toBe('OK');
+    expect(scoreToSymbol(59).label).toBe('FAIR');
+    expect(scoreToSymbol(40).label).toBe('FAIR');
+    expect(scoreToSymbol(39).label).toBe('NG');
+    expect(scoreToSymbol(0).label).toBe('NG');
   });
   it('全レベルに label ・ icon ・ color があり undefined が無い (§0.18)', () => {
-    for (const s of [100, 80, 60, 0]) {
+    for (const s of [100, 80, 65, 50, 0]) {
       const sym = scoreToSymbol(s);
       expect(sym.label).toBeTruthy();
       expect(sym.icon).toBeTruthy();
       expect(sym.color).toMatch(/^#/);
       expect(sym.symbol).toBeUndefined(); // 旧 symbol.symbol 参照は廃止済み
     }
-    expect(['star', 'done', 'warning', 'block']).toContain(scoreToSymbol(100).icon);
+    expect(['star', 'check_circle', 'check', 'warning', 'block']).toContain(scoreToSymbol(100).icon);
   });
 });
 
@@ -284,11 +286,11 @@ describe('scoreFromMetrics は show-window を優先', () => {
       precipSum: 0, feelsLikeMax: 20, tempMax: 25, windShowWindow: 2, uvMax: 0,
     };
     const r = scoreFromMetrics(m, 'TDL');
-    // §0.47.2 : wind 50 + rain 35 = 85 → score 15 → 別日
+    // §0.47.2 : wind 50 + rain 35 = 85 → score 15 → NG (§0.52)
     expect(r.deductions.wind).toBe(50);
     expect(r.deductions.rain).toBe(35);
     expect(r.score).toBe(15);
-    expect(r.symbol.label).toBe('別日');
+    expect(r.symbol.label).toBe('NG');
   });
   it('show-window が無ければ daily 最大にフォールバック', () => {
     const m = {
@@ -298,9 +300,9 @@ describe('scoreFromMetrics は show-window を優先', () => {
       precipSum: 0, feelsLikeMax: 22, tempMax: 25, windShowWindow: null, uvMax: 0,
     };
     const r = scoreFromMetrics(m, 'TDL');
-    // §0.47.2 : wind 5 + rain 5 = 10 → score 90 → ベスト
+    // §0.47.2 : wind 5 + rain 5 = 10 → score 90 → BEST (§0.52)
     expect(r.score).toBe(90);
-    expect(r.symbol.label).toBe('ベスト');
+    expect(r.symbol.label).toBe('BEST');
   });
 });
 
@@ -312,7 +314,7 @@ describe('bandSubscore / weightedBandTotal', () => {
     ]);
     const s = bandSubscore([f], noon, 'TDL');
     expect(s.score).toBe(100);
-    expect(s.symbol.label).toBe('ベスト');
+    expect(s.symbol.label).toBe('BEST');
     expect(s.hasData).toBe(true);
   });
   it('重み付き平均 (昼が最重要)', () => {
@@ -349,10 +351,10 @@ describe('badgeSeverity / applyBadgeGuard (§0.16)', () => {
   it('最悪 severity に応じて上限キャップ (上限のみ・引き上げない)', () => {
     const g = (raw, text) =>
       applyBadgeGuard(raw, { wind: { text: '通常' }, rain: { text }, wbgt: { text: '通常' } }).score;
-    // §0.47.3 : 緩和後の cap (critical 20 / danger 40 / warn 70)
-    expect(g(80, '中止')).toBe(20); // critical
-    expect(g(80, '雨キャン')).toBe(40); // danger
-    expect(g(80, '雨バ')).toBe(70); // warn
+    // §0.52.3 : cap (critical 20=NG / danger 40=FAIR / warn 80=GOOD)
+    expect(g(90, '中止')).toBe(20); // critical
+    expect(g(90, '雨キャン')).toBe(40); // danger
+    expect(g(90, '雨バ')).toBe(80); // warn → GOOD
     expect(g(80, '通常')).toBe(80); // normal はキャップなし
     expect(g(15, '中止')).toBe(15); // キャップは上限のみ (引き下げ済みは保持)
   });
@@ -388,7 +390,7 @@ describe('evaluateDay (統合)', () => {
     // §0.48.2 : hourly に precip が無いので降水量 0 ・ pop window 60 → 高確率で「雨バ」
     expect(r.badges.rain.text).toBe('雨バ');
     expect(r.subscores.noon).toBeTruthy();
-    expect(['ベスト', 'OK', '微妙', '別日']).toContain(r.subscores.noon.symbol.label);
+    expect(['BEST', 'GOOD', 'OK', 'FAIR', 'NG']).toContain(r.subscores.noon.symbol.label);
   });
 
   it('§0.42.4 : 時間帯サブスコアは日スコア以下にクランプされる (整合性)', () => {

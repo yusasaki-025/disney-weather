@@ -44,11 +44,16 @@ export function weightedMean(forecasts, key, category) {
 // --- スコア → レベル (§5.3, §0.6.5) ---
 // ◎ ○ △ × の記号は廃止。用途が直感的に伝わる日本語テキストラベル + 色で表現する。
 // 評価系アイコン (§0.18-2)。4 種とも Unicode 形状が異なり、フォント未読込時も判別可。
+// §0.52 : スコアラベルを 5 段階英語化 (BEST/GOOD/OK/FAIR/NG)。中段 (70点台) を GOOD/OK に分割し、
+//   緑系の偏りを是正。判定は scoreToSymbol が min 降順で先頭一致。
+// §0.52 : 信号機グラデーション (案 A)。BEST/NG は白文字、GOOD は白文字、OK/FAIR は薄色背景なので
+//   濃文字 (CSS data-level で #33691E / #E65100 を当てる)。
 export const SYMBOLS = [
-  { min: 85, key: 'excellent', label: 'ベスト', color: '#2D8F3E', icon: 'star' },
-  { min: 70, key: 'good', label: 'OK', color: '#88C057', icon: 'done' },
-  { min: 50, key: 'fair', label: '微妙', color: '#F2A93B', icon: 'warning' },
-  { min: -Infinity, key: 'bad', label: '別日', color: '#D24A4A', icon: 'block' },
+  { min: 90, key: 'best', label: 'BEST', color: '#2E7D32', icon: 'star' },
+  { min: 75, key: 'good', label: 'GOOD', color: '#66BB6A', icon: 'check_circle' },
+  { min: 60, key: 'ok', label: 'OK', color: '#CDDC39', icon: 'check' },
+  { min: 40, key: 'fair', label: 'FAIR', color: '#FFA726', icon: 'warning' },
+  { min: -Infinity, key: 'ng', label: 'NG', color: '#E53935', icon: 'block' },
 ];
 
 export function scoreToSymbol(score) {
@@ -171,9 +176,10 @@ export function wbgtBadge(wbgt, windShowWindow, feelsLikeMax) {
 // スコアは平均値ベース (§0.13.2)、バッジはピーク (最大) ベースなので、
 // 「OK 75 なのに 雨ほぼ中止」のような矛盾が出る。バッジの危険度でスコアに上限キャップを掛ける。
 const SEVERITY_RANK = { normal: 0, warn: 1, danger: 2, critical: 3 };
-// §0.47.3 : floor guard を緩和 (風バ → 70 / 中止リスク ・ キャン → 40 / ほぼ中止 → 20)。
-//   風バでもスコアは最大 70 (= OK) まで許容し、過剰格下げ (微妙固定) を解消する。
-const SEVERITY_CAP = { critical: 20, danger: 40, warn: 70 };
+// §0.47.3 / §0.52.3 : floor guard。風バ → 80 (= GOOD) / 中止リスク ・ キャン → 40 (= FAIR) / ほぼ中止 → 20 (= NG)。
+//   §0.52 で 5 段階化 ・ warn cap を 70 → 80 に引き上げ、風バ日を GOOD 帯へ分離 (旧 70 だと風バ日が
+//   全て OK に張り付き GOOD が空だった)。BEST(快適 90+) / GOOD(風バ等 75-89) / OK(60-74) を使い分ける。
+const SEVERITY_CAP = { critical: 20, danger: 40, warn: 80 };
 
 export function badgeSeverity(text) {
   // §0.36 でラベル短縮 (ほぼ中止→中止 / 中止リスク高→中止リスク / 雨キャン濃厚→雨キャン 等)

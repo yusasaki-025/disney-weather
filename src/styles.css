@@ -1318,9 +1318,13 @@ h1, h2, h3, h4, .app-title h1 {
 .score-pill .value {
   font-size: 14px;
 }
-.score-pill[data-level='good'],
+/* §0.52 : 信号機グラデーション。OK (黄緑 #CDDC39) は濃緑文字、FAIR (橙 #FFA726) は濃橙文字。
+   BEST 濃緑 ・ GOOD 緑薄 ・ NG 赤 は白文字 (既定 #fff)。 */
+.score-pill[data-level='ok'] {
+  color: #33691e;
+}
 .score-pill[data-level='fair'] {
-  color: #2a3340;
+  color: #e65100;
 }
 
 /* --- §0.6.5 サブスコア 色ピル --- */
@@ -1349,9 +1353,11 @@ h1, h2, h3, h4, .app-title h1 {
   font-size: 16px;
   font-weight: 700;
 }
-.subscore-pill[data-level='good'],
+.subscore-pill[data-level='ok'] {
+  color: #33691e;
+}
 .subscore-pill[data-level='fair'] {
-  color: #2a3340;
+  color: #e65100;
 }
 .subscore-pill[data-level='none'] {
   background: var(--surface-2);

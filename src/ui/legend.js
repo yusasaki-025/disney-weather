@@ -3,13 +3,14 @@
 import { SYMBOLS } from '../score/scoring.js';
 import { esc } from './components.js';
 
+// §0.52 : 5 段階 (BEST/GOOD/OK/FAIR/NG) の説明。
 const DESC = {
-  excellent: '風 ・ 雨 ・ 暑さ全部 OK',
-  good: '軽微な注意のみ',
-  fair: '風バ or 雨バ域',
-  bad: '中止リスク高',
+  best: '風 ・ 雨 ・ 暑さ全部問題なし',
+  good: 'ほぼ快適 ・ 軽微な注意のみ',
+  ok: '行けるが要検討',
+  fair: '風バ or 雨バ域 ・ 注意',
+  ng: '中止リスク高 ・ 別日推奨',
 };
-// ラベルが短くなった (ベスト / OK) ので、行ける日 = ベスト + OK と凡例で補足
 
 
 export function renderScoreLegend(el) {
