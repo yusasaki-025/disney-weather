@@ -272,13 +272,9 @@ function detailPanelHtml(row, park) {
     return order
       .map((g) => {
         const allTimes = g.times.map(esc);
-        const fullTimesText = g.restaurant && g.times.length === 0 ? '予約必須' : allTimes.join(' / ');
-        // §0.41.1 : 4 つ以上の時刻は「最初の 2 つ + ほか N 回」に畳む (全時刻は title と展開内に)
-        const folded = allTimes.length >= 4;
-        const timesText = folded
-          ? `${allTimes.slice(0, 2).join(' / ')} ほか ${allTimes.length - 2} 回`
-          : fullTimesText;
-        const timesTitle = folded ? ` title="${fullTimesText}"` : '';
+        // §0.44.13 : 全時刻を常時表示 (§0.41.1 の「ほか N 回」畳みを撤廃)。複数公演は時刻を独立行に。
+        const timesText = g.restaurant && g.times.length === 0 ? '予約必須' : allTimes.join(' / ');
+        const multiShow = allTimes.length >= 2;
         // §0.40.5 / §0.41.4 : DPA / 抽選 / 期間限定 を独立タグ化。
         //   schedule の内部表記 (プレミアアクセス / エントリー受付) を表示用 (DPA / 抽選) にマップ。
         const TAG_MAP = {
@@ -293,12 +289,14 @@ function detailPanelHtml(row, park) {
             return `<span class="show-tag ${m.cls}">${esc(m.label)}</span>`;
           })
           .join('');
-        // §0.44.10 : 時刻を行頭に (時刻順で一覧したいユーザーの自然な並び) ・ ショー名 ・ タグを後続。
-        const summary = `<span class="show-times"${timesTitle}>${timesText}</span><span class="show-name">${esc(g.name)}</span>${tagsHtml}`;
-        // §0.38-21 : 過去中止率などの詳細は既定で折りたたみ、行クリックで展開 (details/summary, a11y)。
-        // §0.38-21 + §0.41.1 : 過去中止率 ・ 畳んだ全時刻を既定で折りたたみ、行クリックで展開。
+        // §0.44.10 : 時刻を行頭に ・ ショー名 ・ タグを後続。
+        // §0.44.13 : 複数公演は 1 行目=全時刻 ・ 2 行目=ショー名 + タグ。単独公演は時刻先頭の 1 行。
+        const timesHtml = `<span class="show-times">${timesText}</span>`;
+        const nameTagsHtml = `<span class="show-name">${esc(g.name)}</span>${tagsHtml}`;
+        const summary = multiShow
+          ? `<div class="show-times-line">${timesHtml}</div><div class="show-name-line">${nameTagsHtml}</div>`
+          : `${timesHtml}${nameTagsHtml}`;
         const detailParts = [];
-        if (folded) detailParts.push(`<div class="show-alltimes">全 ${allTimes.length} 回 : ${fullTimesText}</div>`);
         // §0.43.1 : per-show 時刻別リスク (#18) と過去中止率 (§0.31) を 1 行に統合し風速の 2 重表示を解消
         const risk = showRiskInfo(Object.values(row.forecasts).filter(Boolean), g.times);
         const riskLine = showRiskLineHtml(g.name, p, risk, predWind);

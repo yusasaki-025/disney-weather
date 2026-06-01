@@ -783,6 +783,17 @@ section {
   font-size: 11px;
   color: var(--text-sub);
 }
+/* §0.44.13 : 複数公演は時刻 (1 行目) とショー名 + タグ (2 行目) を縦に積む。show-item の flex で全幅折り返し。 */
+.show-times-line {
+  flex-basis: 100%;
+}
+.show-name-line {
+  flex-basis: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 8px;
+}
 
 .outfit-list {
   list-style: none;
