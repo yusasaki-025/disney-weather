@@ -178,10 +178,17 @@ function updateStatus() {
   if (wbgtSrc) detail.push(wbgtSrc === 'env-jp' ? 'WBGT 環境省' : 'WBGT 簡易計算');
 
   const fresh = freshnessLabel(oldest);
-  label.textContent = allFail ? '更新' : fresh ? `更新 ・ ${fresh}` : '更新';
+  // §0.51.1 : ボタン文言は鮮度のみ (「更新」はアイコンで伝わる)。文字大でも 1 行に収める。
+  label.textContent = allFail ? '更新' : fresh || '更新';
   // §0.37.8 : スマホ全幅更新ボタンの鮮度ラベル
   const labelMobile = document.getElementById('refresh-label-mobile');
   if (labelMobile) labelMobile.textContent = allFail ? '取得失敗' : fresh || '今';
+  // §0.51.1 : a11y は aria-label / title で「更新」と最終取得を明示。
+  const ariaTime = allFail ? '取得失敗' : fresh ? `最終取得 ${fresh}` : '';
+  const aria = `天気データを更新${ariaTime ? ` (${ariaTime})` : ''}`;
+  btn.setAttribute('aria-label', aria);
+  const btnMobile = document.getElementById('btn-refresh-mobile');
+  if (btnMobile) btnMobile.setAttribute('aria-label', aria);
   btn.title = detail.join(' ・ ');
   btn.classList.toggle('is-cached', anyCached && !allFail);
 }
