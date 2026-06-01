@@ -293,7 +293,8 @@ function detailPanelHtml(row, park) {
             return `<span class="show-tag ${m.cls}">${esc(m.label)}</span>`;
           })
           .join('');
-        const summary = `<span class="show-name">${esc(g.name)}</span><span class="show-times"${timesTitle}>${timesText}</span>${tagsHtml}`;
+        // §0.44.10 : 時刻を行頭に (時刻順で一覧したいユーザーの自然な並び) ・ ショー名 ・ タグを後続。
+        const summary = `<span class="show-times"${timesTitle}>${timesText}</span><span class="show-name">${esc(g.name)}</span>${tagsHtml}`;
         // §0.38-21 : 過去中止率などの詳細は既定で折りたたみ、行クリックで展開 (details/summary, a11y)。
         // §0.38-21 + §0.41.1 : 過去中止率 ・ 畳んだ全時刻を既定で折りたたみ、行クリックで展開。
         const detailParts = [];
