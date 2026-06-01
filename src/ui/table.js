@@ -291,6 +291,13 @@ function detailPanelHtml(row, park, warningData = null) {
       }
       if (s.time) g.times.push(s.time);
     }
+    // §0.46.7 : ショーを開催時刻の昇順に並べる (JSON 記載順だと TDS のスカイ 20:30 が先頭に来ていた)。
+    //   時刻未定 (レストラン等) は Infinity 扱いで末尾へ。
+    const earliest = (g) =>
+      g.times.length
+        ? Math.min(...g.times.map((t) => { const [h, m] = t.split(':').map(Number); return h * 60 + m; }))
+        : Infinity;
+    order.sort((a, b) => earliest(a) - earliest(b));
     return order
       .map((g) => {
         const allTimes = g.times.map(esc);
