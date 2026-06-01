@@ -2785,3 +2785,26 @@ button.extreme-warn {
 .fh-val {
   font-weight: 600;
 }
+
+/* §0.46.11 : スマホ全体のフォントを底上げ (視認性向上)。寸法が px ベースで rem スケールが効かないため、
+   主要な読みテキストを個別に拡大する。横スクロールを誘発する zoom は使わず、メトリクスセル
+   (§0.46.10 の中央配置) は据え置く。 */
+@media (max-width: 767px) {
+  body {
+    font-size: 16px;
+  }
+  .show-list {
+    font-size: 14.5px;
+  }
+  .day-summary .ds-line {
+    font-size: 14px;
+  }
+  .outfit-list li,
+  .op-item,
+  .attraction-item {
+    font-size: 14px;
+  }
+  .cell-date-score .date-line {
+    font-size: 17px;
+  }
+}
