@@ -9,7 +9,7 @@ import { allShowMarkers } from '../data/showSchedule.js';
 // §0.37-11 指標別カラー
 const METRIC_COLOR = {
   pop: '#4A90D2', // 降水確率 = 青
-  wind: '#3A8AB8', // 風速 = ティール
+  wind: '#2E7D32', // §0.44.5 : 風速 = 緑 (降水の青と単軸で区別)
   temp: '#D24A4A', // 気温 = 赤
   feelsLike: '#E89A3C', // 体感 = 橙
 };
@@ -84,16 +84,12 @@ function makeDataset(f, metricKey, jpLabel, yAxisID) {
   };
 }
 
-// 降水確率 + 風速チャート
-export function renderPopWindChart(canvas, forecasts, park, date = null) {
+// §0.44.5 : 降水確率と風速を別グラフに分割 (軸違いで読みづらい 2 軸表示を解消)。1 指標 ・ 単軸で描画。
+function renderSingleMetricChart(canvas, forecasts, park, date, metricKey, jpLabel, axisText, maxY) {
   if (typeof Chart === 'undefined') return;
   destroy(canvas);
   const withHourly = forecasts.filter((f) => f.hourly && f.hourly.length > 0);
-  const datasets = [];
-  for (const f of withHourly) {
-    datasets.push(makeDataset(f, 'pop', '降水確率', 'pop'));
-    datasets.push(makeDataset(f, 'wind', '風速', 'wind'));
-  }
+  const datasets = withHourly.map((f) => makeDataset(f, metricKey, jpLabel, 'y'));
   canvas._chart = new Chart(canvas, {
     type: 'line',
     data: { datasets },
@@ -103,20 +99,22 @@ export function renderPopWindChart(canvas, forecasts, park, date = null) {
       interaction: { mode: 'index', intersect: false },
       scales: {
         x: baseXScale(),
-        pop: { type: 'linear', position: 'left', min: 0, max: 100, title: { display: true, text: '降水確率 %' } },
-        wind: {
-          type: 'linear',
-          position: 'right',
-          min: 0,
-          max: 20,
-          grid: { drawOnChartArea: false },
-          title: { display: true, text: '風速 m/s' },
-        },
+        y: { type: 'linear', position: 'left', min: 0, max: maxY, title: { display: true, text: axisText } },
       },
       plugins: { legend: { labels: { boxWidth: 12, font: { size: 10 } } } },
     },
     plugins: [showLinePlugin(park, date)],
   });
+}
+
+// 降水確率チャート (青 ・ 単軸 %)
+export function renderPopChart(canvas, forecasts, park, date = null) {
+  renderSingleMetricChart(canvas, forecasts, park, date, 'pop', '降水確率', '降水確率 %', 100);
+}
+
+// 風速チャート (緑 ・ 単軸 m/s)
+export function renderWindChart(canvas, forecasts, park, date = null) {
+  renderSingleMetricChart(canvas, forecasts, park, date, 'wind', '風速', '風速 m/s', 20);
 }
 
 // 気温 + 体感温度チャート

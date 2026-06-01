@@ -11,7 +11,7 @@ import {
 import { formatMd, weekday, todayJst } from '../utils/date.js';
 import { getScoreDiff, getScoreHistory } from '../data/forecastSnapshots.js';
 import { BANDS } from '../score/scoring.js';
-import { renderPopWindChart, renderTempChart } from './chart.js';
+import { renderPopChart, renderWindChart, renderTempChart } from './chart.js';
 import { suggestOutfit } from './outfit.js';
 import { getDaySchedule } from '../data/showSchedule.js';
 import { latestOperation } from '../data/operationLog.js';
@@ -373,8 +373,12 @@ function detailPanelHtml(row, park, warningData = null) {
     </div>
     <div class="detail-charts">
       <div class="detail-section">
-        <h4><span class="material-symbols-rounded" aria-hidden="true">water_drop</span>降水確率 ･ 風速 (時系列)</h4>
-        <div class="chart-box"><div style="position:relative;height:240px"><canvas data-chart="popwind"></canvas></div></div>
+        <h4><span class="material-symbols-rounded" aria-hidden="true">water_drop</span>降水確率 (時系列)</h4>
+        <div class="chart-box"><div style="position:relative;height:200px"><canvas data-chart="pop"></canvas></div></div>
+      </div>
+      <div class="detail-section">
+        <h4><span class="material-symbols-rounded" aria-hidden="true">air</span>風速 (時系列)</h4>
+        <div class="chart-box"><div style="position:relative;height:200px"><canvas data-chart="wind"></canvas></div></div>
       </div>
       <div class="detail-section">
         <h4><span class="material-symbols-rounded" aria-hidden="true">thermostat</span>気温 ･ 体感温度</h4>
@@ -525,7 +529,8 @@ export function renderTable(els, rows, state, sources, sourceStatus, handlers, w
     main.setAttribute('aria-expanded', 'true');
 
     const forecasts = Object.values(row.forecasts).filter(Boolean);
-    renderPopWindChart(detail.querySelector('[data-chart="popwind"]'), forecasts, state.park, date);
+    renderPopChart(detail.querySelector('[data-chart="pop"]'), forecasts, state.park, date);
+    renderWindChart(detail.querySelector('[data-chart="wind"]'), forecasts, state.park, date);
     renderTempChart(detail.querySelector('[data-chart="temp"]'), forecasts, state.park, date);
 
     // ショー ・ パレードの TDL/TDS タブ切替 (パークが近接のため詳細内タブで分離)
