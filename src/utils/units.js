@@ -33,3 +33,10 @@ export function maxOf(values) {
   if (nums.length === 0) return null;
   return Math.max(...nums);
 }
+
+// 数値配列の最小 (null/NaN は除外、全て欠損なら null)
+export function minOf(values) {
+  const nums = values.filter((v) => v != null && !Number.isNaN(v));
+  if (nums.length === 0) return null;
+  return Math.min(...nums);
+}

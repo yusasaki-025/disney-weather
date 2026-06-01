@@ -12,6 +12,7 @@ import {
   windowMax,
   windowMean,
   windowPeak,
+  hourlyRange,
   aggregateMetrics,
   scoreFromMetrics,
   bandSubscore,
@@ -279,6 +280,52 @@ describe('aggregateMetrics は単純平均 (欠損除外)', () => {
     const m = aggregateMetrics([a, b], 'TDL');
     expect(m.gustMax).toBe(10); // null は除外
     expect(m.popMax).toBe(50); // (40+60)/2
+  });
+});
+
+describe('hourlyRange (§0.57.1c 「この日の概要」レンジ)', () => {
+  const f1 = fakeForecast('open-meteo', {}, [
+    { hour: 9, gust: 6, pop: 10, wind: 3, precip: 0, wbgt: 18 },
+    { hour: 13, gust: 18, pop: 70, wind: 12, precip: 19.8, wbgt: 26 },
+    { hour: 18, gust: 9, pop: 40, wind: 5, precip: 1.2, wbgt: 22 },
+  ]);
+  it('全 hourly の最低 〜 最高を返す', () => {
+    expect(hourlyRange([f1], 'wind')).toEqual({ min: 3, max: 12 });
+    expect(hourlyRange([f1], 'gust')).toEqual({ min: 6, max: 18 });
+    expect(hourlyRange([f1], 'pop')).toEqual({ min: 10, max: 70 });
+    expect(hourlyRange([f1], 'precip')).toEqual({ min: 0, max: 19.8 });
+    expect(hourlyRange([f1], 'wbgt')).toEqual({ min: 18, max: 26 });
+  });
+  it('複数ソースを横断して min/max を取る', () => {
+    const f2 = fakeForecast('open-weather', {}, [
+      { hour: 13, wind: 2, wbgt: 30 },
+    ]);
+    expect(hourlyRange([f1, f2], 'wind')).toEqual({ min: 2, max: 12 });
+    expect(hourlyRange([f1, f2], 'wbgt')).toEqual({ min: 18, max: 30 });
+  });
+  it('hourly が無い / 全欠損は null', () => {
+    expect(hourlyRange([fakeForecast('jma', {})], 'wind')).toBeNull();
+    const sparse = fakeForecast('open-meteo', {}, [{ hour: 12, pop: 50 }]);
+    expect(hourlyRange([sparse], 'wbgt')).toBeNull(); // wbgt 欠損
+    expect(hourlyRange([sparse], 'pop')).toEqual({ min: 50, max: 50 });
+  });
+  it('aggregateMetrics が *Range フィールドを公開する', () => {
+    const m = aggregateMetrics([f1], 'TDL');
+    expect(m.windRange).toEqual({ min: 3, max: 12 });
+    expect(m.gustRange).toEqual({ min: 6, max: 18 });
+    expect(m.popRange).toEqual({ min: 10, max: 70 });
+    expect(m.precipRange).toEqual({ min: 0, max: 19.8 });
+    expect(m.wbgtRange).toEqual({ min: 18, max: 26 });
+  });
+  it('§0.57.1 整合性 : ShowWindow 値はレンジ内に収まる (カード表示 = ShowWindow)', () => {
+    // カード ・ スコア理由は wbgtShowWindow を表示。これが日レンジ [min,max] に収まることで
+    // 「カード値がレンジ外」という食い違いが起きないことを保証する。
+    const m = aggregateMetrics([f1], 'TDL');
+    expect(m.wbgtShowWindow).not.toBeNull();
+    expect(m.wbgtShowWindow).toBeGreaterThanOrEqual(m.wbgtRange.min);
+    expect(m.wbgtShowWindow).toBeLessThanOrEqual(m.wbgtRange.max);
+    expect(m.popShowWindow).toBeGreaterThanOrEqual(m.popRange.min);
+    expect(m.popShowWindow).toBeLessThanOrEqual(m.popRange.max);
   });
 });
 
