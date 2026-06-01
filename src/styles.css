@@ -810,10 +810,12 @@ section {
   color: var(--text);
   font-style: normal;
 }
+/* §0.46.5 : ショー開催時刻を太字 (ショー名 normal との区別)。tabular-nums で桁揃え。 */
 .show-times,
 .show-item.priority-low .show-times,
 .show-item.priority-restaurant .show-times {
-  color: var(--text-sub);
+  color: var(--text);
+  font-weight: 600;
   font-variant-numeric: tabular-nums;
   font-style: normal;
 }
