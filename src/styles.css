@@ -2549,18 +2549,27 @@ button.extreme-warn {
 }
 
 /* §0.41.5 : 「この日の概要」(スコア理由 ・ 要確認 ・ 天気概況を集約) */
+/* §0.46.3 : 「この日の概要」内の全行を完全左揃えに統一。固定幅ラベル列 (min-width 4.5em) は
+   「スコア理由」(5字) 等で溢れ値の開始位置が行ごとにズレていたため廃止し、「ラベル : 値」を
+   各行とも同じ左端から開始する。 */
+.day-summary {
+  text-align: left;
+}
 .day-summary .ds-line {
   display: flex;
-  gap: 8px;
+  flex-wrap: wrap;
+  gap: 2px 6px;
   margin: 0 0 6px;
   font-size: 13px;
   line-height: 1.5;
 }
 .day-summary .ds-key {
   flex: 0 0 auto;
-  min-width: 4.5em;
   font-weight: 700;
   color: var(--text-sub);
+}
+.day-summary .ds-key::after {
+  content: " :";
 }
 .day-summary .ds-check .ds-val {
   color: var(--score-bad);
