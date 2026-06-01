@@ -70,20 +70,17 @@ export function subscoreHtml(subscores, bands, dayEval = null) {
   };
   const labelHtml = (b) =>
     `<span class="time-label">${b.label}${b.key === 'noon' ? ' <span class="time-key">最重視</span>' : ''}<span class="time-range">${range(b)}</span></span>`;
-  // §0.44.1 : 時間帯スコアの先頭に「日全体」スコアを併記し、時間帯 ≦ 日 のクランプ (§0.42.4) を一目で確認できるように。
+  // §0.44.1 / §0.46.4 : 「日全体」スコアはカード上のスコアバッジ (scorePillHtml) と同じデザインで先頭に併記し、
+  //   「これがその日の総合」と一目で分かるようにする。時間帯 ≦ 日 のクランプ (§0.42.4) の検証にも使える。
   const dayHtml = dayEval
-    ? `<span class="subscore-pill subscore-day" data-level="${dayEval.symbol.key}" style="background:${dayEval.symbol.color}"><span class="time-label">日全体</span><span class="material-symbols-rounded" aria-hidden="true">${dayEval.symbol.icon}</span><span class="value">${dayEval.score}<span class="unit">点</span></span></span>`
+    ? `<div class="subscore-day-row"><span class="subscore-day-label">日全体</span>${scorePillHtml(dayEval)}</div>`
     : '';
-  const dayAria = dayEval ? [`日全体 ${dayEval.symbol.label} ${dayEval.score}`] : [];
-  const ariaParts = [
-    ...dayAria,
-    ...bands.map((b) => {
-      const ss = subscores[b.key];
-      const r = range(b) ? ` (${range(b)})` : '';
-      if (!ss || !ss.hasData) return `${b.label}${r} データなし`;
-      return `${b.label}${r} ${ss.symbol.label} ${ss.score}`;
-    }),
-  ];
+  const ariaParts = bands.map((b) => {
+    const ss = subscores[b.key];
+    const r = range(b) ? ` (${range(b)})` : '';
+    if (!ss || !ss.hasData) return `${b.label}${r} データなし`;
+    return `${b.label}${r} ${ss.symbol.label} ${ss.score}`;
+  });
   const cells = bands.map((b) => {
     const ss = subscores[b.key];
     const has = ss && ss.hasData;
@@ -93,7 +90,7 @@ export function subscoreHtml(subscores, bands, dayEval = null) {
     }
     return `<span class="subscore-pill${main}" data-level="${ss.symbol.key}" style="background:${ss.symbol.color}">${labelHtml(b)}<span class="material-symbols-rounded" aria-hidden="true">${ss.symbol.icon}</span><span class="value">${ss.score}<span class="unit">点</span></span></span>`;
   });
-  return `<span class="subscore-group" role="img" aria-label="${esc(ariaParts.join('、'))}">${dayHtml}${cells.join('')}</span>`;
+  return `<div class="subscore-block">${dayHtml}<span class="subscore-group" role="img" aria-label="${esc(ariaParts.join('、'))}">${cells.join('')}</span></div>`;
 }
 
 // スコアの読み上げ用ラベル (記号なし)
