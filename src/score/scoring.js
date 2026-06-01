@@ -3,9 +3,14 @@
 // 純関数として実装し、境界値をテストで担保する。
 
 import { mean, maxOf } from '../utils/units.js';
-import { showWindowHours, getDaySchedule } from '../data/showSchedule.js';
-import { strictestThreshold, DEFAULT_THRESHOLD } from '../data/show-thresholds.js';
+import { showWindowHours } from '../data/showSchedule.js';
+import { DEFAULT_THRESHOLD } from '../data/show-thresholds.js';
 import { computeSourceWeights, weightFor } from './sourceWeight.js';
+
+// §0.47.1 : 日全体の風バッジ判定に使う一般ショー基準の閾値 (windBa 8 / windCancel 11)。
+//   通常 < 8 / 風バ 8-11 / 中止リスク 11-13 / 中止 ≥ 13。ショー固有の厳しい閾値 (ハーモニー 6m/s 等)
+//   は詳細パネルの per-show 表示でのみ使い、日全体バッジには影響させない。
+const DAY_WIND_THRESHOLD = { windBa: 8, windCancel: 11 };
 
 // §0.39.5 (#23) : 起動時に 1 度だけソース重みを学習 (accuracy-log は静的 import なので不変)。
 //   データ不足時は空 = 全ソース等重みで、従来の単純平均と同じ挙動になる。
@@ -55,24 +60,28 @@ export function scoreToSymbol(score) {
 // 風減点 (gust_show_window 優先、無ければ gust_max)。TDS は全体 × 1.2。
 export function windDeduction(gust, park) {
   if (gust == null) return 0;
+  // §0.47.2 : 過剰減点を緩和 (6m/s -5 / 8m/s -15 / 10m/s -30 / 12m/s -50)。
+  //   6-7m/s は一般的な風速で屋外ショーの大半は通常開催されるため軽い減点に留める。
   let d;
-  if (gust < 5) d = 0;
-  else if (gust < 8) d = 10;
-  else if (gust < 10) d = 30; // 風バ域
-  else if (gust < 13) d = 60; // パレード中止域
-  else d = 90; // アトラクションも止まる域
+  if (gust < 6) d = 0;
+  else if (gust < 8) d = 5;
+  else if (gust < 10) d = 15; // 風バ域
+  else if (gust < 12) d = 30; // 中止リスク域
+  else d = 50; // 中止域
   if (park === 'TDS') d *= 1.2;
   return d;
 }
 
 // 雨減点 (pop_show_window 優先、無ければ pop_max)。precip_sum ≧ 5mm で +10。
 export function rainDeduction(pop, precipSum) {
+  // §0.47.2 : 過剰減点を緩和 (30% -5 / 50% -15 / 70% -35 / 90% -65)。precip_sum ≧ 5mm で +10。
   let d = 0;
   if (pop != null) {
     if (pop < 20) d = 0;
-    else if (pop < 50) d = 15;
-    else if (pop < 70) d = 30;
-    else d = 50;
+    else if (pop < 50) d = 5;
+    else if (pop < 70) d = 15;
+    else if (pop < 90) d = 35;
+    else d = 65;
   }
   if (precipSum != null && precipSum >= 5) d += 10;
   return d;
@@ -154,7 +163,9 @@ export function wbgtBadge(wbgt, windShowWindow, feelsLikeMax) {
 // スコアは平均値ベース (§0.13.2)、バッジはピーク (最大) ベースなので、
 // 「OK 75 なのに 雨ほぼ中止」のような矛盾が出る。バッジの危険度でスコアに上限キャップを掛ける。
 const SEVERITY_RANK = { normal: 0, warn: 1, danger: 2, critical: 3 };
-const SEVERITY_CAP = { critical: 25, danger: 45, warn: 65 };
+// §0.47.3 : floor guard を緩和 (風バ → 70 / 中止リスク ・ キャン → 40 / ほぼ中止 → 20)。
+//   風バでもスコアは最大 70 (= OK) まで許容し、過剰格下げ (微妙固定) を解消する。
+const SEVERITY_CAP = { critical: 20, danger: 40, warn: 70 };
 
 export function badgeSeverity(text) {
   // §0.36 でラベル短縮 (ほぼ中止→中止 / 中止リスク高→中止リスク / 雨キャン濃厚→雨キャン 等)
@@ -314,12 +325,12 @@ export function evaluateDay(forecasts, park, date = null) {
   const popForBadge = metrics.popShowWindow != null ? metrics.popShowWindow : metrics.popMax;
   const wbgtForBadge = metrics.wbgtShowWindow != null ? metrics.wbgtShowWindow : metrics.wbgtMax;
   // §0.30 : その日 ・ パークの high 優先ショーで最も中止しやすい閾値を使う (安全側)
-  const highShows = date
-    ? getDaySchedule(date, park).shows.filter((s) => s.priority === 'high')
-    : [];
-  const windThreshold = highShows.length ? strictestThreshold(highShows) : DEFAULT_THRESHOLD;
+  // §0.47.1 : 日全体の風バッジは「一般ショー基準」(windBa 8 / windCancel 11) で判定する。
+  //   旧実装は最も厳しいショー (ハーモニー 6m/s) の閾値を使い、6-7m/s で日全体が「風バ」に
+  //   過剰判定され 9 割の日が格下げされていた。ショー個別の厳しい閾値は詳細パネル
+  //   (per-show 風 ・ 過去中止率) で引き続き扱う。strictestThreshold/highShows は使わない。
   const badges = {
-    wind: windBadge(gustForBadge, windThreshold),
+    wind: windBadge(gustForBadge, DAY_WIND_THRESHOLD),
     rain: rainBadge(popForBadge, metrics.precipSum),
     wbgt: wbgtBadge(wbgtForBadge, metrics.windShowWindow, metrics.feelsLikeMax),
   };

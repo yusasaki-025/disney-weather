@@ -22,39 +22,41 @@ import {
   BANDS,
 } from '../src/score/scoring.js';
 
-describe('windDeduction (§5.2)', () => {
+describe('windDeduction (§5.2 / §0.47.2 緩和)', () => {
   it('境界値', () => {
-    expect(windDeduction(4.9, 'TDL')).toBe(0);
-    expect(windDeduction(5, 'TDL')).toBe(10);
-    expect(windDeduction(7.9, 'TDL')).toBe(10);
-    expect(windDeduction(8, 'TDL')).toBe(30);
-    expect(windDeduction(9.9, 'TDL')).toBe(30);
-    expect(windDeduction(10, 'TDL')).toBe(60);
-    expect(windDeduction(12.9, 'TDL')).toBe(60);
-    expect(windDeduction(13, 'TDL')).toBe(90);
-    expect(windDeduction(20, 'TDL')).toBe(90);
+    expect(windDeduction(5.9, 'TDL')).toBe(0);
+    expect(windDeduction(6, 'TDL')).toBe(5);
+    expect(windDeduction(7.9, 'TDL')).toBe(5);
+    expect(windDeduction(8, 'TDL')).toBe(15);
+    expect(windDeduction(9.9, 'TDL')).toBe(15);
+    expect(windDeduction(10, 'TDL')).toBe(30);
+    expect(windDeduction(11.9, 'TDL')).toBe(30);
+    expect(windDeduction(12, 'TDL')).toBe(50);
+    expect(windDeduction(20, 'TDL')).toBe(50);
   });
   it('欠損は 0', () => {
     expect(windDeduction(null, 'TDL')).toBe(0);
   });
   it('TDS は ×1.2', () => {
-    expect(windDeduction(10, 'TDS')).toBeCloseTo(72, 5);
-    expect(windDeduction(13, 'TDS')).toBeCloseTo(108, 5);
-    expect(windDeduction(4.9, 'TDS')).toBe(0);
+    expect(windDeduction(10, 'TDS')).toBeCloseTo(36, 5);
+    expect(windDeduction(12, 'TDS')).toBeCloseTo(60, 5);
+    expect(windDeduction(5.9, 'TDS')).toBe(0);
   });
 });
 
-describe('rainDeduction (§5.2)', () => {
+describe('rainDeduction (§5.2 / §0.47.2 緩和)', () => {
   it('境界値', () => {
     expect(rainDeduction(19, 0)).toBe(0);
-    expect(rainDeduction(20, 0)).toBe(15);
-    expect(rainDeduction(49, 0)).toBe(15);
-    expect(rainDeduction(50, 0)).toBe(30);
-    expect(rainDeduction(69, 0)).toBe(30);
-    expect(rainDeduction(70, 0)).toBe(50);
+    expect(rainDeduction(20, 0)).toBe(5);
+    expect(rainDeduction(49, 0)).toBe(5);
+    expect(rainDeduction(50, 0)).toBe(15);
+    expect(rainDeduction(69, 0)).toBe(15);
+    expect(rainDeduction(70, 0)).toBe(35);
+    expect(rainDeduction(89, 0)).toBe(35);
+    expect(rainDeduction(90, 0)).toBe(65);
   });
   it('precip_sum ≧ 5mm で +10', () => {
-    expect(rainDeduction(70, 5)).toBe(60);
+    expect(rainDeduction(70, 5)).toBe(45);
     expect(rainDeduction(10, 5)).toBe(10);
     expect(rainDeduction(10, 4.9)).toBe(0);
   });
@@ -275,10 +277,10 @@ describe('scoreFromMetrics は show-window を優先', () => {
       precipSum: 0, feelsLikeMax: 20, tempMax: 25, windShowWindow: 2, uvMax: 0,
     };
     const r = scoreFromMetrics(m, 'TDL');
-    // wind 60 + rain 50 = 110 → score 0
-    expect(r.deductions.wind).toBe(60);
-    expect(r.deductions.rain).toBe(50);
-    expect(r.score).toBe(0);
+    // §0.47.2 : wind 50 + rain 35 = 85 → score 15 → 別日
+    expect(r.deductions.wind).toBe(50);
+    expect(r.deductions.rain).toBe(35);
+    expect(r.score).toBe(15);
     expect(r.symbol.label).toBe('別日');
   });
   it('show-window が無ければ daily 最大にフォールバック', () => {
@@ -289,9 +291,9 @@ describe('scoreFromMetrics は show-window を優先', () => {
       precipSum: 0, feelsLikeMax: 22, tempMax: 25, windShowWindow: null, uvMax: 0,
     };
     const r = scoreFromMetrics(m, 'TDL');
-    // wind 10 + rain 15 = 25 → score 75 → OK
-    expect(r.score).toBe(75);
-    expect(r.symbol.label).toBe('OK');
+    // §0.47.2 : wind 5 + rain 5 = 10 → score 90 → ベスト
+    expect(r.score).toBe(90);
+    expect(r.symbol.label).toBe('ベスト');
   });
 });
 
@@ -340,11 +342,12 @@ describe('badgeSeverity / applyBadgeGuard (§0.16)', () => {
   it('最悪 severity に応じて上限キャップ (上限のみ・引き上げない)', () => {
     const g = (raw, text) =>
       applyBadgeGuard(raw, { wind: { text: '通常' }, rain: { text }, wbgt: { text: '通常' } }).score;
-    expect(g(80, '中止')).toBe(25); // critical
-    expect(g(80, '雨キャン')).toBe(45); // danger
-    expect(g(80, '雨バ')).toBe(65); // warn
+    // §0.47.3 : 緩和後の cap (critical 20 / danger 40 / warn 70)
+    expect(g(80, '中止')).toBe(20); // critical
+    expect(g(80, '雨キャン')).toBe(40); // danger
+    expect(g(80, '雨バ')).toBe(70); // warn
     expect(g(80, '通常')).toBe(80); // normal はキャップなし
-    expect(g(20, '中止')).toBe(20); // キャップは上限のみ (引き下げ済みは保持)
+    expect(g(15, '中止')).toBe(15); // キャップは上限のみ (引き下げ済みは保持)
   });
   it('最も厳しいバッジが効く', () => {
     const r = applyBadgeGuard(80, {
@@ -353,7 +356,7 @@ describe('badgeSeverity / applyBadgeGuard (§0.16)', () => {
       wbgt: { text: '通常' },
     });
     expect(r.worstSeverity).toBe('critical');
-    expect(r.score).toBe(25);
+    expect(r.score).toBe(20);
     expect(r.capped).toBe(true);
   });
 });
@@ -373,9 +376,9 @@ describe('evaluateDay (統合)', () => {
     expect(r.score).toBeGreaterThanOrEqual(0);
     expect(r.score).toBeLessThanOrEqual(100);
     expect(r.symbol).toBeTruthy();
-    // §0.30 : date 無し → DEFAULT 閾値 (windBa8/windCancel12)。gust window 平均 11 → 風バ域。
-    expect(r.badges.wind.text).toBe('風バ');
-    expect(r.badges.rain.text).toBe('雨キャン'); // pop window 70
+    // §0.47.1 : 日全体バッジは一般ショー基準 (windBa8/windCancel11)。gust window 平均 11 → 中止リスク域。
+    expect(r.badges.wind.text).toBe('中止リスク');
+    expect(r.badges.rain.text).toBe('雨キャン'); // pop window 60
     expect(r.subscores.noon).toBeTruthy();
     expect(['ベスト', 'OK', '微妙', '別日']).toContain(r.subscores.noon.symbol.label);
   });
