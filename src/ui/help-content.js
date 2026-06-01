@@ -44,6 +44,8 @@ export const HELP_SECTIONS = [
         <li><strong>風バ</strong> : 風で演出が一部変更される可能性 (風バージョン)</li>
         <li><strong>雨キャン</strong> : 雨を理由とする中止 (公式「雨天により中止」)</li>
         <li><strong>風キャン</strong> : 強風を理由とする中止 (公式「強風により中止」)</li>
+        <li><strong>平均風速</strong> : ショー時刻の 1時間平均風速 (sustained)。詳細の「風 ◯m/s」はこの値</li>
+        <li><strong>突風 (gust)</strong> : 1時間の最大瞬間風速。中止判定 ・ 過去事例検索のベースで、平均風速より大きいのが通常</li>
         <li><strong>熱バ ・ 熱キャン</strong> : 暑さによる演出変更 ・ 熱中症対策の中止</li>
         <li><strong>中止</strong> : 雨 ・ 風 ・ 熱いずれかで公演が行われないこと (本ツールは「キャンセル」でなく「中止」に統一)</li>
         <li><strong>パイロカット</strong> : 強風で花火 (パイロ) 部分のみ省略</li>

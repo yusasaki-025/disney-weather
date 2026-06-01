@@ -142,17 +142,15 @@ function operationHtml(date) {
 //   熱 : ショー時刻の WBGT (#18) ・ ［過去中止 N%］: 過去同条件 (max ±2m/s) の中止率 (§0.31)
 function showRiskLineHtml(showName, park, risk, predWind) {
   const riskParts = [];
-  // 風 : avg / max。両値 (丸め後) が同じなら 1 値のみ表示。
-  if (risk && risk.wind != null) {
-    if (predWind != null && Math.round(predWind) !== risk.wind) {
-      riskParts.push(
-        `<span class="sr-wind" title="平均 = ショー時刻のピンポイント予想 / max = ショー時刻 ±1時間の最大予想 (過去中止率の判定に使用)">風 ${risk.wind}m/s (平均) / max ${fmtNum(predWind, 0)}m/s</span>`,
-      );
-    } else {
-      riskParts.push(`風 ${risk.wind}m/s`);
-    }
-  } else if (predWind != null) {
-    riskParts.push(`風 ${fmtNum(predWind, 0)}m/s`);
+  // §0.43.2 : 平均風速 (sustained ・ windspeed_10m) と 突風 (gust ・ wind_gusts_10m) を気象用語で併記。
+  //           突風 ≧ 平均風速 が通常だが、算出窓の違いで逆転もあり得る (別物なので違和感なし)。
+  const windPieces = [];
+  if (risk && risk.wind != null) windPieces.push(`風 ${risk.wind}m/s`);
+  if (predWind != null) windPieces.push(`突風 ${fmtNum(predWind, 0)}m/s`);
+  if (windPieces.length) {
+    riskParts.push(
+      `<span class="sr-wind" title="風 (平均風速) = ショー時刻の 1時間平均 (sustained) / 突風 = 1時間最大瞬間風速 (gust)。突風は中止判定 ・ 過去事例検索のベースです">${windPieces.join(' ・ ')}</span>`,
+    );
   }
   if (risk && risk.wbgt != null) riskParts.push(`熱 WBGT${risk.wbgt}`);
   // 過去中止率 (§0.31)。サンプル不足は表示せず (誤情報回避)、3 件未満は (要確認) 併記 (§0.38-10)。
@@ -161,7 +159,7 @@ function showRiskLineHtml(showName, park, risk, predWind) {
   if (r) {
     const cls = r.probability >= 50 ? 'cp-danger' : r.probability >= 30 ? 'cp-warn' : 'cp-mute';
     const lowSample = r.sampleSize < 3 ? '<span class="cp-check">(要確認)</span>' : '';
-    cancelHtml = `<span class="cancel-prob ${cls}" title="過去同条件 (max ${fmtNum(predWind, 0)}m/s ±2m/s) ${r.sampleSize}件中 ${r.cancelCount}件中止">［過去中止 ${r.probability}% (${r.cancelCount}/${r.sampleSize}件)］${lowSample}</span>`;
+    cancelHtml = `<span class="cancel-prob ${cls}" title="過去同条件 (突風 ${fmtNum(predWind, 0)}m/s ±2m/s) ${r.sampleSize}件中 ${r.cancelCount}件中止">［過去中止 ${r.probability}% (${r.cancelCount}/${r.sampleSize}件)］${lowSample}</span>`;
   }
   if (riskParts.length === 0 && !cancelHtml) return '';
   const body = [riskParts.join(' ・ '), cancelHtml].filter(Boolean).join(' ');

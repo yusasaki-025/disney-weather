@@ -25,7 +25,9 @@ export function showRiskInfo(forecasts, times) {
     return vals.length ? Math.round(vals.reduce((a, b) => a + b, 0) / vals.length) : null;
   };
 
-  const wind = meanAt('gust');
+  // §0.43.2 : 「風」は平均風速 (windspeed_10m ・ sustained)。突風 (gust) は別途 cancelProbability 用の
+  //           predWind (wind_gusts_10m) を使い、表示で「風 / 突風」を併記する。
+  const wind = meanAt('wind');
   const wbgt = meanAt('wbgt');
   if (wind == null && wbgt == null) return null;
   return { wind, wbgt };
