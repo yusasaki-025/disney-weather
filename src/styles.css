@@ -523,8 +523,9 @@ section {
 }
 
 /* §0.23 : 日付セルにスコアピルを統合 (上 日付/曜日 ・ 下 スコアピル) */
+/* §0.53.2 : PC で日付セルを他列 (風 ・ 雨 ・ 熱) と同じ垂直中央に揃える (スマホは grid/flex で無影響) */
 .cell-date-score {
-  vertical-align: top;
+  vertical-align: middle;
 }
 .cell-date-score .date-line {
   font-size: 15px;
@@ -1908,15 +1909,27 @@ body {
   }
 
   /* 各 td を領域へ割当 (block 化) */
+  /* §0.53.1 : 日付 + スコアバッジを「1 単位」として中央寄せ ・ 間隔 16px。
+     空の日付サブ (祝日バッジ無し) は gap を作らないよう非表示、熱中症バナーは独立行に回す。 */
   .forecast-table tr.calendar-row > td.cell-date-score {
     grid-area: date-score;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
     width: 100%;
     padding: 0 0 8px;
     margin: 0;
     border-bottom: 1px solid var(--border);
+  }
+  .cell-date-score .date-sub:empty {
+    display: none;
+  }
+  .cell-date-score .heat-alert {
+    flex-basis: 100%;
+    order: 9;
+    justify-content: center;
   }
   .forecast-table tr.calendar-row > td.cell-wind {
     grid-area: wind;
@@ -2564,8 +2577,9 @@ button.extreme-warn {
 .cell-date-score .card-score {
   display: none;
 }
+/* §0.53.2 : PC スコア列も垂直中央揃え (他列と中心線を合わせる) */
 .cell-score-pc {
-  vertical-align: top;
+  vertical-align: middle;
 }
 @media (max-width: 767px) {
   th.col-score,
@@ -2848,3 +2862,5 @@ button.extreme-warn {
     font-size: 17px;
   }
 }
+
+/* §0.54-PLACEHOLDER */
