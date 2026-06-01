@@ -2,7 +2,7 @@
 // 総合スコア = 100 - (風減点 + 雨減点 + 熱中症減点 + 寒さ減点 + UV減点)。
 // 純関数として実装し、境界値をテストで担保する。
 
-import { mean, maxOf } from '../utils/units.js';
+import { mean, maxOf, minOf } from '../utils/units.js';
 import { showWindowHours } from '../data/showSchedule.js';
 import { DEFAULT_THRESHOLD } from '../data/show-thresholds.js';
 import { computeSourceWeights, weightFor } from './sourceWeight.js';
@@ -273,6 +273,16 @@ export function windowPeak(forecasts, hours, field) {
   return best;
 }
 
+// §0.57.1c : その日の全ソース hourly から field の「最低 〜 最高」レンジを返す
+// ({ min, max } | null)。「この日の概要」のレンジ表示用。ショー窓平均 (windowMean) や
+// 日次最大の加重平均 (windMax 等) とは別軸で、1 日の振れ幅をそのまま示す。
+export function hourlyRange(forecasts, field) {
+  const vals = forecasts.flatMap((f) => (f.hourly || []).map((p) => p[field]));
+  const min = minOf(vals);
+  const max = maxOf(vals);
+  return min == null || max == null ? null : { min, max };
+}
+
 // その日の複数ソースを単純平均して指標オブジェクトを作る
 export function aggregateMetrics(forecasts, park, date = null) {
   // §0.39.5 (#23) : ソース別 MAE で学習した重みでの加重平均 (データ不足時は等重み = 単純平均)。
@@ -305,6 +315,13 @@ export function aggregateMetrics(forecasts, park, date = null) {
     gustPeak: windowPeak(forecasts, highHours, 'gust'),
     popPeak: windowPeak(forecasts, highHours, 'pop'),
     wbgtPeak: windowPeak(forecasts, highHours, 'wbgt'),
+    // §0.57.1c : 「この日の概要」用の 1 日の振れ幅レンジ ({ min, max } | null)。
+    // 全ソース hourly の最低 〜 最高。カード上 (ショー窓) との食い違いを「レンジ内」として吸収する。
+    windRange: hourlyRange(forecasts, 'wind'),
+    gustRange: hourlyRange(forecasts, 'gust'),
+    popRange: hourlyRange(forecasts, 'pop'),
+    precipRange: hourlyRange(forecasts, 'precip'),
+    wbgtRange: hourlyRange(forecasts, 'wbgt'),
   };
 }
 
