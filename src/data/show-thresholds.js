@@ -34,6 +34,20 @@ export function isWeatherless(name) {
   return WEATHERLESS_SHOWS.some((re) => re.test(name));
 }
 
+// §0.46.6 : 「期間限定」タグを付ける季節限定演目。priority:high からの自動付与をやめ、
+//   明示リストで判定する (ハーモニー ・ イン ・ カラー等の通年演目に誤って付かないように)。
+const SEASONAL_SHOWS = [
+  /スウィーツ[・･]?フルタイム/, // イッツ ・ ア ・ スウィーツフルタイム! (春の季節パレード)
+  /Reach for the Stars/i,
+  /スカイ[・･]フル[・･]オブ[・･]カラーズ/, // 期間限定花火
+];
+
+// その演目が季節限定 (「期間限定」タグ対象) かを返す。
+export function isSeasonal(name) {
+  if (!name) return false;
+  return SEASONAL_SHOWS.some((re) => re.test(name));
+}
+
 // ショー名から閾値を返す (見つからなければ DEFAULT)。
 export function thresholdForShow(name) {
   if (!name) return { ...DEFAULT_THRESHOLD };

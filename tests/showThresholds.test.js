@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { isWeatherless } from '../src/data/show-thresholds.js';
+import { isWeatherless, isSeasonal } from '../src/data/show-thresholds.js';
 
 describe('isWeatherless (§0.44.12 屋内ショー判定)', () => {
   it('屋内ショー ・ プロジェクションは true', () => {
@@ -16,5 +16,21 @@ describe('isWeatherless (§0.44.12 屋内ショー判定)', () => {
     expect(isWeatherless('スカイ･フル･オブ･カラーズ')).toBe(false);
     expect(isWeatherless('')).toBe(false);
     expect(isWeatherless(null)).toBe(false);
+  });
+});
+
+describe('isSeasonal (§0.46.6 期間限定タグ判定)', () => {
+  it('季節限定演目は true', () => {
+    expect(isSeasonal('イッツ･ア･スウィーツフルタイム!')).toBe(true);
+    expect(isSeasonal('Reach for the Stars')).toBe(true);
+    expect(isSeasonal('スカイ･フル･オブ･カラーズ')).toBe(true);
+  });
+
+  it('通年演目は false (ハーモニー ・ イン ・ カラーに期間限定を付けない)', () => {
+    expect(isSeasonal('ディズニー･ハーモニー･イン･カラー')).toBe(false);
+    expect(isSeasonal('東京ディズニーランド･エレクトリカルパレード･ドリームライツ')).toBe(false);
+    expect(isSeasonal('ジャンボリミッキー!レッツ･ダンス!')).toBe(false);
+    expect(isSeasonal('')).toBe(false);
+    expect(isSeasonal(null)).toBe(false);
   });
 });

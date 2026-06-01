@@ -20,7 +20,7 @@ import { extremeWarning } from '../score/extremeWarning.js';
 import { getScoreReason } from '../score/scoreReason.js';
 import { showRiskInfo } from '../score/showRisk.js';
 import { getAttractionClosures } from '../score/attractionForecast.js';
-import { isWeatherless } from '../data/show-thresholds.js';
+import { isWeatherless, isSeasonal } from '../data/show-thresholds.js';
 import { heatAlertLevel } from '../score/heatAlert.js';
 import { freshnessLabel } from '../utils/freshness.js';
 import { nowcastHtml } from './nowcast.js';
@@ -305,7 +305,8 @@ function detailPanelHtml(row, park, warningData = null) {
           エントリー受付: { label: '抽選', cls: 'tag-chusen' },
           期間限定: { label: '期間限定', cls: 'tag-season' },
         };
-        const tagList = [...(g.cls === 'high' ? ['期間限定'] : []), ...g.tags];
+        // §0.46.6 : 「期間限定」は priority:high からの自動付与でなく季節限定演目の明示判定で付ける。
+        const tagList = [...(isSeasonal(g.name) ? ['期間限定'] : []), ...g.tags];
         const tagsHtml = tagList
           .map((t) => {
             const m = TAG_MAP[t] || { label: t, cls: 'tag-note' };
