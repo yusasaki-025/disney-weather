@@ -304,8 +304,9 @@ function detailPanelHtml(row, park) {
         const riskLine = showRiskLineHtml(g.name, p, risk, predWind);
         if (riskLine) detailParts.push(riskLine);
         const detail = detailParts.join('');
-        if (!detail) return `<li class="show-item priority-${g.cls}">${summary}</li>`;
-        return `<li class="show-item priority-${g.cls}"><details class="show-toggle"><summary>${summary}</summary><div class="show-detail">${detail}</div></details></li>`;
+        // §0.44.9 : 「開催予想」 toggle (details/summary) を撤廃し、風 / 突風 / 熱 / 過去中止率を常時表示。
+        const detailHtml = detail ? `<div class="show-detail">${detail}</div>` : '';
+        return `<li class="show-item priority-${g.cls}">${summary}${detailHtml}</li>`;
       })
       .join('');
   };

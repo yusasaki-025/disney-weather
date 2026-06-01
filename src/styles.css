@@ -2417,30 +2417,10 @@ button.extreme-warn {
   text-decoration-style: dotted;
 }
 
-/* §0.38-21 : ショー詳細 (過去中止率) を折りたたみ。summary がショー行本体。 */
-.show-toggle > summary {
-  display: flex;
-  align-items: baseline;
-  gap: 8px;
-  flex-wrap: wrap;
-  cursor: pointer;
-  list-style: none;
-}
-.show-toggle > summary::-webkit-details-marker {
-  display: none;
-}
-/* §0.40.6 : ショー toggle 文言を「開催予想」に (中身は風 ・ 過去中止率) */
-.show-toggle > summary::after {
-  content: "開催予想 ▶";
-  font-size: 10px;
-  color: var(--accent);
-  margin-left: auto;
-}
-.show-toggle[open] > summary::after {
-  content: "開催予想 ▼";
-}
+/* §0.44.9 : 「開催予想」 toggle を撤廃し、リスク行を常時展開。show-detail は行内で全幅折り返し。 */
 .show-detail {
-  margin-top: 6px;
+  flex-basis: 100%;
+  margin-top: 2px;
   padding-left: 2px;
 }
 /* §0.43.1 : ショー詳細のリスク 1 行統合 (風 avg/max ・ 熱 ・ 過去中止率)。#18 の風速 2 重表示を解消 */
