@@ -2559,6 +2559,22 @@ button.extreme-warn {
   background: var(--risk-bg);
   color: var(--score-bad);
 }
+/* §0.39.2 (#20) : 熱中症警戒級バナー (WBGT 予測由来) */
+.heat-alert {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin: 4px 0;
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: var(--risk-bg);
+  color: var(--score-bad);
+  font-size: 12px;
+  font-weight: 700;
+}
+.heat-alert .material-symbols-rounded {
+  font-size: 16px;
+}
 
 /* §0.37.8 : スマホヘッダー再構成
    右上はヘルプ (アイコンのみ) ・ ヘッダー更新ボタンは隠す

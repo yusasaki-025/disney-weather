@@ -20,6 +20,7 @@ import { extremeWarning } from '../score/extremeWarning.js';
 import { getScoreReason } from '../score/scoreReason.js';
 import { showRiskInfo } from '../score/showRisk.js';
 import { getAttractionClosures } from '../score/attractionForecast.js';
+import { heatAlertLevel } from '../score/heatAlert.js';
 import { freshnessLabel } from '../utils/freshness.js';
 import { nowcastHtml } from './nowcast.js';
 import { getTempColor, getTempBandKey } from '../utils/tempColor.js';
@@ -439,11 +440,17 @@ export function renderTable(els, rows, state, sources, sourceStatus, handlers) {
       // §0.23 : 日付セルにスコアピルを統合 (1 列削減)。§0.22 : data-label でスマホカードのラベル。
       // §0.37.4 : PC は独立スコア列 (cell-score-pc) ・ スマホはカード内 (.card-score) に統合 (CSS で出し分け)。
       const scoreInner = `<div class="score-row">${scorePillHtml(row.eval)}${diffHtml}${extremeHtml}</div>`;
+      // §0.39.2 (#20) : WBGT 予測から熱中症警戒級を導出しカードにバナー表示 (score は既存ロジックで別日化済)
+      const heatAlert = heatAlertLevel(m.wbgtMax);
+      const heatAlertHtml = heatAlert
+        ? `<div class="heat-alert"><span class="material-symbols-rounded" aria-hidden="true">warning</span>${esc(heatAlert.label)} (WBGT予測${heatAlert.wbgt})</div>`
+        : '';
       const mainRow = `<tr class="${cls} calendar-row" data-date="${row.date}" tabindex="0"
         role="button" aria-expanded="false" aria-label="${esc(scoreAria(row.date, row.eval))}">
         <td class="col-date cell-date-score" data-label="日付"${scoreTitle ? ` title="${esc(scoreTitle)}"` : ''}>
           <div class="date-line">${state.sortBy === 'score' && i < 3 ? `<span class="rank-badge">${i + 1}位</span>` : ''}${esc(formatMd(row.date))} <span class="weekday ${dt.isHoliday || dt.weekdayIndex === 0 ? 'day-sun' : dt.weekdayIndex === 6 ? 'day-sat' : 'day-weekday'}">(${esc(weekday(row.date))})</span></div>
           <div class="date-sub">${dayBadges(dt)}</div>
+          ${heatAlertHtml}
           <div class="score-row card-score">${scorePillHtml(row.eval)}${diffHtml}${extremeHtml}</div>
         </td>
         <td class="col-score cell-score-pc" data-label="スコア">${scoreInner}</td>
