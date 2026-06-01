@@ -1823,9 +1823,11 @@ body {
   .forecast-table tr.calendar-row {
     display: grid;
     grid-template-columns: repeat(6, 1fr);
+    /* §0.46.10 : 風 ・ 雨 ・ 熱を均等 3 分割 (各 2 列) にし、雨をカード中心に対称配置 (4 度目の根本修正)。
+       旧 'wind rain rain rain heat heat' (1:3:2) は雨が左寄り ・ 熱の右が空いて見えていた。 */
     grid-template-areas:
       'date-score date-score date-score date-score date-score date-score'
-      'wind rain rain rain heat heat'
+      'wind wind rain rain heat heat'
       'jma jma jma openmeteo openmeteo openmeteo'
       'more more more more more more';
     gap: 8px;
