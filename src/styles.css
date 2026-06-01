@@ -2589,6 +2589,10 @@ button.extreme-warn {
 .day-summary .ds-check .ds-val {
   color: var(--score-bad);
 }
+/* §0.48.3 : 霧雨注釈 (ショー原則開催の可能性高) は補助色で控えめに */
+.day-summary .ds-note .ds-val {
+  color: var(--text-sub);
+}
 /* §0.42.3 : 天気概況の複合天気アイコン (晴れ + 曇り + 霧 並列) */
 .day-summary .ds-wicon {
   font-size: 18px;

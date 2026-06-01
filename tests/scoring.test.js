@@ -55,10 +55,10 @@ describe('rainDeduction (§5.2 / §0.47.2 緩和)', () => {
     expect(rainDeduction(89, 0)).toBe(35);
     expect(rainDeduction(90, 0)).toBe(65);
   });
-  it('precip_sum ≧ 5mm で +10', () => {
-    expect(rainDeduction(70, 5)).toBe(45);
-    expect(rainDeduction(10, 5)).toBe(10);
-    expect(rainDeduction(10, 4.9)).toBe(0);
+  it('§0.48.2 : 時間最大降水量 ≧ 3mm/h で +10', () => {
+    expect(rainDeduction(70, 3)).toBe(45);
+    expect(rainDeduction(10, 3)).toBe(10);
+    expect(rainDeduction(10, 2.9)).toBe(0); // 霧雨 (1mm/h 等) は加算なし
   });
   it('欠損は 0', () => {
     expect(rainDeduction(null, null)).toBe(0);
@@ -155,16 +155,23 @@ describe('windBadge (§5.5)', () => {
   });
 });
 
-describe('rainBadge (§5.5)', () => {
-  it('境界値', () => {
+describe('rainBadge (§5.5 / §0.48.2 時間最大降水量ベース)', () => {
+  it('境界値 (mm/h)', () => {
     expect(rainBadge(0, 0).text).toBe('通常');
-    expect(rainBadge(29, 0.9).text).toBe('通常');
-    expect(rainBadge(30, 0).text).toBe('雨バ');
-    expect(rainBadge(59, 0).text).toBe('雨バ');
-    expect(rainBadge(60, 0).text).toBe('雨キャン');
-    expect(rainBadge(0, 1).text).toBe('雨キャン');
-    expect(rainBadge(0, 2).text).toBe('中止');
+    expect(rainBadge(40, 0.9).text).toBe('通常'); // 低確率 ・ 弱雨
+    expect(rainBadge(50, 0).text).toBe('雨バ'); // 高確率だが降水量弱
+    expect(rainBadge(0, 1).text).toBe('雨バ'); // 1mm/h (霧雨相当)
+    expect(rainBadge(0, 2.9).text).toBe('雨バ');
+    expect(rainBadge(0, 3).text).toBe('雨キャン'); // 3mm/h
+    expect(rainBadge(0, 4.9).text).toBe('雨キャン');
+    expect(rainBadge(0, 5).text).toBe('中止'); // 5mm/h 強雨
+    expect(rainBadge(0, 6).text).toBe('中止');
     expect(rainBadge(null, null).text).toBe('—');
+  });
+  it('§0.48.3 : 霧雨 (drizzle) は雨バ可能性で上限固定', () => {
+    expect(rainBadge(80, 10, true).text).toBe('雨バ'); // 本来は中止級でも drizzle なら雨バ
+    expect(rainBadge(80, 10, false).text).toBe('中止');
+    expect(rainBadge(0, 0.5, true).text).toBe('通常'); // 元が通常なら通常のまま
   });
 });
 
@@ -378,26 +385,27 @@ describe('evaluateDay (統合)', () => {
     expect(r.symbol).toBeTruthy();
     // §0.47.1 : 日全体バッジは一般ショー基準 (windBa8/windCancel11)。gust window 平均 11 → 中止リスク域。
     expect(r.badges.wind.text).toBe('中止リスク');
-    expect(r.badges.rain.text).toBe('雨キャン'); // pop window 60
+    // §0.48.2 : hourly に precip が無いので降水量 0 ・ pop window 60 → 高確率で「雨バ」
+    expect(r.badges.rain.text).toBe('雨バ');
     expect(r.subscores.noon).toBeTruthy();
     expect(['ベスト', 'OK', '微妙', '別日']).toContain(r.subscores.noon.symbol.label);
   });
 
   it('§0.42.4 : 時間帯サブスコアは日スコア以下にクランプされる (整合性)', () => {
-    // precipSum 5mm → 雨バッジ「中止」(critical) で日スコアは 25 にキャップ。
-    // 各時間帯の hourly は穏やかで素のサブスコアは高い → 日スコア以下にクランプされるはず。
+    // §0.48.2 : 時間最大 6mm/h の強雨 → 雨バッジ「中止」(critical) で日スコアは 20 にキャップ。
+    // バンドのサブスコアは pop ベースで穏やか (precip は band 算定に使わない) → 日スコア以下にクランプされるはず。
     const om = fakeForecast(
       'open-meteo',
-      { gustMax: 3, popMax: 10, precipSum: 5, feelsLikeMax: 22, tempMax: 24, uvMax: 3 },
+      { gustMax: 3, popMax: 10, precipSum: 12, feelsLikeMax: 22, tempMax: 24, uvMax: 3 },
       [
-        { hour: 10, gust: 3, pop: 10, wind: 3, wbgt: 22 },
-        { hour: 13, gust: 3, pop: 10, wind: 3, wbgt: 22 },
-        { hour: 19, gust: 3, pop: 10, wind: 3, wbgt: 22 },
+        { hour: 10, gust: 3, pop: 10, wind: 3, wbgt: 22, precip: 6 },
+        { hour: 13, gust: 3, pop: 10, wind: 3, wbgt: 22, precip: 6 },
+        { hour: 19, gust: 3, pop: 10, wind: 3, wbgt: 22, precip: 6 },
       ],
     );
     const r = evaluateDay([om], 'TDL');
     expect(r.capped).toBe(true);
-    expect(r.score).toBeLessThanOrEqual(25);
+    expect(r.score).toBeLessThanOrEqual(20);
     for (const k of ['morning', 'noon', 'night']) {
       if (r.subscores[k].hasData) {
         expect(r.subscores[k].score).toBeLessThanOrEqual(r.score);

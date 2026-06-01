@@ -258,6 +258,10 @@ function dayOverviewHtml(row, today, warningData = null) {
     parts.push(`<p class="ds-line ds-check"><span class="ds-key">(要確認)</span><span class="ds-val">${esc(checks.join(' ・ '))}</span></p>`);
   if (overview)
     parts.push(`<p class="ds-line"><span class="ds-key">天気概況</span><span class="ds-val">${wIconsHtml}${esc(overview)}</span></p>`);
+  // §0.48.3 : 霧雨 (drizzle) は長時間弱雨でショーは原則開催のため、その旨を注釈する。
+  const drizzle = Object.values(row.forecasts).filter(Boolean).some((fc) => /霧雨/.test(fc.weatherText || ''));
+  if (drizzle)
+    parts.push('<p class="ds-line ds-note"><span class="ds-key">霧雨</span><span class="ds-val">弱い雨が続く予報 ・ ショーは原則開催の可能性が高めです</span></p>');
   return `<div class="detail-section day-summary js-day-summary">
         <h4><span class="material-symbols-rounded" aria-hidden="true">summarize</span>この日の概要</h4>
         ${parts.join('\n        ')}
@@ -439,9 +443,10 @@ export function renderTable(els, rows, state, sources, sourceStatus, handlers, w
       const gust = m.gustShowWindow != null ? m.gustShowWindow : m.gustMax;
       const pop = m.popShowWindow != null ? m.popShowWindow : m.popMax;
       const windVal = gust != null ? `${fmtNum(gust, 0)}<span class="unit">m/s</span>` : '—';
+      // §0.48.1 : 雨セルの降水量は時間最大 (mm/h) で表示し Open-Meteo 列と単位を統一 (日合計 mm は使わない)。
       const rainVal =
         pop != null
-          ? `${fmtNum(pop, 0)}<span class="unit">%</span>${m.precipSum != null && m.precipSum >= 0.5 ? ` ${fmtNum(m.precipSum, 1)}<span class="unit">mm</span>` : ''}`
+          ? `${fmtNum(pop, 0)}<span class="unit">%</span>${m.precipMaxHourly != null && m.precipMaxHourly >= 0.5 ? ` ${fmtNum(m.precipMaxHourly, 1)}<span class="unit">mm/h</span>` : ''}`
           : '—';
       const wbgtLabel = wbgtSourceLabel(Object.values(row.forecasts));
       // セルは数値のみ (列ヘッダーが「熱 (WBGT)」なので WBGT/(推定) は冗長)。詳細は title で補助。

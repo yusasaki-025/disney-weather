@@ -73,8 +73,9 @@ export function windDeduction(gust, park) {
 }
 
 // 雨減点 (pop_show_window 優先、無ければ pop_max)。precip_sum ≧ 5mm で +10。
-export function rainDeduction(pop, precipSum) {
-  // §0.47.2 : 過剰減点を緩和 (30% -5 / 50% -15 / 70% -35 / 90% -65)。precip_sum ≧ 5mm で +10。
+export function rainDeduction(pop, precipHourly) {
+  // §0.47.2 : 過剰減点を緩和 (30% -5 / 50% -15 / 70% -35 / 90% -65)。
+  // §0.48.2 : 強雨ボーナスは日合計でなく時間最大降水量 (mm/h) ベース。3mm/h 以上の強い雨で +10。
   let d = 0;
   if (pop != null) {
     if (pop < 20) d = 0;
@@ -83,7 +84,7 @@ export function rainDeduction(pop, precipSum) {
     else if (pop < 90) d = 35;
     else d = 65;
   }
-  if (precipSum != null && precipSum >= 5) d += 10;
+  if (precipHourly != null && precipHourly >= 3) d += 10;
   return d;
 }
 
@@ -133,14 +134,21 @@ export function windBadge(gust, threshold = DEFAULT_THRESHOLD) {
   return { level: 3, text: '中止' };
 }
 
-export function rainBadge(pop, precip) {
-  if (pop == null && precip == null) return { level: 0, text: '—' };
+// §0.48.2 : 雨バッジは時間最大降水量 (mm/h) ベース。< 1 通常 / 1-3 雨バ / 3-5 雨キャン / ≥ 5 ほぼ中止。
+//   降水量が弱くても降水確率が高ければ「雨バ可能性」。§0.48.3 : 霧雨 (drizzle) は長時間弱雨で
+//   ショーは原則開催のため、雨バ可能性で上限固定する。
+export function rainBadge(pop, precipHourly, drizzle = false) {
+  if (pop == null && precipHourly == null) return { level: 0, text: '—' };
   const p = pop ?? 0;
-  const r = precip ?? 0;
-  if (r >= 2) return { level: 3, text: '中止' };
-  if (p >= 60 || r >= 1) return { level: 2, text: '雨キャン' };
-  if (p >= 30 && r < 1) return { level: 1, text: '雨バ' };
-  return { level: 0, text: '通常' };
+  const r = precipHourly ?? 0;
+  let badge;
+  if (r >= 5) badge = { level: 3, text: '中止' };
+  else if (r >= 3) badge = { level: 2, text: '雨キャン' };
+  else if (r >= 1) badge = { level: 1, text: '雨バ' };
+  else if (p >= 50) badge = { level: 1, text: '雨バ' }; // 降水量は弱いが高確率
+  else badge = { level: 0, text: '通常' };
+  if (drizzle && badge.level > 1) badge = { level: 1, text: '雨バ' };
+  return badge;
 }
 
 // WBGT バッジ。§0.37 で風 ・ 雨と同じ 4 階層に統一 (旧「暑さ注意」を熱バに merge)。
@@ -242,6 +250,11 @@ export function aggregateMetrics(forecasts, park, date = null) {
     gustMax: avg('gustMax'),
     popMax: avg('popMax'),
     precipSum: avg('precipSum'),
+    // §0.48.1 : 時間最大降水量 (mm/h)。中止判定 ・ 雨セル表示はこちらを使う (日合計 precipSum は梅雨 ・
+    //   霧雨が長時間続いた累積で、中止判定とは別軸。13mm/日 の霧雨を「ほぼ中止」と誤判定しないため)。
+    precipMaxHourly: maxOf(
+      forecasts.flatMap((f) => (f.hourly || []).map((h) => h.precip).filter((v) => v != null)),
+    ),
     tempMax: avg('tempMax'),
     tempMin: avg('tempMin'),
     feelsLikeMax: avg('feelsLikeMax'),
@@ -267,7 +280,8 @@ export function scoreFromMetrics(m, park) {
   const wbgt = m.wbgtShowWindow != null ? m.wbgtShowWindow : m.wbgtMax;
   const deductions = {
     wind: windDeduction(gust, park),
-    rain: rainDeduction(pop, m.precipSum),
+    // §0.48.2 : 雨減点は時間最大降水量 (mm/h) ベース (日合計 precipSum は使わない)。
+    rain: rainDeduction(pop, m.precipMaxHourly),
     heat: heatDeduction(wbgt, m.feelsLikeMax, m.windShowWindow),
     cold: coldDeduction(m.feelsLikeMax, m.tempMax),
     uv: uvDeduction(m.uvMax),
@@ -324,14 +338,15 @@ export function evaluateDay(forecasts, park, date = null) {
   const gustForBadge = metrics.gustShowWindow != null ? metrics.gustShowWindow : metrics.gustMax;
   const popForBadge = metrics.popShowWindow != null ? metrics.popShowWindow : metrics.popMax;
   const wbgtForBadge = metrics.wbgtShowWindow != null ? metrics.wbgtShowWindow : metrics.wbgtMax;
-  // §0.30 : その日 ・ パークの high 優先ショーで最も中止しやすい閾値を使う (安全側)
   // §0.47.1 : 日全体の風バッジは「一般ショー基準」(windBa 8 / windCancel 11) で判定する。
   //   旧実装は最も厳しいショー (ハーモニー 6m/s) の閾値を使い、6-7m/s で日全体が「風バ」に
   //   過剰判定され 9 割の日が格下げされていた。ショー個別の厳しい閾値は詳細パネル
   //   (per-show 風 ・ 過去中止率) で引き続き扱う。strictestThreshold/highShows は使わない。
+  // §0.48.3 : いずれかのソースが霧雨 (drizzle, weatherText に「霧雨」) なら雨バッジを上限固定する。
+  const drizzle = forecasts.some((f) => /霧雨/.test(f.weatherText || ''));
   const badges = {
     wind: windBadge(gustForBadge, DAY_WIND_THRESHOLD),
-    rain: rainBadge(popForBadge, metrics.precipSum),
+    rain: rainBadge(popForBadge, metrics.precipMaxHourly, drizzle),
     wbgt: wbgtBadge(wbgtForBadge, metrics.windShowWindow, metrics.feelsLikeMax),
   };
 
