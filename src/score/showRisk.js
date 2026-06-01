@@ -14,7 +14,8 @@ export function showRiskInfo(forecasts, times) {
   );
   if (hours.size === 0) return null;
 
-  const meanAt = (field) => {
+  // §0.51.4 : decimals で丸め桁を指定。風速は小数 1 桁、WBGT は整数。
+  const meanAt = (field, decimals = 0) => {
     const vals = [];
     for (const f of forecasts) {
       if (!f || !Array.isArray(f.hourly)) continue;
@@ -22,13 +23,17 @@ export function showRiskInfo(forecasts, times) {
         if (hours.has(p.hour) && p[field] != null) vals.push(p[field]);
       }
     }
-    return vals.length ? Math.round(vals.reduce((a, b) => a + b, 0) / vals.length) : null;
+    if (!vals.length) return null;
+    const avg = vals.reduce((a, b) => a + b, 0) / vals.length;
+    const f = 10 ** decimals;
+    return Math.round(avg * f) / f;
   };
 
   // §0.43.2 : 「風」は平均風速 (windspeed_10m ・ sustained)。突風 (gust) は別途 cancelProbability 用の
   //           predWind (wind_gusts_10m) を使い、表示で「風 / 突風」を併記する。
-  const wind = meanAt('wind');
-  const wbgt = meanAt('wbgt');
+  // §0.51.4 : 風速は小数 1 桁、WBGT は整数で返す。
+  const wind = meanAt('wind', 1);
+  const wbgt = meanAt('wbgt', 0);
   if (wind == null && wbgt == null) return null;
   return { wind, wbgt };
 }

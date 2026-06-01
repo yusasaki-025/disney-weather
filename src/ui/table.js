@@ -146,8 +146,9 @@ function showRiskLineHtml(showName, park, risk, predWind, weatherless = false) {
     // §0.43.2 : 平均風速 (sustained ・ windspeed_10m) と 突風 (gust ・ wind_gusts_10m) を気象用語で併記。
     //           突風 ≧ 平均風速 が通常だが、算出窓の違いで逆転もあり得る (別物なので違和感なし)。
     const windPieces = [];
-    if (risk && risk.wind != null) windPieces.push(`風 ${risk.wind}m/s`);
-    if (predWind != null) windPieces.push(`突風 ${fmtNum(predWind, 0)}m/s`);
+    // §0.51.4 : 風速は小数 1 桁表示で統一。
+    if (risk && risk.wind != null) windPieces.push(`風 ${fmtNum(risk.wind, 1)}m/s`);
+    if (predWind != null) windPieces.push(`突風 ${fmtNum(predWind, 1)}m/s`);
     if (windPieces.length) {
       riskParts.push(
         `<span class="sr-wind" title="風 (平均風速) = ショー時刻の 1時間平均 (sustained) / 突風 = 1時間最大瞬間風速 (gust)。突風は中止判定 ・ 過去事例検索のベースです">${windPieces.join(' ・ ')}</span>`,
@@ -442,7 +443,8 @@ export function renderTable(els, rows, state, sources, sourceStatus, handlers, w
       const m = row.eval.metrics;
       const gust = m.gustShowWindow != null ? m.gustShowWindow : m.gustMax;
       const pop = m.popShowWindow != null ? m.popShowWindow : m.popMax;
-      const windVal = gust != null ? `${fmtNum(gust, 0)}<span class="unit">m/s</span>` : '—';
+      // §0.51.4 : 風速は小数 1 桁表示 (7.6 / 8.2 m/s)。8m/s 境界で「同じ 8 なのにバッジ違う」矛盾を解消。
+      const windVal = gust != null ? `${fmtNum(gust, 1)}<span class="unit">m/s</span>` : '—';
       // §0.48.1 : 雨セルの降水量は時間最大 (mm/h) で表示し Open-Meteo 列と単位を統一 (日合計 mm は使わない)。
       const rainVal =
         pop != null
