@@ -43,7 +43,8 @@ export function computeStats(log = getAccuracyLog()) {
   for (const src of Object.keys(out)) {
     for (const k of Object.keys(out[src])) {
       const { errs, biases } = out[src][k];
-      out[src][k] = { rms: round1(rms(errs)), bias: round1(mean(biases)), n: errs.length };
+      // §0.39.5 (#23) : mae (平均絶対誤差) を追加。ソース重み付けは誤差の小ささを基準にするため。
+      out[src][k] = { rms: round1(rms(errs)), mae: round1(mean(errs)), bias: round1(mean(biases)), n: errs.length };
     }
   }
   return out;

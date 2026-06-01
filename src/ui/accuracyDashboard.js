@@ -10,6 +10,7 @@ import {
   notableExamples,
   ACCURACY_METRICS,
 } from '../data/accuracyLogLoader.js';
+import { computeSourceWeights, MIN_SAMPLES } from '../score/sourceWeight.js';
 
 const SOURCE_LABEL = { jma: '気象庁', 'open-meteo': 'Open-Meteo', 'env-jp': '環境省 WBGT' };
 const SOURCE_COLOR = { jma: '#e0823d', 'open-meteo': '#2f6fb0', 'env-jp': '#2d8f3e' };
@@ -36,6 +37,28 @@ function statsTableHtml(stats) {
     <h2><span class="material-symbols-rounded" aria-hidden="true">analytics</span>ソース別 平均誤差 ・ バイアス</h2>
     <p class="acc-note">RMS = 誤差の大きさ (小さいほど正確) ・ バイアス = 予報 − 実測 (＋ は過大予報 ・ − は過小予報)</p>
     <div class="acc-table-wrap"><table class="acc-table"><thead><tr><th>ソース</th>${head}</tr></thead><tbody>${rows}</tbody></table></div>
+  </div>`;
+}
+
+// §0.39.5 (#23) : ソース重み (MAE 学習) の可視化。重み 1.0 = 等価、> 1 = 信頼厚く採用、< 1 = 控えめ。
+const WEIGHT_METRIC_LABEL = { wind: '風速', temp: '気温', wbgt: 'WBGT' };
+function weightsHtml(stats) {
+  const weights = computeSourceWeights(stats);
+  const rows = Object.entries(weights)
+    .map(([mk, bySrc]) => {
+      const cells = Object.entries(bySrc)
+        .map(([src, w]) => `<span class="acc-weight-src">${esc(srcLabel(src))} <strong>×${w.toFixed(2)}</strong></span>`)
+        .join('');
+      return `<li><span class="acc-weight-metric">${esc(WEIGHT_METRIC_LABEL[mk] || mk)}</span>${cells}</li>`;
+    })
+    .join('');
+  const body = rows
+    ? `<ul class="acc-weight-list">${rows}</ul>`
+    : `<p class="acc-note">各指標とも ${MIN_SAMPLES} 日以上の比較が貯まると、誤差の小さいソースを重く扱う重み付けが自動で効き始めます (現在は全ソース等価で算定中)。</p>`;
+  return `<div class="acc-section">
+    <h2><span class="material-symbols-rounded" aria-hidden="true">balance</span>ソース重み (誤差学習)</h2>
+    <p class="acc-note">過去の平均絶対誤差 (MAE) が小さいソースを重く扱い、総合スコアの加重平均に反映します。×1.0 が等価です。</p>
+    ${body}
   </div>`;
 }
 
@@ -101,6 +124,7 @@ export function renderDashboard(root) {
       <div class="acc-chart"><canvas id="acc-chart"></canvas></div>
     </div>
     ${statsTableHtml(stats)}
+    ${weightsHtml(stats)}
     ${examplesHtml(ex)}
     <p class="acc-disclaimer">本ダッシュボードは公開予報と気象庁アメダス (船橋) ・ 環境省 WBGT 実測の比較に基づく参考値です。</p>
   `;

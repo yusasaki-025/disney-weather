@@ -2031,6 +2031,31 @@ body {
   position: relative;
   height: 280px;
 }
+/* §0.39.5 (#23) : ソース重み (誤差学習) 一覧 */
+.acc-weight-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.acc-weight-list li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px 12px;
+  font-size: 13px;
+}
+.acc-weight-metric {
+  flex: 0 0 auto;
+  min-width: 4em;
+  font-weight: 700;
+  color: var(--text-sub);
+}
+.acc-weight-src strong {
+  font-variant-numeric: tabular-nums;
+}
 .acc-table-wrap {
   overflow-x: auto;
 }

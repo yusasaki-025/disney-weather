@@ -5,6 +5,36 @@
 import { mean, maxOf } from '../utils/units.js';
 import { showWindowHours, getDaySchedule } from '../data/showSchedule.js';
 import { strictestThreshold, DEFAULT_THRESHOLD } from '../data/show-thresholds.js';
+import { computeSourceWeights, weightFor } from './sourceWeight.js';
+
+// §0.39.5 (#23) : 起動時に 1 度だけソース重みを学習 (accuracy-log は静的 import なので不変)。
+//   データ不足時は空 = 全ソース等重みで、従来の単純平均と同じ挙動になる。
+const SOURCE_WEIGHTS = computeSourceWeights();
+
+// 日次集計キー → 学習カテゴリ (wind/temp/wbgt)。該当なし (pop/precip 等) は等重み。
+const WEIGHT_CATEGORY = {
+  windMax: 'wind',
+  gustMax: 'wind',
+  tempMax: 'temp',
+  tempMin: 'temp',
+  feelsLikeMax: 'temp',
+  feelsLikeMin: 'temp',
+  wbgtMax: 'wbgt',
+};
+
+// ソース重みでの加重平均。category 未指定 ・ 学習なしのソースは weight 1.0 (= 単純平均) に縮退。
+export function weightedMean(forecasts, key, category) {
+  let num = 0;
+  let den = 0;
+  for (const f of forecasts) {
+    const v = f[key];
+    if (v == null || Number.isNaN(v)) continue;
+    const w = category ? weightFor(SOURCE_WEIGHTS, category, f.source) : 1;
+    num += v * w;
+    den += w;
+  }
+  return den === 0 ? null : num / den;
+}
 
 // --- スコア → レベル (§5.3, §0.6.5) ---
 // ◎ ○ △ × の記号は廃止。用途が直感的に伝わる日本語テキストラベル + 色で表現する。
@@ -191,7 +221,8 @@ export function windowPeak(forecasts, hours, field) {
 
 // その日の複数ソースを単純平均して指標オブジェクトを作る
 export function aggregateMetrics(forecasts, park, date = null) {
-  const avg = (key) => mean(forecasts.map((f) => f[key]));
+  // §0.39.5 (#23) : ソース別 MAE で学習した重みでの加重平均 (データ不足時は等重み = 単純平均)。
+  const avg = (key) => weightedMean(forecasts, key, WEIGHT_CATEGORY[key]);
   // §0.8 fix: date を渡してその日の実スケジュール窓でスコア算定する
   // (渡し忘れると常に FALLBACK 時刻窓になり、日別の実時刻が score に反映されない)
   const highHours = showWindowHours(park, 'high', 1, date);
