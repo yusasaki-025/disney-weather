@@ -1459,6 +1459,18 @@ h1, h2, h3, h4, .app-title h1 {
 .cat-head-label {
   font-size: 11px;
 }
+/* §0.56.2/.3 : スマホ列見出し (card-col-head) は PC では非表示 (thead が担う) */
+.card-col-head {
+  display: none;
+}
+/* §0.56.4 : 見出し末尾カッコ (WBGT) / (気象庁) / (Open-Meteo) は 0.75em ・ サブカラー ・ 細字で
+   補足扱いに (風速単位「m/s」と同じパターン)。PC thead + スマホ card-col-head 共通。 */
+.metric-suffix {
+  font-size: 0.75em;
+  color: var(--text-sub);
+  font-weight: 400;
+  margin-left: 2px;
+}
 .metric-cell {
   display: inline-flex;
   flex-direction: column;
@@ -1468,9 +1480,18 @@ h1, h2, h3, h4, .app-title h1 {
 .cat-val {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 4px;
   font-weight: 700;
   font-size: 14px;
+  /* §0.56.1 : 文字大でセル幅を超える時は「% ↔ mm/h」のグループ境界で折り返す (セル外へはみ出さない) */
+  flex-wrap: wrap;
+}
+/* §0.56.1 : 数字 + 単位のグループは割れない (例「19.8mm/h」を分断しない) */
+.cat-val .vg {
+  display: inline-flex;
+  align-items: baseline;
+  white-space: nowrap;
 }
 .cat-val .unit {
   font-size: 10px;
@@ -2478,13 +2499,14 @@ body {
   }
 }
 
-/* §0.37-7 : スマホで雨セルを広げ (grid rain 3/6) アイコン + % + mm を 1 行に収める */
+/* §0.56.1 : スマホ雨セルは文字大で「% ↔ mm/h」のグループ境界で折り返せるように (旧 §0.37-7 の nowrap を解除)。
+   グループ内 (.vg) は nowrap なので「19.8mm/h」が割れることはない。 */
 @media (max-width: 767px) {
   .forecast-table tr.calendar-row > td.cell-rain .metric-cell {
-    white-space: nowrap;
+    white-space: normal;
   }
   .forecast-table tr.calendar-row > td.cell-rain .cat-val {
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
   }
 }
 
@@ -2869,15 +2891,34 @@ button.extreme-warn {
    grid セル全体でなくセル内コンテンツに zoom を当て、グリッド幅 (横スクロール) を保つ。 */
 @media (max-width: 767px) {
   .forecast-table tr.calendar-row > td.cell-date-score .date-line,
-  .forecast-table tr.calendar-row > td.cell-date-score .score-row,
-  .forecast-table tr.calendar-row > td.cell-wind .metric-cell,
-  .forecast-table tr.calendar-row > td.cell-rain .metric-cell,
-  .forecast-table tr.calendar-row > td.cell-heat .metric-cell {
+  .forecast-table tr.calendar-row > td.cell-date-score .score-row {
     zoom: 1.15;
   }
-  /* ソースセル (気象庁 / Open-Meteo) は内部ラッパー無しなのでセル直接 zoom (3 列幅で収まる) */
+  /* §0.56.2 : 見出し (card-col-head) と値を同率で拡大し、メトリクスとソースの見出しサイズを揃える
+     (旧 §0.54 はメトリクスを .metric-cell のみ zoom し見出しが取り残されていた)。 */
+  .forecast-table tr.calendar-row > td.cell-wind,
+  .forecast-table tr.calendar-row > td.cell-rain,
+  .forecast-table tr.calendar-row > td.cell-heat,
   .forecast-table tr.calendar-row > td.cell-jma,
   .forecast-table tr.calendar-row > td.cell-openmeteo {
     zoom: 1.15;
+  }
+  /* §0.56.3 : スマホ列見出しを実 DOM (card-col-head) で表示 ・ 旧 ::before データラベルは隠す */
+  .forecast-table tr.calendar-row > td:not(.cell-date-score)::before {
+    content: none;
+  }
+  .card-col-head {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    font-size: var(--fs-xs);
+    color: var(--brand-blue);
+    font-weight: 600;
+    margin-bottom: 2px;
+    letter-spacing: 0.3px;
+  }
+  .card-col-head .cch-icon {
+    font-size: 1.15em;
   }
 }

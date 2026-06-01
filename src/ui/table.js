@@ -39,10 +39,27 @@ const CAT_ICON = { wind: 'air', rain: 'umbrella', wbgt: 'thermostat' };
 
 // 風 / 雨 / 熱セル : カテゴリアイコン(頭) ＋ 実数値(主) ＋ バッジ(副) (§0.5.2 / §0.6.6-3)
 // kind: wind/rain/wbgt。cellClass/label はスマホカード化 (§0.22) 用。
+// §0.56.4 : 見出し末尾カッコ (WBGT) は本体と分けて metric-suffix で縮小表示。
+const METRIC_HEAD = {
+  wind: { main: '風', suffix: '' },
+  rain: { main: '雨', suffix: '' },
+  wbgt: { main: '熱', suffix: '(WBGT)' },
+};
 const METRIC_LABEL = { wind: '風', rain: '雨', wbgt: '熱 (WBGT)' };
+
+// §0.56.2/.3/.4 : スマホカードの列見出し (実 DOM)。PC は thead が担うので CSS で非表示。
+//   main + 末尾カッコ (metric-suffix で縮小) ＋ 任意アイコン。全列で同サイズ ・ 同パターンに統一。
+function colHeadHtml(main, suffix = '', icon = '') {
+  const ic = icon ? `<span class="material-symbols-rounded cch-icon" aria-hidden="true">${icon}</span>` : '';
+  const sfx = suffix ? `<span class="metric-suffix">${esc(suffix)}</span>` : '';
+  return `<span class="card-col-head" aria-hidden="true">${ic}${esc(main)}${sfx}</span>`;
+}
+
 function metricCell(kind, valueHtml, badge, title = '') {
   const cellClass = kind === 'wbgt' ? 'cell-heat' : `cell-${kind}`;
+  const h = METRIC_HEAD[kind];
   return `<td class="${cellClass}" data-label="${esc(METRIC_LABEL[kind])}"${title ? ` title="${esc(title)}"` : ''}>
+    ${colHeadHtml(h.main, h.suffix)}
     <div class="metric-cell">
       <span class="cat-val"><span class="material-symbols-rounded cat-icon" aria-hidden="true">${CAT_ICON[kind]}</span>${valueHtml}</span>
       ${cancelBadgeHtml(badge)}
@@ -81,11 +98,13 @@ function sourceCellHtml(source, forecast, status) {
   // スマホカード化 (§0.22) 用のクラス ・ ラベル
   const cellClass = source === 'jma' ? 'cell-jma' : 'cell-openmeteo';
   const label = SOURCE_LABEL[source] || source;
+  // §0.56.3 : スマホ見出しも「天気 (気象庁)」「天気 (Open-Meteo)」+ 晴れアイコンに統一 (PC 版 §0.44.3 と揃える)。
+  const head = colHeadHtml('天気', `(${label})`, 'wb_sunny');
   if (status && !status.ok) {
-    return `<td class="source-cell ${cellClass}" data-label="${esc(label)}"><span class="cell-fail">取得失敗 <button type="button" data-retry>再試行</button></span></td>`;
+    return `<td class="source-cell ${cellClass}" data-label="${esc(label)}">${head}<span class="cell-fail">取得失敗 <button type="button" data-retry>再試行</button></span></td>`;
   }
   if (!forecast) {
-    return `<td class="source-cell ${cellClass} is-empty" data-label="${esc(label)}">—</td>`;
+    return `<td class="source-cell ${cellClass} is-empty" data-label="${esc(label)}">${head}—</td>`;
   }
   const temp =
     forecast.tempMax != null || forecast.tempMin != null
@@ -96,6 +115,7 @@ function sourceCellHtml(source, forecast, status) {
   // 大きな天気アイコン (40px) を主役に (§0.6.6-2)
   const wi = getWeatherIcon(forecast.weatherText);
   return `<td class="source-cell ${cellClass}" data-label="${esc(label)}" title="${esc(title)}">
+    ${head}
     <span class="material-symbols-rounded weather-icon" style="color:${wi.color}" aria-hidden="true">${wi.name}</span>
     <div class="sc-sub">${esc(normalizeWeatherText(forecast.weatherText))}</div>
     <div class="sc-main">${temp}</div>
@@ -414,11 +434,11 @@ export function renderTable(els, rows, state, sources, sourceStatus, handlers, w
     <th class="col-score">スコア</th>
     ${catHead('wind', '風')}
     ${catHead('rain', '雨')}
-    <th><span class="material-symbols-rounded cat-head" aria-hidden="true">${CAT_ICON.wbgt}</span><span class="cat-head-label">熱 (WBGT)</span><span class="material-symbols-rounded wbgt-info" tabindex="0" role="img" title="暑さ指数 (WBGT)。気温 + 湿度 + 日射から算出する熱中症リスク指標。28+ で警戒、31+ で危険。" aria-label="暑さ指数 (WBGT) とは : 気温 ・ 湿度 ・ 日射から算出する熱中症リスク指標。28 以上で警戒、31 以上で危険。">info</span></th>
+    <th><span class="material-symbols-rounded cat-head" aria-hidden="true">${CAT_ICON.wbgt}</span><span class="cat-head-label">熱<span class="metric-suffix">(WBGT)</span></span><span class="material-symbols-rounded wbgt-info" tabindex="0" role="img" title="暑さ指数 (WBGT)。気温 + 湿度 + 日射から算出する熱中症リスク指標。28+ で警戒、31+ で危険。" aria-label="暑さ指数 (WBGT) とは : 気温 ・ 湿度 ・ 日射から算出する熱中症リスク指標。28 以上で警戒、31 以上で危険。">info</span></th>
     ${sources
       .map(
         (s) =>
-          `<th><span class="material-symbols-rounded cat-head" aria-hidden="true">wb_sunny</span><span class="cat-head-label">天気 (${esc(SOURCE_LABEL[s] || s)})</span></th>`,
+          `<th><span class="material-symbols-rounded cat-head" aria-hidden="true">wb_sunny</span><span class="cat-head-label">天気<span class="metric-suffix">(${esc(SOURCE_LABEL[s] || s)})</span></span></th>`,
       )
       .join('')}
     <th class="col-chev" aria-hidden="true"></th>
@@ -444,11 +464,12 @@ export function renderTable(els, rows, state, sources, sourceStatus, handlers, w
       const gust = m.gustShowWindow != null ? m.gustShowWindow : m.gustMax;
       const pop = m.popShowWindow != null ? m.popShowWindow : m.popMax;
       // §0.51.4 : 風速は小数 1 桁表示 (7.6 / 8.2 m/s)。8m/s 境界で「同じ 8 なのにバッジ違う」矛盾を解消。
-      const windVal = gust != null ? `${fmtNum(gust, 1)}<span class="unit">m/s</span>` : '—';
+      // §0.56.1 : 数字 + 単位を .vg でグループ化し、文字大でも「数字↔単位」は割れず「% ↔ mm/h」間で改行する。
+      const windVal = gust != null ? `<span class="vg">${fmtNum(gust, 1)}<span class="unit">m/s</span></span>` : '—';
       // §0.48.1 : 雨セルの降水量は時間最大 (mm/h) で表示し Open-Meteo 列と単位を統一 (日合計 mm は使わない)。
       const rainVal =
         pop != null
-          ? `${fmtNum(pop, 0)}<span class="unit">%</span>${m.precipMaxHourly != null && m.precipMaxHourly >= 0.5 ? ` ${fmtNum(m.precipMaxHourly, 1)}<span class="unit">mm/h</span>` : ''}`
+          ? `<span class="vg">${fmtNum(pop, 0)}<span class="unit">%</span></span>${m.precipMaxHourly != null && m.precipMaxHourly >= 0.5 ? `<span class="vg">${fmtNum(m.precipMaxHourly, 1)}<span class="unit">mm/h</span></span>` : ''}`
           : '—';
       const wbgtLabel = wbgtSourceLabel(Object.values(row.forecasts));
       // セルは数値のみ (列ヘッダーが「熱 (WBGT)」なので WBGT/(推定) は冗長)。詳細は title で補助。
