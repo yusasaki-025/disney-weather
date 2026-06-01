@@ -44,11 +44,18 @@ const BADGE_LONG = {
   '—': '—',
 };
 
-// 風 / 雨 / 熱 のキャンセルバッジ HTML (§0.6.6 でセル側にカテゴリアイコンを持つためバッジ内アイコンは廃止)
+// 風 / 雨 / 熱 のキャンセルバッジ HTML。
+// §0.39.10 (#28) : 色覚多様性対応。警告レベル (lv≥1) に severity アイコンを併用し、
+//   色のみに依存せず警戒度を判別できるようにする (lv0 通常はクリーン維持 ・ 縦線は使わない)。
+const BADGE_ICON = { 1: 'warning', 2: 'priority_high', 3: 'block' };
 export function cancelBadgeHtml(badge) {
   const short = badge.text;
   const long = BADGE_LONG[short] || short;
-  return `<span class="cancel-badge cancel-lv${badge.level}"><span class="badge-long">${esc(long)}</span><span class="badge-short">${esc(short)}</span></span>`;
+  const icon = BADGE_ICON[badge.level];
+  const iconHtml = icon
+    ? `<span class="material-symbols-rounded badge-icon" aria-hidden="true">${icon}</span>`
+    : '';
+  return `<span class="cancel-badge cancel-lv${badge.level}">${iconHtml}<span class="badge-long">${esc(long)}</span><span class="badge-short">${esc(short)}</span></span>`;
 }
 
 // 朝/昼/夜 サブスコア HTML (§0.6.5 : 記号廃止、色付き数値ピル)。
