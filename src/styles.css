@@ -756,41 +756,32 @@ section {
   text-align: left;
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
-/* §0.40.5 : priority high の背景色は廃止 (区別は「期間限定」タグで) */
-.show-item.priority-high {
+/* §0.44.7 : ショー ・ パレードは priority によらず完全同形式 (§0.38.17 / §0.40.5 / §0.41.2 の決着)。
+   priority high / low / restaurant の背景 ・ 文字色 ・ 太字 ・ 斜体差を全撤廃。区別は「期間限定」等のタグのみ。 */
+.show-item.priority-high,
+.show-item.priority-low,
+.show-item.priority-medium,
+.show-item.priority-restaurant {
   background: none;
 }
-.show-name {
+.show-name,
+.show-item.priority-high .show-name,
+.show-item.priority-low .show-name,
+.show-item.priority-restaurant .show-name {
   font-weight: 400;
+  color: var(--text);
+  font-style: normal;
 }
-.show-times {
+.show-times,
+.show-item.priority-low .show-times,
+.show-item.priority-restaurant .show-times {
   color: var(--text-sub);
   font-variant-numeric: tabular-nums;
+  font-style: normal;
 }
 .show-tags {
   font-size: 11px;
   color: var(--text-sub);
-}
-/* §0.40.5 : priority high の太字は廃止 (区別は「期間限定」タグのみ) */
-.show-item.priority-high .show-name {
-  font-weight: 400;
-  color: var(--text);
-}
-.show-item.priority-low .show-name {
-  font-weight: 400;
-  color: var(--text-mute);
-}
-.show-item.priority-low .show-times {
-  color: var(--text-mute);
-}
-/* §0.26.1 : 時刻未定のレストランショー (要予約) は priority-low と同等の控えめ表示 */
-.show-item.priority-restaurant .show-name {
-  font-weight: 400;
-  color: var(--text-mute);
-}
-.show-item.priority-restaurant .show-times {
-  color: var(--text-mute);
-  font-style: italic;
 }
 
 .outfit-list {
