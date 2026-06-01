@@ -199,7 +199,7 @@ function render() {
 
   const view = applyFilterSort(rows, state);
   renderTop3(els.top3, rows, { onSelect: openByDate });
-  renderTable(els, view, state, activeSources, sourceStatus, handlers);
+  renderTable(els, view, state, activeSources, sourceStatus, handlers, warningData);
   renderLegend(els.legend);
   renderTodayWarning(els, todayJst(), warningData);
   updateStatus();

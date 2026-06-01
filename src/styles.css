@@ -2503,6 +2503,22 @@ button.extreme-warn {
   vertical-align: -4px;
   margin-right: 2px;
 }
+/* §0.44.2 : 警報 ・ 注意報を「この日の概要」内に集約 (バッジは §0.39.3 のスタイルを流用) */
+.day-summary .ds-warn .ds-val {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+}
+.day-summary .ds-warn .jw-source {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-sub);
+}
+.day-summary .ds-warn-time {
+  font-size: 10px;
+  color: var(--text-sub);
+}
 /* §0.39.4 (#22) : アトラクション運休予測 */
 .attraction-note {
   font-size: 12px;

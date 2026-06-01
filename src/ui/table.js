@@ -211,9 +211,24 @@ function attractionHtml(park, gust) {
 
 // §0.41.5 : 「この日の概要」セクション。スコア理由 (§0.37.10) ・ (要確認) の理由 ・ 天気概況を
 //           詳細パネル冒頭に集約 (カード上の score-reason は撤去し、ここに一本化)。
-function dayOverviewHtml(row, today) {
+function dayOverviewHtml(row, today, warningData = null) {
   const m = row.eval.metrics;
   const reason = getScoreReason(m, row.eval.badges);
+  // §0.44.2 : 気象庁の警報 ・ 注意報 (現在発表中 ・ 当日のみ) を「この日の概要」の冒頭に集約する。
+  //           カード折りたたみ時のバッジ (renderTodayWarning) は当日 ・ 翌日の警告として現状維持。
+  let warnHtml = '';
+  if (row.date === today && warningData && warningData.warnings && warningData.warnings.length) {
+    const badges = warningData.warnings
+      .map(
+        (w) =>
+          `<span class="jma-warn-badge ${w.level === 'advisory' ? 'jw-advisory' : 'jw-warning'}"><span class="material-symbols-rounded" aria-hidden="true">${WARN_ICON[w.level] || 'info'}</span>${esc(w.label)}</span>`,
+      )
+      .join('');
+    const rd = warningData.reportDatetime
+      ? `<span class="ds-warn-time">(${esc(warningData.reportDatetime.slice(0, 16).replace('T', ' '))} 発表)</span>`
+      : '';
+    warnHtml = `<p class="ds-line ds-warn"><span class="ds-key">警報 ・ 注意報</span><span class="ds-val"><span class="jw-source">気象庁</span>${badges}${rd}</span></p>`;
+  }
   // (要確認) の理由 : 単独ソースの極端値 + 6 日先以降の予報誤差
   const checks = [];
   const precipMaxHourly = Math.max(
@@ -238,6 +253,7 @@ function dayOverviewHtml(row, today) {
         .join('')
     : '';
   const parts = [
+    ...(warnHtml ? [warnHtml] : []),
     `<p class="ds-line"><span class="ds-key">スコア理由</span><span class="score-reason ds-val">${esc(reason)}</span></p>`,
   ];
   if (checks.length)
@@ -250,7 +266,7 @@ function dayOverviewHtml(row, today) {
       </div>`;
 }
 
-function detailPanelHtml(row, park) {
+function detailPanelHtml(row, park, warningData = null) {
   // §0.8 : その日の実スケジュール (公式取得があれば official、無ければ fallback)
   const schedFor = (p) => getDaySchedule(row.date, p);
   // §0.26 : 同名ショーを 1 行に集約 (times を " / " 連結)。内部用語 (メイン算定窓/補助/参考) は
@@ -331,7 +347,7 @@ function detailPanelHtml(row, park) {
   // §0.6.8 : 左カラム = 情報、右カラム = グラフ。
   return `<div class="detail-panel">
     <div class="detail-info">
-      ${dayOverviewHtml(row, todayJst())}
+      ${dayOverviewHtml(row, todayJst(), warningData)}
       <div class="detail-section">
         <h4><span class="material-symbols-rounded" aria-hidden="true">schedule</span>時間帯スコア (昼を最重視)</h4>
         <div class="subscore-detail">${subscoreHtml(row.eval.subscores, BANDS, row.eval)}</div>
@@ -368,7 +384,7 @@ function detailPanelHtml(row, park) {
   </div>`;
 }
 
-export function renderTable(els, rows, state, sources, sourceStatus, handlers) {
+export function renderTable(els, rows, state, sources, sourceStatus, handlers, warningData = null) {
   const { thead, tbody } = els;
 
   // ヘッダー
@@ -504,7 +520,7 @@ export function renderTable(els, rows, state, sources, sourceStatus, handlers) {
     if (!willOpen) return;
 
     const row = rows.find((r) => r.date === date);
-    detail.firstElementChild.innerHTML = detailPanelHtml(row, state.park);
+    detail.firstElementChild.innerHTML = detailPanelHtml(row, state.park, warningData);
     detail.hidden = false;
     main.setAttribute('aria-expanded', 'true');
 
