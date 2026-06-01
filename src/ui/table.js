@@ -36,8 +36,6 @@ function tempSpan(c) {
 
 const SOURCE_LABEL = { jma: '気象庁', 'open-meteo': 'Open-Meteo', openweather: 'OpenWeather' };
 const CAT_ICON = { wind: 'air', rain: 'umbrella', wbgt: 'thermostat' };
-// §0.38-7 : 気象庁 / Open-Meteo 見出しにもアイコン (ソース違いを視覚化)
-const SOURCE_ICON = { jma: 'cloud', 'open-meteo': 'partly_cloudy_day', openweather: 'cloud_queue' };
 
 // 風 / 雨 / 熱セル : カテゴリアイコン(頭) ＋ 実数値(主) ＋ バッジ(副) (§0.5.2 / §0.6.6-3)
 // kind: wind/rain/wbgt。cellClass/label はスマホカード化 (§0.22) 用。
@@ -403,7 +401,7 @@ export function renderTable(els, rows, state, sources, sourceStatus, handlers, w
     ${sources
       .map(
         (s) =>
-          `<th><span class="material-symbols-rounded cat-head" aria-hidden="true">${SOURCE_ICON[s] || 'cloud'}</span><span class="cat-head-label">${esc(SOURCE_LABEL[s] || s)}</span></th>`,
+          `<th><span class="material-symbols-rounded cat-head" aria-hidden="true">wb_sunny</span><span class="cat-head-label">天気 (${esc(SOURCE_LABEL[s] || s)})</span></th>`,
       )
       .join('')}
     <th class="col-chev" aria-hidden="true"></th>
