@@ -137,16 +137,35 @@ function operationHtml(date) {
       </div>`;
 }
 
-// §0.31 : 過去同条件 (max 風速 ±2m/s) での中止率。サンプル不足は表示しない (誤情報回避)。
-function cancelProbHtml(showName, park, predWind) {
+// §0.43.1 : ショー詳細のリスク表示を 1 行に統合 (#18 per-show と §0.31 過去中止率の風速 2 重表示を解消)。
+//   風 : avg = ショー時刻ピンポイント (#18 showRisk) / max = ショー窓 ±1h 最大 (§0.31 中止率の参照値)
+//   熱 : ショー時刻の WBGT (#18) ・ ［過去中止 N%］: 過去同条件 (max ±2m/s) の中止率 (§0.31)
+function showRiskLineHtml(showName, park, risk, predWind) {
+  const riskParts = [];
+  // 風 : avg / max。両値 (丸め後) が同じなら 1 値のみ表示。
+  if (risk && risk.wind != null) {
+    if (predWind != null && Math.round(predWind) !== risk.wind) {
+      riskParts.push(
+        `<span class="sr-wind" title="平均 = ショー時刻のピンポイント予想 / max = ショー時刻 ±1時間の最大予想 (過去中止率の判定に使用)">風 ${risk.wind}m/s (平均) / max ${fmtNum(predWind, 0)}m/s</span>`,
+      );
+    } else {
+      riskParts.push(`風 ${risk.wind}m/s`);
+    }
+  } else if (predWind != null) {
+    riskParts.push(`風 ${fmtNum(predWind, 0)}m/s`);
+  }
+  if (risk && risk.wbgt != null) riskParts.push(`熱 WBGT${risk.wbgt}`);
+  // 過去中止率 (§0.31)。サンプル不足は表示せず (誤情報回避)、3 件未満は (要確認) 併記 (§0.38-10)。
   const r = getCancelProbability(showName, park, predWind);
-  if (!r) return '';
-  const cls = r.probability >= 50 ? 'cp-danger' : r.probability >= 30 ? 'cp-warn' : 'cp-mute';
-  const wind = fmtNum(predWind, 0);
-  // §0.38-11 : 「予報 12m/s ［過去中止 43% (3/7件)］」形式に短縮 (% を先出し ・ コンパクト)。
-  // 件数 3 件未満は信頼度が低いので (要確認) を併記 (§0.38-10 と連動)。
-  const lowSample = r.sampleSize < 3 ? '<span class="cp-check">(要確認)</span>' : '';
-  return `<span class="cancel-prob ${cls}" title="予報 max ${wind}m/s ・ 過去同条件 ${r.sampleSize}件中 ${r.cancelCount}件中止">予報 ${wind}m/s ［過去中止 ${r.probability}% (${r.cancelCount}/${r.sampleSize}件)］${lowSample}</span>`;
+  let cancelHtml = '';
+  if (r) {
+    const cls = r.probability >= 50 ? 'cp-danger' : r.probability >= 30 ? 'cp-warn' : 'cp-mute';
+    const lowSample = r.sampleSize < 3 ? '<span class="cp-check">(要確認)</span>' : '';
+    cancelHtml = `<span class="cancel-prob ${cls}" title="過去同条件 (max ${fmtNum(predWind, 0)}m/s ±2m/s) ${r.sampleSize}件中 ${r.cancelCount}件中止">［過去中止 ${r.probability}% (${r.cancelCount}/${r.sampleSize}件)］${lowSample}</span>`;
+  }
+  if (riskParts.length === 0 && !cancelHtml) return '';
+  const body = [riskParts.join(' ・ '), cancelHtml].filter(Boolean).join(' ');
+  return `<div class="show-risk-line">${body}</div>`;
 }
 
 // §0.39.1 : 予報変更履歴 (直近 7 スナップショットのスコア推移)。点が 2 未満なら非表示。
@@ -281,16 +300,10 @@ function detailPanelHtml(row, park) {
         // §0.38-21 + §0.41.1 : 過去中止率 ・ 畳んだ全時刻を既定で折りたたみ、行クリックで展開。
         const detailParts = [];
         if (folded) detailParts.push(`<div class="show-alltimes">全 ${allTimes.length} 回 : ${fullTimesText}</div>`);
-        // §0.38.21+ (#18) : このショーの開催時刻における 風 ・ 熱 (時刻別 WBGT) を toggle 内に表示
+        // §0.43.1 : per-show 時刻別リスク (#18) と過去中止率 (§0.31) を 1 行に統合し風速の 2 重表示を解消
         const risk = showRiskInfo(Object.values(row.forecasts).filter(Boolean), g.times);
-        if (risk) {
-          const rp = [];
-          if (risk.wind != null) rp.push(`風 ${risk.wind}m/s`);
-          if (risk.wbgt != null) rp.push(`熱 WBGT${risk.wbgt}`);
-          if (rp.length) detailParts.push(`<div class="show-risk">${rp.join(' ・ ')}</div>`);
-        }
-        const cp = cancelProbHtml(g.name, p, predWind);
-        if (cp) detailParts.push(cp);
+        const riskLine = showRiskLineHtml(g.name, p, risk, predWind);
+        if (riskLine) detailParts.push(riskLine);
         const detail = detailParts.join('');
         if (!detail) return `<li class="show-item priority-${g.cls}">${summary}</li>`;
         return `<li class="show-item priority-${g.cls}"><details class="show-toggle"><summary>${summary}</summary><div class="show-detail">${detail}</div></details></li>`;

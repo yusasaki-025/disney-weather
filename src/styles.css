@@ -2452,11 +2452,17 @@ button.extreme-warn {
   margin-top: 6px;
   padding-left: 2px;
 }
-/* §0.38.21+ (#18) : ショー個別の時刻別リスク (風 ・ 熱) */
-.show-risk {
+/* §0.43.1 : ショー詳細のリスク 1 行統合 (風 avg/max ・ 熱 ・ 過去中止率)。#18 の風速 2 重表示を解消 */
+.show-risk-line {
   font-size: 12px;
   color: var(--text-sub);
   margin-bottom: 2px;
+  line-height: 1.5;
+}
+.show-risk-line .cancel-prob {
+  display: inline;
+  width: auto;
+  margin: 0;
 }
 
 /* §0.37.4 : PC はスコア独立列 (7列) ・ スマホはカード内 (cell-date-score) に統合維持 */
