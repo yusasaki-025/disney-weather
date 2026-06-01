@@ -273,7 +273,8 @@ function detailPanelHtml(row, park) {
       .map((g) => {
         const allTimes = g.times.map(esc);
         // §0.44.13 : 全時刻を常時表示 (§0.41.1 の「ほか N 回」畳みを撤廃)。複数公演は時刻を独立行に。
-        const timesText = g.restaurant && g.times.length === 0 ? '予約必須' : allTimes.join(' / ');
+        // §0.44.8 : レストランショーの「予約必須」はタグ (バッジ) で 1 回のみ表示し、時刻スロットには出さない。
+        const timesText = allTimes.join(' / ');
         const multiShow = allTimes.length >= 2;
         // §0.40.5 / §0.41.4 : DPA / 抽選 / 期間限定 を独立タグ化。
         //   schedule の内部表記 (プレミアアクセス / エントリー受付) を表示用 (DPA / 抽選) にマップ。
@@ -291,7 +292,7 @@ function detailPanelHtml(row, park) {
           .join('');
         // §0.44.10 : 時刻を行頭に ・ ショー名 ・ タグを後続。
         // §0.44.13 : 複数公演は 1 行目=全時刻 ・ 2 行目=ショー名 + タグ。単独公演は時刻先頭の 1 行。
-        const timesHtml = `<span class="show-times">${timesText}</span>`;
+        const timesHtml = timesText ? `<span class="show-times">${timesText}</span>` : '';
         const nameTagsHtml = `<span class="show-name">${esc(g.name)}</span>${tagsHtml}`;
         const summary = multiShow
           ? `<div class="show-times-line">${timesHtml}</div><div class="show-name-line">${nameTagsHtml}</div>`
