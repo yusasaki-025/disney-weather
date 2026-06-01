@@ -11,10 +11,11 @@ import { fetchJma, SOURCE_ID as JMA } from './data/jma.js';
 import { fetchOpenMeteo, SOURCE_ID as OM } from './data/openMeteo.js';
 import { fetchOpenWeather, SOURCE_ID as OW } from './data/openWeather.js';
 import { fetchEnvWbgt, WBGT_SOURCE } from './data/wbgt.js';
+import { fetchJmaWarning } from './data/jmaWarning.js';
 import { dayType } from './data/holidays.js';
 import { evaluateDay } from './score/scoring.js';
 import { renderTop3 } from './ui/top3.js';
-import { renderTable, renderLegend } from './ui/table.js';
+import { renderTable, renderLegend, renderTodayWarning } from './ui/table.js';
 import { loadState, applyFilterSort, wireControls } from './ui/filters.js';
 import { LOCATION } from './config/location.js';
 
@@ -29,6 +30,7 @@ const state = loadState();
 let rawBySourceDate = {}; // { source: { date: forecast } }
 const sourceStatus = {}; // { source: { ok, error, stale, fetchedAt } }
 let activeSources = [JMA, OM];
+let warningData = null; // §0.39.3 (#21) 気象庁の現在発表中の警報 ・ 注意報 (当日カード用)
 
 const els = {
   thead: document.querySelector('#forecast-table thead'),
@@ -105,6 +107,9 @@ async function loadAll(force = false) {
   } catch (e) {
     logger.info('環境省 WBGT スキップ', e.message);
   }
+
+  // §0.39.3 (#21) : 気象庁の現在発表中の警報 ・ 注意報 (当日カードに表示)。fetchJmaWarning は内部で握り潰す。
+  warningData = await fetchJmaWarning();
 }
 
 // --- 行の組み立て (park でスコアが変わるので描画時に都度計算) ---
@@ -196,6 +201,7 @@ function render() {
   renderTop3(els.top3, rows, { onSelect: openByDate });
   renderTable(els, view, state, activeSources, sourceStatus, handlers);
   renderLegend(els.legend);
+  renderTodayWarning(els, todayJst(), warningData);
   updateStatus();
 }
 

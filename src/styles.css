@@ -2526,6 +2526,39 @@ button.extreme-warn {
   color: var(--text-sub);
   font-size: 12px;
 }
+/* §0.39.3 (#21) : 気象庁の警報 ・ 注意報 (当日カード) */
+.jma-warning {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  margin-top: 6px;
+}
+.jma-warning .jw-source {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-sub);
+}
+.jma-warn-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 6px;
+}
+.jma-warn-badge .material-symbols-rounded {
+  font-size: 14px;
+}
+.jma-warn-badge.jw-advisory {
+  background: var(--warn-bg);
+  color: #9a6a00;
+}
+.jma-warn-badge.jw-warning {
+  background: var(--risk-bg);
+  color: var(--score-bad);
+}
 
 /* §0.37.8 : スマホヘッダー再構成
    右上はヘルプ (アイコンのみ) ・ ヘッダー更新ボタンは隠す
