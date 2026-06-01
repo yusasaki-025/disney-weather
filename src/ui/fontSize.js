@@ -33,23 +33,29 @@ export function initFontSize() {
   applyFontSize(savedFontSize());
 }
 
-// ヘッダーのセグメント (小/中/大) を結線し、現在値をハイライト ・ aria-checked 同期する。
+// 1 つのコントロールの現在値ハイライト ・ aria-checked を同期する。
+function syncControl(root) {
+  const cur = document.documentElement.dataset.fontSize || 'small';
+  for (const b of root.querySelectorAll('[data-size]')) {
+    const on = b.dataset.size === cur;
+    b.classList.toggle('active', on);
+    b.setAttribute('aria-checked', on ? 'true' : 'false');
+  }
+}
+
+// ページ上の全 .fontsize-control を同期 (PC ヘッダーとスマホ操作列の 2 箇所を一致させる)。
+function syncAllControls() {
+  for (const c of document.querySelectorAll('.fontsize-control')) syncControl(c);
+}
+
+// セグメント (小/中/大) を結線。クリックで全コントロールのハイライトを揃える。
 export function wireFontSizeControl(root) {
   if (!root) return;
-  const buttons = [...root.querySelectorAll('[data-size]')];
-  const sync = () => {
-    const cur = document.documentElement.dataset.fontSize || 'small';
-    for (const b of buttons) {
-      const on = b.dataset.size === cur;
-      b.classList.toggle('active', on);
-      b.setAttribute('aria-checked', on ? 'true' : 'false');
-    }
-  };
-  for (const b of buttons) {
+  for (const b of root.querySelectorAll('[data-size]')) {
     b.addEventListener('click', () => {
       applyFontSize(b.dataset.size);
-      sync();
+      syncAllControls();
     });
   }
-  sync();
+  syncControl(root);
 }

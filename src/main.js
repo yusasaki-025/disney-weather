@@ -248,9 +248,9 @@ function renderSkeleton() {
 }
 
 function setupHeader() {
-  // §0.46.12 : 文字サイズ切替 (小/中/大) を復元 + 結線
+  // §0.46.12 / §0.49 : 文字サイズ切替 (小/中/大) を復元 + 結線 (PC ヘッダー ・ スマホ操作列の 2 箇所)
   initFontSize();
-  wireFontSizeControl(document.querySelector('.fontsize-control'));
+  document.querySelectorAll('.fontsize-control').forEach((c) => wireFontSizeControl(c));
   document.getElementById('btn-refresh').addEventListener('click', () => refresh(true));
   document.getElementById('btn-retry-all').addEventListener('click', () => refresh(true));
   // §0.37.8 : スマホはフィルター下の全幅更新ボタン (ヘッダー refresh は CSS で非表示)

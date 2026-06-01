@@ -96,10 +96,20 @@
             <button class="seg-btn" data-dayfilter="holiday" type="button"><span class="label-long">土日祝のみ</span><span class="label-short">土日祝</span></button>
           </div>
         </div>
-        <button id="btn-refresh-mobile" class="btn btn-primary refresh-mobile" type="button">
-          <span class="material-symbols-rounded" aria-hidden="true">refresh</span>天気データを更新 ・ <span id="refresh-label-mobile">今</span>
-        </button>
       </section>
+
+      <!-- §0.49 : スマホのみ ・ 絞り込み下に「文字サイズ」+「更新」を横並び (PC はヘッダー側に維持) -->
+      <div class="mobile-action-row">
+        <div class="fontsize-control" role="radiogroup" aria-label="文字サイズ">
+          <span class="material-symbols-rounded fontsize-icon" aria-hidden="true">text_increase</span>
+          <button type="button" class="fontsize-btn" data-size="small" role="radio" aria-checked="true" aria-label="文字サイズ 小">小</button>
+          <button type="button" class="fontsize-btn" data-size="medium" role="radio" aria-checked="false" aria-label="文字サイズ 中">中</button>
+          <button type="button" class="fontsize-btn" data-size="large" role="radio" aria-checked="false" aria-label="文字サイズ 大">大</button>
+        </div>
+        <button id="btn-refresh-mobile" class="btn btn-primary refresh-mobile" type="button">
+          <span class="material-symbols-rounded" aria-hidden="true">refresh</span>更新 ・ <span id="refresh-label-mobile">今</span>
+        </button>
+      </div>
 
       <section id="table-section" aria-label="候補日の予報比較">
         <div class="table-scroll">
