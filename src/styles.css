@@ -2493,6 +2493,12 @@ button.extreme-warn {
 .day-summary .ds-check .ds-val {
   color: var(--score-bad);
 }
+/* §0.42.3 : 天気概況の複合天気アイコン (晴れ + 曇り + 霧 並列) */
+.day-summary .ds-wicon {
+  font-size: 18px;
+  vertical-align: -4px;
+  margin-right: 2px;
+}
 
 /* §0.37.8 : スマホヘッダー再構成
    右上はヘルプ (アイコンのみ) ・ ヘッダー更新ボタンは隠す

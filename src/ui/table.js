@@ -22,7 +22,7 @@ import { showRiskInfo } from '../score/showRisk.js';
 import { freshnessLabel } from '../utils/freshness.js';
 import { nowcastHtml } from './nowcast.js';
 import { getTempColor, getTempBandKey } from '../utils/tempColor.js';
-import { getWeatherIcon } from '../utils/weatherIcon.js';
+import { getWeatherIcon, getWeatherIcons } from '../utils/weatherIcon.js';
 import { normalizeWeatherText } from '../utils/weatherText.js';
 
 // 気温セルを暖寒色で着色 (§0.6-2)。data-tb はダークモード CSS 上書き用。
@@ -186,13 +186,19 @@ function dayOverviewHtml(row, today) {
     row.forecasts.jma || row.forecasts['open-meteo'] || Object.values(row.forecasts).filter(Boolean)[0];
   const t = (v) => (v != null ? `${Math.round(v)}°` : '—');
   const overview = f ? `${normalizeWeatherText(f.weatherText)} ・ 最高 ${t(f.tempMax)} / 最低 ${t(f.tempMin)}` : '';
+  // §0.42.3 : 複合天気 (「晴れ、夜曇り、昼前まで霧」等) を「、」分割で複数アイコン並列表示
+  const wIconsHtml = f
+    ? getWeatherIcons(f.weatherText)
+        .map((ic) => `<span class="material-symbols-rounded ds-wicon" style="color:${ic.color}" aria-hidden="true">${ic.name}</span>`)
+        .join('')
+    : '';
   const parts = [
     `<p class="ds-line"><span class="ds-key">スコア理由</span><span class="score-reason ds-val">${esc(reason)}</span></p>`,
   ];
   if (checks.length)
     parts.push(`<p class="ds-line ds-check"><span class="ds-key">(要確認)</span><span class="ds-val">${esc(checks.join(' ・ '))}</span></p>`);
   if (overview)
-    parts.push(`<p class="ds-line"><span class="ds-key">天気概況</span><span class="ds-val">${esc(overview)}</span></p>`);
+    parts.push(`<p class="ds-line"><span class="ds-key">天気概況</span><span class="ds-val">${wIconsHtml}${esc(overview)}</span></p>`);
   return `<div class="detail-section day-summary js-day-summary">
         <h4><span class="material-symbols-rounded" aria-hidden="true">summarize</span>この日の概要</h4>
         ${parts.join('\n        ')}
