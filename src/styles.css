@@ -1941,10 +1941,11 @@ body {
     display: none !important;
   }
 
-  /* 「タップで詳細」(閉) / 「閉じる」(開) を more 領域に集約 */
+  /* §0.46.2 : 「タップで詳細」(閉) / 「閉じる」(開) を chevron 記号 + 文言で併記 (more 領域に集約)。
+     旧 open 状態は content: 'expand_less' で文字がそのまま出ていた不具合も修正。 */
   .forecast-table tr.calendar-row::after {
     grid-area: more;
-    content: '› タップで詳細';
+    content: '⌄ タップで詳細';
     text-align: center;
     margin-top: 0;
     padding-top: 6px;
@@ -1954,7 +1955,7 @@ body {
     font-weight: 600;
   }
   .forecast-table tr.calendar-row[aria-expanded='true']::after {
-    content: 'expand_less';
+    content: '⌃ 閉じる';
   }
 }
 
