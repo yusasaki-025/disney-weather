@@ -5068,6 +5068,396 @@ function getTimeSlotScore(forecast, slot /* 朝/昼/夜 */) {
 
 ---
 
+### 0.45 タグ色一貫性確保 (期間限定タグの「文字白撤廃」)
+
+公開ページ §0.44 反映後の Yuka さん指示。§0.44.14 で文字白撤廃を全タグに適用したが、期間限定タグだけ「紫 + 白文字」で残ってしまった ・ 「薄色背景 + 濃色文字」原則に揃える。
+
+#### 0.45.1 期間限定タグを薄ピンク + 濃ピンクに
+
+問題 : 期間限定タグが「紫 + 白文字」のまま ・ 他タグ (DPA / 抽選 / 確定情報) と統一感欠如。抽選が既に薄紫なので、期間限定は **別の薄色系** に。
+
+対応 :
+
+| タグ | 背景色 | 文字色 |
+|---|---|---|
+| 期間限定 (新) | **薄ピンク** `#FCE4EC` | **濃ピンク** `#AD1457` |
+| 抽選 (§0.44.14) | 薄紫 `#F3E5F5` | 濃紫 `#6A1B9A` |
+| DPA (§0.44.14) | 薄水色 `#E1F5FE` | 濃水色 `#0277BD` |
+| 確定情報 | 薄緑 | 濃緑 |
+| 通常 (§0.41.1) | 薄緑 | 濃緑 |
+| 風バ/雨バ/熱バ | 薄黄 | 濃黄 |
+| キャン濃厚 | 薄赤 | 濃赤 |
+
+選定理由 :
+
+- **薄ピンク** = 紫系の隣接色 (抽選の薄紫と区別可)
+- 「期間限定 = 季節限定 = 特別感 ・ お祝い」イメージにピンクが合う
+- 既存色 (DPA 青 ・ 抽選紫 ・ 確定情報緑 ・ バッジ黄/赤) と被らない
+- 「薄色背景 + 濃色文字」原則に統一
+
+該当 :
+- `src/styles.css` の `.tag-limited` (or `.tag-seasonal`) 色値
+- 色トークン整理
+
+#### 検証 (§0.45)
+
+- 期間限定タグが薄ピンク + 濃ピンク
+- 抽選 (薄紫) と視覚区別可能
+- 全タグが「薄色背景 + 濃色文字」原則統一
+- ヘルプ用語集 ・ FAQ で色マッピング表更新 (必要なら)
+
+---
+
+### 0.46 UI 改善 第7弾 + 文字サイズ機能 (12項目)
+
+公開ページ §0.44/§0.45 反映後の Yuka さん指摘 12項目。スマホ警報未反映 ・ 概要内左寄せ ・ 時間帯スコア拡大 ・ ショー並び順 ・ スマホ雨セル中央 (4度目) ・ 文字サイズ機能新規。
+
+#### 0.46.1 ★ PC + スマホ両方で警報 ・ 注意報を toggle 内に (§0.44.2 完全未実装)
+
+問題 : §0.44.2 で「この日の概要」内に警報を集約する仕様化したが、**PC ・ スマホ両方とも未反映** ・ 警報が「この日の概要」セクションでなくカード外 (toggle 外) に出てる。Yuka さん再確認指摘。
+
+対応 :
+
+- **PC ・ スマホ両方** で警報 ・ 注意報を「この日の概要」内に集約 (§0.44.2 仕様の完全実装)
+- カード上 (折りたたみ時) には現状維持 (当日 ・ 翌日は警告必要)
+- 詳細展開時に「この日の概要」セクション内にバッジ表示
+- 表示例 :
+  ```
+  ## この日の概要
+  [警報] 気象庁 濃霧注意報 (06/10 5:00 発表)
+  スコア理由 : 風 6m/s 風バ ・ 雨 40% 中止
+  (要確認) : 6日先以降は予報の誤差大きめ
+  天気概況 : 霧雨 ・ 最高 17° / 最低 14°
+  ```
+- PC レイアウト ・ スマホ media query 両方を網羅
+- DOM 構造 ・ CSS の両方で「この日の概要」内に来ることを確認
+
+該当 :
+- `src/ui/detailPanel.js` (PC + スマホ共通) の「この日の概要」セクションに警報を append
+- `src/ui/mobileCard.js` (or 該当) のスマホレイアウト
+- `src/styles.css` の警報バッジ配置 (PC 用 + スマホ media query 両方)
+- **検証必須 : chrome-devtools MCP で PC 1280px + スマホ 375px 両方で実描画確認**
+
+#### 0.46.2 chevron アイコンに「閉じる」文言併用
+
+問題 : `expand_less` chevron アイコンだけで「閉じる」操作が伝わりづらい。
+
+対応 :
+
+```html
+<button class="card-toggle-close">
+  <span class="material-symbols-rounded">expand_less</span>
+  <span class="label">閉じる</span>
+</button>
+```
+
+- chevron アイコン + 「閉じる」テキスト併用
+- aria-label = "閉じる" (a11y)
+- 折りたたみ時は `expand_more` + 「タップで詳細」
+
+該当 : `src/ui/mobileCard.js` (or 該当) のトグルボタン
+
+#### 0.46.3 「この日の概要」内の項目を完全左揃え
+
+問題 : 「この日の概要」内に表示される「スコア理由」「(要確認)」「天気概況」 が中央寄せ or 不揃いに見える (天気概況の前にスペース or padding が違う?)。
+
+対応 :
+
+- セクション内のすべての行を **`text-align: left`** + **同じ左 padding** に統一
+- 各項目 :
+  ```html
+  <div class="summary-row">
+    <span class="label">スコア理由 :</span>
+    <span class="value">風 6m/s 風バ ・ 雨 40% 中止</span>
+  </div>
+  <div class="summary-row">
+    <span class="label">(要確認) :</span>
+    <span class="value">6日先以降は予報の誤差大きめ</span>
+  </div>
+  ```
+- すべてラベル + 値で同じ構造 ・ flex で左揃え
+
+該当 : `src/ui/detailPanel.js` (or 該当) の「この日の概要」セクション + CSS
+
+#### 0.46.4 時間帯スコアのフォント拡大 + 日全体スコアをカード上と同デザインに
+
+問題 :
+- 時間帯スコア「朝/昼/夜」の文字 (65点等) が小さい ・ 余白も狭い
+- 「日全体」スコアが時間帯と同じスタイルだが、カード上のスコアバッジと別物に見える
+
+対応 :
+
+```
+[日全体]
+[微妙 65] ← カード上と同じデザインのバッジ (高さ + 太字 + 色)
+
+[時間帯スコア]
+朝 9-12時   75 ← フォント 1.2× ・ 余白 1.5×
+昼 12-16時  65 (最重視) ← 同上 + 強調
+夜 18-21時  60 ← 同上
+```
+
+- 「日全体」は **カード上のスコアバッジと同じ DOM ・ CSS** を使い、視覚的に「これがその日の総合」と分かるように
+- 時間帯スコアは **font-size 拡大** (例 `1.1rem` → `1.3rem`)、余白 (例 `padding: 4px 8px` → `padding: 8px 16px`) を増やす
+- 「最重視」マークも強調 (太字 + 縦線 or 背景)
+
+該当 : `src/ui/detailPanel.js` の時間帯スコア表示 + `src/styles.css`
+
+#### 0.46.5 ショー開催時刻を太字
+
+問題 : 「13:00 ディズニー ・ ハーモニー ・ イン ・ カラー」の時刻部分がショー名と同じ太さで、区別つきにくい。
+
+対応 :
+
+- 時刻 (`hh:mm`) を **太字** (`font-weight: 600`) に
+- ショー名 ・ タグは現状維持 (normal weight)
+- 等幅フォント (`font-variant-numeric: tabular-nums`) で時刻列揃え
+
+```html
+<div class="show-item">
+  <span class="show-time">13:00</span>  <!-- 太字 -->
+  <span class="show-name">ディズニー ・ ハーモニー ・ イン ・ カラー</span>
+  <span class="tag tag-dpa">DPA</span>
+</div>
+```
+
+```css
+.show-time { font-weight: 600; font-variant-numeric: tabular-nums; }
+.show-name { font-weight: 400; }
+```
+
+該当 : `src/ui/showList.js` の時刻スパン + `src/styles.css`
+
+#### 0.46.6 ハーモニーインカラーから「期間限定」タグ削除
+
+問題 : 「ディズニー ・ ハーモニー ・ イン ・ カラー」は通年演目 ・ 「期間限定」タグ不要。
+
+対応 :
+
+- `src/data/show-thresholds.js` の「ディズニー ・ ハーモニー ・ イン ・ カラー」エントリから `priority: 'high'` or `seasonal: true` を削除
+- 他に通年演目誤分類されているショーがあれば併せて確認 :
+  - Reach for the Stars : 期間限定?
+  - イッツ ・ ア ・ スウィーツフルタイム! : 期間限定 (継続)
+  - ジュビレーション : 終了
+  - エレクトリカルパレード ・ ドリームライツ : 通年 → タグなし
+  - スカイ ・ フル ・ オブ ・ カラーズ : 期間限定?
+
+正式期間限定 (推定):
+- イッツ ・ ア ・ スウィーツフルタイム! (4-6月の春パレード)
+- Reach for the Stars (期間限定 ・ 公式情報要確認)
+- スカイ ・ フル ・ オブ ・ カラーズ (期間限定花火)
+
+該当 : `src/data/show-thresholds.js` の seasonal フラグ見直し
+
+#### 0.46.7 スカイ ・ フル ・ オブ ・ カラーズ TDS の表示位置修正
+
+問題 : シー (TDS) で「スカイ ・ フル ・ オブ ・ カラーズ」が一番上に表示されている ・ 閉園前の花火 (20:30 頃) なのに最上位は不自然 ・ 時刻順なら下のほう (ビリーヴ 19:00 の後) のはず。
+
+対応 :
+
+- ショー並びを **時刻昇順** (現状そのはずだが、何か壊れてる?)
+- TDS のショー時刻データ ・ 並びを確認 :
+  - 通常 : ハピネス ・ パレード等 13:00 〜 → エントリー受付 → ナイトショー (ビリーヴ 19:00) → スカイ ・ フル ・ オブ ・ カラーズ (20:30) の順
+- データ or ソートロジックバグなら修正
+
+該当 : `src/ui/showList.js` のソートロジック + `src/data/schedule/*.json` のデータ
+
+#### 0.46.8 レストラン系 ・ 予約必須を一番下にソート
+
+問題 : ダッフィー & フレンズのワンダフル ・ フレンドシップ (TDS) ・ ミッキーのレインボー ・ ルアウ (TDL) などのショーレストラン (予約必須) が時刻順で中間に出てしまい目立つ ・ 通常パレード ・ ショーと混ざる。
+
+対応 :
+
+ショー並びを **2段階ソート** :
+1. メイン順 (時刻昇順) ・ 屋外ショー ・ パレード ・ プロジェクション ・ 屋内ステージ
+2. 末尾 (時刻に関わらず) ・ **予約必須レストラン** (`reservation: required`)
+
+```javascript
+// src/ui/showList.js
+shows.sort((a, b) => {
+  if (a.reservationRequired && !b.reservationRequired) return 1;
+  if (!a.reservationRequired && b.reservationRequired) return -1;
+  return a.time - b.time;
+});
+```
+
+該当 :
+- `src/data/show-thresholds.js` の `reservationRequired: true` フラグ
+- `src/ui/showList.js` のソートロジック
+
+#### 0.46.9 ナウキャスト (雨雲レーダー) 文字左寄せ
+
+問題 : 雨雲レーダーセクションの説明文 (例「気象庁の雨雲レーダーを見る」) が中央寄せに見える ・ 他セクションと不揃い。
+
+対応 :
+
+- `text-align: left` に統一
+- リンクボタンも左揃え
+- 他セクション (時系列 ・ 持ち物 ・ ショー) と同じ pattern
+
+該当 : `src/ui/detailPanel.js` (or 該当) の雨雲レーダーセクション + CSS
+
+#### 0.46.10 ★★★ スマホ雨セル中央配置 (4度目の指摘 ・ 根本修正)
+
+問題 : §0.40.3 ・ §0.41 ・ §0.44 などで再三仕様化したが、まだスマホで雨セルが「左に寄ってる」「熱の右側が空いてる」 ・ Yuka さん 4度目の指摘。
+
+根本原因推測 :
+- grid-template-areas で `wind / rain / heat` の各セルに `align-self`、`justify-self` が不一致
+- または grid 内 padding の左右非対称
+- または 雨セルだけ `text-align` 漏れ
+- または `.cell-rain` 内の `.num` / `.unit` の子要素が左寄せ
+
+対応 (根本修正 ・ 4度目の決着) :
+
+```css
+/* スマホカード内 grid (横 6カラム想定) */
+.mobile-card-metrics {
+  display: grid;
+  grid-template-columns: 1fr 3fr 2fr;  /* wind / rain / heat */
+  align-items: center;
+  justify-items: center;             /* 全セル中央揃え */
+}
+
+.cell-wind,
+.cell-rain,
+.cell-heat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;               /* 子要素 (アイコン ・ 数字 ・ バッジ) 中央 */
+  justify-content: center;
+  text-align: center;
+  width: 100%;                        /* セル幅一杯 */
+  padding: 0;
+  margin: 0;
+}
+
+.cell-rain .icon,
+.cell-rain .num,
+.cell-rain .unit,
+.cell-rain .badge {
+  display: inline-block;
+  margin: 0 auto;                     /* インライン要素も中央 */
+}
+```
+
+- セル全体 ・ セル内子要素両方を中央寄せ
+- grid 内 margin / padding の左右非対称を撲滅
+- 開発者ツールで「セルの bounding box の中心 = セル内コンテンツの中心」を確認
+
+検証 (Code が必ず実機 + DevTools で確認):
+
+1. iPhone 14 Pro Max エミュ (430px) で雨セルの left/right padding が等しい
+2. 雨セル内のアイコン ・ 数字 ・ バッジが完全中央
+3. PC でも崩れない
+4. 風 ・ 雨 ・ 熱 すべて視覚的に中央
+5. CSS の `text-align: center` が継承されてる (子要素オーバーライドなし)
+
+該当 :
+- `src/styles.css` の `.mobile-card-metrics` ・ `.cell-rain` ・ 子要素すべて
+- `src/ui/mobileCard.js` の DOM 構造 (centering を阻害してる要素ないか確認)
+- **必須 : chrome-devtools MCP で実描画 + コンピューテッドスタイル確認**
+
+#### 0.46.11 スマホ全体フォントサイズ底上げ
+
+問題 : スマホ全体のフォントが小さめ ・ 視認性低い。
+
+対応 :
+
+- スマホ media query (`max-width: 768px`) でルートフォントサイズを **底上げ** :
+  ```css
+  @media (max-width: 768px) {
+    :root {
+      font-size: 17px;   /* 旧 14-15px → 17px */
+    }
+  }
+  ```
+- 各要素は rem ベースなので全体的に拡大
+- 重要箇所 (見出し ・ スコア) は更に拡大 (§0.46.4 と整合)
+
+該当 : `src/styles.css` のスマホ media query
+
+#### 0.46.12 ★ 新機能 : 文字サイズ変更オプション (老眼配慮)
+
+問題 : Yuka さんお母様 (老眼) のため、ユーザーが文字サイズを変更できる機能が欲しい。
+
+対応 :
+
+**3段階切替 ・ 現状を「小」基準に 2段階上げる**
+
+```
+ヘッダーに「文字サイズ」ボタン (or 設定アイコン)
+↓
+ドロップダウン or トグル :
+  [小 (デフォルト)] [中] [大]
+↓
+ルート font-size を変更 :
+  小 (デフォルト) : 現状サイズ
+  中 : +1段階 (約 1.15×)
+  大 : +2段階 (約 1.3×)
+```
+
+実装 :
+
+```javascript
+// src/ui/settings.js (新規)
+function setFontSize(size /* 'small' | 'medium' | 'large' */) {
+  document.documentElement.dataset.fontSize = size;
+  localStorage.setItem('fontSize', size);
+}
+
+// 起動時に復元 (未設定なら 'small' = 現状)
+const saved = localStorage.getItem('fontSize') || 'small';
+setFontSize(saved);
+```
+
+```css
+:root { font-size: 16px; }   /* デフォルト = 小 */
+
+:root[data-font-size='small']  { font-size: 16px; }  /* 現状 */
+:root[data-font-size='medium'] { font-size: 18px; }  /* +1段階 */
+:root[data-font-size='large']  { font-size: 21px; }  /* +2段階 (老眼向け) */
+
+@media (max-width: 768px) {
+  :root[data-font-size='small']  { font-size: 17px; }  /* スマホ底上げ (§0.46.11) */
+  :root[data-font-size='medium'] { font-size: 19px; }
+  :root[data-font-size='large']  { font-size: 22px; }
+}
+```
+
+**重要な変更点** :
+- 「小」がデフォルト (現状サイズ)
+- 「中」「大」は「上げる」方向のみ (下げる選択肢なし)
+- 老眼配慮で「大」は思い切って 1.3× (21px)
+
+UI :
+- ヘッダー右上 (ヘルプアイコンの隣) に「文字サイズ」アイコン (`text_increase` Material Symbol)
+- タップで小モーダル or ドロップダウン
+- 3つのボタン「小 / 中 / 大」・ 現在選択中をハイライト
+- ヘルプ用語集に「文字サイズ変更について」追加
+
+該当 :
+- `src/ui/settings.js` (新規)
+- `src/styles.css` の `:root[data-font-size]` セレクタ
+- `src/index.html` の `<head>` に initialize script
+- ヘッダー UI (`src/ui/header.js` or 該当)
+
+#### 検証 (§0.46 全 12項目)
+
+- PC + スマホ警報 (#1) : 両方とも「この日の概要」内に警報集約 (§0.44.2 完全実装)
+- chevron + 「閉じる」 (#2) : アイコン + テキスト併用
+- 概要内左揃え (#3) : スコア理由 ・ (要確認) ・ 天気概況 すべて左揃え
+- 時間帯スコア拡大 (#4) : フォント 1.2× ・ 余白 1.5× ・ 日全体はカード上と同デザイン
+- ショー時刻太字 (#5) : 時刻のみ font-weight: 600
+- ハーモニータグ削除 (#6) : 期間限定タグ消失
+- スカイ並び (#7) : 時刻順で適切な位置 (ビリーヴの下)
+- レストラン末尾 (#8) : 予約必須は一番下
+- ナウキャスト左寄せ (#9) : text-align: left
+- ★★★ 雨セル中央 (#10) : スマホで完全中央 ・ DevTools で bounding box 確認
+- スマホ全体フォント (#11) : ルート 17px ・ 全体的に拡大
+- 文字サイズ変更 (#12) : 3段階切替 (小=現状 / 中=+1段階 / 大=+2段階 老眼向け) ・ localStorage 保存 ・ ヘッダーボタン
+
+---
+
 ### 0.39 機能拡張 第3弾 (実用性 ・ データ精度 ・ 運用自動化 ・ a11y/perf)
 
 公開ページの仕上げ後の発展機能。実用性 4 ・ データ精度 3 ・ 運用 2 ・ a11y/perf 2 の計 11項目。共有/操作性カテゴリは Yuka さん判断で見送り。

@@ -2666,10 +2666,10 @@ button.extreme-warn {
   background: #f3e5f5;
   color: #6a1b9a;
 }
-/* §0.41.3 : 期間限定タグは紫系に (ベストの緑と被らない) */
+/* §0.45.1 : 期間限定タグを薄ピンク + 濃ピンクに (文字白撤廃 ・ 抽選の薄紫と区別 ・ 全タグ薄色背景+濃色文字に統一) */
 .show-tag.tag-season {
-  background: #7c3aed;
-  color: #fff;
+  background: #fce4ec;
+  color: #ad1457;
 }
 
 /* §0.41.4 : 時間帯スコアの凡例 (点数の満点を明示) */
