@@ -297,6 +297,17 @@ export function evaluateDay(forecasts, park, date = null) {
   const guard = applyBadgeGuard(rawScore, badges);
   const score = guard.score;
 
+  // §0.42.4 : 日スコアの floor guard を時間帯サブスコアにも波及させ整合を取る。
+  // 日 = 別日 25 なのに 朝/昼/夜 = 75 のような乖離はユーザーの信頼を損なうため、
+  // 各時間帯スコアを日スコア以下にクランプする (時間帯 ≦ 日)。
+  for (const b of BANDS) {
+    const s = subscores[b.key];
+    if (s && s.hasData && s.score > score) {
+      s.score = score;
+      s.symbol = scoreToSymbol(score);
+    }
+  }
+
   return {
     score,
     rawScore,

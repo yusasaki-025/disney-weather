@@ -379,4 +379,26 @@ describe('evaluateDay (統合)', () => {
     expect(r.subscores.noon).toBeTruthy();
     expect(['ベスト', 'OK', '微妙', '別日']).toContain(r.subscores.noon.symbol.label);
   });
+
+  it('§0.42.4 : 時間帯サブスコアは日スコア以下にクランプされる (整合性)', () => {
+    // precipSum 5mm → 雨バッジ「中止」(critical) で日スコアは 25 にキャップ。
+    // 各時間帯の hourly は穏やかで素のサブスコアは高い → 日スコア以下にクランプされるはず。
+    const om = fakeForecast(
+      'open-meteo',
+      { gustMax: 3, popMax: 10, precipSum: 5, feelsLikeMax: 22, tempMax: 24, uvMax: 3 },
+      [
+        { hour: 10, gust: 3, pop: 10, wind: 3, wbgt: 22 },
+        { hour: 13, gust: 3, pop: 10, wind: 3, wbgt: 22 },
+        { hour: 19, gust: 3, pop: 10, wind: 3, wbgt: 22 },
+      ],
+    );
+    const r = evaluateDay([om], 'TDL');
+    expect(r.capped).toBe(true);
+    expect(r.score).toBeLessThanOrEqual(25);
+    for (const k of ['morning', 'noon', 'night']) {
+      if (r.subscores[k].hasData) {
+        expect(r.subscores[k].score).toBeLessThanOrEqual(r.score);
+      }
+    }
+  });
 });
