@@ -19,6 +19,8 @@ import {
   evaluateDay,
   badgeSeverity,
   applyBadgeGuard,
+  popScoreCap,
+  warnCountCap,
   BANDS,
 } from '../src/score/scoring.js';
 
@@ -44,21 +46,24 @@ describe('windDeduction (§5.2 / §0.47.2 緩和)', () => {
   });
 });
 
-describe('rainDeduction (§5.2 / §0.47.2 緩和)', () => {
-  it('境界値', () => {
+describe('rainDeduction (§0.55.2 確率 + 雨量 合算強化)', () => {
+  it('確率の境界値 (雨量 0)', () => {
     expect(rainDeduction(19, 0)).toBe(0);
     expect(rainDeduction(20, 0)).toBe(5);
-    expect(rainDeduction(49, 0)).toBe(5);
-    expect(rainDeduction(50, 0)).toBe(15);
-    expect(rainDeduction(69, 0)).toBe(15);
+    expect(rainDeduction(29, 0)).toBe(5);
+    expect(rainDeduction(30, 0)).toBe(10);
+    expect(rainDeduction(49, 0)).toBe(10);
+    expect(rainDeduction(50, 0)).toBe(20);
+    expect(rainDeduction(69, 0)).toBe(20);
     expect(rainDeduction(70, 0)).toBe(35);
     expect(rainDeduction(89, 0)).toBe(35);
-    expect(rainDeduction(90, 0)).toBe(65);
+    expect(rainDeduction(90, 0)).toBe(55);
   });
-  it('§0.48.2 : 時間最大降水量 ≧ 3mm/h で +10', () => {
-    expect(rainDeduction(70, 3)).toBe(45);
-    expect(rainDeduction(10, 3)).toBe(10);
-    expect(rainDeduction(10, 2.9)).toBe(0); // 霧雨 (1mm/h 等) は加算なし
+  it('雨量 (mm/h) を合算 (<1 -5 / 1-3 -15 / 3-5 -30 / ≥5 -55)', () => {
+    expect(rainDeduction(0, 0.5)).toBe(5); // 霧雨相当
+    expect(rainDeduction(10, 2.9)).toBe(15); // 確率小 + 1-3mm/h
+    expect(rainDeduction(70, 3)).toBe(65); // 35 + 30
+    expect(rainDeduction(90, 5)).toBe(80); // 55 + 55 = 110 → 80 でキャップ
   });
   it('欠損は 0', () => {
     expect(rainDeduction(null, null)).toBe(0);
@@ -367,6 +372,63 @@ describe('badgeSeverity / applyBadgeGuard (§0.16)', () => {
     expect(r.worstSeverity).toBe('critical');
     expect(r.score).toBe(20);
     expect(r.capped).toBe(true);
+  });
+});
+
+describe('§0.55 evaluateDay 統合 (キャップで過剰評価を防ぐ ・ 各段階到達可能)', () => {
+  it('風バ単独 + 晴れ (雨少) → GOOD まで (BEST にしない)', () => {
+    const om = fakeForecast(
+      'open-meteo',
+      { gustMax: 8, popMax: 10, precipSum: 0, feelsLikeMax: 24, tempMax: 27, uvMax: 5 },
+      [
+        { hour: 12, gust: 8, pop: 10, wind: 6, wbgt: 24, precip: 0 },
+        { hour: 13, gust: 8, pop: 10, wind: 6, wbgt: 24, precip: 0 },
+        { hour: 14, gust: 8, pop: 10, wind: 6, wbgt: 24, precip: 0 },
+      ],
+    );
+    const r = evaluateDay([om], 'TDL');
+    expect(r.badges.wind.text).toBe('風バ');
+    expect(['GOOD']).toContain(r.symbol.label); // 風バ単独 → GOOD (BEST/OK ではない)
+  });
+  it('高い雨確率 (70%) → BEST にならない (FAIR 以下)', () => {
+    const om = fakeForecast(
+      'open-meteo',
+      { gustMax: 3, popMax: 70, precipSum: 0, feelsLikeMax: 22, tempMax: 24, uvMax: 3 },
+      [
+        { hour: 12, gust: 3, pop: 70, wind: 2, wbgt: 22, precip: 0 },
+        { hour: 13, gust: 3, pop: 70, wind: 2, wbgt: 22, precip: 0 },
+        { hour: 14, gust: 3, pop: 70, wind: 2, wbgt: 22, precip: 0 },
+      ],
+    );
+    const r = evaluateDay([om], 'TDL');
+    expect(r.score).toBeLessThanOrEqual(59); // 70%+ は FAIR 上限
+    expect(['FAIR', 'NG']).toContain(r.symbol.label);
+  });
+});
+
+describe('popScoreCap (§0.55.1 雨確率キャップ)', () => {
+  it('確率帯ごとの上限', () => {
+    expect(popScoreCap(29)).toBe(100); // 上限なし
+    expect(popScoreCap(30)).toBe(89); // GOOD
+    expect(popScoreCap(49)).toBe(89);
+    expect(popScoreCap(50)).toBe(74); // OK
+    expect(popScoreCap(69)).toBe(74);
+    expect(popScoreCap(70)).toBe(59); // FAIR
+    expect(popScoreCap(null)).toBe(100);
+  });
+  it('霧雨は緩和 (<1mm/h は OK 許容 ・ ≥1mm/h は FAIR)', () => {
+    expect(popScoreCap(80, true, 0.7)).toBe(74); // 高確率でも軽霧雨は OK まで
+    expect(popScoreCap(80, true, 1.2)).toBe(59); // 1mm/h 以上は FAIR
+  });
+});
+
+describe('warnCountCap (§0.55.5 複数注意バッジ)', () => {
+  const b = (wind, rain, wbgt) => ({ wind: { text: wind }, rain: { text: rain }, wbgt: { text: wbgt } });
+  it('注意バッジ数で上限', () => {
+    expect(warnCountCap(b('通常', '通常', '通常'))).toBe(100);
+    expect(warnCountCap(b('風バ', '通常', '通常'))).toBe(89); // 1 → GOOD
+    expect(warnCountCap(b('風バ', '雨バ', '通常'))).toBe(74); // 2 → OK (6/11 ケース)
+    expect(warnCountCap(b('風バ', '雨バ', '熱バ'))).toBe(59); // 3 → FAIR
   });
 });
 

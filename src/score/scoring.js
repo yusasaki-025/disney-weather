@@ -79,18 +79,26 @@ export function windDeduction(gust, park) {
 
 // 雨減点 (pop_show_window 優先、無ければ pop_max)。precip_sum ≧ 5mm で +10。
 export function rainDeduction(pop, precipHourly) {
-  // §0.47.2 : 過剰減点を緩和 (30% -5 / 50% -15 / 70% -35 / 90% -65)。
-  // §0.48.2 : 強雨ボーナスは日合計でなく時間最大降水量 (mm/h) ベース。3mm/h 以上の強い雨で +10。
+  // §0.55.2 : 雨確率と時間最大降水量を「合算」で減点 (§0.47/§0.48 で緩めすぎた反動修正)。
+  //   確率 : 30% -10 / 50% -20 / 70% -35 / 90% -55。雨量 : <1 -5 / 1-3 -15 / 3-5 -30 / ≥5 -55。
+  //   両方効くが二重減点を抑えるため合計 80 でキャップ。
   let d = 0;
   if (pop != null) {
     if (pop < 20) d = 0;
-    else if (pop < 50) d = 5;
-    else if (pop < 70) d = 15;
+    else if (pop < 30) d = 5;
+    else if (pop < 50) d = 10;
+    else if (pop < 70) d = 20;
     else if (pop < 90) d = 35;
-    else d = 65;
+    else d = 55;
   }
-  if (precipHourly != null && precipHourly >= 3) d += 10;
-  return d;
+  let p = 0;
+  if (precipHourly != null && precipHourly > 0) {
+    if (precipHourly < 1) p = 5;
+    else if (precipHourly < 3) p = 15;
+    else if (precipHourly < 5) p = 30;
+    else p = 55;
+  }
+  return Math.min(80, d + p);
 }
 
 // 熱中症減点 (wbgt_show_window 優先、無ければ wbgt_max)。風で緩和、体感高で悪化。
@@ -199,6 +207,27 @@ export function applyBadgeGuard(rawScore, badges) {
   const cap = SEVERITY_CAP[worst];
   const score = cap != null ? Math.min(rawScore, cap) : rawScore;
   return { score, rawScore, worstSeverity: worst, capped: score < rawScore };
+}
+
+// §0.55.1 : 雨確率に応じたスコア上限 (降りそうな日は BEST にしない)。
+//   < 30% 上限なし / 30-49% GOOD(89) / 50-69% OK(74) / 70%+ FAIR(59)。
+//   霧雨 (drizzle) は弱雨が長時間 ・ ショー原則開催のため緩和 : < 1mm/h は OK(74) まで許容、≥ 1mm/h は FAIR(59)。
+export function popScoreCap(pop, drizzle = false, precipHourly = null) {
+  if (drizzle) return precipHourly != null && precipHourly >= 1 ? 59 : 74;
+  if (pop == null || pop < 30) return 100;
+  if (pop < 50) return 89; // GOOD
+  if (pop < 70) return 74; // OK
+  return 59; // FAIR
+}
+
+// §0.55.5 : 注意バッジ (風バ/雨バ/熱バ = warn) の同時発生数に応じたスコア上限。
+//   0 上限なし / 1 GOOD(89) / 2 OK(74) / 3 FAIR(59)。複数の軽警告が重なれば確実に格下げする。
+export function warnCountCap(badges) {
+  const n = Object.values(badges).filter((b) => badgeSeverity(b.text) === 'warn').length;
+  if (n <= 0) return 100;
+  if (n === 1) return 89; // GOOD
+  if (n === 2) return 74; // OK
+  return 59; // FAIR
 }
 
 // --- 指標の集計 (§5.1) ---
@@ -357,8 +386,13 @@ export function evaluateDay(forecasts, park, date = null) {
   };
 
   // §0.16 : バッジ危険度でスコアに上限キャップ (スコアとバッジの矛盾解消)
+  // §0.55 : さらに 雨確率キャップ (§0.55.1) と 注意バッジ同時数キャップ (§0.55.5) を併用し、最も厳しい上限を採用。
+  //   「霧雨で BEST」「風バ + 霧雨で GOOD」のような過剰評価を防ぐ。
   const guard = applyBadgeGuard(rawScore, badges);
-  const score = guard.score;
+  const pCap = popScoreCap(popForBadge, drizzle, metrics.precipMaxHourly);
+  const cCap = warnCountCap(badges);
+  const score = Math.min(guard.score, pCap, cCap);
+  const capped = score < rawScore;
 
   // §0.42.4 : 日スコアの floor guard を時間帯サブスコアにも波及させ整合を取る。
   // 日 = 別日 25 なのに 朝/昼/夜 = 75 のような乖離はユーザーの信頼を損なうため、
@@ -374,7 +408,7 @@ export function evaluateDay(forecasts, park, date = null) {
   return {
     score,
     rawScore,
-    capped: guard.capped,
+    capped,
     worstSeverity: guard.worstSeverity,
     symbol: scoreToSymbol(score),
     deductions,
