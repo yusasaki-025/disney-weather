@@ -1324,15 +1324,22 @@ h1, h2, h3, h4, .app-title h1 {
   justify-content: center;
 }
 /* §0.46.4 : 時間帯スコアのピルを拡大 (フォント約 1.2× ・ 余白約 1.5×) し視認性を上げる */
+/* §0.60.C : 時間帯スコアの形状統一。日全体は横長 ・ 朝昼夜は縦積みで向きが違うため、999px だと
+   日全体=横ピル / 朝昼夜=円形ブロブと逆に不揃いになる。両者を同一 radius の角丸四角に揃える
+   (仕様の代替案「全部角丸四角」) ことで形を統一する。 */
 .subscore-pill {
   display: inline-flex;
   flex-direction: column;
   align-items: center;
   min-width: 38px;
-  padding: 6px 12px;
-  border-radius: 10px;
+  padding: 8px 14px;
+  border-radius: 14px;
   color: #fff;
   line-height: 1.2;
+}
+/* 日全体ピルは subscore セクション内では 999px を解除し角丸四角に (カード上の score-pill は不変)。 */
+.subscore-day-row .score-pill {
+  border-radius: 14px;
 }
 .subscore-pill .time-label {
   font-size: var(--fs-xs);
@@ -2559,6 +2566,15 @@ button.extreme-warn {
   cursor: pointer;
   text-decoration: underline;
   text-decoration-style: dotted;
+}
+/* §0.60.C : スマホでカードの「(要確認)」がスコアの右に詰まり窮屈だったため、独立行 (スコア下) に
+   回して余白を確保する (score-row は flex-wrap 済みなので flex-basis:100% で改行)。 */
+@media (max-width: 767px) {
+  .cell-date-score .score-row.card-score .extreme-warn {
+    flex-basis: 100%;
+    margin-top: 4px;
+    text-align: center;
+  }
 }
 
 /* §0.44.9 : 「開催予想」 toggle を撤廃し、リスク行を常時展開。show-detail は行内で全幅折り返し。 */
