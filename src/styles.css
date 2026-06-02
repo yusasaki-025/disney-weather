@@ -2706,9 +2706,10 @@ button.extreme-warn {
 .day-climate {
   text-align: left;
 }
+/* §0.64.5 : 値が 2 行に折り返してもアイコン ・ ラベルが 1 行目の上端に揃うよう flex-start に。 */
 .day-climate .dc-row {
   display: flex;
-  align-items: baseline;
+  align-items: flex-start;
   gap: 8px;
   margin: 0 0 6px;
   font-size: var(--fs-sm);
@@ -2718,7 +2719,8 @@ button.extreme-warn {
   flex: 0 0 auto;
   font-size: var(--fs-lg);
   color: var(--accent);
-  align-self: center;
+  align-self: flex-start;
+  margin-top: 2px;
 }
 .day-climate .dc-label {
   flex: 0 0 auto;
