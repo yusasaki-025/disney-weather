@@ -172,7 +172,7 @@ function showRiskLineHtml(showName, park, risk, predWind, weatherless = false) {
     if (predWind != null) windPieces.push(`突風 ${fmtNum(predWind, 1)}m/s`);
     if (windPieces.length) {
       riskParts.push(
-        `<span class="sr-wind" title="風 (平均風速) = ショー時刻の 1時間平均 (sustained) / 突風 = 1時間最大瞬間風速 (gust)。突風は中止判定 ・ 過去事例検索のベースです">${windPieces.join(' ・ ')}</span>`,
+        `<span class="sr-wind" title="風 (平均風速) = ショー時刻の 1時間平均 (sustained) / 突風 = 1時間最大瞬間風速 (gust)。突風は中止判定・過去事例検索のベースです">${windPieces.join('・')}</span>`,
       );
     }
   }
@@ -188,9 +188,9 @@ function showRiskLineHtml(showName, park, risk, predWind, weatherless = false) {
     }
   }
   // §0.44.12 : 屋内ショーは「屋内 ・ 天候影響なし」を明示 (空欄だと未取得と紛らわしいため)。
-  const indoorNote = weatherless ? '<span class="sr-indoor">屋内 ・ 天候影響なし</span>' : '';
+  const indoorNote = weatherless ? '<span class="sr-indoor">屋内・天候影響なし</span>' : '';
   if (riskParts.length === 0 && !cancelHtml && !indoorNote) return '';
-  const body = [riskParts.join(' ・ '), indoorNote, cancelHtml].filter(Boolean).join(' ');
+  const body = [riskParts.join('・'), indoorNote, cancelHtml].filter(Boolean).join(' ');
   return `<div class="show-risk-line">${body}</div>`;
 }
 
@@ -224,7 +224,7 @@ function attractionHtml(park, gust) {
     .join('');
   return `<div class="detail-section">
         <h4><span class="material-symbols-rounded" aria-hidden="true">attractions</span>アトラクション運休予測 (${esc(park)})</h4>
-        <p class="attraction-note">予報 max ${Math.round(gust)}m/s ・ 屋外コースター ・ 水上系は強風で運休することがあります (推定閾値)</p>
+        <p class="attraction-note">予報 max ${Math.round(gust)}m/s・屋外コースター・水上系は強風で運休することがあります (推定閾値)</p>
         <ul class="attraction-list">${items}</ul>
       </div>`;
 }
@@ -239,7 +239,7 @@ function daySummaryHtml(row, today, warningData = null) {
   // 警報名 (当日のみ ・ 解説文に織り込む)
   let warningLabel = '';
   if (row.date === today && warningData && warningData.warnings && warningData.warnings.length) {
-    warningLabel = warningData.warnings.map((w) => w.label).join(' ・ ');
+    warningLabel = warningData.warnings.map((w) => w.label).join('・');
   }
   const text = daySummary({ weather, warningLabel, badges: row.eval.badges, drizzle });
   // (要確認) : 単独ソースの極端値 + 6 日先以降の予報誤差
@@ -253,9 +253,9 @@ function daySummaryHtml(row, today, warningData = null) {
   const ex = extremeWarning({ gustMax: m.gustMax, precipMaxHourly });
   if (ex) checks.push(ex.title || ex.text);
   const daysAhead = Math.round((new Date(row.date) - new Date(today)) / 86400000);
-  if (daysAhead >= 6) checks.push('6 日先以降は予報の誤差が大きめ ・ 当日朝に再確認を');
+  if (daysAhead >= 6) checks.push('6 日先以降は予報の誤差が大きめ・当日朝に再確認を');
   const checkHtml = checks.length
-    ? `<p class="ds-check-note">(要確認 : ${esc(checks.join(' ・ '))})</p>`
+    ? `<p class="ds-check-note">(要確認 : ${esc(checks.join('・'))})</p>`
     : '';
   return `<div class="detail-section day-summary js-day-summary">
         <h4><span class="material-symbols-rounded" aria-hidden="true">summarize</span>この日の概要</h4>
@@ -281,7 +281,7 @@ function dayClimateHtml(row, today, warningData = null) {
     const rd = warningData.reportDatetime
       ? ` <span class="dc-time">(${esc(formatMd(warningData.reportDatetime.slice(0, 10)))} ${esc(warningData.reportDatetime.slice(11, 16))} 発表)</span>`
       : '';
-    rows.push(dcRow('warning', '警報 ・ 注意報', `<span class="jw-source">気象庁</span>${badges}${rd}`));
+    rows.push(dcRow('warning', '警報・注意報', `<span class="jw-source">気象庁</span>${badges}${rd}`));
   }
   const rng = (r, digits = 0) => (r ? `${fmtNum(r.min, digits)} 〜 ${fmtNum(r.max, digits)}` : null);
   if (m.windRange) {
@@ -302,7 +302,7 @@ function dayClimateHtml(row, today, warningData = null) {
       .join('');
     const t = (v) => (v != null ? `${Math.round(v)}°` : '—');
     rows.push(
-      dcRow('wb_sunny', '天気', `${wIcons}${esc(normalizeWeatherText(f.weatherText))} ・ 最高 ${t(f.tempMax)} / 最低 ${t(f.tempMin)}`),
+      dcRow('wb_sunny', '天気', `${wIcons}${esc(normalizeWeatherText(f.weatherText))}・最高 ${t(f.tempMax)} / 最低 ${t(f.tempMin)}`),
     );
   }
   if (!rows.length) return '';
@@ -460,7 +460,7 @@ export function renderTable(els, rows, state, sources, sourceStatus, handlers, w
     <th class="col-score">スコア</th>
     ${catHead('wind', '風')}
     ${catHead('rain', '雨')}
-    <th><span class="material-symbols-rounded cat-head" aria-hidden="true">${CAT_ICON.wbgt}</span><span class="cat-head-label">熱<span class="metric-suffix">(WBGT)</span></span><span class="material-symbols-rounded wbgt-info" tabindex="0" role="img" title="暑さ指数 (WBGT)。気温 + 湿度 + 日射から算出する熱中症リスク指標。28+ で警戒、31+ で危険。" aria-label="暑さ指数 (WBGT) とは : 気温 ・ 湿度 ・ 日射から算出する熱中症リスク指標。28 以上で警戒、31 以上で危険。">info</span></th>
+    <th><span class="material-symbols-rounded cat-head" aria-hidden="true">${CAT_ICON.wbgt}</span><span class="cat-head-label">熱<span class="metric-suffix">(WBGT)</span></span><span class="material-symbols-rounded wbgt-info" tabindex="0" role="img" title="暑さ指数 (WBGT)。気温 + 湿度 + 日射から算出する熱中症リスク指標。28+ で警戒、31+ で危険。" aria-label="暑さ指数 (WBGT) とは : 気温・湿度・日射から算出する熱中症リスク指標。28 以上で警戒、31 以上で危険。">info</span></th>
     ${sources
       .map(
         (s) =>
@@ -509,7 +509,7 @@ export function renderTable(els, rows, state, sources, sourceStatus, handlers, w
       const windTitle = peakTxt(m.gustPeak, 'm/s');
       const wbgtBase = wbgtLabel === '環境省' ? 'WBGT 環境省取得値' : 'WBGT 簡易計算による推定値';
       const wbgtPeakTxt = peakTxt(m.wbgtPeak, '');
-      const wbgtTitle = wbgtPeakTxt ? `${wbgtBase} ・ ${wbgtPeakTxt}` : wbgtBase;
+      const wbgtTitle = wbgtPeakTxt ? `${wbgtBase}・${wbgtPeakTxt}` : wbgtBase;
 
       // §0.16 : バッジ格下げ時はスコアセルに理由ツールチップ
       let scoreTitle = '';

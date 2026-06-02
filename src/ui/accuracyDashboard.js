@@ -34,8 +34,8 @@ function statsTableHtml(stats) {
     })
     .join('');
   return `<div class="acc-section">
-    <h2><span class="material-symbols-rounded" aria-hidden="true">analytics</span>ソース別 平均誤差 ・ バイアス</h2>
-    <p class="acc-note">RMS = 誤差の大きさ (小さいほど正確) ・ バイアス = 予報 − 実測 (＋ は過大予報 ・ − は過小予報)</p>
+    <h2><span class="material-symbols-rounded" aria-hidden="true">analytics</span>ソース別 平均誤差・バイアス</h2>
+    <p class="acc-note">RMS = 誤差の大きさ (小さいほど正確)・バイアス = 予報 − 実測 (＋ は過大予報・− は過小予報)</p>
     <div class="acc-table-wrap"><table class="acc-table"><thead><tr><th>ソース</th>${head}</tr></thead><tbody>${rows}</tbody></table></div>
   </div>`;
 }
@@ -64,10 +64,10 @@ function weightsHtml(stats) {
 
 function examplesHtml(ex) {
   const row = (e) =>
-    `<li><span class="acc-date">${esc(e.date)}</span><span class="acc-ex-src">${esc(srcLabel(e.src))}</span>予報 ${e.predicted}m/s ・ 実測 ${e.actual}m/s <span class="acc-err">(誤差 ${e.error}m/s)</span></li>`;
+    `<li><span class="acc-date">${esc(e.date)}</span><span class="acc-ex-src">${esc(srcLabel(e.src))}</span>予報 ${e.predicted}m/s・実測 ${e.actual}m/s <span class="acc-err">(誤差 ${e.error}m/s)</span></li>`;
   if (ex.misses.length === 0) return '';
   return `<div class="acc-section">
-    <h2><span class="material-symbols-rounded" aria-hidden="true">target</span>直近の的中例 ・ 外し例 (風速)</h2>
+    <h2><span class="material-symbols-rounded" aria-hidden="true">target</span>直近の的中例・外し例 (風速)</h2>
     <div class="acc-examples">
       <div><h3>外し例 (誤差大)</h3><ul class="acc-ex-list miss">${ex.misses.map(row).join('')}</ul></div>
       <div><h3>的中例 (誤差小)</h3><ul class="acc-ex-list hit">${ex.hits.map(row).join('')}</ul></div>
@@ -126,7 +126,7 @@ export function renderDashboard(root) {
     ${statsTableHtml(stats)}
     ${weightsHtml(stats)}
     ${examplesHtml(ex)}
-    <p class="acc-disclaimer">本ダッシュボードは公開予報と気象庁アメダス (船橋) ・ 環境省 WBGT 実測の比較に基づく参考値です。</p>
+    <p class="acc-disclaimer">本ダッシュボードは公開予報と気象庁アメダス (船橋)・環境省 WBGT 実測の比較に基づく参考値です。</p>
   `;
 
   drawChart(root.querySelector('#acc-chart'), ts);

@@ -20,6 +20,6 @@ export function getScoreReason(metrics, badges) {
     parts.push(`熱 WBGT${Math.round(wbgt)} ${badges.wbgt.text}`);
   }
 
-  if (parts.length === 0) return '風 ・ 雨 ・ 熱 全部OK';
-  return parts.join(' ・ ');
+  if (parts.length === 0) return '風・雨・熱 全部OK';
+  return parts.join('・');
 }

@@ -16,7 +16,7 @@ export function nowcastHtml(date) {
       <span class="material-symbols-rounded" aria-hidden="true">radar</span>
       <span class="nowcast-text">
         <span class="nowcast-title">気象庁ナウキャストで雨雲を確認<span class="nowcast-newtab"> (新しいタブ)</span></span>
-        <span class="nowcast-sub">当日の降り出し ・ 雨雲の接近を直前チェック</span>
+        <span class="nowcast-sub">当日の降り出し・雨雲の接近を直前チェック</span>
       </span>
       <span class="material-symbols-rounded" aria-hidden="true">open_in_new</span>
     </a>

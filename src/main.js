@@ -189,7 +189,7 @@ function updateStatus() {
   btn.setAttribute('aria-label', aria);
   const btnMobile = document.getElementById('btn-refresh-mobile');
   if (btnMobile) btnMobile.setAttribute('aria-label', aria);
-  btn.title = detail.join(' ・ ');
+  btn.title = detail.join('・');
   btn.classList.toggle('is-cached', anyCached && !allFail);
 }
 

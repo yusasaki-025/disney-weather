@@ -9,7 +9,7 @@ describe('getScoreReason (§0.37-10)', () => {
       { gustShowWindow: 3, popShowWindow: 0, wbgtShowWindow: 20 },
       { wind: badge(0, '通常'), rain: badge(0, '通常'), wbgt: badge(0, '通常') },
     );
-    expect(r).toBe('風 ・ 雨 ・ 熱 全部OK');
+    expect(r).toBe('風・雨・熱 全部OK');
   });
 
   it('風だけバッジが立つと風のみ表示', () => {
@@ -20,12 +20,12 @@ describe('getScoreReason (§0.37-10)', () => {
     expect(r).toBe('風 9m/s 風バ');
   });
 
-  it('複数立つと ・ で連結 (風 ・ 雨 ・ 熱の順)', () => {
+  it('複数立つと・で連結 (風・雨・熱の順)', () => {
     const r = getScoreReason(
       { gustShowWindow: 12, popShowWindow: 70, wbgtShowWindow: 31 },
       { wind: badge(2, '中止リスク'), rain: badge(2, '雨キャン'), wbgt: badge(2, '熱キャン') },
     );
-    expect(r).toBe('風 12m/s 中止リスク ・ 雨 70% 雨キャン ・ 熱 WBGT31 熱キャン');
+    expect(r).toBe('風 12m/s 中止リスク・雨 70% 雨キャン・熱 WBGT31 熱キャン');
   });
 
   it('showWindow が無ければ Max にフォールバック', () => {

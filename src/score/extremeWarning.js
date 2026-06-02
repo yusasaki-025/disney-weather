@@ -15,6 +15,6 @@ export function extremeWarning({ gustMax, precipMaxHourly } = {}) {
   if (reasons.length === 0) return null;
   return {
     text: '(要確認)',
-    title: `${reasons.join(' ・ ')} の単独予報 ・ 他ソースの確認を推奨`,
+    title: `${reasons.join('・')} の単独予報・他ソースの確認を推奨`,
   };
 }
