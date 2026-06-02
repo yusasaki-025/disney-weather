@@ -56,13 +56,38 @@ function expandShows(shows) {
   return out;
 }
 
+// §0.61 : 両パーク共通ショー (TDL/TDS 上空で見える花火等)。片パークの取得漏れに備え、
+//   もう片方に存在すれば自動補完する (§0.44.11 のデータ依存対応を再発防止ロジック化)。
+const SHARED_SHOWS = [/スカイ[・･]フル[・･]オブ[・･]カラーズ/];
+
+// §0.61 : 同日 ・ 他パークの official データから、共通ショーで当パークに欠けているものを補完する。
+//   当パークが official のときのみ (fallback の日には注入しない)。show は他パークのエントリを複製。
+function injectSharedShows(date, park, shows) {
+  const ym = (date || '').slice(0, 7);
+  const otherPark = park === 'TDL' ? 'TDS' : 'TDL';
+  const otherDay = MONTHLY[ym]?.days?.[date]?.[otherPark];
+  if (!otherDay || !Array.isArray(otherDay.shows)) return shows;
+  const has = (name) => shows.some((s) => s.name === name);
+  const out = shows.slice();
+  for (const re of SHARED_SHOWS) {
+    if (out.some((s) => re.test(s.name))) continue; // 当パークに既にある
+    const fromOther = otherDay.shows.filter((s) => re.test(s.name));
+    for (const s of fromOther) {
+      if (has(s.name)) continue;
+      out.push(...expandShows([s]));
+    }
+  }
+  return out;
+}
+
 // その日 ・ パークのショー配列を返す。{ shows, source: 'official' | 'fallback' }。
 // date: 'YYYY-MM-DD'、park: 'TDL' | 'TDS'
 export function getDaySchedule(date, park) {
   const ym = (date || '').slice(0, 7);
   const day = MONTHLY[ym]?.days?.[date]?.[park];
   if (day && Array.isArray(day.shows) && day.shows.length > 0) {
-    return { shows: expandShows(day.shows), source: 'official' };
+    // §0.61 : official の日のみ共通ショー (スカイ等) を他パークから補完。
+    return { shows: injectSharedShows(date, park, expandShows(day.shows)), source: 'official' };
   }
   return { shows: FALLBACK_SCHEDULE[park] || [], source: 'fallback' };
 }
