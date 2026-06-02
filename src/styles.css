@@ -1497,10 +1497,9 @@ h1, h2, h3, h4, .app-title h1 {
   font-size: 10px;
   font-weight: 600;
   color: var(--text-sub);
-  /* §0.57.4 : 旧 -3px は §0.56.1 の .vg グループ化 (gap 0) と相まって単位が数字に食い込んで
-     いた (例「12.2m/s」が重なる)。負マージンを撤廃し数字と単位に僅かな余白 (1px) を確保する。
-     .vg が inline-flex (gap 0) なので PC ・ スマホ共通で 1px でよい (旧スマホ専用 0 上書きは不要)。 */
-  margin-left: 1px;
+  /* §0.57.4 / §0.58.2 : 旧 -3px は §0.56.1 の .vg グループ化 (gap 0) で単位が数字に食い込んでいた。
+     負マージンを撤廃し PC ・ スマホ共通で 2px の余白を確保 (「10.3 m/s」等の食い込み解消)。 */
+  margin-left: 2px;
 }
 
 /* テーブルヘッダーを薄いブルーに */
@@ -2604,6 +2603,11 @@ button.extreme-warn {
 /* §0.53.2 : PC スコア列も垂直中央揃え (他列と中心線を合わせる) */
 .cell-score-pc {
   vertical-align: middle;
+}
+/* §0.58.1 : PC スコア列の .score-row は flex なので text-align:center が効かず左寄せになっていた。
+   justify-content: center でスコアバッジを列の水平中央に揃える (風/雨/熱の中心と一致)。 */
+.cell-score-pc .score-row {
+  justify-content: center;
 }
 @media (max-width: 767px) {
   th.col-score,
