@@ -3,6 +3,7 @@
 // wbgtShowWindow/wbgtMax, uvMax, gustShowWindow/gustMax, feelsLikeMax/Min)。
 // 返り値は {icon, text}[] (table.js が <li> 化)。重複削除 + 8件上限。
 
+// §0.62 : 各アイテムに reason (理由ラベル) + cat (色カテゴリ : rain/heat/cold/uv/wind/sun/show) を付与。
 // 雨対策 (pop% + 日合計 precipSum mm ベース。時間 mm/h は metrics に無いため日合計で代替)
 function rainGear(pop, precipSum) {
   const items = [];
@@ -10,17 +11,17 @@ function rainGear(pop, precipSum) {
   const pp = pop ?? 0;
   const pr = precipSum ?? 0;
   if (pr >= 20 || pp >= 80) {
-    items.push({ icon: 'dry_cleaning', text: 'ポンチョ必須' });
-    items.push({ icon: 'checkroom', text: 'タオル ・ 着替え' });
-    items.push({ icon: 'umbrella', text: '折りたたみ傘' });
+    items.push({ icon: 'dry_cleaning', text: 'ポンチョ必須', reason: '強雨', cat: 'rain' });
+    items.push({ icon: 'checkroom', text: 'タオル ・ 着替え', reason: '強雨', cat: 'rain' });
+    items.push({ icon: 'umbrella', text: '折りたたみ傘', reason: '強雨', cat: 'rain' });
   } else if (pp >= 70 || pr >= 5) {
-    items.push({ icon: 'dry_cleaning', text: 'ポンチョ必須' });
-    items.push({ icon: 'umbrella', text: '折りたたみ傘' });
+    items.push({ icon: 'dry_cleaning', text: 'ポンチョ必須', reason: '雨', cat: 'rain' });
+    items.push({ icon: 'umbrella', text: '折りたたみ傘', reason: '雨', cat: 'rain' });
   } else if (pp >= 50 || pr >= 1) {
-    items.push({ icon: 'umbrella', text: '折りたたみ傘' });
-    items.push({ icon: 'dry_cleaning', text: 'ポンチョ (パレード時)' });
+    items.push({ icon: 'umbrella', text: '折りたたみ傘', reason: '雨', cat: 'rain' });
+    items.push({ icon: 'dry_cleaning', text: 'ポンチョ (パレード時)', reason: '雨', cat: 'rain' });
   } else if (pp >= 30) {
-    items.push({ icon: 'umbrella', text: '折りたたみ傘' });
+    items.push({ icon: 'umbrella', text: '折りたたみ傘', reason: '小雨', cat: 'rain' });
   }
   return items;
 }
@@ -30,31 +31,31 @@ function clothingFor(tempMax) {
   const items = [];
   if (tempMax == null) return items;
   if (tempMax >= 35) {
-    items.push({ icon: 'air', text: 'ハンディファン' });
-    items.push({ icon: 'ac_unit', text: 'ネッククーラー ・ 保冷剤' });
-    items.push({ icon: 'local_drink', text: '凍らせたペットボトル' });
-    items.push({ icon: 'beach_access', text: '日傘' });
+    items.push({ icon: 'air', text: 'ハンディファン', reason: '猛暑', cat: 'heat' });
+    items.push({ icon: 'ac_unit', text: 'ネッククーラー ・ 保冷剤', reason: '猛暑', cat: 'heat' });
+    items.push({ icon: 'local_drink', text: '凍らせたペットボトル', reason: '猛暑', cat: 'heat' });
+    items.push({ icon: 'beach_access', text: '日傘', reason: '猛暑', cat: 'heat' });
   } else if (tempMax >= 32) {
-    items.push({ icon: 'air', text: 'ハンディファン' });
-    items.push({ icon: 'ac_unit', text: 'ネッククーラー' });
-    items.push({ icon: 'beach_access', text: '日傘' });
+    items.push({ icon: 'air', text: 'ハンディファン', reason: '暑さ', cat: 'heat' });
+    items.push({ icon: 'ac_unit', text: 'ネッククーラー', reason: '暑さ', cat: 'heat' });
+    items.push({ icon: 'beach_access', text: '日傘', reason: '暑さ', cat: 'heat' });
   } else if (tempMax >= 28) {
-    items.push({ icon: 'beach_access', text: '日傘' });
-    items.push({ icon: 'dry_cleaning', text: '汗拭きタオル' });
-    items.push({ icon: 'local_drink', text: '多めの水分' });
+    items.push({ icon: 'beach_access', text: '日傘', reason: '暑さ', cat: 'heat' });
+    items.push({ icon: 'dry_cleaning', text: '汗拭きタオル', reason: '暑さ', cat: 'heat' });
+    items.push({ icon: 'local_drink', text: '多めの水分', reason: '暑さ', cat: 'heat' });
   } else if (tempMax >= 22) {
     // 特に対策なし (薄手で OK)
   } else if (tempMax >= 15) {
-    items.push({ icon: 'checkroom', text: '薄手の上着 (朝晩用)' });
+    items.push({ icon: 'checkroom', text: '薄手の上着 (朝晩用)', reason: '朝晩冷え', cat: 'cold' });
   } else if (tempMax >= 10) {
-    items.push({ icon: 'checkroom', text: '薄手のジャケット ・ カーディガン' });
+    items.push({ icon: 'checkroom', text: '薄手のジャケット ・ カーディガン', reason: '寒さ', cat: 'cold' });
   } else if (tempMax >= 5) {
-    items.push({ icon: 'checkroom', text: 'コート' });
-    items.push({ icon: 'dry_cleaning', text: 'マフラー' });
+    items.push({ icon: 'checkroom', text: 'コート', reason: '寒さ', cat: 'cold' });
+    items.push({ icon: 'dry_cleaning', text: 'マフラー', reason: '寒さ', cat: 'cold' });
   } else {
-    items.push({ icon: 'checkroom', text: 'ヒートテック ・ ダウン' });
-    items.push({ icon: 'dry_cleaning', text: 'マフラー ・ 手袋' });
-    items.push({ icon: 'local_fire_department', text: 'カイロ' });
+    items.push({ icon: 'checkroom', text: 'ヒートテック ・ ダウン', reason: '厳寒', cat: 'cold' });
+    items.push({ icon: 'dry_cleaning', text: 'マフラー ・ 手袋', reason: '厳寒', cat: 'cold' });
+    items.push({ icon: 'local_fire_department', text: 'カイロ', reason: '厳寒', cat: 'cold' });
   }
   return items;
 }
@@ -64,11 +65,11 @@ function wbgtGear(wbgt) {
   const items = [];
   if (wbgt == null) return items;
   if (wbgt >= 31) {
-    items.push({ icon: 'cookie', text: '塩飴' });
-    items.push({ icon: 'checkroom', text: '着替え (帰り用)' });
+    items.push({ icon: 'cookie', text: '塩飴', reason: '熱中症対策', cat: 'heat' });
+    items.push({ icon: 'checkroom', text: '着替え (帰り用)', reason: '熱中症対策', cat: 'heat' });
   } else if (wbgt >= 28) {
-    items.push({ icon: 'cookie', text: '塩飴' });
-    items.push({ icon: 'local_drink', text: '多めの水分' });
+    items.push({ icon: 'cookie', text: '塩飴', reason: '熱中症対策', cat: 'heat' });
+    items.push({ icon: 'local_drink', text: '多めの水分', reason: '熱中症対策', cat: 'heat' });
   }
   return items;
 }
@@ -78,11 +79,11 @@ function uvGear(uv) {
   const items = [];
   if (uv == null) return items;
   if (uv >= 8) {
-    items.push({ icon: 'sunny', text: '日焼け止め SPF50' });
-    items.push({ icon: 'sports', text: '帽子 ・ サングラス' });
+    items.push({ icon: 'sunny', text: '日焼け止め SPF50', reason: '強UV', cat: 'uv' });
+    items.push({ icon: 'sports', text: '帽子 ・ サングラス', reason: '強UV', cat: 'uv' });
   } else if (uv >= 5) {
-    items.push({ icon: 'sunny', text: '日焼け止め SPF30' });
-    items.push({ icon: 'sports', text: '帽子' });
+    items.push({ icon: 'sunny', text: '日焼け止め SPF30', reason: 'UV', cat: 'uv' });
+    items.push({ icon: 'sports', text: '帽子', reason: '晴れ', cat: 'sun' });
   }
   return items;
 }
@@ -91,8 +92,8 @@ function uvGear(uv) {
 function windGear(gust) {
   const items = [];
   if (gust == null) return items;
-  if (gust >= 10) items.push({ icon: 'face', text: '髪留め ・ 帽子の紐' });
-  else if (gust >= 5) items.push({ icon: 'face', text: '髪留め' });
+  if (gust >= 10) items.push({ icon: 'face', text: '髪留め ・ 帽子の紐', reason: '強風', cat: 'wind' });
+  else if (gust >= 5) items.push({ icon: 'face', text: '髪留め', reason: '風', cat: 'wind' });
   return items;
 }
 
@@ -101,8 +102,8 @@ function tempDiffGear(feelsMax, feelsMin) {
   const items = [];
   if (feelsMax == null || feelsMin == null) return items;
   const diff = feelsMax - feelsMin;
-  if (diff >= 12) items.push({ icon: 'dry_cleaning', text: '羽織りもの ・ ストール' });
-  else if (diff >= 8) items.push({ icon: 'checkroom', text: '羽織りもの' });
+  if (diff >= 12) items.push({ icon: 'dry_cleaning', text: '羽織りもの ・ ストール', reason: '寒暖差', cat: 'cold' });
+  else if (diff >= 8) items.push({ icon: 'checkroom', text: '羽織りもの', reason: '寒暖差', cat: 'cold' });
   return items;
 }
 

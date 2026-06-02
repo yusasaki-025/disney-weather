@@ -848,6 +848,47 @@ section {
   font-size: var(--fs-xl);
   color: var(--accent);
 }
+.outfit-list li .outfit-text {
+  flex: 1;
+}
+/* §0.62 : 持ち物の理由タグ (なぜ必要か)。既存タグ (DPA/抽選/期間限定/確定情報) と被らない
+   カテゴリ色 ・ 薄色背景 + 濃色文字。サイズは既存タグと同等。 */
+.reason-tag {
+  flex: 0 0 auto;
+  font-size: 0.75em;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+.reason-tag.reason-rain {
+  background: #e3f2fd;
+  color: #1565c0;
+}
+.reason-tag.reason-heat {
+  background: #ffe0b2;
+  color: #e65100;
+}
+.reason-tag.reason-cold {
+  background: #e0f2f1;
+  color: #00695c;
+}
+.reason-tag.reason-uv {
+  background: #fff9c4;
+  color: #f57f17;
+}
+.reason-tag.reason-wind {
+  background: #eceff1;
+  color: #455a64;
+}
+.reason-tag.reason-sun {
+  background: #fff3e0;
+  color: #ef6c00;
+}
+.reason-tag.reason-show {
+  background: #f8bbd0;
+  color: #880e4f;
+}
 
 .detail-actions {
   display: flex;

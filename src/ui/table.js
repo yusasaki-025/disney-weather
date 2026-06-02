@@ -397,7 +397,7 @@ function detailPanelHtml(row, park, warningData = null) {
   const outfit = suggestOutfit(row.eval.metrics)
     .map(
       (o) =>
-        `<li><span class="material-symbols-rounded" aria-hidden="true">${o.icon}</span>${esc(o.text)}</li>`,
+        `<li><span class="material-symbols-rounded" aria-hidden="true">${o.icon}</span><span class="outfit-text">${esc(o.text)}</span>${o.reason ? `<span class="reason-tag reason-${o.cat}">${esc(o.reason)}</span>` : ''}</li>`,
     )
     .join('');
   // §0.6.8 : 左カラム = 情報、右カラム = グラフ。
