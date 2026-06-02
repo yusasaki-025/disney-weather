@@ -294,7 +294,7 @@ function dayClimateHtml(row, today, warningData = null) {
   }
   // §0.64.1 : ラベル末尾カッコ (WBGT) は metric-suffix で縮小 (§0.56.4 と統一)。
   if (m.wbgtRange) rows.push(dcRow('thermostat', '熱 <span class="metric-suffix">(WBGT)</span>', rng(m.wbgtRange)));
-  // 天気 (複合アイコン + 気温レンジ)
+  // §0.64.6 : 天気と気温は性質が違うため別行に分割 (天気行 / 気温行)。
   const f =
     row.forecasts.jma || row.forecasts['open-meteo'] || Object.values(row.forecasts).filter(Boolean)[0];
   if (f) {
@@ -302,9 +302,10 @@ function dayClimateHtml(row, today, warningData = null) {
       .map((ic) => `<span class="material-symbols-rounded ds-wicon" style="color:${ic.color}" aria-hidden="true">${ic.name}</span>`)
       .join('');
     const t = (v) => (v != null ? `${Math.round(v)}°` : '—');
-    rows.push(
-      dcRow('wb_sunny', '天気', `${wIcons}${esc(normalizeWeatherText(f.weatherText))}・最高 ${t(f.tempMax)} / 最低 ${t(f.tempMin)}`),
-    );
+    rows.push(dcRow('wb_sunny', '天気', `${wIcons}${esc(normalizeWeatherText(f.weatherText))}`));
+    if (f.tempMax != null || f.tempMin != null) {
+      rows.push(dcRow('device_thermostat', '気温', `最高 ${t(f.tempMax)} / 最低 ${t(f.tempMin)}`));
+    }
   }
   if (!rows.length) return '';
   return `<div class="detail-section day-climate">
