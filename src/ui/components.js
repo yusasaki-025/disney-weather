@@ -58,44 +58,39 @@ export function cancelBadgeHtml(badge) {
   return `<span class="cancel-badge cancel-lv${badge.level}">${iconHtml}<span class="badge-long">${esc(long)}</span><span class="badge-short">${esc(short)}</span></span>`;
 }
 
-// 朝/昼/夜 サブスコア HTML (§0.6.5 : 記号廃止、色付き数値ピル)。
-// 背景色 = スコア帯。数値のみ表示。昼は subscore-main で少し大きく強調。未取得は灰色ピル + "-"。
-export function subscoreHtml(subscores, bands, dayEval = null, reasonText = '') {
-  // §0.38-4 : 各時間帯に時刻範囲を併記 (朝 9-12時 等)。昼は重み最大なので「最重視」表示。
-  // BANDS は hours (Set) を持つので min〜max+1 で時刻範囲を導出する。
+// 朝/昼/夜 サブスコア HTML (§0.64.3 : 案A シンプル縦並び)。
+// 「理由 : ...」行 + 時間帯ごとに「朝 9-12時  50  ⚠ FAIR」を 1 行ずつ並べる。昼に「← 最重視」。
+// 日全体スコアは見出し側 (table.js h4) に併記するため、ここでは内訳のみ描く。dayEval は aria 用。
+export function subscoreHtml(subscores, bands, _dayEval = null, reasonText = '') {
+  // §0.38-4 : 各時間帯に時刻範囲を併記 (朝 9-12時 等)。BANDS は hours (Set) を持つ。
   const range = (b) => {
     if (!b.hours || b.hours.size === 0) return '';
     const hs = [...b.hours];
     return `${Math.min(...hs)}-${Math.max(...hs) + 1}時`;
   };
-  const labelHtml = (b) =>
-    `<span class="time-label">${b.label}${b.key === 'noon' ? ' <span class="time-key">最重視</span>' : ''}<span class="time-range">${range(b)}</span></span>`;
-  // §0.44.1 / §0.46.4 : 「日全体」スコアはカード上のスコアバッジ (scorePillHtml) と同じデザインで先頭に併記し、
-  //   「これがその日の総合」と一目で分かるようにする。時間帯 ≦ 日 のクランプ (§0.42.4) の検証にも使える。
-  const dayHtml = dayEval
-    ? `<div class="subscore-day-row"><span class="subscore-day-label">日全体</span>${scorePillHtml(dayEval)}</div>`
-    : '';
   const ariaParts = bands.map((b) => {
     const ss = subscores[b.key];
     const r = range(b) ? ` (${range(b)})` : '';
     if (!ss || !ss.hasData) return `${b.label}${r} データなし`;
     return `${b.label}${r} ${ss.symbol.label} ${ss.score}`;
   });
-  const cells = bands.map((b) => {
+  // §0.64.3 : 各時間帯を 1 行に (時刻 / 点 / 評価バッジ / 最重視マーク)。
+  const rows = bands.map((b) => {
     const ss = subscores[b.key];
     const has = ss && ss.hasData;
-    const main = b.key === 'noon' ? ' subscore-main' : '';
+    const isNoon = b.key === 'noon';
+    const noonMark = isNoon ? '<span class="ss-row-key">← 最重視</span>' : '';
+    const timeHtml = `<span class="ss-row-time">${b.label}<span class="ss-row-range">${range(b)}</span></span>`;
     if (!has) {
-      return `<span class="subscore-pill${main}" data-level="none">${labelHtml(b)}<span class="value">-</span></span>`;
+      return `<li class="ss-row${isNoon ? ' ss-row-main' : ''}" data-level="none">${timeHtml}<span class="ss-row-score">-</span><span class="ss-row-badge">データなし</span>${noonMark}</li>`;
     }
-    return `<span class="subscore-pill${main}" data-level="${ss.symbol.key}" style="background:${ss.symbol.color}">${labelHtml(b)}<span class="material-symbols-rounded" aria-hidden="true">${ss.symbol.icon}</span><span class="value">${ss.score}<span class="unit">点</span></span></span>`;
+    const c = ss.symbol.color;
+    return `<li class="ss-row${isNoon ? ' ss-row-main' : ''}" data-level="${ss.symbol.key}">${timeHtml}<span class="ss-row-score" style="color:${c}">${ss.score}</span><span class="ss-row-badge" style="color:${c}"><span class="material-symbols-rounded" aria-hidden="true">${ss.symbol.icon}</span>${esc(ss.symbol.label)}</span>${noonMark}</li>`;
   });
-  // §0.63.4 : 日全体 → スコア理由 → 「時間帯別」サブ見出し → 朝昼夜 の順で内訳を明確化。
   const reasonHtml = reasonText
-    ? `<p class="score-reason-line"><span class="srl-key">スコア理由</span><span class="srl-val">${esc(reasonText)}</span></p>`
+    ? `<p class="score-reason-line"><span class="srl-key">理由</span><span class="srl-val">${esc(reasonText)}</span></p>`
     : '';
-  const subhead = '<p class="subscore-subhead">時間帯別 (昼を最重視)</p>';
-  return `<div class="subscore-block">${dayHtml}${reasonHtml}${subhead}<span class="subscore-group" role="img" aria-label="${esc(ariaParts.join('、'))}">${cells.join('')}</span></div>`;
+  return `<div class="subscore-block">${reasonHtml}<ul class="ss-rows" role="img" aria-label="${esc(ariaParts.join('、'))}">${rows.join('')}</ul></div>`;
 }
 
 // スコアの読み上げ用ラベル (記号なし)

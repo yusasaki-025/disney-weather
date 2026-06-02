@@ -1369,75 +1369,82 @@ h1, h2, h3, h4, .app-title h1 {
 }
 
 /* --- §0.6.5 サブスコア 色ピル --- */
-.subscore-group {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  justify-content: center;
+/* §0.64.3 案A : スコアセクションは「スコア [日全体バッジ] (見出し) → 理由行 → 時間帯別の縦並び行」。 */
+/* 日全体バッジは見出し右端に併記。 */
+.score-head .score-pill {
+  margin-left: auto;
+  border-radius: 999px;
 }
-/* §0.46.4 : 時間帯スコアのピルを拡大 (フォント約 1.2× ・ 余白約 1.5×) し視認性を上げる */
-/* §0.60.C : 時間帯スコアの形状統一。日全体は横長 ・ 朝昼夜は縦積みで向きが違うため、999px だと
-   日全体=横ピル / 朝昼夜=円形ブロブと逆に不揃いになる。両者を同一 radius の角丸四角に揃える
-   (仕様の代替案「全部角丸四角」) ことで形を統一する。 */
-.subscore-pill {
-  display: inline-flex;
-  flex-direction: column;
-  align-items: center;
-  min-width: 38px;
-  padding: 8px 14px;
-  border-radius: 14px;
-  color: #fff;
-  line-height: 1.2;
-}
-/* 日全体ピルは subscore セクション内では 999px を解除し角丸四角に (カード上の score-pill は不変)。 */
-.subscore-day-row .score-pill {
-  border-radius: 14px;
-}
-.subscore-pill .time-label {
-  font-size: var(--fs-xs);
-  opacity: 0.92;
-}
-.subscore-pill .value {
-  font-size: var(--fs-lg);
-  font-weight: 700;
-}
-.subscore-pill[data-level='ok'] {
-  color: #33691e;
-}
-.subscore-pill[data-level='fair'] {
-  color: #e65100;
-}
-.subscore-pill[data-level='none'] {
-  background: var(--surface-2);
-  color: var(--text-sub);
-}
-.subscore-main {
-  padding: 8px 16px;
-  border: 2px solid var(--brand-gold);
-  border-radius: 12px;
-}
-.subscore-main .value {
-  font-size: var(--fs-xl);
-}
-/* §0.46.4 : 「日全体」スコアはカード上のスコアバッジ (score-pill) と同デザインで先頭に大きく表示 */
 .subscore-block {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 12px;
+  align-items: stretch;
+  gap: 10px;
+  width: 100%;
 }
-.subscore-day-row {
+/* §0.64.3 : 時間帯別をシンプルな縦並び行 (朝 9-12時  50  ⚠ FAIR ← 最重視) で表示。 */
+.ss-rows {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+.ss-row {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
+  padding: 7px 12px;
+  border-radius: 10px;
+  background: var(--surface-2);
 }
-.subscore-day-label {
-  font-size: 12px;
-  font-weight: 700;
+/* 昼は最重視なので淡いゴールド枠で強調。 */
+.ss-row-main {
+  border: 1.5px solid var(--brand-gold);
+  background: var(--surface);
+}
+.ss-row-time {
+  flex: 1 1 auto;
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--text);
+}
+.ss-row-range {
+  margin-left: 6px;
+  font-size: var(--fs-xs);
+  font-weight: 400;
   color: var(--text-sub);
 }
-.subscore-day-row .score-pill {
-  font-size: 15px;
+.ss-row-score {
+  min-width: 2.4em;
+  text-align: right;
+  font-size: var(--fs-lg);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.ss-row-badge {
+  min-width: 5em;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: var(--fs-sm);
+  font-weight: 700;
+}
+.ss-row-badge .material-symbols-rounded {
+  font-size: 18px;
+}
+.ss-row[data-level='none'] .ss-row-score,
+.ss-row[data-level='none'] .ss-row-badge {
+  color: var(--text-sub);
+}
+.ss-row-key {
+  flex: 0 0 auto;
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  color: var(--brand-gold);
+  white-space: nowrap;
 }
 
 /* --- §0.6.5 スコア凡例カード --- */
@@ -2742,15 +2749,12 @@ button.extreme-warn {
   text-align: left;
 }
 .score-reason-line .srl-key {
+  flex: 0 0 auto;
   font-weight: 700;
   color: var(--text-sub);
 }
-.subscore-subhead {
-  margin: 8px 0 6px;
-  font-size: var(--fs-xs);
-  font-weight: 700;
-  color: var(--text-sub);
-  text-align: center;
+.score-reason-line .srl-key::after {
+  content: " :";
 }
 .day-summary .ds-line {
   display: flex;

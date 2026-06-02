@@ -410,7 +410,7 @@ function detailPanelHtml(row, park, warningData = null) {
       ${daySummaryHtml(row, todayJst(), warningData)}
       ${dayClimateHtml(row, todayJst(), warningData)}
       <div class="detail-section score-section">
-        <h4><span class="material-symbols-rounded" aria-hidden="true">scoreboard</span>スコア</h4>
+        <h4 class="score-head"><span class="material-symbols-rounded" aria-hidden="true">scoreboard</span><span class="score-head-title">スコア</span>${scorePillHtml(row.eval)}</h4>
         <div class="subscore-detail">${subscoreHtml(row.eval.subscores, BANDS, row.eval, scoreReason)}</div>
         <p class="subscore-note">各時間帯の快適度 (100点満点)</p>
       </div>
