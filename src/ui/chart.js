@@ -9,6 +9,7 @@ import { allShowMarkers } from '../data/showSchedule.js';
 // §0.37-11 指標別カラー
 const METRIC_COLOR = {
   pop: '#4A90D2', // 降水確率 = 青
+  precip: '#4A90D2', // §0.59.2 : 降水量 = 青 (降水確率と同系)
   wind: '#2E7D32', // §0.44.5 : 風速 = 緑 (降水の青と単軸で区別)
   temp: '#D24A4A', // 気温 = 赤
   feelsLike: '#E89A3C', // 体感 = 橙
@@ -80,7 +81,7 @@ function makeDataset(f, metricKey, jpLabel, yAxisID) {
     borderDash: sourceDash(f.source),
     yAxisID,
     tension: 0.3,
-    pointRadius: metricKey === 'pop' || metricKey === 'temp' ? 2 : 0,
+    pointRadius: metricKey === 'pop' || metricKey === 'precip' || metricKey === 'temp' ? 2 : 0,
   };
 }
 
@@ -107,9 +108,10 @@ function renderSingleMetricChart(canvas, forecasts, park, date, metricKey, jpLab
   });
 }
 
-// 降水確率チャート (青 ・ 単軸 %)
-export function renderPopChart(canvas, forecasts, park, date = null) {
-  renderSingleMetricChart(canvas, forecasts, park, date, 'pop', '降水確率', '降水確率 %', 100);
+// §0.59.2 : 降水量チャート (青 ・ 単軸 mm/h)。max は自動 (強雨をクリップしない)。
+//   降水確率はカード上の数値で見えるため、グラフは「どれだけ強い雨か」を示す降水量に置換。
+export function renderPrecipChart(canvas, forecasts, park, date = null) {
+  renderSingleMetricChart(canvas, forecasts, park, date, 'precip', '降水量', '降水量 mm/h', undefined);
 }
 
 // 風速チャート (緑 ・ 単軸 m/s)

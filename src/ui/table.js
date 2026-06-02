@@ -11,7 +11,7 @@ import {
 import { formatMd, weekday, todayJst } from '../utils/date.js';
 import { getScoreDiff, getScoreHistory } from '../data/forecastSnapshots.js';
 import { BANDS } from '../score/scoring.js';
-import { renderPopChart, renderWindChart, renderTempChart } from './chart.js';
+import { renderPrecipChart, renderWindChart, renderTempChart } from './chart.js';
 import { suggestOutfit } from './outfit.js';
 import { getDaySchedule } from '../data/showSchedule.js';
 import { latestOperation } from '../data/operationLog.js';
@@ -243,8 +243,9 @@ function dayOverviewHtml(row, today, warningData = null) {
           `<span class="jma-warn-badge ${w.level === 'advisory' ? 'jw-advisory' : 'jw-warning'}"><span class="material-symbols-rounded" aria-hidden="true">${WARN_ICON[w.level] || 'info'}</span>${esc(w.label)}</span>`,
       )
       .join('');
+    // §0.59.1 : 発表日時は年を省き「M/D HH:MM」形式に短縮 (例 5/28 11:10)。
     const rd = warningData.reportDatetime
-      ? `<span class="ds-warn-time">(${esc(warningData.reportDatetime.slice(0, 16).replace('T', ' '))} 発表)</span>`
+      ? `<span class="ds-warn-time">(${esc(formatMd(warningData.reportDatetime.slice(0, 10)))} ${esc(warningData.reportDatetime.slice(11, 16))} 発表)</span>`
       : '';
     warnHtml = `<p class="ds-line ds-warn"><span class="ds-key">警報 ・ 注意報</span><span class="ds-val"><span class="jw-source">気象庁</span>${badges}${rd}</span></p>`;
   }
@@ -428,8 +429,8 @@ function detailPanelHtml(row, park, warningData = null) {
     </div>
     <div class="detail-charts">
       <div class="detail-section">
-        <h4><span class="material-symbols-rounded" aria-hidden="true">water_drop</span>降水確率 (時系列)</h4>
-        <div class="chart-box"><div style="position:relative;height:200px"><canvas data-chart="pop"></canvas></div></div>
+        <h4><span class="material-symbols-rounded" aria-hidden="true">water_drop</span>降水量 (時系列)</h4>
+        <div class="chart-box"><div style="position:relative;height:200px"><canvas data-chart="precip"></canvas></div></div>
       </div>
       <div class="detail-section">
         <h4><span class="material-symbols-rounded" aria-hidden="true">air</span>風速 (時系列)</h4>
@@ -590,7 +591,7 @@ export function renderTable(els, rows, state, sources, sourceStatus, handlers, w
     main.setAttribute('aria-expanded', 'true');
 
     const forecasts = Object.values(row.forecasts).filter(Boolean);
-    renderPopChart(detail.querySelector('[data-chart="pop"]'), forecasts, state.park, date);
+    renderPrecipChart(detail.querySelector('[data-chart="precip"]'), forecasts, state.park, date);
     renderWindChart(detail.querySelector('[data-chart="wind"]'), forecasts, state.park, date);
     renderTempChart(detail.querySelector('[data-chart="temp"]'), forecasts, state.park, date);
 
