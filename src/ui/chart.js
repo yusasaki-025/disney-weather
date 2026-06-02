@@ -10,7 +10,7 @@ import { allShowMarkers } from '../data/showSchedule.js';
 const METRIC_COLOR = {
   pop: '#4A90D2', // 降水確率 = 青
   precip: '#4A90D2', // §0.59.2 : 降水量 = 青 (降水確率と同系)
-  wind: '#2E7D32', // §0.44.5 : 風速 = 緑 (降水の青と単軸で区別)
+  wind: '#00897B', // §0.60.D : 風速 = 青緑 (teal)。BEST スコアの緑 #2E7D32 と混同しないよう別トーンに
   temp: '#D24A4A', // 気温 = 赤
   feelsLike: '#E89A3C', // 体感 = 橙
 };

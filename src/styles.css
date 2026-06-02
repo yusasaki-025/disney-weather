@@ -1229,7 +1229,7 @@ section {
      SYMBOLS はインライン background、こちらは「(要確認)」赤 ・ 警告橙等のテキスト/装飾色に使う。 */
   --score-best: #2e7d32;
   --score-good: #66bb6a;
-  --score-ok: #cddc39;
+  --score-ok: #c0ca33;
   --score-fair: #ffa726;
   --score-ng: #e53935;
   /* 後方互換エイリアス (既存 var(--score-bad)/(--score-fair) 参照を 5 段階値に揃える) */

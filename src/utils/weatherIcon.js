@@ -5,7 +5,7 @@ import { normalizeWeatherText } from './weatherText.js';
 
 export function getWeatherIcon(weatherText) {
   const t = weatherText || '';
-  if (t.includes('雷')) return { name: 'bolt', color: '#9B59B6' };
+  if (t.includes('雷')) return { name: 'bolt', color: '#FBC02D' }; // §0.60.D : 紫→黄系 (天気アイコン群から浮かないよう警戒色に)
   if (t.includes('雪')) return { name: 'ac_unit', color: '#3A8AB8' };
   if (t.includes('大雨') || t.includes('暴風')) return { name: 'thunderstorm', color: '#2C4D8E' };
   if (t.includes('雨')) return { name: 'rainy', color: '#3F6FAE' };

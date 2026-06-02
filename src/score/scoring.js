@@ -51,7 +51,7 @@ export function weightedMean(forecasts, key, category) {
 export const SYMBOLS = [
   { min: 90, key: 'best', label: 'BEST', color: '#2E7D32', icon: 'star' },
   { min: 75, key: 'good', label: 'GOOD', color: '#66BB6A', icon: 'check_circle' },
-  { min: 60, key: 'ok', label: 'OK', color: '#CDDC39', icon: 'check' },
+  { min: 60, key: 'ok', label: 'OK', color: '#C0CA33', icon: 'check' },
   { min: 40, key: 'fair', label: 'FAIR', color: '#FFA726', icon: 'warning' },
   { min: -Infinity, key: 'ng', label: 'NG', color: '#E53935', icon: 'block' },
 ];
