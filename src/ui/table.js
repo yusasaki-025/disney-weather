@@ -292,7 +292,8 @@ function dayClimateHtml(row, today, warningData = null) {
     const precipTxt = m.precipRange ? ` / 雨量 ${rng(m.precipRange, 1)} mm/h` : '';
     rows.push(dcRow('umbrella', '雨', `確率 ${rng(m.popRange)}%${precipTxt}`));
   }
-  if (m.wbgtRange) rows.push(dcRow('thermostat', '熱 (WBGT)', rng(m.wbgtRange)));
+  // §0.64.1 : ラベル末尾カッコ (WBGT) は metric-suffix で縮小 (§0.56.4 と統一)。
+  if (m.wbgtRange) rows.push(dcRow('thermostat', '熱 <span class="metric-suffix">(WBGT)</span>', rng(m.wbgtRange)));
   // 天気 (複合アイコン + 気温レンジ)
   const f =
     row.forecasts.jma || row.forecasts['open-meteo'] || Object.values(row.forecasts).filter(Boolean)[0];
