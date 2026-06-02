@@ -60,24 +60,26 @@ function expandShows(shows) {
 //   もう片方に存在すれば自動補完する (§0.44.11 のデータ依存対応を再発防止ロジック化)。
 const SHARED_SHOWS = [/スカイ[・･]フル[・･]オブ[・･]カラーズ/];
 
-// §0.61 : 同日 ・ 他パークの official データから、共通ショーで当パークに欠けているものを補完する。
-//   当パークが official のときのみ (fallback の日には注入しない)。show は他パークのエントリを複製。
+// §0.61/§0.64.2 : 純関数版。展開済み shows に、他パークの「生」ショー (otherRawShows) から
+//   共通ショー (SHARED_SHOWS) で欠けているものを補完して返す。重複ガード付き。テスト可能。
+export function mergeSharedShows(shows, otherRawShows) {
+  if (!Array.isArray(otherRawShows) || !otherRawShows.length) return shows;
+  const out = shows.slice();
+  for (const re of SHARED_SHOWS) {
+    if (out.some((s) => re.test(s.name))) continue; // 当パークに既にある
+    for (const s of otherRawShows) {
+      if (re.test(s.name) && !out.some((o) => o.name === s.name)) out.push(...expandShows([s]));
+    }
+  }
+  return out;
+}
+
+// §0.61 : 同日 ・ 他パークの official データから共通ショーを補完 (当パークが official のときのみ)。
 function injectSharedShows(date, park, shows) {
   const ym = (date || '').slice(0, 7);
   const otherPark = park === 'TDL' ? 'TDS' : 'TDL';
   const otherDay = MONTHLY[ym]?.days?.[date]?.[otherPark];
-  if (!otherDay || !Array.isArray(otherDay.shows)) return shows;
-  const has = (name) => shows.some((s) => s.name === name);
-  const out = shows.slice();
-  for (const re of SHARED_SHOWS) {
-    if (out.some((s) => re.test(s.name))) continue; // 当パークに既にある
-    const fromOther = otherDay.shows.filter((s) => re.test(s.name));
-    for (const s of fromOther) {
-      if (has(s.name)) continue;
-      out.push(...expandShows([s]));
-    }
-  }
-  return out;
+  return mergeSharedShows(shows, otherDay?.shows);
 }
 
 // その日 ・ パークのショー配列を返す。{ shows, source: 'official' | 'fallback' }。
