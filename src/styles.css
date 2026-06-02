@@ -2,29 +2,9 @@
    配色 ・ 記号は §6.3、アクセシビリティは §6.4 に準拠。
    見出し左の縦アクセントバーは使わない (階層は太さ ・ 余白 ・ 色で表現)。 */
 
-:root {
-  --bg: #f4f6f9;
-  --surface: #ffffff;
-  --surface-2: #f0f3f7;
-  --border: #dde3ea;
-  --text: #1d2733;
-  --text-sub: #5a6675;
-  --text-mute: #8a93a0;
-  --accent: #2f6fb0;
-  --accent-dark: #245a90;
-  --ok-green: #2e7d32;
-
-  --score-excellent: #2d8f3e;
-  --score-good: #88c057;
-  --score-fair: #f2a93b;
-  --score-bad: #d24a4a;
-
-  --risk-bg: #fdecec;
-  --warn-bg: #fef6e7;
-
-  --radius: 12px;
-  --shadow: 0 1px 3px rgba(20, 30, 45, 0.08), 0 4px 12px rgba(20, 30, 45, 0.05);
-}
+/* §0.60.A : 旧 §6.3 配色の :root はここにあったが、§0.6.10 TDR トーン (下部の :root) と
+   2 重定義で値が食い違い後勝ちで死蔵していたため削除。色トークンは TDR トーン側に一本化。
+   L5 固有だった --text-mute / --ok-green は TDR トーン側へ移設済み。 */
 
 * {
   box-sizing: border-box;
@@ -1237,16 +1217,24 @@ section {
   --border: #d8e1ec;
   --text: #1a2740;
   --text-sub: #5a6b85;
+  --text-mute: #8a93a0;
+  --ok-green: #2e7d32;
   --brand-blue: #1f4fa3;
   --brand-blue-dark: #163a7a;
   --brand-pink: #e85d9a;
   --brand-gold: #e8b54d;
   --accent: #1f4fa3;
   --accent-dark: #163a7a;
-  --score-excellent: #2e9e4f;
-  --score-good: #8fc861;
-  --score-fair: #f0a93c;
-  --score-bad: #e0544e;
+  /* §0.60.A : スコア色は scoring.js の SYMBOLS (5 段階 BEST/GOOD/OK/FAIR/NG) と同値に保つ。
+     SYMBOLS はインライン background、こちらは「(要確認)」赤 ・ 警告橙等のテキスト/装飾色に使う。 */
+  --score-best: #2e7d32;
+  --score-good: #66bb6a;
+  --score-ok: #cddc39;
+  --score-fair: #ffa726;
+  --score-ng: #e53935;
+  /* 後方互換エイリアス (既存 var(--score-bad)/(--score-fair) 参照を 5 段階値に揃える) */
+  --score-bad: #e53935;
+  --score-excellent: #2e7d32;
   --warn-bg: #fef4e2;
   --risk-bg: #fdeceb;
   --row-hover: #eef3f9;
