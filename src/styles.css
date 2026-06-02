@@ -1029,6 +1029,17 @@ section {
   font-weight: 700;
   font-size: var(--fs-sm);
 }
+/* §0.63.1 : 「(新しいタブ)」は PC では小さめ補足 ・ スマホでは非表示 (open_in_new アイコンで代替) */
+.nowcast-newtab {
+  font-size: 0.85em;
+  font-weight: 400;
+  color: var(--text-sub);
+}
+@media (max-width: 767px) {
+  .nowcast-newtab {
+    display: none;
+  }
+}
 
 .nowcast-sub {
   font-size: var(--fs-xs);
@@ -2671,6 +2682,75 @@ button.extreme-warn {
    各行とも同じ左端から開始する。 */
 .day-summary {
   text-align: left;
+}
+/* §0.63.2 : 「この日の概要」を解説テキストに */
+.day-summary-text {
+  margin: 0;
+  font-size: var(--fs-sm);
+  line-height: 1.6;
+  color: var(--text);
+}
+.ds-check-note {
+  margin: 6px 0 0;
+  font-size: var(--fs-xs);
+  color: var(--text-sub);
+}
+/* §0.63.3 : 「この日の気候」(アイコン + ラベル + 値) */
+.day-climate {
+  text-align: left;
+}
+.day-climate .dc-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin: 0 0 6px;
+  font-size: var(--fs-sm);
+  line-height: 1.5;
+}
+.day-climate .dc-icon {
+  flex: 0 0 auto;
+  font-size: var(--fs-lg);
+  color: var(--accent);
+  align-self: center;
+}
+.day-climate .dc-label {
+  flex: 0 0 auto;
+  min-width: 5em;
+  font-weight: 700;
+  color: var(--text-sub);
+}
+.day-climate .dc-val {
+  flex: 1;
+}
+.day-climate .dc-time {
+  font-size: var(--fs-2xs);
+  color: var(--text-sub);
+}
+.day-climate .dc-val .ds-wicon {
+  font-size: var(--fs-lg);
+  vertical-align: -3px;
+  margin-right: 2px;
+}
+/* §0.63.4 : スコアセクションの「スコア理由」行 + 「時間帯別」サブ見出し */
+.score-reason-line {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 6px;
+  margin: 10px 0 6px;
+  font-size: var(--fs-sm);
+  line-height: 1.5;
+  text-align: left;
+}
+.score-reason-line .srl-key {
+  font-weight: 700;
+  color: var(--text-sub);
+}
+.subscore-subhead {
+  margin: 8px 0 6px;
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  color: var(--text-sub);
+  text-align: center;
 }
 .day-summary .ds-line {
   display: flex;

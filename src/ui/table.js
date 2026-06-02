@@ -18,6 +18,7 @@ import { latestOperation } from '../data/operationLog.js';
 import { getCancelProbability } from '../score/cancelProbability.js';
 import { extremeWarning } from '../score/extremeWarning.js';
 import { getScoreReason } from '../score/scoreReason.js';
+import { daySummary } from '../score/daySummary.js';
 import { showRiskInfo } from '../score/showRisk.js';
 import { getAttractionClosures } from '../score/attractionForecast.js';
 import { isWeatherless, isSeasonal } from '../data/show-thresholds.js';
@@ -228,14 +229,48 @@ function attractionHtml(park, gust) {
       </div>`;
 }
 
-// §0.41.5 : 「この日の概要」セクション。スコア理由 (§0.37.10) ・ (要確認) の理由 ・ 天気概況を
-//           詳細パネル冒頭に集約 (カード上の score-reason は撤去し、ここに一本化)。
-function dayOverviewHtml(row, today, warningData = null) {
+// §0.63.2 : 「この日の概要」を数行の解説テキストに専念させる (データ羅列は「この日の気候」へ分離)。
+function daySummaryHtml(row, today, warningData = null) {
   const m = row.eval.metrics;
-  const reason = getScoreReason(m, row.eval.badges);
-  // §0.44.2 : 気象庁の警報 ・ 注意報 (現在発表中 ・ 当日のみ) を「この日の概要」の冒頭に集約する。
-  //           カード折りたたみ時のバッジ (renderTodayWarning) は当日 ・ 翌日の警告として現状維持。
-  let warnHtml = '';
+  const f =
+    row.forecasts.jma || row.forecasts['open-meteo'] || Object.values(row.forecasts).filter(Boolean)[0];
+  const weather = f ? normalizeWeatherText(f.weatherText) : '';
+  const drizzle = Object.values(row.forecasts).filter(Boolean).some((fc) => /霧雨/.test(fc.weatherText || ''));
+  // 警報名 (当日のみ ・ 解説文に織り込む)
+  let warningLabel = '';
+  if (row.date === today && warningData && warningData.warnings && warningData.warnings.length) {
+    warningLabel = warningData.warnings.map((w) => w.label).join(' ・ ');
+  }
+  const text = daySummary({ weather, warningLabel, badges: row.eval.badges, drizzle });
+  // (要確認) : 単独ソースの極端値 + 6 日先以降の予報誤差
+  const checks = [];
+  const precipMaxHourly = Math.max(
+    0,
+    ...Object.values(row.forecasts)
+      .filter(Boolean)
+      .flatMap((fc) => (fc.hourly || []).map((h) => h.precip ?? 0)),
+  );
+  const ex = extremeWarning({ gustMax: m.gustMax, precipMaxHourly });
+  if (ex) checks.push(ex.title || ex.text);
+  const daysAhead = Math.round((new Date(row.date) - new Date(today)) / 86400000);
+  if (daysAhead >= 6) checks.push('6 日先以降は予報の誤差が大きめ ・ 当日朝に再確認を');
+  const checkHtml = checks.length
+    ? `<p class="ds-check-note">(要確認 : ${esc(checks.join(' ・ '))})</p>`
+    : '';
+  return `<div class="detail-section day-summary js-day-summary">
+        <h4><span class="material-symbols-rounded" aria-hidden="true">summarize</span>この日の概要</h4>
+        <p class="day-summary-text">${esc(text)}</p>
+        ${checkHtml}
+      </div>`;
+}
+
+// §0.63.3 : 「この日の気候」セクション。警報 ・ 風 ・ 雨 ・ 熱 (レンジ) ・ 天気をアイコン付きで一覧。
+function dayClimateHtml(row, today, warningData = null) {
+  const m = row.eval.metrics;
+  const rows = [];
+  const dcRow = (icon, label, val) =>
+    `<div class="dc-row"><span class="material-symbols-rounded dc-icon" aria-hidden="true">${icon}</span><span class="dc-label">${label}</span><span class="dc-val">${val}</span></div>`;
+  // 警報 ・ 注意報 (当日のみ)
   if (row.date === today && warningData && warningData.warnings && warningData.warnings.length) {
     const badges = warningData.warnings
       .map(
@@ -243,70 +278,37 @@ function dayOverviewHtml(row, today, warningData = null) {
           `<span class="jma-warn-badge ${w.level === 'advisory' ? 'jw-advisory' : 'jw-warning'}"><span class="material-symbols-rounded" aria-hidden="true">${WARN_ICON[w.level] || 'info'}</span>${esc(w.label)}</span>`,
       )
       .join('');
-    // §0.59.1 : 発表日時は年を省き「M/D HH:MM」形式に短縮 (例 5/28 11:10)。
     const rd = warningData.reportDatetime
-      ? `<span class="ds-warn-time">(${esc(formatMd(warningData.reportDatetime.slice(0, 10)))} ${esc(warningData.reportDatetime.slice(11, 16))} 発表)</span>`
+      ? ` <span class="dc-time">(${esc(formatMd(warningData.reportDatetime.slice(0, 10)))} ${esc(warningData.reportDatetime.slice(11, 16))} 発表)</span>`
       : '';
-    warnHtml = `<p class="ds-line ds-warn"><span class="ds-key">警報 ・ 注意報</span><span class="ds-val"><span class="jw-source">気象庁</span>${badges}${rd}</span></p>`;
+    rows.push(dcRow('warning', '警報 ・ 注意報', `<span class="jw-source">気象庁</span>${badges}${rd}`));
   }
-  // (要確認) の理由 : 単独ソースの極端値 + 6 日先以降の予報誤差
-  const checks = [];
-  const precipMaxHourly = Math.max(
-    0,
-    ...Object.values(row.forecasts)
-      .filter(Boolean)
-      .flatMap((f) => (f.hourly || []).map((h) => h.precip ?? 0)),
-  );
-  const ex = extremeWarning({ gustMax: m.gustMax, precipMaxHourly });
-  if (ex) checks.push(ex.title || ex.text);
-  const daysAhead = Math.round((new Date(row.date) - new Date(today)) / 86400000);
-  if (daysAhead >= 6) checks.push('6 日先以降は予報の誤差が大きめ ・ 当日朝に再確認を');
-  // 天気概況 (主要ソースの天気 + 気温レンジ)
-  const f =
-    row.forecasts.jma || row.forecasts['open-meteo'] || Object.values(row.forecasts).filter(Boolean)[0];
-  const t = (v) => (v != null ? `${Math.round(v)}°` : '—');
-  const overview = f ? `${normalizeWeatherText(f.weatherText)} ・ 最高 ${t(f.tempMax)} / 最低 ${t(f.tempMin)}` : '';
-  // §0.42.3 : 複合天気 (「晴れ、夜曇り、昼前まで霧」等) を「、」分割で複数アイコン並列表示
-  const wIconsHtml = f
-    ? getWeatherIcons(f.weatherText)
-        .map((ic) => `<span class="material-symbols-rounded ds-wicon" style="color:${ic.color}" aria-hidden="true">${ic.name}</span>`)
-        .join('')
-    : '';
-  const parts = [
-    ...(warnHtml ? [warnHtml] : []),
-    `<p class="ds-line"><span class="ds-key">スコア理由</span><span class="score-reason ds-val">${esc(reason)}</span></p>`,
-  ];
-  if (checks.length)
-    parts.push(`<p class="ds-line ds-check"><span class="ds-key">(要確認)</span><span class="ds-val">${esc(checks.join(' ・ '))}</span></p>`);
-  if (overview)
-    parts.push(`<p class="ds-line"><span class="ds-key">天気概況</span><span class="ds-val">${wIconsHtml}${esc(overview)}</span></p>`);
-  // §0.57.1c (Yuka 提案 ・ 根本解決) : 風 ・ 雨 ・ 熱の「最低 〜 最高」レンジ (1 日の振れ幅)。
-  //   カード上はショー時刻ピンポイント値 (ShowWindow) なので、レンジを併記することで
-  //   「カード値 vs スコア理由 vs 時刻別」の食い違いを「幅の中」として理解できるようにする。
   const rng = (r, digits = 0) => (r ? `${fmtNum(r.min, digits)} 〜 ${fmtNum(r.max, digits)}` : null);
   if (m.windRange) {
     const gustTxt = m.gustRange ? ` (突風 ${rng(m.gustRange)} m/s)` : '';
-    parts.push(
-      `<p class="ds-line ds-range"><span class="ds-key">風速</span><span class="ds-val">${rng(m.windRange)} m/s${gustTxt}</span></p>`,
-    );
+    rows.push(dcRow('air', '風速', `${rng(m.windRange)} m/s${gustTxt}`));
   }
   if (m.popRange) {
     const precipTxt = m.precipRange ? ` / 雨量 ${rng(m.precipRange, 1)} mm/h` : '';
-    parts.push(
-      `<p class="ds-line ds-range"><span class="ds-key">雨</span><span class="ds-val">確率 ${rng(m.popRange)}%${precipTxt}</span></p>`,
+    rows.push(dcRow('umbrella', '雨', `確率 ${rng(m.popRange)}%${precipTxt}`));
+  }
+  if (m.wbgtRange) rows.push(dcRow('thermostat', '熱 (WBGT)', rng(m.wbgtRange)));
+  // 天気 (複合アイコン + 気温レンジ)
+  const f =
+    row.forecasts.jma || row.forecasts['open-meteo'] || Object.values(row.forecasts).filter(Boolean)[0];
+  if (f) {
+    const wIcons = getWeatherIcons(f.weatherText)
+      .map((ic) => `<span class="material-symbols-rounded ds-wicon" style="color:${ic.color}" aria-hidden="true">${ic.name}</span>`)
+      .join('');
+    const t = (v) => (v != null ? `${Math.round(v)}°` : '—');
+    rows.push(
+      dcRow('wb_sunny', '天気', `${wIcons}${esc(normalizeWeatherText(f.weatherText))} ・ 最高 ${t(f.tempMax)} / 最低 ${t(f.tempMin)}`),
     );
   }
-  if (m.wbgtRange)
-    parts.push(
-      `<p class="ds-line ds-range"><span class="ds-key">熱 (WBGT)</span><span class="ds-val">${rng(m.wbgtRange)}</span></p>`,
-    );
-  // §0.48.3 : 霧雨 (drizzle) は長時間弱雨でショーは原則開催のため、その旨を注釈する。
-  const drizzle = Object.values(row.forecasts).filter(Boolean).some((fc) => /霧雨/.test(fc.weatherText || ''));
-  if (drizzle)
-    parts.push('<p class="ds-line ds-note"><span class="ds-key">霧雨</span><span class="ds-val">弱い雨が続く予報 ・ ショーは原則開催の可能性が高めです</span></p>');
-  return `<div class="detail-section day-summary js-day-summary">
-        <h4><span class="material-symbols-rounded" aria-hidden="true">summarize</span>この日の概要</h4>
-        ${parts.join('\n        ')}
+  if (!rows.length) return '';
+  return `<div class="detail-section day-climate">
+        <h4><span class="material-symbols-rounded" aria-hidden="true">partly_cloudy_day</span>この日の気候</h4>
+        ${rows.join('\n        ')}
       </div>`;
 }
 
@@ -401,12 +403,15 @@ function detailPanelHtml(row, park, warningData = null) {
     )
     .join('');
   // §0.6.8 : 左カラム = 情報、右カラム = グラフ。
+  // §0.63.4 : スコアセクション (日全体 + スコア理由 + 時間帯別)。
+  const scoreReason = getScoreReason(row.eval.metrics, row.eval.badges);
   return `<div class="detail-panel">
     <div class="detail-info">
-      ${dayOverviewHtml(row, todayJst(), warningData)}
-      <div class="detail-section">
-        <h4><span class="material-symbols-rounded" aria-hidden="true">schedule</span>時間帯スコア (昼を最重視)</h4>
-        <div class="subscore-detail">${subscoreHtml(row.eval.subscores, BANDS, row.eval)}</div>
+      ${daySummaryHtml(row, todayJst(), warningData)}
+      ${dayClimateHtml(row, todayJst(), warningData)}
+      <div class="detail-section score-section">
+        <h4><span class="material-symbols-rounded" aria-hidden="true">scoreboard</span>スコア</h4>
+        <div class="subscore-detail">${subscoreHtml(row.eval.subscores, BANDS, row.eval, scoreReason)}</div>
         <p class="subscore-note">各時間帯の快適度 (100点満点)</p>
       </div>
       ${forecastHistoryHtml(row.date, park || 'TDL', row.eval.score)}

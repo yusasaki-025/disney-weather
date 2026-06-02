@@ -60,7 +60,7 @@ export function cancelBadgeHtml(badge) {
 
 // 朝/昼/夜 サブスコア HTML (§0.6.5 : 記号廃止、色付き数値ピル)。
 // 背景色 = スコア帯。数値のみ表示。昼は subscore-main で少し大きく強調。未取得は灰色ピル + "-"。
-export function subscoreHtml(subscores, bands, dayEval = null) {
+export function subscoreHtml(subscores, bands, dayEval = null, reasonText = '') {
   // §0.38-4 : 各時間帯に時刻範囲を併記 (朝 9-12時 等)。昼は重み最大なので「最重視」表示。
   // BANDS は hours (Set) を持つので min〜max+1 で時刻範囲を導出する。
   const range = (b) => {
@@ -90,7 +90,12 @@ export function subscoreHtml(subscores, bands, dayEval = null) {
     }
     return `<span class="subscore-pill${main}" data-level="${ss.symbol.key}" style="background:${ss.symbol.color}">${labelHtml(b)}<span class="material-symbols-rounded" aria-hidden="true">${ss.symbol.icon}</span><span class="value">${ss.score}<span class="unit">点</span></span></span>`;
   });
-  return `<div class="subscore-block">${dayHtml}<span class="subscore-group" role="img" aria-label="${esc(ariaParts.join('、'))}">${cells.join('')}</span></div>`;
+  // §0.63.4 : 日全体 → スコア理由 → 「時間帯別」サブ見出し → 朝昼夜 の順で内訳を明確化。
+  const reasonHtml = reasonText
+    ? `<p class="score-reason-line"><span class="srl-key">スコア理由</span><span class="srl-val">${esc(reasonText)}</span></p>`
+    : '';
+  const subhead = '<p class="subscore-subhead">時間帯別 (昼を最重視)</p>';
+  return `<div class="subscore-block">${dayHtml}${reasonHtml}${subhead}<span class="subscore-group" role="img" aria-label="${esc(ariaParts.join('、'))}">${cells.join('')}</span></div>`;
 }
 
 // スコアの読み上げ用ラベル (記号なし)
