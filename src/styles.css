@@ -799,6 +799,18 @@ section {
   color: var(--text);
   font-style: normal;
 }
+/* §0.64.2+ : PC は正式名 (sn-full)、スマホは「東京ディズニーランド･」等を省いた短縮名 (sn-short)。 */
+.show-name .sn-short {
+  display: none;
+}
+@media (max-width: 767px) {
+  .show-name .sn-full {
+    display: none;
+  }
+  .show-name .sn-short {
+    display: inline;
+  }
+}
 /* §0.46.5 : ショー開催時刻を太字 (ショー名 normal との区別)。tabular-nums で桁揃え。 */
 .show-times,
 .show-item.priority-low .show-times,

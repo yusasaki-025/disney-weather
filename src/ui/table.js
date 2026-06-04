@@ -377,7 +377,14 @@ function detailPanelHtml(row, park, warningData = null) {
         // §0.44.10 : 時刻を行頭に ・ ショー名 ・ タグを後続。
         // §0.44.13 : 複数公演は 1 行目=全時刻 ・ 2 行目=ショー名 + タグ。単独公演は時刻先頭の 1 行。
         const timesHtml = timesText ? `<span class="show-times">${timesText}</span>` : '';
-        const nameTagsHtml = `<span class="show-name">${esc(g.name)}</span>${tagsHtml}`;
+        // §0.64.2+ : スマホでは冗長な「東京ディズニーランド･ / 東京ディズニーシー･」接頭辞を省略 (名前が長いため)。
+        //   PC は正式名、スマホは短縮名を CSS で出し分け (sn-full / sn-short)。
+        const shortName = g.name.replace(/^東京ディズニー(?:ランド|シー)[・･]/, '');
+        const nameInner =
+          shortName !== g.name
+            ? `<span class="sn-full">${esc(g.name)}</span><span class="sn-short">${esc(shortName)}</span>`
+            : esc(g.name);
+        const nameTagsHtml = `<span class="show-name">${nameInner}</span>${tagsHtml}`;
         const summary = multiShow
           ? `<div class="show-times-line">${timesHtml}</div><div class="show-name-line">${nameTagsHtml}</div>`
           : `${timesHtml}${nameTagsHtml}`;
