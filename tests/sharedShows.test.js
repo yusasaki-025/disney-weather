@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { mergeSharedShows } from '../src/data/showSchedule.js';
+import { mergeSharedShows, FALLBACK_SCHEDULE } from '../src/data/showSchedule.js';
 
 // §0.64.2 : 両パーク共通ショー (スカイ ・ フル ・ オブ ・ カラーズ) が両パークに必ず出ることを保証。
 const sky = { name: 'スカイ･フル･オブ･カラーズ', times: ['20:30'], priority: 'low', kind: 'fireworks', tags: [] };
@@ -28,5 +28,14 @@ describe('mergeSharedShows (§0.64.2 両パーク共通ショー補完)', () => 
   it('全角 ・ 半角どちらの中黒でも共通ショーとして判定', () => {
     const full = { name: 'スカイ・フル・オブ・カラーズ', times: ['20:30'], priority: 'low' };
     expect(mergeSharedShows([], [full]).some((s) => s.name.includes('スカイ'))).toBe(true);
+  });
+});
+
+describe('FALLBACK_SCHEDULE (§0.64.2 official 未取得日もスカイを表示)', () => {
+  it('TDL の fallback にスカイ・フル・オブ・カラーズが含まれる', () => {
+    expect(FALLBACK_SCHEDULE.TDL.some((s) => s.name.includes('スカイ'))).toBe(true);
+  });
+  it('TDS の fallback にもスカイ・フル・オブ・カラーズが含まれる', () => {
+    expect(FALLBACK_SCHEDULE.TDS.some((s) => s.name.includes('スカイ'))).toBe(true);
   });
 });
