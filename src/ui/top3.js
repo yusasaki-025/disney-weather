@@ -1,5 +1,6 @@
 // 推奨日 TOP3 ハイライト (§3.7)。
 import { dateLabel, esc, fmtNum } from './components.js';
+import { showWindowOrMax } from '../utils/metrics.js';
 
 // ルールベースの「行くべき理由」自然文。
 // window.cowork.askClaude があれば後から非同期で差し替える (任意強化)。
@@ -11,7 +12,7 @@ export function buildReason(row) {
   else if (wind.level === 1) parts.push('やや風あり');
   else parts.push('風が強め');
 
-  const pop = m.popShowWindow != null ? m.popShowWindow : m.popMax;
+  const pop = showWindowOrMax(m, 'pop');
   if (pop != null) {
     if (pop < 20) parts.push('降水確率低め');
     else if (pop < 50) parts.push(`降水確率${Math.round(pop)}%`);
@@ -45,8 +46,8 @@ export function renderTop3(container, rows, { onSelect }) {
   container.innerHTML = ranked
     .map((row, i) => {
       const m = row.eval.metrics;
-      const gust = m.gustShowWindow != null ? m.gustShowWindow : m.gustMax;
-      const pop = m.popShowWindow != null ? m.popShowWindow : m.popMax;
+      const gust = showWindowOrMax(m, 'gust');
+      const pop = showWindowOrMax(m, 'pop');
       const wbgtPart =
         m.wbgtMax != null && m.wbgtMax >= 25
           ? `<span>WBGT ${fmtNum(m.wbgtMax, 1)}</span>` // §0.65.1 : 小数 1 桁

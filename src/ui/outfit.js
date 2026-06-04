@@ -3,6 +3,8 @@
 // wbgtShowWindow/wbgtMax, uvMax, gustShowWindow/gustMax, feelsLikeMax/Min)。
 // 返り値は {icon, text}[] (table.js が <li> 化)。重複削除 + 8件上限。
 
+import { showWindowOrMax } from '../utils/metrics.js';
+
 // §0.62 : 各アイテムに reason (理由ラベル) + cat (色カテゴリ : rain/heat/cold/uv/wind/sun/show) を付与。
 // 雨対策 (pop% + 日合計 precipSum mm ベース。時間 mm/h は metrics に無いため日合計で代替)
 function rainGear(pop, precipSum) {
@@ -109,9 +111,9 @@ function tempDiffGear(feelsMax, feelsMin) {
 
 // メイン : metrics から服装サジェストの配列を返す (重複削除 + 8件上限)
 export function suggestOutfit(m) {
-  const pop = m.popShowWindow != null ? m.popShowWindow : m.popMax;
-  const wbgt = m.wbgtShowWindow != null ? m.wbgtShowWindow : m.wbgtMax;
-  const gust = m.gustShowWindow != null ? m.gustShowWindow : m.gustMax;
+  const pop = showWindowOrMax(m, 'pop');
+  const wbgt = showWindowOrMax(m, 'wbgt');
+  const gust = showWindowOrMax(m, 'gust');
   const raw = [
     ...rainGear(pop, m.precipSum),
     ...clothingFor(m.tempMax),

@@ -416,7 +416,6 @@ section {
 .forecast-table tbody .weather-icon,
 .forecast-table tbody .cat-icon,
 .forecast-table tbody .score-pill,
-.forecast-table tbody .subscore-pill,
 .forecast-table tbody .cancel-badge {
   position: static;
   z-index: auto;
@@ -434,9 +433,6 @@ section {
 .score-pill .material-symbols-rounded {
   font-size: var(--fs-xl);
   margin-right: 2px;
-}
-.subscore-pill .material-symbols-rounded {
-  font-size: var(--fs-sm);
 }
 .legend-pill .material-symbols-rounded {
   font-size: var(--fs-lg);
@@ -561,57 +557,7 @@ section {
   vertical-align: text-bottom;
 }
 
-.subscore-group {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  justify-content: center;
-}
-
-.subscore {
-  display: inline-flex;
-  flex-direction: column;
-  align-items: center;
-  font-size: var(--fs-xs);
-  color: var(--text-sub);
-  line-height: 1.2;
-}
-
-.subscore .time-label {
-  font-size: var(--fs-2xs);
-}
-
-.subscore .symbol {
-  font-size: 15px;
-  font-weight: 700;
-}
-
-/* 昼 = 最重要。枠 ＋ 太字 ＋ 数値併記で強調。 */
-.subscore-main {
-  flex-direction: row;
-  align-items: center;
-  gap: 4px;
-  padding: 3px 8px;
-  border: 1.5px solid var(--accent);
-  border-radius: 8px;
-  background: var(--surface-2);
-}
-
-.subscore-main .time-label {
-  font-size: var(--fs-xs);
-  font-weight: 700;
-  color: var(--text);
-}
-
-.subscore-main .symbol {
-  font-size: 17px;
-}
-
-.subscore-main .value {
-  font-size: var(--fs-sm);
-  font-weight: 700;
-  color: var(--text);
-}
+/* §0.68.C : §0.64.3 で .ss-rows/.ss-row 系に置換され未使用になった旧 subscore-pill/group/main 系を撤去。 */
 
 /* バッジ (風 / 雨 / 熱) */
 .cancel-badge {
@@ -1324,11 +1270,9 @@ h1, h2, h3, h4, .app-title h1 {
   font-family: var(--font-head), -apple-system, 'Hiragino Kaku Gothic ProN', 'Yu Gothic', sans-serif;
 }
 .score-pill .value,
-.subscore-pill .value,
 .metric-cell .value,
 .cat-val,
-.tcolor,
-.sb-src b {
+.tcolor {
   font-family: var(--font-num), var(--font-body), sans-serif;
   font-variant-numeric: tabular-nums;
 }
@@ -1880,10 +1824,6 @@ body {
     font-weight: 600;
   }
 
-  /* 時間帯スコアは中央寄せ */
-  .subscore-group {
-    justify-content: center;
-  }
 }
 
 /* 3. PC でも余白を詰める */
@@ -2598,18 +2538,6 @@ body {
   .cancel-prob {
     font-size: var(--fs-xs);
   }
-}
-
-/* §0.38-4 : 時間帯ピルの時刻範囲 ・ 最重視ラベル */
-.subscore-pill .time-range {
-  display: block;
-  font-size: var(--fs-2xs);
-  opacity: 0.85;
-  font-weight: 400;
-}
-.subscore-pill .time-key {
-  font-size: var(--fs-2xs);
-  font-weight: 700;
 }
 
 /* §0.38-8 : 熱 (WBGT) 見出しの info アイコン (tooltip は title 属性) */

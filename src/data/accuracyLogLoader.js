@@ -3,6 +3,7 @@
 // RMS (二乗平均平方根誤差) と bias (符号付き平均誤差 = 予報 - 実測) を算出する。
 
 import logJson from './accuracy-log.json';
+import { round1 } from '../utils/metrics.js';
 
 const METRICS = [
   { key: 'wind', actual: 'actualMaxWind', predicted: 'predictedMaxWind', error: 'windError', label: '風速', unit: 'm/s' },
@@ -21,7 +22,6 @@ export function getAccuracyLog() {
 
 const rms = (arr) => (arr.length ? Math.sqrt(arr.reduce((s, x) => s + x * x, 0) / arr.length) : null);
 const mean = (arr) => (arr.length ? arr.reduce((s, x) => s + x, 0) / arr.length : null);
-const round1 = (x) => (x == null ? null : Math.round(x * 10) / 10);
 
 // ソース別 ・ 指標別の RMS / bias / サンプル数を集計。
 // 戻り値: { [src]: { [metricKey]: { rms, bias, n } } }

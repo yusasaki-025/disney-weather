@@ -14,7 +14,7 @@ export function showRiskInfo(forecasts, times) {
   );
   if (hours.size === 0) return null;
 
-  // §0.51.4 : decimals で丸め桁を指定。風速は小数 1 桁、WBGT は整数。
+  // §0.51.4 / §0.65.1 : decimals で丸め桁を指定。風速 ・ WBGT とも小数 1 桁で呼ぶ。
   const meanAt = (field, decimals = 0) => {
     const vals = [];
     for (const f of forecasts) {

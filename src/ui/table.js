@@ -9,6 +9,7 @@ import {
   scoreAria,
 } from './components.js';
 import { formatMd, weekday, todayJst } from '../utils/date.js';
+import { showWindowOrMax } from '../utils/metrics.js';
 import { getScoreDiff, getScoreHistory } from '../data/forecastSnapshots.js';
 import { BANDS } from '../score/scoring.js';
 import { renderPrecipChart, renderWindChart, renderTempChart } from './chart.js';
@@ -321,7 +322,7 @@ function detailPanelHtml(row, park, warningData = null) {
   // §0.26 : 同名ショーを 1 行に集約 (times を " / " 連結)。内部用語 (メイン算定窓/補助/参考) は
   //          表示せず、priority は CSS class (.priority-high/-medium/-low) で視覚区別する。
   // §0.31 : 中止確率に使う予報 max 風速 (ショー窓優先、無ければ日最大)
-  const predWind = row.eval.metrics.gustShowWindow ?? row.eval.metrics.gustMax;
+  const predWind = showWindowOrMax(row.eval.metrics, 'gust');
   const showRowsFor = (p) => {
     const order = [];
     const byName = new Map();
@@ -435,7 +436,7 @@ function detailPanelHtml(row, park, warningData = null) {
         <ul class="show-list" data-park-shows="TDS" hidden>${showRowsFor('TDS')}</ul>
       </div>
       ${operationHtml(row.date)}
-      ${attractionHtml(park || 'TDL', row.eval.metrics.gustShowWindow ?? row.eval.metrics.gustMax)}
+      ${attractionHtml(park || 'TDL', showWindowOrMax(row.eval.metrics, 'gust'))}
       <div class="detail-section">
         <h4><span class="material-symbols-rounded" aria-hidden="true">checkroom</span>持ち物 ･ 服装</h4>
         <ul class="outfit-list">${outfit}</ul>
@@ -497,8 +498,8 @@ export function renderTable(els, rows, state, sources, sourceStatus, handlers, w
       const groupStart = dt.isOff && !prevOff && state.sortBy === 'date';
       // 風 / 雨 / 熱の実数値 (ショー窓優先) (§0.5.2)
       const m = row.eval.metrics;
-      const gust = m.gustShowWindow != null ? m.gustShowWindow : m.gustMax;
-      const pop = m.popShowWindow != null ? m.popShowWindow : m.popMax;
+      const gust = showWindowOrMax(m, 'gust');
+      const pop = showWindowOrMax(m, 'pop');
       // §0.51.4 : 風速は小数 1 桁表示 (7.6 / 8.2 m/s)。8m/s 境界で「同じ 8 なのにバッジ違う」矛盾を解消。
       // §0.56.1 : 数字 + 単位を .vg でグループ化し、文字大でも「数字↔単位」は割れず「% ↔ mm/h」間で改行する。
       const windVal = gust != null ? `<span class="vg">${fmtNum(gust, 1)}<span class="unit">m/s</span></span>` : '—';
@@ -511,7 +512,7 @@ export function renderTable(els, rows, state, sources, sourceStatus, handlers, w
       // セルは数値のみ (列ヘッダーが「熱 (WBGT)」なので WBGT/(推定) は冗長)。詳細は title で補助。
       // §0.57.1 : バッジ判定 ・ スコア理由と同じ wbgtShowWindow (ショー時刻帯) に統一し、
       // 「熱バなのに数値が低い」食い違いを解消 (hourly が無い日は wbgtMax にフォールバック)。
-      const wbgt = m.wbgtShowWindow != null ? m.wbgtShowWindow : m.wbgtMax;
+      const wbgt = showWindowOrMax(m, 'wbgt');
       const wbgtVal = wbgt != null ? `${fmtNum(wbgt, 1)}` : '—'; // §0.65.1 : 小数 1 桁
       // §0.13.2 : スコアは平均ベース。ピーク (最大) は補助ツールチップに表示。
       // §0.65.1 : WBGT のピークも小数 1 桁 (digits=1)、風速 ・ 雨確率は整数のまま。

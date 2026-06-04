@@ -3,6 +3,7 @@
 // 純関数として実装し、境界値をテストで担保する。
 
 import { mean, maxOf, minOf } from '../utils/units.js';
+import { showWindowOrMax } from '../utils/metrics.js';
 import { showWindowHours } from '../data/showSchedule.js';
 import { DEFAULT_THRESHOLD } from '../data/show-thresholds.js';
 import { computeSourceWeights, weightFor } from './sourceWeight.js';
@@ -327,9 +328,9 @@ export function aggregateMetrics(forecasts, park, date = null) {
 
 // 指標 → 総合スコア ＋ 内訳 (§5.2)
 export function scoreFromMetrics(m, park) {
-  const gust = m.gustShowWindow != null ? m.gustShowWindow : m.gustMax;
-  const pop = m.popShowWindow != null ? m.popShowWindow : m.popMax;
-  const wbgt = m.wbgtShowWindow != null ? m.wbgtShowWindow : m.wbgtMax;
+  const gust = showWindowOrMax(m, 'gust');
+  const pop = showWindowOrMax(m, 'pop');
+  const wbgt = showWindowOrMax(m, 'wbgt');
   const deductions = {
     wind: windDeduction(gust, park),
     // §0.48.2 : 雨減点は時間最大降水量 (mm/h) ベース (日合計 precipSum は使わない)。
@@ -408,9 +409,9 @@ export function evaluateDay(forecasts, park, date = null) {
   const subscores = {};
   for (const b of BANDS) subscores[b.key] = bandSubscore(forecasts, b, park);
 
-  const gustForBadge = metrics.gustShowWindow != null ? metrics.gustShowWindow : metrics.gustMax;
-  const popForBadge = metrics.popShowWindow != null ? metrics.popShowWindow : metrics.popMax;
-  const wbgtForBadge = metrics.wbgtShowWindow != null ? metrics.wbgtShowWindow : metrics.wbgtMax;
+  const gustForBadge = showWindowOrMax(metrics, 'gust');
+  const popForBadge = showWindowOrMax(metrics, 'pop');
+  const wbgtForBadge = showWindowOrMax(metrics, 'wbgt');
   // §0.47.1 : 日全体の風バッジは「一般ショー基準」(windBa 8 / windCancel 11) で判定する。
   //   旧実装は最も厳しいショー (ハーモニー 6m/s) の閾値を使い、6-7m/s で日全体が「風バ」に
   //   過剰判定され 9 割の日が格下げされていた。ショー個別の厳しい閾値は詳細パネル
