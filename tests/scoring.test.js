@@ -544,6 +544,38 @@ describe('evaluateDay (統合)', () => {
     expect(r.score).toBe(80); // warn cap 80
   });
 
+  it('§0.68.A : capped は base (時間帯平均) 基準で判定 ・ base を返す', () => {
+    // 風 9m/s 全時間帯 → bands 85, base 85。warn cap 80 で base から下がる → capped true。
+    const windy = fakeForecast(
+      'open-meteo',
+      { gustMax: 9, popMax: 10, feelsLikeMax: 22, tempMax: 24, uvMax: 3 },
+      [
+        { hour: 10, gust: 9, pop: 10, wind: 7, wbgt: 22 },
+        { hour: 13, gust: 9, pop: 10, wind: 7, wbgt: 22 },
+        { hour: 19, gust: 9, pop: 10, wind: 7, wbgt: 22 },
+      ],
+    );
+    const r1 = evaluateDay([windy], 'TDL');
+    expect(r1.base).toBe(85);
+    expect(r1.score).toBeLessThan(r1.base);
+    expect(r1.capped).toBe(true);
+    expect(r1.capped).toBe(r1.score < r1.base); // 不変条件
+
+    // 全時間帯穏やか → bands 100, base 100, キャップ無し → capped false。
+    const calm = fakeForecast(
+      'open-meteo',
+      { gustMax: 3, popMax: 5, feelsLikeMax: 22, tempMax: 24, uvMax: 3 },
+      [
+        { hour: 10, gust: 3, pop: 5, wind: 2, wbgt: 20 },
+        { hour: 13, gust: 3, pop: 5, wind: 2, wbgt: 20 },
+        { hour: 19, gust: 3, pop: 5, wind: 2, wbgt: 20 },
+      ],
+    );
+    const r2 = evaluateDay([calm], 'TDL');
+    expect(r2.base).toBe(100);
+    expect(r2.capped).toBe(false);
+  });
+
   it('§0.66.2 : いずれかの時間帯が NG なら日 ≤ 59 (FAIR) に制限', () => {
     // 昼が強風 (12m/s) + 強雨 (95%) で NG、朝夜は穏やか → floor guard で日 ≤ 59。
     const om = fakeForecast(

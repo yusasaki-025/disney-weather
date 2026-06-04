@@ -532,7 +532,9 @@ export function renderTable(els, rows, state, sources, sourceStatus, handlers, w
           ['wbgt', ev.badges.wbgt, peakTxt(m.wbgtPeak, '', 1)],
         ].find(([, b]) => `${b.text}` && b.level >= 2 && b.text !== '—');
         const reasonBadge = worstBadge ? `バッジ「${worstBadge[1].text}」${worstBadge[2] ? ` (${worstBadge[2]})` : ''}` : 'バッジ判定';
-        scoreTitle = `平均値スコア ${ev.rawScore} だが ${reasonBadge} により「${ev.symbol.label}」に格下げ`;
+        // §0.68.A (監査 D-1) : §0.66 で日スコアは時間帯加重平均 (base) ベースになったため、
+        //   表示も rawScore (旧 ・ 全要素平均) でなく ev.base を「時間帯平均スコア」として示す。
+        scoreTitle = `時間帯平均スコア ${ev.base} だが ${reasonBadge} により「${ev.symbol.label}」に格下げ`;
       }
 
       const cls = ['row-main', groupStart ? 'holiday-group-start' : ''].filter(Boolean).join(' ');

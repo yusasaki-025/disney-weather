@@ -438,7 +438,10 @@ export function evaluateDay(forecasts, park, date = null) {
   const pCap = popScoreCap(popForBadge, drizzle, metrics.precipMaxHourly);
   const cCap = warnCountCap(badges);
   const score = Math.min(guard.score, pCap, cCap, floorCap);
-  const capped = score < rawScore;
+  // §0.68.A (監査 L-1) : §0.66 で日スコアの基準が rawScore → base (時間帯加重平均) に変わったので、
+  //   「キャップで下がったか」の判定も base と比較する (rawScore 比較だと無関係な日に capped=true になり
+  //    格下げツールチップが誤表示されていた)。
+  const capped = score < base;
 
   // §0.66.4 : §0.42.4 (時間帯 ≦ 日 クランプ) は撤廃。日が時間帯加重平均なので自然に整合し、
   //   時間帯スコアは時刻別の独自値のまま (夜が日より高い等もそのまま表示)。
