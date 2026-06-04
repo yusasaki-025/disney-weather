@@ -429,11 +429,11 @@ function detailPanelHtml(row, park, warningData = null) {
       <div class="detail-section">
         <h4><span class="material-symbols-rounded" aria-hidden="true">theater_comedy</span>ショー ･ パレード${schedBadge}</h4>
         <div class="park-tabs" role="tablist" aria-label="パーク切替">
-          <button class="park-tab active" role="tab" data-park-tab="TDL" type="button">TDL</button>
-          <button class="park-tab" role="tab" data-park-tab="TDS" type="button">TDS</button>
+          <button class="park-tab active" role="tab" aria-selected="true" aria-controls="shows-TDL-${row.date}" id="tab-TDL-${row.date}" data-park-tab="TDL" type="button">TDL</button>
+          <button class="park-tab" role="tab" aria-selected="false" aria-controls="shows-TDS-${row.date}" id="tab-TDS-${row.date}" data-park-tab="TDS" type="button">TDS</button>
         </div>
-        <ul class="show-list" data-park-shows="TDL">${showRowsFor('TDL')}</ul>
-        <ul class="show-list" data-park-shows="TDS" hidden>${showRowsFor('TDS')}</ul>
+        <ul class="show-list" id="shows-TDL-${row.date}" role="tabpanel" aria-labelledby="tab-TDL-${row.date}" data-park-shows="TDL">${showRowsFor('TDL')}</ul>
+        <ul class="show-list" id="shows-TDS-${row.date}" role="tabpanel" aria-labelledby="tab-TDS-${row.date}" data-park-shows="TDS" hidden>${showRowsFor('TDS')}</ul>
       </div>
       ${operationHtml(row.date)}
       ${attractionHtml(park || 'TDL', showWindowOrMax(row.eval.metrics, 'gust'))}
@@ -618,7 +618,12 @@ export function renderTable(els, rows, state, sources, sourceStatus, handlers, w
     detail.querySelectorAll('.park-tab').forEach((tab) => {
       tab.addEventListener('click', () => {
         const p = tab.dataset.parkTab;
-        detail.querySelectorAll('.park-tab').forEach((t) => t.classList.toggle('active', t === tab));
+        // §0.68.F (監査 A-1) : class active に加え aria-selected もトグル (SR が選択中パークを判別できるように)。
+        detail.querySelectorAll('.park-tab').forEach((t) => {
+          const on = t === tab;
+          t.classList.toggle('active', on);
+          t.setAttribute('aria-selected', on ? 'true' : 'false');
+        });
         detail.querySelectorAll('[data-park-shows]').forEach((el) => {
           el.hidden = el.dataset.parkShows !== p;
         });

@@ -82,7 +82,7 @@ export function subscoreHtml(subscores, bands, _dayEval = null, reasonText = '')
     const noonMark = isNoon ? '<span class="ss-row-key">← 最重視</span>' : '';
     const timeHtml = `<span class="ss-row-time">${b.label}<span class="ss-row-range">${range(b)}</span></span>`;
     if (!has) {
-      return `<li class="ss-row${isNoon ? ' ss-row-main' : ''}" data-level="none">${timeHtml}<span class="ss-row-score">-</span><span class="ss-row-badge">データなし</span>${noonMark}</li>`;
+      return `<li class="ss-row${isNoon ? ' ss-row-main' : ''}" data-level="none">${timeHtml}<span class="ss-row-score">—</span><span class="ss-row-badge">データなし</span>${noonMark}</li>`;
     }
     const c = ss.symbol.color;
     return `<li class="ss-row${isNoon ? ' ss-row-main' : ''}" data-level="${ss.symbol.key}">${timeHtml}<span class="ss-row-score" style="color:${c}">${ss.score}</span><span class="ss-row-badge" style="color:${c}"><span class="material-symbols-rounded" aria-hidden="true">${ss.symbol.icon}</span>${esc(ss.symbol.label)}</span>${noonMark}</li>`;
