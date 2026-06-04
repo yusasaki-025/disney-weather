@@ -10,7 +10,7 @@ import { logger } from './utils/logger.js';
 import { fetchJma, SOURCE_ID as JMA } from './data/jma.js';
 import { fetchOpenMeteo, SOURCE_ID as OM } from './data/openMeteo.js';
 import { fetchOpenWeather, SOURCE_ID as OW } from './data/openWeather.js';
-import { fetchEnvWbgt, WBGT_SOURCE } from './data/wbgt.js';
+import { fetchEnvWbgt, mergeEnvWbgt } from './data/wbgt.js';
 import { fetchJmaWarning } from './data/jmaWarning.js';
 import { dayType } from './data/holidays.js';
 import { evaluateDay } from './score/scoring.js';
@@ -75,12 +75,9 @@ function indexByDate(list) {
 function applyEnvWbgt(envWbgt) {
   if (!envWbgt) return;
   const omByDate = rawBySourceDate[OM] || {};
+  // §0.68.E : 日次 wbgtMax だけでなく hourly[].wbgt も環境省実値にマージ (mergeEnvWbgt)。
   for (const [date, info] of Object.entries(envWbgt)) {
-    const f = omByDate[date];
-    if (f && info.wbgtMax != null) {
-      f.wbgtMax = info.wbgtMax;
-      f.wbgtSource = WBGT_SOURCE.ENV_JP;
-    }
+    mergeEnvWbgt(omByDate[date], info);
   }
 }
 

@@ -12,6 +12,29 @@ export const WBGT_SOURCE = {
   DERIVED: 'derived',
 };
 
+// §0.68.E (監査 S-2) : 環境省 WBGT 実値を Open-Meteo forecast にマージする (forecast を破壊的に更新)。
+//   info = { wbgtMax, hourly: [{ hour, wbgt }] } (parseEnvWbgtCsv の 1 日分)。
+//   日次 wbgtMax だけでなく hourly[].wbgt も時刻一致で上書きし wbgtSource を env-jp にする。
+//   showWindow ・ スコア ・ カード表示はすべて hourly 由来なので、これで「環境省」ラベルと実値が一致する
+//   (旧実装は wbgtMax のみ上書きし hourly を捨てていたため、ラベルは環境省でも採点は派生値だった)。
+export function mergeEnvWbgt(forecast, info) {
+  if (!forecast || !info) return;
+  if (info.wbgtMax != null) {
+    forecast.wbgtMax = info.wbgtMax;
+    forecast.wbgtSource = WBGT_SOURCE.ENV_JP;
+  }
+  if (Array.isArray(info.hourly) && info.hourly.length && Array.isArray(forecast.hourly)) {
+    const byHour = new Map(info.hourly.map((h) => [h.hour, h.wbgt]));
+    for (const p of forecast.hourly) {
+      const v = byHour.get(p.hour);
+      if (v != null) {
+        p.wbgt = v;
+        p.wbgtSource = WBGT_SOURCE.ENV_JP;
+      }
+    }
+  }
+}
+
 // 浦安直近の予測値として 44132 (船橋) を採用 (§3.13)。
 export const ENV_WBGT_POINT = '44132';
 const ENV_WBGT_URL = (point) =>

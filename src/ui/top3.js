@@ -48,10 +48,10 @@ export function renderTop3(container, rows, { onSelect }) {
       const m = row.eval.metrics;
       const gust = showWindowOrMax(m, 'gust');
       const pop = showWindowOrMax(m, 'pop');
+      // §0.68.E (監査 D-2) : WBGT もカード ・ 詳細と同じショー窓基準に統一 (旧 wbgtMax で食い違っていた)。
+      const wbgt = showWindowOrMax(m, 'wbgt');
       const wbgtPart =
-        m.wbgtMax != null && m.wbgtMax >= 25
-          ? `<span>WBGT ${fmtNum(m.wbgtMax, 1)}</span>` // §0.65.1 : 小数 1 桁
-          : '';
+        wbgt != null && wbgt >= 25 ? `<span>WBGT ${fmtNum(wbgt, 1)}</span>` : '';
       const sym = row.eval.symbol;
       return `<article class="top3-card" role="button" tabindex="0" data-date="${row.date}"
         aria-label="${esc(dateLabel(row.date))} ${esc(sym.label)} スコア${row.eval.score}">

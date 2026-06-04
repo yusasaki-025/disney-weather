@@ -1,5 +1,35 @@
 import { describe, it, expect, vi, afterEach } from 'vitest';
-import { deriveWbgt, parseEnvWbgtCsv, fetchEnvWbgt } from '../src/data/wbgt.js';
+import { deriveWbgt, parseEnvWbgtCsv, fetchEnvWbgt, mergeEnvWbgt, WBGT_SOURCE } from '../src/data/wbgt.js';
+
+describe('mergeEnvWbgt (§0.68.E 環境省実値を hourly にマージ)', () => {
+  it('日次 wbgtMax と hourly[].wbgt を時刻一致で上書きし source を env-jp に', () => {
+    const f = {
+      wbgtMax: 20,
+      wbgtSource: WBGT_SOURCE.DERIVED,
+      hourly: [
+        { hour: 12, wbgt: 22, gust: 5 },
+        { hour: 13, wbgt: 23, gust: 5 },
+        { hour: 14, wbgt: 24, gust: 5 },
+      ],
+    };
+    mergeEnvWbgt(f, { wbgtMax: 27.4, hourly: [{ hour: 13, wbgt: 26.5 }, { hour: 14, wbgt: 27.4 }] });
+    expect(f.wbgtMax).toBe(27.4);
+    expect(f.wbgtSource).toBe(WBGT_SOURCE.ENV_JP);
+    expect(f.hourly[0].wbgt).toBe(22); // 12時は環境省に無い → 派生値のまま
+    expect(f.hourly[1].wbgt).toBe(26.5); // 13時 上書き
+    expect(f.hourly[1].wbgtSource).toBe(WBGT_SOURCE.ENV_JP);
+    expect(f.hourly[2].wbgt).toBe(27.4);
+    expect(f.hourly[0].gust).toBe(5); // 他フィールドは不変
+  });
+
+  it('forecast / info が無い ・ hourly 無しでも安全', () => {
+    expect(() => mergeEnvWbgt(null, { wbgtMax: 25 })).not.toThrow();
+    const f = { wbgtMax: 20, hourly: [{ hour: 12, wbgt: 22 }] };
+    mergeEnvWbgt(f, { wbgtMax: 26 }); // hourly 無し
+    expect(f.wbgtMax).toBe(26);
+    expect(f.hourly[0].wbgt).toBe(22); // hourly は不変
+  });
+});
 
 describe('deriveWbgt (§3.11 簡易式)', () => {
   it('欠損は null', () => {
