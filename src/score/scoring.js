@@ -344,28 +344,32 @@ export function scoreFromMetrics(m, park) {
 }
 
 // --- 時間帯サブスコア (§3.3) ---
+// §0.66.1 : 重みは Yuka 確定値 (朝 1.5 / 昼 2.0 / 夜 1.0)。昼を最重視しつつ朝 ・ 夜も無視しない。
+//   日スコアはこの重みでの時間帯加重平均で算出する (weightedBandTotal)。
 export const BANDS = [
-  { key: 'morning', label: '朝', hours: new Set([9, 10, 11]), weight: 0.5 },
+  { key: 'morning', label: '朝', hours: new Set([9, 10, 11]), weight: 1.5 },
   { key: 'noon', label: '昼', hours: new Set([12, 13, 14, 15]), weight: 2.0 },
-  { key: 'night', label: '夜', hours: new Set([18, 19, 20]), weight: 0.3 },
+  { key: 'night', label: '夜', hours: new Set([18, 19, 20]), weight: 1.0 },
 ];
 
-// 時間帯ごとのミニスコア (風 ・ 雨 ・ 熱の減点のみで算定)
+// 時間帯ごとのミニスコア (風 ・ 雨 ・ 熱の減点のみで算定)。
+// §0.66.3 : スコア理由用に主因 (最大減点要素) も返す (風 / 雨 / 暑さ / null)。
 export function bandSubscore(forecasts, band, park) {
   const gust = windowMax(forecasts, band.hours, 'gust');
   const pop = windowMax(forecasts, band.hours, 'pop');
   const wbgt = windowMax(forecasts, band.hours, 'wbgt');
   const wind = windowMax(forecasts, band.hours, 'wind');
   const feelsLikeMax = mean(forecasts.map((f) => f.feelsLikeMax));
-  const total =
-    windDeduction(gust, park) +
-    rainDeduction(pop, null) +
-    heatDeduction(wbgt, feelsLikeMax, wind);
-  const score = Math.max(0, Math.min(100, Math.round(100 - total)));
-  return { score, symbol: scoreToSymbol(score), hasData: gust != null || pop != null };
+  const dWind = windDeduction(gust, park);
+  const dRain = rainDeduction(pop, null);
+  const dHeat = heatDeduction(wbgt, feelsLikeMax, wind);
+  const score = Math.max(0, Math.min(100, Math.round(100 - (dWind + dRain + dHeat))));
+  const maxD = Math.max(dWind, dRain, dHeat);
+  const factor = maxD <= 0 ? null : dWind === maxD ? '風' : dRain === maxD ? '雨' : '暑さ';
+  return { score, symbol: scoreToSymbol(score), hasData: gust != null || pop != null, factor };
 }
 
-// 時間帯サブスコアの重み付き平均 (§5.2 の代替総合スコア形)
+// 時間帯サブスコアの重み付き平均 (§0.66.1 : 日スコアの基準)
 export function weightedBandTotal(subscores) {
   let num = 0;
   let den = 0;
@@ -377,6 +381,23 @@ export function weightedBandTotal(subscores) {
     }
   }
   return den === 0 ? null : Math.round(num / den);
+}
+
+// §0.66.2 : floor guard。時間帯に NG/FAIR が含まれる日は日スコアに上限を掛け、
+//   「最重視の昼が FAIR なのに日 OK」のような楽観バイアスを防ぐ。
+//   いずれか NG (< 40) → 日 ≤ 59 (FAIR) / いずれか FAIR (< 60) → 日 ≤ 74 (OK) / 全部 OK 以上 → 上限なし。
+export function bandFloorCap(subscores) {
+  let hasNg = false;
+  let hasFair = false;
+  for (const b of BANDS) {
+    const s = subscores[b.key];
+    if (!s || !s.hasData) continue;
+    if (s.score < 40) hasNg = true;
+    else if (s.score < 60) hasFair = true;
+  }
+  if (hasNg) return 59;
+  if (hasFair) return 74;
+  return 100;
 }
 
 // --- 1 日分の総合評価 (UI が使う入口) ---
@@ -402,36 +423,38 @@ export function evaluateDay(forecasts, park, date = null) {
     wbgt: wbgtBadge(wbgtForBadge, metrics.windShowWindow, metrics.feelsLikeMax),
   };
 
-  // §0.16 : バッジ危険度でスコアに上限キャップ (スコアとバッジの矛盾解消)
-  // §0.55 : さらに 雨確率キャップ (§0.55.1) と 注意バッジ同時数キャップ (§0.55.5) を併用し、最も厳しい上限を採用。
-  //   「霧雨で BEST」「風バ + 霧雨で GOOD」のような過剰評価を防ぐ。
-  const guard = applyBadgeGuard(rawScore, badges);
+  // §0.66.1 : 日スコアの基準を「全要素加重平均 (rawScore)」から「時間帯サブスコアの加重平均」に変更。
+  //   全部通常なら高得点になる要素ベースだと「時間帯 FAIR なのに日 OK」が起きるため、時間帯ベースで整合。
+  //   時間帯データが無い日 (fallback で hourly なし等) は従来の rawScore に縮退する。
+  const bandAvg = weightedBandTotal(subscores);
+  const base = bandAvg != null ? bandAvg : rawScore;
+
+  // §0.66.2 : floor guard。時間帯に NG/FAIR があれば日スコアに上限を掛ける。
+  const floorCap = bandFloorCap(subscores);
+
+  // §0.16 / §0.55 : バッジ危険度 ・ 雨確率 ・ 注意バッジ同時数の上限も併用 (安全網)。
+  //   特に band 算定は precip mm/h を見ない (pop のみ) ため、強雨日は雨バッジキャップで担保する。
+  const guard = applyBadgeGuard(base, badges);
   const pCap = popScoreCap(popForBadge, drizzle, metrics.precipMaxHourly);
   const cCap = warnCountCap(badges);
-  const score = Math.min(guard.score, pCap, cCap);
+  const score = Math.min(guard.score, pCap, cCap, floorCap);
   const capped = score < rawScore;
 
-  // §0.42.4 : 日スコアの floor guard を時間帯サブスコアにも波及させ整合を取る。
-  // 日 = 別日 25 なのに 朝/昼/夜 = 75 のような乖離はユーザーの信頼を損なうため、
-  // 各時間帯スコアを日スコア以下にクランプする (時間帯 ≦ 日)。
-  for (const b of BANDS) {
-    const s = subscores[b.key];
-    if (s && s.hasData && s.score > score) {
-      s.score = score;
-      s.symbol = scoreToSymbol(score);
-    }
-  }
+  // §0.66.4 : §0.42.4 (時間帯 ≦ 日 クランプ) は撤廃。日が時間帯加重平均なので自然に整合し、
+  //   時間帯スコアは時刻別の独自値のまま (夜が日より高い等もそのまま表示)。
 
   return {
     score,
     rawScore,
+    base,
     capped,
     worstSeverity: guard.worstSeverity,
     symbol: scoreToSymbol(score),
     deductions,
     metrics,
     subscores,
-    weightedTotal: weightedBandTotal(subscores),
+    weightedTotal: bandAvg,
+    floorCap,
     badges,
   };
 }

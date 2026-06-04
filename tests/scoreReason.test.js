@@ -1,42 +1,46 @@
 import { describe, it, expect } from 'vitest';
 import { getScoreReason } from '../src/score/scoreReason.js';
 
-const badge = (level, text) => ({ level, text });
+// §0.66.3 : 時間帯ベースの理由。subscores ({score, symbol:{label}, hasData, factor}) を受け取る。
+const band = (score, label, hasData = true, factor = null) => ({ score, symbol: { label }, hasData, factor });
 
-describe('getScoreReason (§0.37-10)', () => {
-  it('全て通常なら 全部OK', () => {
-    const r = getScoreReason(
-      { gustShowWindow: 3, popShowWindow: 0, wbgtShowWindow: 20 },
-      { wind: badge(0, '通常'), rain: badge(0, '通常'), wbgt: badge(0, '通常') },
-    );
-    expect(r).toBe('風・雨・熱 全部OK');
+describe('getScoreReason (§0.66.3 時間帯ベース)', () => {
+  it('昼を先頭に各時間帯の評価を並べる', () => {
+    const r = getScoreReason({
+      subscores: {
+        morning: band(45, 'FAIR', true, '風'),
+        noon: band(45, 'FAIR', true, '風'),
+        night: band(74, 'OK'),
+      },
+    });
+    // 昼 (最重視) を先頭 ・ FAIR 以下は主因 (風強め) を併記 ・ OK は併記なし
+    expect(r).toBe('昼 (最重視) FAIR (45) 風強め・朝 FAIR (45) 風強め・夜 OK (74)');
   });
 
-  it('風だけバッジが立つと風のみ表示', () => {
-    const r = getScoreReason(
-      { gustShowWindow: 9, popShowWindow: 0, wbgtShowWindow: 20 },
-      { wind: badge(1, '風バ'), rain: badge(0, '通常'), wbgt: badge(0, '通常') },
-    );
-    expect(r).toBe('風 9m/s 風バ');
+  it('全時間帯 OK 以上なら主因は付かない', () => {
+    const r = getScoreReason({
+      subscores: {
+        morning: band(85, 'GOOD'),
+        noon: band(90, 'BEST'),
+        night: band(80, 'GOOD'),
+      },
+    });
+    expect(r).toBe('昼 (最重視) BEST (90)・朝 GOOD (85)・夜 GOOD (80)');
   });
 
-  it('複数立つと・で連結 (風・雨・熱の順)', () => {
-    const r = getScoreReason(
-      { gustShowWindow: 12, popShowWindow: 70, wbgtShowWindow: 31 },
-      { wind: badge(2, '中止リスク'), rain: badge(2, '雨キャン'), wbgt: badge(2, '熱キャン') },
-    );
-    expect(r).toBe('風 12m/s 中止リスク・雨 70% 雨キャン・熱 WBGT31 熱キャン');
+  it('データ無しの時間帯はスキップ', () => {
+    const r = getScoreReason({
+      subscores: {
+        morning: band(0, 'NG', false),
+        noon: band(45, 'FAIR', true, '雨'),
+        night: band(0, 'NG', false),
+      },
+    });
+    expect(r).toBe('昼 (最重視) FAIR (45) 雨');
   });
 
-  it('showWindow が無ければ Max にフォールバック', () => {
-    const r = getScoreReason(
-      { gustShowWindow: null, gustMax: 10, popMax: 0, wbgtMax: 20 },
-      { wind: badge(1, '風バ'), rain: badge(0, '通常'), wbgt: badge(0, '通常') },
-    );
-    expect(r).toBe('風 10m/s 風バ');
-  });
-
-  it('metrics/badges 欠損は空文字', () => {
-    expect(getScoreReason(null, null)).toBe('');
+  it('subscores 欠損は空文字', () => {
+    expect(getScoreReason(null)).toBe('');
+    expect(getScoreReason({})).toBe('');
   });
 });

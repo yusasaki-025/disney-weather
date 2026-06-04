@@ -414,7 +414,7 @@ function detailPanelHtml(row, park, warningData = null) {
     .join('');
   // §0.6.8 : 左カラム = 情報、右カラム = グラフ。
   // §0.63.4 : スコアセクション (日全体 + スコア理由 + 時間帯別)。
-  const scoreReason = getScoreReason(row.eval.metrics, row.eval.badges);
+  const scoreReason = getScoreReason(row.eval);
   return `<div class="detail-panel">
     <div class="detail-info">
       ${daySummaryHtml(row, todayJst(), warningData)}

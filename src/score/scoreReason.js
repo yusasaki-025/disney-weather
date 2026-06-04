@@ -1,27 +1,26 @@
-// スコア理由の 1 行解説 (§0.37-10)。スコアラベル直下に「なぜこのスコアか」を簡潔に示す。
-// 風 ・ 雨 ・ 熱のうちバッジが立っている (level≥1) ものを「風 9m/s 風バ」形式で列挙。
-// 全て通常なら「風 ・ 雨 ・ 熱 全部OK」。
+// スコア理由の 1 行解説 (§0.66.3)。日スコアが時間帯加重平均ベースになったため、
+// 理由も時間帯ベースに変更。最重視の「昼」を先頭に、各時間帯の評価 (+ 主因) を並べる。
+// 例 : 「昼 (最重視) FAIR (45) 風強め・朝 FAIR (45)・夜 OK (74)」
 
-// getScoreReason(metrics, badges) -> string
-export function getScoreReason(metrics, badges) {
-  if (!metrics || !badges) return '';
+const BAND_LABEL = { morning: '朝', noon: '昼', night: '夜' };
+const FACTOR_TEXT = { 風: '風強め', 雨: '雨', 暑さ: '暑さ' };
+// 昼を最重視として先頭に出す並び順。
+const ORDER = ['noon', 'morning', 'night'];
+
+// getScoreReason(evaluation) -> string
+//   evaluation : evaluateDay の戻り値 (subscores を持つ)。
+export function getScoreReason(evaluation) {
+  const subscores = evaluation?.subscores;
+  if (!subscores) return '';
   const parts = [];
-  // §0.65.1/.2 : 風速 ・ WBGT は小数 1 桁、雨確率は整数で表示精度を統一。
-  const d1 = (v) => Math.round(v * 10) / 10;
-
-  const wind = metrics.gustShowWindow ?? metrics.gustMax;
-  if (badges.wind && badges.wind.level >= 1 && wind != null) {
-    parts.push(`風 ${d1(wind)}m/s ${badges.wind.text}`);
+  for (const key of ORDER) {
+    const s = subscores[key];
+    if (!s || !s.hasData) continue;
+    const tag = key === 'noon' ? '昼 (最重視)' : BAND_LABEL[key];
+    // FAIR 以下のときだけ主因 (風強め / 雨 / 暑さ) を併記して「なぜ低いか」を示す。
+    const why = s.score < 60 && s.factor ? ` ${FACTOR_TEXT[s.factor]}` : '';
+    parts.push(`${tag} ${s.symbol.label} (${s.score})${why}`);
   }
-  const pop = metrics.popShowWindow ?? metrics.popMax;
-  if (badges.rain && badges.rain.level >= 1 && pop != null) {
-    parts.push(`雨 ${Math.round(pop)}% ${badges.rain.text}`);
-  }
-  const wbgt = metrics.wbgtShowWindow ?? metrics.wbgtMax;
-  if (badges.wbgt && badges.wbgt.level >= 1 && wbgt != null) {
-    parts.push(`熱 WBGT${d1(wbgt)} ${badges.wbgt.text}`);
-  }
-
-  if (parts.length === 0) return '風・雨・熱 全部OK';
+  if (parts.length === 0) return '時間帯データなし';
   return parts.join('・');
 }

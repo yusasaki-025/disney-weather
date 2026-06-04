@@ -369,14 +369,23 @@ describe('bandSubscore / weightedBandTotal', () => {
     expect(s.symbol.label).toBe('BEST');
     expect(s.hasData).toBe(true);
   });
-  it('重み付き平均 (昼が最重要)', () => {
+  it('重み付き平均 (朝1.5 / 昼2.0 / 夜1.0)', () => {
     const sub = {
       morning: { score: 100, hasData: true },
       noon: { score: 50, hasData: true },
       night: { score: 0, hasData: true },
     };
-    // (100*0.5 + 50*2.0 + 0*0.3) / (0.5+2.0+0.3) = 150/2.8 ≈ 54
-    expect(weightedBandTotal(sub)).toBe(54);
+    // §0.66.1 : (100*1.5 + 50*2.0 + 0*1.0) / (1.5+2.0+1.0) = 250/4.5 ≈ 56
+    expect(weightedBandTotal(sub)).toBe(56);
+  });
+  it('§0.66.1 仕様例 (朝45 / 昼45 / 夜74 → 51)', () => {
+    const sub = {
+      morning: { score: 45, hasData: true },
+      noon: { score: 45, hasData: true },
+      night: { score: 74, hasData: true },
+    };
+    // (45*1.5 + 45*2.0 + 74*1.0) / 4.5 = 231.5/4.5 = 51.4 → 51
+    expect(weightedBandTotal(sub)).toBe(51);
   });
   it('データ無しは null', () => {
     expect(
@@ -502,25 +511,53 @@ describe('evaluateDay (統合)', () => {
     expect(['BEST', 'GOOD', 'OK', 'FAIR', 'NG']).toContain(r.subscores.noon.symbol.label);
   });
 
-  it('§0.42.4 : 時間帯サブスコアは日スコア以下にクランプされる (整合性)', () => {
-    // §0.48.2 : 時間最大 6mm/h の強雨 → 雨バッジ「中止」(critical) で日スコアは 20 にキャップ。
-    // バンドのサブスコアは pop ベースで穏やか (precip は band 算定に使わない) → 日スコア以下にクランプされるはず。
+  it('§0.66.4 : 時間帯クランプは撤廃 ・ 時間帯は日スコアを超えてよい (夜が日より高い)', () => {
+    // 朝 ・ 昼が風で低め、夜は穏やか → 夜のサブスコアが日 (加重平均) を上回る。
     const om = fakeForecast(
       'open-meteo',
-      { gustMax: 3, popMax: 10, precipSum: 12, feelsLikeMax: 22, tempMax: 24, uvMax: 3 },
+      { gustMax: 9, popMax: 10, feelsLikeMax: 22, tempMax: 24, uvMax: 3 },
       [
-        { hour: 10, gust: 3, pop: 10, wind: 3, wbgt: 22, precip: 6 },
-        { hour: 13, gust: 3, pop: 10, wind: 3, wbgt: 22, precip: 6 },
-        { hour: 19, gust: 3, pop: 10, wind: 3, wbgt: 22, precip: 6 },
+        { hour: 10, gust: 9, pop: 10, wind: 7, wbgt: 22 },
+        { hour: 13, gust: 9, pop: 10, wind: 7, wbgt: 22 },
+        { hour: 19, gust: 2, pop: 0, wind: 2, wbgt: 21 },
       ],
     );
     const r = evaluateDay([om], 'TDL');
-    expect(r.capped).toBe(true);
-    expect(r.score).toBeLessThanOrEqual(20);
-    for (const k of ['morning', 'noon', 'night']) {
-      if (r.subscores[k].hasData) {
-        expect(r.subscores[k].score).toBeLessThanOrEqual(r.score);
-      }
-    }
+    // 夜は減点なし (100) で日スコアより高い = クランプされていない。
+    expect(r.subscores.night.score).toBeGreaterThan(r.score);
+  });
+
+  it('§0.66.1 : 日スコアは時間帯加重平均ベース (weightedTotal = 加重平均)', () => {
+    // 全時間帯 風 9m/s (風バ) → 各バンド 85。加重平均 85。
+    // 日スコアは warn (風バ) キャップ 80 が併用されるため 80 (= GOOD)。楽観的に BEST にならない。
+    const om = fakeForecast(
+      'open-meteo',
+      { gustMax: 9, popMax: 10, feelsLikeMax: 22, tempMax: 24, uvMax: 3 },
+      [
+        { hour: 10, gust: 9, pop: 10, wind: 7, wbgt: 22 },
+        { hour: 13, gust: 9, pop: 10, wind: 7, wbgt: 22 },
+        { hour: 19, gust: 9, pop: 10, wind: 7, wbgt: 22 },
+      ],
+    );
+    const r = evaluateDay([om], 'TDL');
+    expect(r.weightedTotal).toBe(85);
+    expect(r.score).toBe(80); // warn cap 80
+  });
+
+  it('§0.66.2 : いずれかの時間帯が NG なら日 ≤ 59 (FAIR) に制限', () => {
+    // 昼が強風 (12m/s) + 強雨 (95%) で NG、朝夜は穏やか → floor guard で日 ≤ 59。
+    const om = fakeForecast(
+      'open-meteo',
+      { gustMax: 12, popMax: 95, feelsLikeMax: 22, tempMax: 24, uvMax: 3 },
+      [
+        { hour: 10, gust: 2, pop: 0, wind: 2, wbgt: 21 },
+        { hour: 13, gust: 12, pop: 95, wind: 2, wbgt: 21 },
+        { hour: 19, gust: 2, pop: 0, wind: 2, wbgt: 21 },
+      ],
+    );
+    const r = evaluateDay([om], 'TDL');
+    expect(r.subscores.noon.score).toBeLessThan(40); // 昼 NG
+    expect(r.floorCap).toBe(59);
+    expect(r.score).toBeLessThanOrEqual(59);
   });
 });
