@@ -1,5 +1,24 @@
 import { describe, it, expect } from 'vitest';
-import { mergeSharedShows, FALLBACK_SCHEDULE } from '../src/data/showSchedule.js';
+import { mergeSharedShows, FALLBACK_SCHEDULE, inPeriod } from '../src/data/showSchedule.js';
+
+describe('inPeriod (§0.68.H.a 季節限定ショーの期間フィルタ)', () => {
+  it('period 無し (undefined / 不正) は常時表示', () => {
+    expect(inPeriod('2026-12-31', undefined)).toBe(true);
+    expect(inPeriod('2026-12-31', ['2026-04-01'])).toBe(true); // 要素数不正
+  });
+  it('期間内は true ・ 期間外は false', () => {
+    const p = ['2026-04-15', '2026-06-30'];
+    expect(inPeriod('2026-04-15', p)).toBe(true); // 開始日含む
+    expect(inPeriod('2026-06-30', p)).toBe(true); // 終了日含む
+    expect(inPeriod('2026-05-20', p)).toBe(true);
+    expect(inPeriod('2026-04-14', p)).toBe(false); // 開始前
+    expect(inPeriod('2026-07-01', p)).toBe(false); // 終了後
+  });
+  it('片側 null は無制限', () => {
+    expect(inPeriod('2026-01-01', [null, '2026-06-30'])).toBe(true);
+    expect(inPeriod('2026-12-31', ['2026-04-01', null])).toBe(true);
+  });
+});
 
 // §0.64.2 : 両パーク共通ショー (スカイ ・ フル ・ オブ ・ カラーズ) が両パークに必ず出ることを保証。
 const sky = { name: 'スカイ･フル･オブ･カラーズ', times: ['20:30'], priority: 'low', kind: 'fireworks', tags: [] };

@@ -91,6 +91,17 @@ function injectSharedShows(date, park, shows) {
   return mergeSharedShows(shows, otherDay?.shows);
 }
 
+// §0.68.H.a (§0.39.7 ・ 監査 S-3) : 季節限定ショーの自動期間管理。
+//   FALLBACK_SCHEDULE のエントリに任意で period: ['YYYY-MM-DD', 'YYYY-MM-DD'] を持たせると、
+//   その期間外の日には fallback から自動除外する (official JSON は日付別キュレートなので対象外)。
+//   period 無しのエントリは常時表示 (= 既存挙動そのまま)。日付は ISO 文字列なので辞書順比較で OK。
+//   ※ 実際の開始/終了日は公式発表ベースで Yuka さんが手動更新する (§0.39.7 運用方針)。
+export function inPeriod(date, period) {
+  if (!Array.isArray(period) || period.length !== 2) return true;
+  const [start, end] = period;
+  return (!start || date >= start) && (!end || date <= end);
+}
+
 // その日 ・ パークのショー配列を返す。{ shows, source: 'official' | 'fallback' }。
 // date: 'YYYY-MM-DD'、park: 'TDL' | 'TDS'
 export function getDaySchedule(date, park) {
@@ -100,7 +111,9 @@ export function getDaySchedule(date, park) {
     // §0.61 : official の日のみ共通ショー (スカイ等) を他パークから補完。
     return { shows: injectSharedShows(date, park, expandShows(day.shows)), source: 'official' };
   }
-  return { shows: FALLBACK_SCHEDULE[park] || [], source: 'fallback' };
+  // §0.68.H.a : fallback は period でフィルタ (期間外の季節限定公演を除外)。
+  const shows = (FALLBACK_SCHEDULE[park] || []).filter((s) => inPeriod(date, s.period));
+  return { shows, source: 'fallback' };
 }
 
 // 'HH:MM' → 小数時間 (13:30 → 13.5)
