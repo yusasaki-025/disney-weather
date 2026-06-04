@@ -24,12 +24,18 @@ export function buildReason(row) {
   return parts.join(' ･ ');
 }
 
-export function renderTop3(container, rows, { onSelect }) {
-  // ◎ ○ を優先しつつスコア降順で上位 3 件
-  const ranked = [...rows]
-    .filter((r) => r.eval && !r.isNg)
+// スコア降順で上位 3 件を選ぶ。NG 日は推奨しない (純関数 ・ テスト可能)。
+// §0.68.B (監査 S-1) : 旧 `!r.isNg` は未設定プロパティ参照で常に true → NG 日が混入していた。
+//   eval.symbol.key で正しく NG を除外する。
+export function selectTop3(rows) {
+  return [...rows]
+    .filter((r) => r.eval && r.eval.symbol.key !== 'ng')
     .sort((a, b) => b.eval.score - a.eval.score)
     .slice(0, 3);
+}
+
+export function renderTop3(container, rows, { onSelect }) {
+  const ranked = selectTop3(rows);
 
   if (ranked.length === 0) {
     container.innerHTML = '<p class="data-status">候補がありません。</p>';
