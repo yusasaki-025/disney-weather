@@ -221,14 +221,21 @@ export function popScoreCap(pop, drizzle = false, precipHourly = null) {
   return 59; // FAIR
 }
 
-// §0.55.5 : 注意バッジ (風バ/雨バ/熱バ = warn) の同時発生数に応じたスコア上限。
-//   0 上限なし / 1 GOOD(89) / 2 OK(74) / 3 FAIR(59)。複数の軽警告が重なれば確実に格下げする。
-export function warnCountCap(badges) {
-  const n = Object.values(badges).filter((b) => badgeSeverity(b.text) === 'warn').length;
-  if (n <= 0) return 100;
-  if (n === 1) return 89; // GOOD
-  if (n === 2) return 74; // OK
-  return 59; // FAIR
+// §0.72 : 注意バッジ (風バ/雨バ/熱バ = warn) の要素別上限 (§0.55.5 の個数ベースを置換)。
+//   実態 (Yuka 知見) : 風は緩い (注意でも開催されやすい) / 雨 ・ 熱は厳しい (悪化で確定キャン)。
+//   風単独 = GOOD(89) / 雨 or 熱単独 = OK(74) / 雨+熱 = FAIR(59) / 風+雨 or 風+熱 = OK(74) / 3つ = FAIR(59)。
+//   中止リスク/キャン/中止 (danger/critical) は applyBadgeGuard 側で別途キャップ。
+export function warnElementCap(badges) {
+  const isWarn = (b) => !!b && badgeSeverity(b.text) === 'warn';
+  const hasWind = isWarn(badges.wind);
+  const hasRain = isWarn(badges.rain);
+  const hasHeat = isWarn(badges.wbgt);
+  let cap = 100;
+  if (hasRain && hasHeat) cap = Math.min(cap, 59); // 雨+熱 = FAIR
+  else if (hasRain || hasHeat) cap = Math.min(cap, 74); // 雨単独 or 熱単独 = OK
+  if (hasWind && (hasRain || hasHeat)) cap = Math.min(cap, 74); // 風+雨 or 風+熱 = OK
+  else if (hasWind) cap = Math.min(cap, 89); // 風単独 = GOOD
+  return cap;
 }
 
 // --- 指標の集計 (§5.1) ---
@@ -482,7 +489,7 @@ export function evaluateDay(forecasts, park, date = null) {
   //   特に band 算定は precip mm/h を見ない (pop のみ) ため、強雨日は雨バッジキャップで担保する。
   const guard = applyBadgeGuard(base, badges);
   const pCap = popScoreCap(popForBadge, drizzle, metrics.precipMaxHourly);
-  const cCap = warnCountCap(badges);
+  const cCap = warnElementCap(badges); // §0.72 : 要素別重み付け上限 (旧 warnCountCap)
   const score = Math.min(guard.score, pCap, cCap, floorCap);
   // §0.68.A (監査 L-1) : §0.66 で日スコアの基準が rawScore → base (時間帯加重平均) に変わったので、
   //   「キャップで下がったか」の判定も base と比較する (rawScore 比較だと無関係な日に capped=true になり

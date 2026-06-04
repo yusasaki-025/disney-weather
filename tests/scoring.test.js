@@ -21,7 +21,7 @@ import {
   badgeSeverity,
   applyBadgeGuard,
   popScoreCap,
-  warnCountCap,
+  warnElementCap,
   BANDS,
 } from '../src/score/scoring.js';
 
@@ -494,13 +494,27 @@ describe('popScoreCap (§0.55.1 雨確率キャップ)', () => {
   });
 });
 
-describe('warnCountCap (§0.55.5 複数注意バッジ)', () => {
+describe('warnElementCap (§0.72 要素別重み付け ・ 風 < 雨 ・ 熱)', () => {
   const b = (wind, rain, wbgt) => ({ wind: { text: wind }, rain: { text: rain }, wbgt: { text: wbgt } });
-  it('注意バッジ数で上限', () => {
-    expect(warnCountCap(b('通常', '通常', '通常'))).toBe(100);
-    expect(warnCountCap(b('風バ', '通常', '通常'))).toBe(89); // 1 → GOOD
-    expect(warnCountCap(b('風バ', '雨バ', '通常'))).toBe(74); // 2 → OK (6/11 ケース)
-    expect(warnCountCap(b('風バ', '雨バ', '熱バ'))).toBe(59); // 3 → FAIR
+  it('警告なし → 上限なし', () => {
+    expect(warnElementCap(b('通常', '通常', '通常'))).toBe(100);
+  });
+  it('風単独 = GOOD (89) ・ 風は緩い', () => {
+    expect(warnElementCap(b('風バ', '通常', '通常'))).toBe(89);
+  });
+  it('雨単独 ・ 熱単独 = OK (74) ・ 厳しめ', () => {
+    expect(warnElementCap(b('通常', '雨バ', '通常'))).toBe(74);
+    expect(warnElementCap(b('通常', '通常', '熱バ'))).toBe(74);
+  });
+  it('風+雨 ・ 風+熱 = OK (74)', () => {
+    expect(warnElementCap(b('風バ', '雨バ', '通常'))).toBe(74);
+    expect(warnElementCap(b('風バ', '通常', '熱バ'))).toBe(74);
+  });
+  it('雨+熱 = FAIR (59) ・ 両方厳しい', () => {
+    expect(warnElementCap(b('通常', '雨バ', '熱バ'))).toBe(59);
+  });
+  it('3つ全部 = FAIR (59)', () => {
+    expect(warnElementCap(b('風バ', '雨バ', '熱バ'))).toBe(59);
   });
 });
 
