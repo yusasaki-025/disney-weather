@@ -378,6 +378,22 @@ describe('bandSubscore / weightedBandTotal', () => {
     // §0.66.1 : (100*1.5 + 50*2.0 + 0*1.0) / (1.5+2.0+1.0) = 250/4.5 ≈ 56
     expect(weightedBandTotal(sub)).toBe(56);
   });
+  it('§0.68.H.b : 寒さ ・ UV も band スコアに反映 (主因ラベルも返す)', () => {
+    const cold = fakeForecast('open-meteo', { tempMax: 9, feelsLikeMax: 7, uvMax: 2 }, [
+      { hour: 13, gust: 3, pop: 0, wind: 2, wbgt: 8 },
+    ]);
+    const sCold = bandSubscore([cold], noon, 'TDL');
+    expect(sCold.score).toBe(90); // 寒さ -10 (feelsLike 7 → 5〜10 帯)
+    expect(sCold.factor).toBe('寒さ');
+
+    const uv = fakeForecast('open-meteo', { tempMax: 24, feelsLikeMax: 22, uvMax: 11 }, [
+      { hour: 13, gust: 3, pop: 0, wind: 2, wbgt: 22 },
+    ]);
+    const sUv = bandSubscore([uv], noon, 'TDL');
+    expect(sUv.score).toBe(90); // UV ≥11 → -10
+    expect(sUv.factor).toBe('UV');
+  });
+
   it('§0.66.1 仕様例 (朝45 / 昼45 / 夜74 → 51)', () => {
     const sub = {
       morning: { score: 45, hasData: true },

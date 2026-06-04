@@ -3,7 +3,7 @@
 // 例 : 「昼 (最重視) FAIR (45) 風強め・朝 FAIR (45)・夜 OK (74)」
 
 const BAND_LABEL = { morning: '朝', noon: '昼', night: '夜' };
-const FACTOR_TEXT = { 風: '風強め', 雨: '雨', 暑さ: '暑さ' };
+const FACTOR_TEXT = { 風: '風強め', 雨: '雨', 暑さ: '暑さ', 寒さ: '寒さ', UV: 'UV 強め' };
 // 昼を最重視として先頭に出す並び順。
 const ORDER = ['noon', 'morning', 'night'];
 

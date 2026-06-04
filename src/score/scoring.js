@@ -364,12 +364,27 @@ export function bandSubscore(forecasts, band, park, drizzle = false) {
   const wind = windowMax(forecasts, band.hours, 'wind');
   const precip = windowMax(forecasts, band.hours, 'precip');
   const feelsLikeMax = mean(forecasts.map((f) => f.feelsLikeMax));
+  // §0.68.H.b (監査 L-2) : 寒さ ・ UV も band に組み込み、日スコア (時間帯加重平均) に反映させる。
+  //   §0.66 で日スコアが band 平均ベースになり、要素ベース rawScore に入る cold/uv が捨てられて
+  //   いたため (冬日 ・ 強 UV 日が過大評価)。cold/uv は日次値なので全時間帯に一律で効く。
+  const tempMax = mean(forecasts.map((f) => f.tempMax));
+  const uvMax = mean(forecasts.map((f) => f.uvMax));
   const dWind = windDeduction(gust, park);
   const dRain = rainDeduction(pop, null);
   const dHeat = heatDeduction(wbgt, feelsLikeMax, wind);
-  const score = Math.max(0, Math.min(100, Math.round(100 - (dWind + dRain + dHeat))));
-  const maxD = Math.max(dWind, dRain, dHeat);
-  const factor = maxD <= 0 ? null : dWind === maxD ? '風' : dRain === maxD ? '雨' : '暑さ';
+  const dCold = coldDeduction(feelsLikeMax, tempMax);
+  const dUv = uvDeduction(uvMax);
+  const score = Math.max(0, Math.min(100, Math.round(100 - (dWind + dRain + dHeat + dCold + dUv))));
+  // 主因 (最大減点) — スコア理由用。cold/uv は中止バッジが無いので「寒さ」「UV」ラベルで補足。
+  const factors = [
+    ['風', dWind],
+    ['雨', dRain],
+    ['暑さ', dHeat],
+    ['寒さ', dCold],
+    ['UV', dUv],
+  ];
+  const maxD = Math.max(...factors.map(([, d]) => d));
+  const factor = maxD <= 0 ? null : factors.find(([, d]) => d === maxD)[0];
   const badges = {
     wind: windBadge(gust, DAY_WIND_THRESHOLD),
     rain: rainBadge(pop, precip, drizzle),
