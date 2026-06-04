@@ -89,7 +89,7 @@ function rainSub(forecast) {
   if (pop == null || pop <= 0) return ''; // 雨 0% は非表示
   const hourlyPrecip = (forecast.hourly || []).map((h) => h.precip ?? 0);
   const precipMax = hourlyPrecip.length ? Math.max(...hourlyPrecip) : 0;
-  const mmh = precipMax > 0 ? ` ${fmtNum(precipMax, 0)}mm/h` : '';
+  const mmh = precipMax > 0 ? ` ${fmtNum(precipMax, 1)}mm/h` : ''; // §0.65.2 : 雨量は小数 1 桁で統一
   const title =
     forecast.precipSum != null && forecast.precipSum > 0 ? ` title="日合計 ${fmtNum(forecast.precipSum, 1)}mm"` : '';
   return `<div class="sc-sub"${title}>${fmtNum(pop, 0)}%${mmh}</div>`;
@@ -176,7 +176,7 @@ function showRiskLineHtml(showName, park, risk, predWind, weatherless = false) {
       );
     }
   }
-  if (risk && risk.wbgt != null) riskParts.push(`熱 WBGT${risk.wbgt}`);
+  if (risk && risk.wbgt != null) riskParts.push(`熱 WBGT${fmtNum(risk.wbgt, 1)}`); // §0.65.1 : 小数 1 桁
   // 過去中止率 (§0.31)。サンプル不足は表示せず (誤情報回避)、3 件未満は (要確認) 併記 (§0.38-10)。
   let cancelHtml = '';
   if (!weatherless) {
@@ -293,7 +293,8 @@ function dayClimateHtml(row, today, warningData = null) {
     rows.push(dcRow('umbrella', '雨', `確率 ${rng(m.popRange)}%${precipTxt}`));
   }
   // §0.64.1 : ラベル末尾カッコ (WBGT) は metric-suffix で縮小 (§0.56.4 と統一)。
-  if (m.wbgtRange) rows.push(dcRow('thermostat', '熱 <span class="metric-suffix">(WBGT)</span>', rng(m.wbgtRange)));
+  // §0.65.1 : WBGT レンジも小数 1 桁で表示 (境界揺れ可視化)。
+  if (m.wbgtRange) rows.push(dcRow('thermostat', '熱 <span class="metric-suffix">(WBGT)</span>', rng(m.wbgtRange, 1)));
   // §0.64.6 : 天気と気温は性質が違うため別行に分割 (天気行 / 気温行)。
   const f =
     row.forecasts.jma || row.forecasts['open-meteo'] || Object.values(row.forecasts).filter(Boolean)[0];
@@ -511,13 +512,14 @@ export function renderTable(els, rows, state, sources, sourceStatus, handlers, w
       // §0.57.1 : バッジ判定 ・ スコア理由と同じ wbgtShowWindow (ショー時刻帯) に統一し、
       // 「熱バなのに数値が低い」食い違いを解消 (hourly が無い日は wbgtMax にフォールバック)。
       const wbgt = m.wbgtShowWindow != null ? m.wbgtShowWindow : m.wbgtMax;
-      const wbgtVal = wbgt != null ? `${fmtNum(wbgt, 0)}` : '—';
+      const wbgtVal = wbgt != null ? `${fmtNum(wbgt, 1)}` : '—'; // §0.65.1 : 小数 1 桁
       // §0.13.2 : スコアは平均ベース。ピーク (最大) は補助ツールチップに表示。
-      const peakTxt = (peak, unit) =>
-        peak ? `ピーク ${fmtNum(peak.value, 0)}${unit} (${peak.hour}時)` : '';
+      // §0.65.1 : WBGT のピークも小数 1 桁 (digits=1)、風速 ・ 雨確率は整数のまま。
+      const peakTxt = (peak, unit, digits = 0) =>
+        peak ? `ピーク ${fmtNum(peak.value, digits)}${unit} (${peak.hour}時)` : '';
       const windTitle = peakTxt(m.gustPeak, 'm/s');
       const wbgtBase = wbgtLabel === '環境省' ? 'WBGT 環境省取得値' : 'WBGT 簡易計算による推定値';
-      const wbgtPeakTxt = peakTxt(m.wbgtPeak, '');
+      const wbgtPeakTxt = peakTxt(m.wbgtPeak, '', 1);
       const wbgtTitle = wbgtPeakTxt ? `${wbgtBase}・${wbgtPeakTxt}` : wbgtBase;
 
       // §0.16 : バッジ格下げ時はスコアセルに理由ツールチップ
@@ -527,7 +529,7 @@ export function renderTable(els, rows, state, sources, sourceStatus, handlers, w
         const worstBadge = [
           ['wind', ev.badges.wind, peakTxt(m.gustPeak, 'm/s')],
           ['rain', ev.badges.rain, peakTxt(m.popPeak, '%')],
-          ['wbgt', ev.badges.wbgt, peakTxt(m.wbgtPeak, '')],
+          ['wbgt', ev.badges.wbgt, peakTxt(m.wbgtPeak, '', 1)],
         ].find(([, b]) => `${b.text}` && b.level >= 2 && b.text !== '—');
         const reasonBadge = worstBadge ? `バッジ「${worstBadge[1].text}」${worstBadge[2] ? ` (${worstBadge[2]})` : ''}` : 'バッジ判定';
         scoreTitle = `平均値スコア ${ev.rawScore} だが ${reasonBadge} により「${ev.symbol.label}」に格下げ`;

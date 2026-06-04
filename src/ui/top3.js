@@ -43,7 +43,7 @@ export function renderTop3(container, rows, { onSelect }) {
       const pop = m.popShowWindow != null ? m.popShowWindow : m.popMax;
       const wbgtPart =
         m.wbgtMax != null && m.wbgtMax >= 25
-          ? `<span>WBGT ${fmtNum(m.wbgtMax, 0)}</span>`
+          ? `<span>WBGT ${fmtNum(m.wbgtMax, 1)}</span>` // §0.65.1 : 小数 1 桁
           : '';
       const sym = row.eval.symbol;
       return `<article class="top3-card" role="button" tabindex="0" data-date="${row.date}"
@@ -55,7 +55,7 @@ export function renderTop3(container, rows, { onSelect }) {
           <span>${esc(sym.label)}</span> スコア${row.eval.score}
         </span>
         <span class="card-metrics">
-          <span>風 ${fmtNum(gust, 0, 'm/s')}</span>
+          <span>風 ${fmtNum(gust, 1, 'm/s')}</span>
           <span>降水 ${fmtNum(pop, 0, '%')}</span>
           ${wbgtPart}
         </span>

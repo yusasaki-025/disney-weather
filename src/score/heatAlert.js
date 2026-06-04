@@ -7,6 +7,7 @@ const ALERT_WBGT = 33;
 // heatAlertLevel(wbgtMax) -> { label, wbgt } | null
 export function heatAlertLevel(wbgtMax) {
   if (wbgtMax == null || Number.isNaN(wbgtMax)) return null;
-  if (wbgtMax >= ALERT_WBGT) return { label: '熱中症警戒級', wbgt: Math.round(wbgtMax) };
+  // §0.65.1 : WBGT は小数 1 桁で統一。
+  if (wbgtMax >= ALERT_WBGT) return { label: '熱中症警戒級', wbgt: Math.round(wbgtMax * 10) / 10 };
   return null;
 }

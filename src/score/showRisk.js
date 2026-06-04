@@ -31,9 +31,9 @@ export function showRiskInfo(forecasts, times) {
 
   // §0.43.2 : 「風」は平均風速 (windspeed_10m ・ sustained)。突風 (gust) は別途 cancelProbability 用の
   //           predWind (wind_gusts_10m) を使い、表示で「風 / 突風」を併記する。
-  // §0.51.4 : 風速は小数 1 桁、WBGT は整数で返す。
+  // §0.51.4 / §0.65.1 : 風速 ・ WBGT とも小数 1 桁で返す (表示精度を統一)。
   const wind = meanAt('wind', 1);
-  const wbgt = meanAt('wbgt', 0);
+  const wbgt = meanAt('wbgt', 1);
   if (wind == null && wbgt == null) return null;
   return { wind, wbgt };
 }
