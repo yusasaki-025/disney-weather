@@ -576,6 +576,56 @@ describe('evaluateDay (統合)', () => {
     expect(r2.capped).toBe(false);
   });
 
+  it('§0.68.1 : 日バッジ = 各時間帯バッジの最悪 (昼だけ風バ → 日も風バ)', () => {
+    // 朝 ・ 夜は穏やか、昼だけ風 9m/s (風バ)。日の風バッジは昼の風バを反映。
+    const om = fakeForecast(
+      'open-meteo',
+      { gustMax: 9, popMax: 10, feelsLikeMax: 22, tempMax: 24, uvMax: 3 },
+      [
+        { hour: 10, gust: 2, pop: 5, wind: 2, wbgt: 21 },
+        { hour: 13, gust: 9, pop: 5, wind: 6, wbgt: 21 },
+        { hour: 19, gust: 2, pop: 5, wind: 2, wbgt: 21 },
+      ],
+    );
+    const r = evaluateDay([om], 'TDL');
+    expect(r.badges.wind.text).toBe('風バ');
+    expect(r.subscores.noon.badges.wind.text).toBe('風バ');
+    expect(r.subscores.morning.badges.wind.text).toBe('通常');
+  });
+
+  it('§0.68.1/.2 : 全時間帯バッジ通常なら日は FAIR にならない (通常なのに FAIR を解消)', () => {
+    // 穏やかな日 → 全バッジ通常 ・ スコアは OK 以上 (FAIR にならない)。
+    const om = fakeForecast(
+      'open-meteo',
+      { gustMax: 3, popMax: 10, feelsLikeMax: 22, tempMax: 24, uvMax: 3 },
+      [
+        { hour: 10, gust: 3, pop: 10, wind: 2, wbgt: 22 },
+        { hour: 13, gust: 3, pop: 10, wind: 2, wbgt: 22 },
+        { hour: 19, gust: 3, pop: 10, wind: 2, wbgt: 22 },
+      ],
+    );
+    const r = evaluateDay([om], 'TDL');
+    const allNormal = Object.values(r.badges).every((b) => b.level === 0);
+    expect(allNormal).toBe(true);
+    expect(r.score).toBeGreaterThanOrEqual(60); // 全部通常なら FAIR (≤59) にならない
+  });
+
+  it('§0.68.1 : FAIR の日は必ず何かの時間帯バッジが警告 (バッジ-スコア整合)', () => {
+    // 昼が暑さ (WBGT 28) + 風 9 で FAIR。→ 日バッジに熱バ or 風バが立つ。
+    const om = fakeForecast(
+      'open-meteo',
+      { gustMax: 9, popMax: 10, feelsLikeMax: 30, tempMax: 31, uvMax: 6 },
+      [
+        { hour: 10, gust: 9, pop: 10, wind: 4, wbgt: 28 },
+        { hour: 13, gust: 9, pop: 10, wind: 4, wbgt: 28 },
+        { hour: 19, gust: 9, pop: 10, wind: 4, wbgt: 28 },
+      ],
+    );
+    const r = evaluateDay([om], 'TDL');
+    const anyWarn = Object.values(r.badges).some((b) => b.level >= 1);
+    expect(anyWarn).toBe(true);
+  });
+
   it('§0.66.2 : いずれかの時間帯が NG なら日 ≤ 59 (FAIR) に制限', () => {
     // 昼が強風 (12m/s) + 強雨 (95%) で NG、朝夜は穏やか → floor guard で日 ≤ 59。
     const om = fakeForecast(
