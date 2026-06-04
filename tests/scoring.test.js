@@ -610,6 +610,23 @@ describe('evaluateDay (統合)', () => {
     expect(r.score).toBeGreaterThanOrEqual(60); // 全部通常なら FAIR (≤59) にならない
   });
 
+  it('§0.69.1 : 全時間帯通常の日は日バッジが「通常」(緑) ・ 「—」に化けない', () => {
+    const om = fakeForecast(
+      'open-meteo',
+      { gustMax: 3, popMax: 10, feelsLikeMax: 22, tempMax: 24, uvMax: 3 },
+      [
+        { hour: 10, gust: 3, pop: 10, wind: 2, wbgt: 22 },
+        { hour: 13, gust: 3, pop: 10, wind: 2, wbgt: 22 },
+        { hour: 19, gust: 3, pop: 10, wind: 2, wbgt: 22 },
+      ],
+    );
+    const r = evaluateDay([om], 'TDL');
+    // 全 3 要素が「通常」(level 0 ・ text 通常) で、'—' (データ無し表記) ではない。
+    expect(r.badges.wind).toEqual({ level: 0, text: '通常' });
+    expect(r.badges.rain).toEqual({ level: 0, text: '通常' });
+    expect(r.badges.wbgt).toEqual({ level: 0, text: '通常' });
+  });
+
   it('§0.68.1 : FAIR の日は必ず何かの時間帯バッジが警告 (バッジ-スコア整合)', () => {
     // 昼が暑さ (WBGT 28) + 風 9 で FAIR。→ 日バッジに熱バ or 風バが立つ。
     const om = fakeForecast(

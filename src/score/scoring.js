@@ -429,13 +429,17 @@ export function evaluateDay(forecasts, park, date = null) {
   //   時間帯データが無い日 (hourly 無し ・ fallback) のみ従来の日次 (ショー窓/最大) 値で判定。
   //   雨は band が pop のみのため、日次 precip mm/h ベースの雨バッジとも比較して悪い方を採る (強雨の取りこぼし防止)。
   const anyBand = BANDS.some((b) => subscores[b.key].hasData);
+  // §0.69.1 : データのある時間帯バッジの中から最悪 (level 最大) を採る。全時間帯が通常なら
+  //   その「通常」バッジ (緑) を返す。旧実装は初期値 '—' を返し level 0 同士で置換されず、
+  //   通常日の緑バッジが '—' に化けて消えていた (§0.68.D の退化)。
   const worstBandBadge = (key) => {
-    let worst = { level: 0, text: '—' };
+    let worst = null;
     for (const b of BANDS) {
-      const bb = subscores[b.key]?.badges?.[key];
-      if (bb && bb.level > worst.level) worst = bb;
+      const s = subscores[b.key];
+      const bb = s?.hasData ? s.badges?.[key] : null;
+      if (bb && (!worst || bb.level > worst.level)) worst = bb;
     }
-    return worst;
+    return worst || { level: 0, text: '—' };
   };
   const worseBadge = (a, b) => (b.level > a.level ? b : a);
   const badges = anyBand
