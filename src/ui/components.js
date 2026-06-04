@@ -90,7 +90,8 @@ export function subscoreHtml(subscores, bands, _dayEval = null, reasonText = '')
   const reasonHtml = reasonText
     ? `<p class="score-reason-line"><span class="srl-key">理由</span><span class="srl-val">${esc(reasonText)}</span></p>`
     : '';
-  return `<div class="subscore-block">${reasonHtml}<ul class="ss-rows" role="img" aria-label="${esc(ariaParts.join('、'))}">${rows.join('')}</ul></div>`;
+  // §0.71.1 : 時間帯別は「参考」情報として理由文の下に小さく置く (主役は上の直接理由)。
+  return `<div class="subscore-block">${reasonHtml}<p class="subscore-subhead">時間帯別 (参考)</p><ul class="ss-rows" role="img" aria-label="${esc(ariaParts.join('、'))}">${rows.join('')}</ul></div>`;
 }
 
 // スコアの読み上げ用ラベル (記号なし)

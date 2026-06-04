@@ -2690,6 +2690,13 @@ button.extreme-warn {
   line-height: 1.5;
   text-align: left;
 }
+/* §0.71.1 : 時間帯別 (参考) の小見出し ・ 控えめに */
+.subscore-subhead {
+  margin: 8px 0 4px;
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  color: var(--text-sub);
+}
 .score-reason-line .srl-key {
   flex: 0 0 auto;
   font-weight: 700;

@@ -1,26 +1,51 @@
-// スコア理由の 1 行解説 (§0.66.3)。日スコアが時間帯加重平均ベースになったため、
-// 理由も時間帯ベースに変更。最重視の「昼」を先頭に、各時間帯の評価 (+ 主因) を並べる。
-// 例 : 「昼 (最重視) FAIR (45) 風強め・朝 FAIR (45)・夜 OK (74)」
+// スコア理由の 1 行解説 (§0.71.2)。日スコアの「直接の理由」を簡潔に示す。
+// 「加重平均 71 → 上限 → FAIR 59」のような中間計算は出さず (Yuka 指摘)、
+// 警告バッジ (風/雨/熱) の有無 ・ 数を直接の理由文にする。時間帯別は別途 ss-rows に参考表示。
+// 例 : 警告 0 →「風・雨・熱 通常」/ 警告 1 →「風バ可能性あり (8.2m/s)」/
+//      警告 2-3 →「警告 3つ (風バ + 雨バ + 熱バ)」。
 
-const BAND_LABEL = { morning: '朝', noon: '昼', night: '夜' };
-const FACTOR_TEXT = { 風: '風強め', 雨: '雨', 暑さ: '暑さ', 寒さ: '寒さ', UV: 'UV 強め' };
-// 昼を最重視として先頭に出す並び順。
-const ORDER = ['noon', 'morning', 'night'];
+import { showWindowOrMax, round1 } from '../utils/metrics.js';
+
+// バッジ短縮テキスト → 長文 (単独警告時に使う)。
+const LONG = {
+  風バ: '風バ可能性あり',
+  中止リスク: '中止リスク高',
+  中止: 'ほぼ中止',
+  雨バ: '雨バ可能性',
+  雨キャン: '雨キャン濃厚',
+  熱バ: '熱バ可能性あり',
+  熱キャン: '熱キャン濃厚',
+};
+
+const KEYS = ['wind', 'rain', 'wbgt'];
+
+// 単独警告の「長文 (実測値)」表現。
+function warnDetail(key, badge, metrics) {
+  const long = LONG[badge.text] || badge.text;
+  if (!metrics) return long;
+  if (key === 'wind') {
+    const g = showWindowOrMax(metrics, 'gust');
+    return g != null ? `${long} (${round1(g)}m/s)` : long;
+  }
+  if (key === 'rain') {
+    const precip = metrics.precipMaxHourly;
+    if (precip != null && precip >= 1) return `${long} (${round1(precip)}mm/h)`;
+    const pop = showWindowOrMax(metrics, 'pop');
+    return pop != null ? `${long} (${Math.round(pop)}%)` : long;
+  }
+  const w = showWindowOrMax(metrics, 'wbgt');
+  return w != null ? `${long} (WBGT ${round1(w)})` : long;
+}
 
 // getScoreReason(evaluation) -> string
-//   evaluation : evaluateDay の戻り値 (subscores を持つ)。
+//   evaluation : evaluateDay の戻り値 (badges ・ metrics を持つ)。
 export function getScoreReason(evaluation) {
-  const subscores = evaluation?.subscores;
-  if (!subscores) return '';
-  const parts = [];
-  for (const key of ORDER) {
-    const s = subscores[key];
-    if (!s || !s.hasData) continue;
-    const tag = key === 'noon' ? '昼 (最重視)' : BAND_LABEL[key];
-    // FAIR 以下のときだけ主因 (風強め / 雨 / 暑さ) を併記して「なぜ低いか」を示す。
-    const why = s.score < 60 && s.factor ? ` ${FACTOR_TEXT[s.factor]}` : '';
-    parts.push(`${tag} ${s.symbol.label} (${s.score})${why}`);
-  }
-  if (parts.length === 0) return '時間帯データなし';
-  return parts.join('・');
+  const badges = evaluation?.badges;
+  if (!badges) return '';
+  const warns = KEYS.filter((k) => badges[k] && badges[k].level >= 1);
+  if (warns.length === 0) return '風・雨・熱 通常';
+  if (warns.length === 1) return warnDetail(warns[0], badges[warns[0]], evaluation.metrics);
+  // 複数警告は「警告 N つ (短縮名 + ...)」で直接列挙 (中止リスク/キャン等もそのまま含む)。
+  const shorts = warns.map((k) => badges[k].text);
+  return `警告 ${warns.length}つ (${shorts.join(' + ')})`;
 }
