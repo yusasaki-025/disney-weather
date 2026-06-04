@@ -1331,6 +1331,11 @@ h1, h2, h3, h4, .app-title h1 {
   margin-left: auto;
   border-radius: 999px;
 }
+/* §0.70.2 : §0.68.A で日全体 pill を h4 内へ移した結果、h4 のアクセント色 (青) が pill の
+   アイコンに被り青色化していた退化を修正。pill 自身のレベル別色 (信号機色) を継承させる。 */
+.score-head .score-pill .material-symbols-rounded {
+  color: inherit;
+}
 .subscore-block {
   display: flex;
   flex-direction: column;
