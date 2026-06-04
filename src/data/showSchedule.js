@@ -64,6 +64,11 @@ function expandShows(shows) {
 //   もう片方に存在すれば自動補完する (§0.44.11 のデータ依存対応を再発防止ロジック化)。
 const SHARED_SHOWS = [/スカイ[・･]フル[・･]オブ[・･]カラーズ/];
 
+// §0.64.2 : 両パーク上空で見える共通ショー (スカイ等) か判定。過去中止履歴の両パーク合算等に使う。
+export function isSharedShow(name) {
+  return SHARED_SHOWS.some((re) => re.test(name || ''));
+}
+
 // §0.61/§0.64.2 : 純関数版。展開済み shows に、他パークの「生」ショー (otherRawShows) から
 //   共通ショー (SHARED_SHOWS) で欠けているものを補完して返す。重複ガード付き。テスト可能。
 export function mergeSharedShows(shows, otherRawShows) {

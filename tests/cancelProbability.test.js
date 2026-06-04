@@ -51,4 +51,22 @@ describe('getCancelProbability (§0.31)', () => {
     const res = getCancelProbability('X', 'TDL', 5);
     expect(res.probability).toBe(0); // null は数えない
   });
+
+  it('共通ショー (スカイ) は両パークの records を合算し TDL/TDS で一致 (§0.64.2)', () => {
+    // 履歴は TDS のみ (実態と同じ)。TDL は記録なしでも合算で同じ結果になること。
+    getAllRecordsForShow.mockImplementation((_name, park) => {
+      if (park === 'TDS') {
+        const near = [...Array(9)].map(() => ({ maxWind: 12, status: 'cancel' })).concat([{ maxWind: 12, status: 'ok' }]);
+        const far = [...Array(15)].map(() => ({ maxWind: 3, status: 'ok' }));
+        return [...near, ...far];
+      }
+      return []; // TDL は記録なし
+    });
+    const sky = 'スカイ･フル･オブ･カラーズ';
+    const tdl = getCancelProbability(sky, 'TDL', 12);
+    const tds = getCancelProbability(sky, 'TDS', 12);
+    expect(tdl).not.toBeNull();
+    expect(tdl.probability).toBe(90); // 10 件中 9 件中止
+    expect(tdl).toEqual(tds); // 左右一致
+  });
 });
