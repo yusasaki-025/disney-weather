@@ -44,12 +44,9 @@ export function getScoreReason(evaluation) {
   if (!badges) return '';
   const warns = KEYS.filter((k) => badges[k] && badges[k].level >= 1);
   if (warns.length === 0) return '風・雨・熱 通常';
+  // §0.77.1 : 曖昧表現 (「通常開催されることが多い」等) は排し、数値付きの具体的な理由のみ返す。
   if (warns.length === 1) {
-    const k = warns[0];
-    const detail = warnDetail(k, badges[k], evaluation.metrics);
-    // §0.72.3 : 風単独 (注意レベル) は「通常開催されやすい」を補足し過度に避けさせない (風 < 雨 ・ 熱)。
-    if (k === 'wind' && badges.wind.text === '風バ') return `${detail} ・ 風は通常開催されることが多い`;
-    return detail;
+    return warnDetail(warns[0], badges[warns[0]], evaluation.metrics);
   }
   // §0.72.3 : 雨バ + 熱バ (風なし ・ どちらも厳しい要素) は要素を明示。
   if (warns.length === 2 && badges.rain?.text === '雨バ' && badges.wbgt?.text === '熱バ') {

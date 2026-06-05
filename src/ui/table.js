@@ -239,18 +239,26 @@ function attractionHtml(park, gust) {
 }
 
 // §0.63.2 : 「この日の概要」を数行の解説テキストに専念させる (データ羅列は「この日の気候」へ分離)。
-function daySummaryHtml(row, today, warningData = null) {
+function daySummaryHtml(row, today, warningData = null, park = 'TDL') {
   const m = row.eval.metrics;
   const f =
     row.forecasts.jma || row.forecasts['open-meteo'] || Object.values(row.forecasts).filter(Boolean)[0];
   const weather = f ? normalizeWeatherText(f.weatherText) : '';
-  const drizzle = Object.values(row.forecasts).filter(Boolean).some((fc) => /霧雨/.test(fc.weatherText || ''));
   // 警報名 (当日のみ ・ 解説文に織り込む)
   let warningLabel = '';
   if (row.date === today && warningData && warningData.warnings && warningData.warnings.length) {
     warningLabel = warningData.warnings.map((w) => w.label).join('・');
   }
-  const text = daySummary({ weather, warningLabel, badges: row.eval.badges, drizzle });
+  // §0.77.2 : priority high のショー (季節限定 ・ showWindow 判定対象) を概要に併記。name 重複は除き先頭から。
+  const highShows = [];
+  const seen = new Set();
+  for (const s of getDaySchedule(row.date, park || 'TDL').shows) {
+    if (s.priority === 'high' && s.time && !seen.has(s.name)) {
+      seen.add(s.name);
+      highShows.push({ name: s.name, time: s.time });
+    }
+  }
+  const text = daySummary({ weather, warningLabel, badges: row.eval.badges, highShows });
   // (要確認) : 単独ソースの極端値 + 6 日先以降の予報誤差
   const checks = [];
   const precipMaxHourly = Math.max(
@@ -426,7 +434,7 @@ function detailPanelHtml(row, park, warningData = null) {
   const scoreReason = getScoreReason(row.eval);
   return `<div class="detail-panel">
     <div class="detail-info">
-      ${daySummaryHtml(row, todayJst(), warningData)}
+      ${daySummaryHtml(row, todayJst(), warningData, park || 'TDL')}
       ${dayClimateHtml(row, todayJst(), warningData)}
       <div class="detail-section score-section">
         <h4 class="score-head"><span class="material-symbols-rounded" aria-hidden="true">scoreboard</span><span class="score-head-title">スコア</span>${scorePillHtml(row.eval)}</h4>

@@ -11,9 +11,9 @@ describe('getScoreReason (§0.71.2 直接理由)', () => {
     expect(getScoreReason(ev({ wind: ok, rain: ok, wbgt: ok }))).toBe('風・雨・熱 通常');
   });
 
-  it('警告 1 (風バ) → 長文 + 実測値 + 風は緩い補足 (§0.72.3)', () => {
+  it('警告 1 (風バ) → 長文 + 実測値 (§0.77.1 曖昧な補足は削除)', () => {
     const r = getScoreReason(ev({ wind: badge(1, '風バ'), rain: ok, wbgt: ok }, { gustShowWindow: 8.2 }));
-    expect(r).toBe('風バ可能性あり (8.2m/s) ・ 風は通常開催されることが多い');
+    expect(r).toBe('風バ可能性あり (8.2m/s)');
   });
 
   it('警告 2 (雨バ + 熱バ) → 「雨と熱の両方が注意」 (§0.72.3)', () => {
