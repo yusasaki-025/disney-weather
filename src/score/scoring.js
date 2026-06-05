@@ -360,16 +360,15 @@ export const BANDS = [
   { key: 'night', label: '夜', hours: new Set([18, 19, 20]), weight: 1.0 },
 ];
 
-// 時間帯ごとのミニスコア (風 ・ 雨 ・ 熱の減点のみで算定)。
-// §0.66.3 : スコア理由用に主因 (最大減点要素) も返す (風 / 雨 / 暑さ / null)。
-// §0.68.1 : 日バッジの時間帯統合用に、その時間帯のバッジ (風/雨/熱) も返す。スコアと同じ
-//   windowMax (時間帯ピーク) ベースなので、バッジとサブスコアが必ず整合する。
-export function bandSubscore(forecasts, band, park, drizzle = false) {
+// 時間帯ごとのミニスコア (風 ・ 雨 ・ 熱 ・ 寒さ ・ UV の減点で算定)。
+// §0.66.3 : スコア理由用に主因 (最大減点要素) も返す (風 / 雨 / 暑さ / 寒さ / UV / null)。
+// §0.74 : §0.68.1 の時間帯別バッジ (日バッジ統合用) は撤廃 (日バッジはショー時刻 showWindow 由来に
+//   一本化したため不要)。ここはスコア (時間帯ピーク) のみを返す。
+export function bandSubscore(forecasts, band, park) {
   const gust = windowMax(forecasts, band.hours, 'gust');
   const pop = windowMax(forecasts, band.hours, 'pop');
   const wbgt = windowMax(forecasts, band.hours, 'wbgt');
   const wind = windowMax(forecasts, band.hours, 'wind');
-  const precip = windowMax(forecasts, band.hours, 'precip');
   const feelsLikeMax = mean(forecasts.map((f) => f.feelsLikeMax));
   // §0.68.H.b (監査 L-2) : 寒さ ・ UV も band に組み込み、日スコア (時間帯加重平均) に反映させる。
   //   §0.66 で日スコアが band 平均ベースになり、要素ベース rawScore に入る cold/uv が捨てられて
@@ -392,12 +391,7 @@ export function bandSubscore(forecasts, band, park, drizzle = false) {
   ];
   const maxD = Math.max(...factors.map(([, d]) => d));
   const factor = maxD <= 0 ? null : factors.find(([, d]) => d === maxD)[0];
-  const badges = {
-    wind: windBadge(gust, DAY_WIND_THRESHOLD),
-    rain: rainBadge(pop, precip, drizzle),
-    wbgt: wbgtBadge(wbgt, wind, feelsLikeMax),
-  };
-  return { score, symbol: scoreToSymbol(score), hasData: gust != null || pop != null, factor, badges };
+  return { score, symbol: scoreToSymbol(score), hasData: gust != null || pop != null, factor };
 }
 
 // 時間帯サブスコアの重み付き平均 (§0.66.1 : 日スコアの基準)
@@ -439,42 +433,21 @@ export function evaluateDay(forecasts, park, date = null) {
   // §0.48.3 : いずれかのソースが霧雨 (weatherText に「霧雨」) なら雨バッジを上限固定する。
   const drizzle = forecasts.some((f) => /霧雨/.test(f.weatherText || ''));
   const subscores = {};
-  for (const b of BANDS) subscores[b.key] = bandSubscore(forecasts, b, park, drizzle);
+  for (const b of BANDS) subscores[b.key] = bandSubscore(forecasts, b, park);
 
   const gustForBadge = showWindowOrMax(metrics, 'gust');
   const popForBadge = showWindowOrMax(metrics, 'pop');
   const wbgtForBadge = showWindowOrMax(metrics, 'wbgt');
 
-  // §0.68.1 (監査 L-3) : 日バッジを時間帯ベースに統一。各時間帯バッジの「最悪 (level 最大)」を日バッジに採る。
-  //   §0.66 で日スコアが時間帯加重平均になったのにバッジは日次 max のままで、「全部通常なのに FAIR」
-  //   「熱バなのに OK」の乖離が出ていた。バッジもサブスコアと同じ時間帯 windowMax 由来にして整合させる。
-  //   時間帯データが無い日 (hourly 無し ・ fallback) のみ従来の日次 (ショー窓/最大) 値で判定。
-  //   雨は band が pop のみのため、日次 precip mm/h ベースの雨バッジとも比較して悪い方を採る (強雨の取りこぼし防止)。
-  const anyBand = BANDS.some((b) => subscores[b.key].hasData);
-  // §0.69.1 : データのある時間帯バッジの中から最悪 (level 最大) を採る。全時間帯が通常なら
-  //   その「通常」バッジ (緑) を返す。旧実装は初期値 '—' を返し level 0 同士で置換されず、
-  //   通常日の緑バッジが '—' に化けて消えていた (§0.68.D の退化)。
-  const worstBandBadge = (key) => {
-    let worst = null;
-    for (const b of BANDS) {
-      const s = subscores[b.key];
-      const bb = s?.hasData ? s.badges?.[key] : null;
-      if (bb && (!worst || bb.level > worst.level)) worst = bb;
-    }
-    return worst || { level: 0, text: '—' };
+  // §0.74 (案 B) : 日バッジ判定を「ショー時刻範囲 (showWindow)」に統一。表示数値 (カードの風/雨/熱の値) と
+  //   同じソース (showWindowOrMax) なので、数値とバッジが必ず一致する。
+  //   §0.68.1 の「全時間帯 (朝/昼/夜) の最悪値 (worstBandBadge)」は撤廃 ・ ショー時刻外 (深夜/早朝) の
+  //   ピークで「ショー時刻 8.4m/s なのに中止リスク高 (別時間帯 11m/s 由来)」となる乖離を解消する。
+  const badges = {
+    wind: windBadge(gustForBadge, DAY_WIND_THRESHOLD),
+    rain: rainBadge(popForBadge, metrics.precipMaxHourly, drizzle),
+    wbgt: wbgtBadge(wbgtForBadge, metrics.windShowWindow, metrics.feelsLikeMax),
   };
-  const worseBadge = (a, b) => (b.level > a.level ? b : a);
-  const badges = anyBand
-    ? {
-        wind: worstBandBadge('wind'),
-        rain: worseBadge(worstBandBadge('rain'), rainBadge(popForBadge, metrics.precipMaxHourly, drizzle)),
-        wbgt: worstBandBadge('wbgt'),
-      }
-    : {
-        wind: windBadge(gustForBadge, DAY_WIND_THRESHOLD),
-        rain: rainBadge(popForBadge, metrics.precipMaxHourly, drizzle),
-        wbgt: wbgtBadge(wbgtForBadge, metrics.windShowWindow, metrics.feelsLikeMax),
-      };
 
   // §0.66.1 : 日スコアの基準を「全要素加重平均 (rawScore)」から「時間帯サブスコアの加重平均」に変更。
   //   全部通常なら高得点になる要素ベースだと「時間帯 FAIR なのに日 OK」が起きるため、時間帯ベースで整合。

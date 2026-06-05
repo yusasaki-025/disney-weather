@@ -606,21 +606,38 @@ describe('evaluateDay (統合)', () => {
     expect(r2.capped).toBe(false);
   });
 
-  it('§0.68.1 : 日バッジ = 各時間帯バッジの最悪 (昼だけ風バ → 日も風バ)', () => {
-    // 朝 ・ 夜は穏やか、昼だけ風 9m/s (風バ)。日の風バッジは昼の風バを反映。
+  it('§0.74 : 日バッジはショー時刻 (showWindow) 由来 ・ ショー時刻外のピークは無視', () => {
+    // 朝 9-11時に突風 12m/s (中止リスク域) があるが、ショー時刻 (13/15時±1) は 8m/s (風バ域)。
+    // 日バッジは showWindow 由来なので「中止リスク高」でなく「風バ」(表示数値 8 と一致)。
     const om = fakeForecast(
       'open-meteo',
-      { gustMax: 9, popMax: 10, feelsLikeMax: 22, tempMax: 24, uvMax: 3 },
+      { gustMax: 12, popMax: 10, feelsLikeMax: 22, tempMax: 24, uvMax: 3 },
       [
-        { hour: 10, gust: 2, pop: 5, wind: 2, wbgt: 21 },
-        { hour: 13, gust: 9, pop: 5, wind: 6, wbgt: 21 },
-        { hour: 19, gust: 2, pop: 5, wind: 2, wbgt: 21 },
+        { hour: 10, gust: 12, pop: 5, wind: 9, wbgt: 21 }, // ショー時刻外のピーク (無視されるべき)
+        { hour: 13, gust: 8, pop: 5, wind: 6, wbgt: 21 },
+        { hour: 15, gust: 8, pop: 5, wind: 6, wbgt: 21 },
       ],
     );
     const r = evaluateDay([om], 'TDL');
+    // 表示数値 (gustShowWindow) と一致する「風バ」。朝の 12m/s で「中止リスク」化しない。
+    expect(r.metrics.gustShowWindow).toBeLessThan(11);
     expect(r.badges.wind.text).toBe('風バ');
-    expect(r.subscores.noon.badges.wind.text).toBe('風バ');
-    expect(r.subscores.morning.badges.wind.text).toBe('通常');
+  });
+
+  it('§0.74 : 閾値整合性ガード ・ 中止リスク高 ⇔ 表示数値 (showWindow) ≥ windCancel(11)', () => {
+    // ショー時刻に 12m/s → 中止リスク。表示数値も同じ showWindow なので 11 以上で整合。
+    const om = fakeForecast(
+      'open-meteo',
+      { gustMax: 12, popMax: 10, feelsLikeMax: 22, tempMax: 24, uvMax: 3 },
+      [
+        { hour: 13, gust: 12, pop: 5, wind: 9, wbgt: 21 },
+        { hour: 15, gust: 12, pop: 5, wind: 9, wbgt: 21 },
+      ],
+    );
+    const r = evaluateDay([om], 'TDL');
+    const shown = r.metrics.gustShowWindow ?? r.metrics.gustMax; // カード表示と同じ showWindowOrMax
+    expect(r.badges.wind.text).toBe('中止リスク');
+    expect(shown).toBeGreaterThanOrEqual(11);
   });
 
   it('§0.68.1/.2 : 全時間帯バッジ通常なら日は FAIR にならない (通常なのに FAIR を解消)', () => {
