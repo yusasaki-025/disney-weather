@@ -29,6 +29,7 @@ import { nowcastHtml } from './nowcast.js';
 import { getTempColor, getTempBandKey } from '../utils/tempColor.js';
 import { getWeatherIcon, getWeatherIcons } from '../utils/weatherIcon.js';
 import { normalizeWeatherText } from '../utils/weatherText.js';
+import { weatherBadge } from '../data/weatherBadge.js';
 
 // 気温セルを暖寒色で着色 (§0.6-2)。data-tb はダークモード CSS 上書き用。
 function tempSpan(c) {
@@ -117,12 +118,16 @@ function sourceCellHtml(source, forecast, status) {
   const title = `${label} ${freshnessLabel(forecast.fetchedAt)}`;
   // 大きな天気アイコン (40px) を主役に (§0.6.6-2)
   const wi = getWeatherIcon(forecast.weatherText);
+  // §0.80 : 天気にも 5 段階バッジ (快適/ふつう/注意/警告/悪天候)。風 ・ 雨 ・ 熱と同じ薄色背景 + 濃色文字。表示用。
+  const wb = weatherBadge(forecast.weatherText);
+  const wbHtml = `<span class="weather-badge wb-${wb.key}">${wb.text}</span>`;
   return `<td class="source-cell ${cellClass}" data-label="${esc(label)}" title="${esc(title)}">
     ${head}
     <span class="material-symbols-rounded weather-icon" style="color:${wi.color}" aria-hidden="true">${wi.name}</span>
     <div class="sc-sub">${esc(normalizeWeatherText(forecast.weatherText))}</div>
     <div class="sc-main">${temp}</div>
     ${rainSub(forecast)}
+    ${wbHtml}
   </td>`;
 }
 
