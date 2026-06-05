@@ -179,7 +179,7 @@ function showRiskLineHtml(showName, park, risk, predWind, weatherless = false) {
     if (predWind != null) windPieces.push(`突風 ${fmtNum(predWind, 1)}m/s`);
     if (windPieces.length) {
       riskParts.push(
-        `<span class="sr-wind" title="風 (平均風速) = ショー時刻の 1時間平均 (sustained) / 突風 = 1時間最大瞬間風速 (gust)。突風は中止判定・過去事例検索のベースです">${windPieces.join('・')}</span>`,
+        `<span class="sr-wind" title="風 (平均風速) = ショー時刻の 1時間平均 (sustained) / 突風 = 1時間最大瞬間風速 (gust)。突風は中止判定・過去事例検索のベースです">${windPieces.join(' ｜ ')}</span>`,
       );
     }
   }
@@ -202,11 +202,19 @@ function showRiskLineHtml(showName, park, risk, predWind, weatherless = false) {
   if (!weatherless) {
     const th = thresholdForShow(showName);
     const note = th.isDefault ? '<span class="th-note">(一般基準)</span>' : '';
-    thresholdHtml = `<div class="show-threshold">基準 : 風バ ${th.windBa}m/s 〜 ・ 中止 ${th.windCancel}m/s 〜 ${note}</div>`;
+    // §0.81.3 : 基準も ｜ 区切り。行全体は薄グレー (最も控えめな階層)。
+    thresholdHtml = `<div class="show-threshold"><span class="sr-lead">基準</span> 風バ ${th.windBa}m/s 〜 ｜ 中止 ${th.windCancel}m/s 〜 ${note}</div>`;
   }
   if (riskParts.length === 0 && !cancelHtml && !indoorNote && !thresholdHtml) return '';
-  const body = [riskParts.join('・'), indoorNote, cancelHtml].filter(Boolean).join(' ');
-  return `<div class="show-risk-line">${body}</div>${thresholdHtml}`;
+  // §0.81.2/.3 : 現状行 = 「現状」ラベル (中グレー) + データ (濃黒 ・ ｜ 区切り) ・ 過去中止率 (中グレー)。
+  const dataInner = [riskParts.join(' ｜ '), cancelHtml].filter(Boolean).join(' ・ ');
+  let statusLine = '';
+  if (weatherless) {
+    statusLine = `<div class="show-risk-line">${[riskParts.join(' ｜ '), indoorNote].filter(Boolean).join(' ')}</div>`;
+  } else if (dataInner) {
+    statusLine = `<div class="show-risk-line"><span class="sr-lead">現状</span> ${dataInner}</div>`;
+  }
+  return `${statusLine}${thresholdHtml}`;
 }
 
 // §0.39.1 : 予報変更履歴 (直近 7 スナップショットのスコア推移)。点が 2 未満なら非表示。

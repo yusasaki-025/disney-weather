@@ -74,18 +74,18 @@ export function subscoreHtml(subscores, bands, _dayEval = null, reasonText = '')
     if (!ss || !ss.hasData) return `${b.label}${r} データなし`;
     return `${b.label}${r} ${ss.symbol.label} ${ss.score}`;
   });
-  // §0.64.3 : 各時間帯を 1 行に (時刻 / 点 / 評価バッジ / 最重視マーク)。
+  // §0.64.3 : 各時間帯を 1 行に (時刻 / 点 / 評価バッジ)。
+  // §0.81.5 : 「← 最重視」テキストは撤去。昼は ss-row-main のゴールド枠 + 背景で視覚的に強調する。
   const rows = bands.map((b) => {
     const ss = subscores[b.key];
     const has = ss && ss.hasData;
     const isNoon = b.key === 'noon';
-    const noonMark = isNoon ? '<span class="ss-row-key">← 最重視</span>' : '';
     const timeHtml = `<span class="ss-row-time">${b.label}<span class="ss-row-range">${range(b)}</span></span>`;
     if (!has) {
-      return `<li class="ss-row${isNoon ? ' ss-row-main' : ''}" data-level="none">${timeHtml}<span class="ss-row-score">—</span><span class="ss-row-badge">データなし</span>${noonMark}</li>`;
+      return `<li class="ss-row${isNoon ? ' ss-row-main' : ''}" data-level="none">${timeHtml}<span class="ss-row-score">—</span><span class="ss-row-badge">データなし</span></li>`;
     }
     const c = ss.symbol.color;
-    return `<li class="ss-row${isNoon ? ' ss-row-main' : ''}" data-level="${ss.symbol.key}">${timeHtml}<span class="ss-row-score" style="color:${c}">${ss.score}</span><span class="ss-row-badge" style="color:${c}"><span class="material-symbols-rounded" aria-hidden="true">${ss.symbol.icon}</span>${esc(ss.symbol.label)}</span>${noonMark}</li>`;
+    return `<li class="ss-row${isNoon ? ' ss-row-main' : ''}" data-level="${ss.symbol.key}">${timeHtml}<span class="ss-row-score" style="color:${c}">${ss.score}</span><span class="ss-row-badge" style="color:${c}"><span class="material-symbols-rounded" aria-hidden="true">${ss.symbol.icon}</span>${esc(ss.symbol.label)}</span></li>`;
   });
   const reasonHtml = reasonText
     ? `<p class="score-reason-line"><span class="srl-key">理由</span><span class="srl-val">${esc(reasonText)}</span></p>`

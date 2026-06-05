@@ -705,9 +705,10 @@ section {
 }
 
 /* --- 詳細パネル (展開行) --- */
+/* §0.81.1 : 詳細パネル背景は PC ・ スマホとも白に統一 (旧 PC は surface-2 水色だった)。 */
 .detail-row td {
   padding: 0;
-  background: var(--surface-2);
+  background: #fff;
 }
 
 .detail-panel {
@@ -757,7 +758,8 @@ section {
   flex-wrap: wrap;
   align-items: baseline;
   gap: 4px 8px;
-  padding: 4px 0;
+  /* §0.81.4 : ショー行間を広げ (約 16px) 区切りを見やすく。 */
+  padding: 8px 0;
   text-align: left;
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
@@ -1393,10 +1395,13 @@ h1, h2, h3, h4, .app-title h1 {
   border-radius: 10px;
   background: var(--surface-2);
 }
-/* 昼は最重視なので淡いゴールド枠で強調。 */
+/* §0.81.5 : 昼は最重視。「← 最重視」テキストは撤去し、ゴールド枠 + 淡ゴールド背景 + 太字で視覚強調。 */
 .ss-row-main {
   border: 1.5px solid var(--brand-gold);
-  background: var(--surface);
+  background: #fffaf0;
+}
+.ss-row-main .ss-row-time {
+  font-weight: 700;
 }
 .ss-row-time {
   flex: 1 1 auto;
@@ -2620,10 +2625,11 @@ button.extreme-warn {
   padding-left: 2px;
 }
 /* §0.43.1 : ショー詳細のリスク 1 行統合 (風 avg/max ・ 熱 ・ 過去中止率)。#18 の風速 2 重表示を解消 */
+/* §0.81.2 : 現状行は「データ」を濃黒に (--text) ・ ラベルと過去中止率は中グレーで階層化。 */
 .show-risk-line {
   font-size: 12px;
-  color: var(--text-sub);
-  margin-bottom: 2px;
+  color: var(--text);
+  margin-bottom: 3px;
   line-height: 1.5;
 }
 .show-risk-line .cancel-prob {
@@ -2631,15 +2637,27 @@ button.extreme-warn {
   width: auto;
   margin: 0;
 }
+/* §0.81.2 : 「現状」「基準」ラベル。現状=中グレー / 基準行内=薄グレー (行色を継承)。 */
+.sr-lead {
+  font-weight: 500;
+  font-size: 0.9em;
+  color: var(--text-sub);
+}
+.sr-lead::after {
+  content: " :";
+}
+.show-threshold .sr-lead {
+  color: inherit;
+}
 /* §0.44.12 : 屋内ショー ・ プロジェクションの「屋内 ・ 天候影響なし」マーク */
 .sr-indoor {
   color: var(--text-mute);
   font-size: var(--fs-xs);
 }
-/* §0.75 : ショー個別の風閾値 (基準 : 風バ 〜 / 中止 〜) を現状値の下に小さく ・ サブカラーで。 */
+/* §0.75 / §0.81.2 : ショー個別の風閾値 (基準) は最も控えめな階層 = 薄グレー (--text-mute)。 */
 .show-threshold {
   font-size: 0.85em;
-  color: var(--text-sub);
+  color: var(--text-mute);
   line-height: 1.4;
   margin-bottom: 2px;
 }
