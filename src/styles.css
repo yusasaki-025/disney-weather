@@ -1927,6 +1927,11 @@ body {
   .forecast-table tr.calendar-row > td.cell-rain {
     grid-area: rain;
   }
+  /* §0.82.2 : 風 ・ 雨は同じ grid 行。雨が 2 行に折り返しても風セルと垂直中心で揃える。 */
+  .forecast-table tr.calendar-row > td.cell-wind,
+  .forecast-table tr.calendar-row > td.cell-rain {
+    align-self: center;
+  }
   .forecast-table tr.calendar-row > td.cell-heat {
     grid-area: heat;
   }
@@ -2555,8 +2560,13 @@ body {
   .forecast-table tr.calendar-row > td.cell-rain .metric-cell {
     white-space: normal;
   }
+  /* §0.82.1 : 2 行折り返し時の行間をタイトに (row-gap 2px ・ line-height 1.2)。
+     列方向 (アイコン↔値) の余白は維持。1 行で収まる文字小/中は見た目変化なし。 */
   .forecast-table tr.calendar-row > td.cell-rain .cat-val {
     flex-wrap: wrap;
+    row-gap: 2px;
+    column-gap: 4px;
+    line-height: 1.2;
   }
 }
 
