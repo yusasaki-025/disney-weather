@@ -7,19 +7,21 @@
 // 典型値 (公式取得が無い日・取得失敗時の FALLBACK)
 export const FALLBACK_SCHEDULE = {
   TDL: [
-    { name: 'ハーモニー･イン･カラー', time: '13:00', priority: 'high', type: 'parade' },
+    // §0.76 : ハーモニー ・ イン ・ カラーは通年演目なので high → medium (showWindow 判定対象外)。
+    { name: 'ハーモニー･イン･カラー', time: '13:00', priority: 'medium', type: 'parade' },
     { name: 'ジュビレーション！', time: '15:00', priority: 'high', type: 'parade' },
     { name: 'ジャンボリミッキー！', time: '11:00', priority: 'medium', type: 'show' },
     { name: 'エレクトリカルパレード･ドリームライツ', time: '19:30', priority: 'low', type: 'parade' },
     // §0.64.2 : 両パーク共通の期間限定ナイト花火。official 未取得日 (fallback) でも TDL/TDS 両方に出す。
-    { name: 'スカイ･フル･オブ･カラーズ', time: '20:30', priority: 'low', type: 'show' },
+    // §0.76 : 期間限定花火なので high (showWindow 判定対象)。
+    { name: 'スカイ･フル･オブ･カラーズ', time: '20:30', priority: 'high', type: 'show' },
   ],
   TDS: [
     { name: 'スパークリング･ジュビリー･セレブレーション', time: '11:30', priority: 'high', type: 'show' },
     { name: 'ウィッシュ', time: '14:00', priority: 'high', type: 'show' },
     { name: 'ビリーヴ！～シー･オブ･ドリームス～', time: '19:45', priority: 'low', type: 'show' },
-    // §0.64.2 : 上空共通の期間限定ナイト花火 (fallback 日も表示)。
-    { name: 'スカイ･フル･オブ･カラーズ', time: '20:30', priority: 'low', type: 'show' },
+    // §0.64.2 / §0.76 : 期間限定ナイト花火 (fallback 日も表示) ・ high。
+    { name: 'スカイ･フル･オブ･カラーズ', time: '20:30', priority: 'high', type: 'show' },
   ],
 };
 

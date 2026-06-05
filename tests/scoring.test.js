@@ -287,6 +287,9 @@ describe('hourlyRange (§0.57.1c 「この日の概要」レンジ)', () => {
   const f1 = fakeForecast('open-meteo', {}, [
     { hour: 9, gust: 6, pop: 10, wind: 3, precip: 0, wbgt: 18 },
     { hour: 13, gust: 18, pop: 70, wind: 12, precip: 19.8, wbgt: 26 },
+    // §0.76 : ショー窓が {14,15,16,20,21} に変わったため、窓内 (15時) に既存レンジ内の値を 1 点追加
+    //   (ShowWindow を非 null に ・ min/max レンジは不変)。
+    { hour: 15, gust: 10, pop: 40, wind: 5, precip: 1.0, wbgt: 22 },
     { hour: 18, gust: 9, pop: 40, wind: 5, precip: 1.2, wbgt: 22 },
   ]);
   it('全 hourly の最低 〜 最高を返す', () => {
@@ -524,16 +527,17 @@ describe('evaluateDay (統合)', () => {
       'open-meteo',
       { gustMax: 12, popMax: 70, precipSum: 0, feelsLikeMax: 22, tempMax: 25, uvMax: 6 },
       [
-        { hour: 12, gust: 11, pop: 50, wind: 5, wbgt: 24 },
-        { hour: 13, gust: 12, pop: 70, wind: 6, wbgt: 26 },
-        { hour: 14, gust: 10, pop: 60, wind: 5, wbgt: 25 },
+        { hour: 14, gust: 11, pop: 50, wind: 5, wbgt: 24 },
+        { hour: 15, gust: 12, pop: 70, wind: 6, wbgt: 26 },
+        { hour: 16, gust: 10, pop: 60, wind: 5, wbgt: 25 },
       ],
     );
     const r = evaluateDay([om], 'TDL');
     expect(r.score).toBeGreaterThanOrEqual(0);
     expect(r.score).toBeLessThanOrEqual(100);
     expect(r.symbol).toBeTruthy();
-    // §0.47.1 : 日全体バッジは一般ショー基準 (windBa8/windCancel11)。gust window 平均 11 → 中止リスク域。
+    // §0.76 : 高 priority は ジュビレーション 15:00 + スカイ 20:30 → show 窓 {14,15,16,20,21}。
+    // §0.47.1 : 一般ショー基準 (windBa8/windCancel11)。gust window 平均 11 → 中止リスク域。
     expect(r.badges.wind.text).toBe('中止リスク');
     // §0.48.2 : hourly に precip が無いので降水量 0 ・ pop window 60 → 高確率で「雨バ」
     expect(r.badges.rain.text).toBe('雨バ');
@@ -662,9 +666,9 @@ describe('evaluateDay (統合)', () => {
       'open-meteo',
       { gustMax: 3, popMax: 10, feelsLikeMax: 22, tempMax: 24, uvMax: 3 },
       [
-        { hour: 10, gust: 3, pop: 10, wind: 2, wbgt: 22 },
-        { hour: 13, gust: 3, pop: 10, wind: 2, wbgt: 22 },
-        { hour: 19, gust: 3, pop: 10, wind: 2, wbgt: 22 },
+        { hour: 14, gust: 3, pop: 10, wind: 2, wbgt: 22 },
+        { hour: 15, gust: 3, pop: 10, wind: 2, wbgt: 22 },
+        { hour: 16, gust: 3, pop: 10, wind: 2, wbgt: 22 },
       ],
     );
     const r = evaluateDay([om], 'TDL');

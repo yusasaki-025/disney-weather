@@ -9,11 +9,11 @@
         "openHour": "09:00",
         "closeHour": "21:00",
         "shows": [
-          { "name": "ディズニー･ハーモニー･イン･カラー", "times": ["13:00"], "priority": "high", "kind": "parade-day", "tags": ["プレミアアクセス"] },
+          { "name": "ディズニー･ハーモニー･イン･カラー", "times": ["13:00"], "priority": "medium", "kind": "parade-day", "tags": ["プレミアアクセス"] },
           { "name": "イッツ･ア･スウィーツフルタイム!", "times": ["15:40"], "priority": "high", "kind": "show-day", "tags": ["プレミアアクセス"] },
           { "name": "Reach for the Stars", "times": ["20:50"], "priority": "high", "kind": "show-day", "tags": ["プレミアアクセス"] },
           { "name": "東京ディズニーランド･エレクトリカルパレード･ドリームライツ", "times": ["19:30"], "priority": "low", "kind": "parade-night", "tags": ["プレミアアクセス"] },
-          { "name": "スカイ･フル･オブ･カラーズ", "times": ["20:30"], "priority": "low", "kind": "fireworks", "tags": [] },
+          { "name": "スカイ･フル･オブ･カラーズ", "times": ["20:30"], "priority": "high", "kind": "fireworks", "tags": [] },
           { "name": "ジャンボリミッキー!レッツ･ダンス!", "times": ["12:30", "13:45", "15:00", "16:50", "18:05"], "priority": "medium", "kind": "show-indoor", "tags": ["エントリー受付"] },
           { "name": "ミッキーのレインボー･ルアウ", "times": [], "priority": null, "kind": "show-restaurant", "tags": ["予約必須"] }
         ]
@@ -22,7 +22,7 @@
         "openHour": "09:00",
         "closeHour": "21:00",
         "shows": [
-          { "name": "スカイ･フル･オブ･カラーズ", "times": ["20:30"], "priority": "low", "kind": "fireworks", "tags": [] },
+          { "name": "スカイ･フル･オブ･カラーズ", "times": ["20:30"], "priority": "high", "kind": "fireworks", "tags": [] },
           { "name": "スパークリング･ジュビリー･セレブレーション", "times": ["11:30", "14:00", "16:00"], "priority": "high", "kind": "harbor-day", "tags": [] },
           { "name": "【環境演出】スパークリング･ジュビリー･ナイト", "times": ["20:15", "20:40", "20:55"], "priority": "low", "kind": "environment", "tags": [] },
           { "name": "ビリーヴ!〜シー･オブ･ドリームス〜", "times": ["19:30"], "priority": "low", "kind": "harbor-night", "tags": ["プレミアアクセス"] },
@@ -37,11 +37,11 @@
         "openHour": "09:00",
         "closeHour": "21:00",
         "shows": [
-          { "name": "ディズニー･ハーモニー･イン･カラー", "times": ["13:00"], "priority": "high", "kind": "parade-day", "tags": ["プレミアアクセス"] },
+          { "name": "ディズニー･ハーモニー･イン･カラー", "times": ["13:00"], "priority": "medium", "kind": "parade-day", "tags": ["プレミアアクセス"] },
           { "name": "イッツ･ア･スウィーツフルタイム!", "times": ["15:40"], "priority": "high", "kind": "show-day", "tags": ["プレミアアクセス"] },
           { "name": "Reach for the Stars", "times": ["20:50"], "priority": "high", "kind": "show-day", "tags": ["プレミアアクセス"] },
           { "name": "東京ディズニーランド･エレクトリカルパレード･ドリームライツ", "times": ["19:30"], "priority": "low", "kind": "parade-night", "tags": ["プレミアアクセス"] },
-          { "name": "スカイ･フル･オブ･カラーズ", "times": ["20:30"], "priority": "low", "kind": "fireworks", "tags": [] },
+          { "name": "スカイ･フル･オブ･カラーズ", "times": ["20:30"], "priority": "high", "kind": "fireworks", "tags": [] },
           { "name": "ジャンボリミッキー!レッツ･ダンス!", "times": ["12:30", "13:45", "15:00", "16:50", "18:05"], "priority": "medium", "kind": "show-indoor", "tags": ["エントリー受付"] },
           { "name": "ミッキーのレインボー･ルアウ", "times": [], "priority": null, "kind": "show-restaurant", "tags": ["予約必須"] }
         ]
@@ -50,7 +50,7 @@
         "openHour": "09:00",
         "closeHour": "21:00",
         "shows": [
-          { "name": "スカイ･フル･オブ･カラーズ", "times": ["20:30"], "priority": "low", "kind": "fireworks", "tags": [] },
+          { "name": "スカイ･フル･オブ･カラーズ", "times": ["20:30"], "priority": "high", "kind": "fireworks", "tags": [] },
           { "name": "スパークリング･ジュビリー･セレブレーション", "times": ["11:30", "14:00", "16:00"], "priority": "high", "kind": "harbor-day", "tags": [] },
           { "name": "【環境演出】スパークリング･ジュビリー･ナイト", "times": ["20:15", "20:40", "20:55"], "priority": "low", "kind": "environment", "tags": [] },
           { "name": "ビリーヴ!〜シー･オブ･ドリームス〜", "times": ["19:30"], "priority": "low", "kind": "harbor-night", "tags": ["プレミアアクセス"] },
