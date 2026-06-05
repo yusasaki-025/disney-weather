@@ -1,5 +1,29 @@
 import { describe, it, expect } from 'vitest';
-import { isWeatherless, isSeasonal } from '../src/data/show-thresholds.js';
+import { isWeatherless, isSeasonal, thresholdForShow } from '../src/data/show-thresholds.js';
+
+describe('thresholdForShow (§0.75 ショー個別の風閾値 + isDefault)', () => {
+  it('固有閾値ショー (ハーモニー) は windBa6/windCancel12 ・ isDefault=false', () => {
+    const t = thresholdForShow('ディズニー･ハーモニー･イン･カラー');
+    expect(t.windBa).toBe(6);
+    expect(t.windCancel).toBe(12);
+    expect(t.isDefault).toBe(false);
+  });
+  it('エレクトリカルは windCancel10 (windBa は DEFAULT 8) ・ isDefault=false', () => {
+    const t = thresholdForShow('東京ディズニーランド･エレクトリカルパレード･ドリームライツ');
+    expect(t.windBa).toBe(8);
+    expect(t.windCancel).toBe(10);
+    expect(t.isDefault).toBe(false);
+  });
+  it('一般ショー (該当なし) は DEFAULT 8/12 ・ isDefault=true', () => {
+    const t = thresholdForShow('架空ショー');
+    expect(t.windBa).toBe(8);
+    expect(t.windCancel).toBe(12);
+    expect(t.isDefault).toBe(true);
+  });
+  it('名前なしも DEFAULT ・ isDefault=true', () => {
+    expect(thresholdForShow().isDefault).toBe(true);
+  });
+});
 
 describe('isWeatherless (§0.44.12 屋内ショー判定)', () => {
   it('屋内ショー ・ プロジェクションは true', () => {

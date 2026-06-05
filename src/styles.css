@@ -2604,6 +2604,16 @@ button.extreme-warn {
   color: var(--text-mute);
   font-size: var(--fs-xs);
 }
+/* §0.75 : ショー個別の風閾値 (基準 : 風バ 〜 / 中止 〜) を現状値の下に小さく ・ サブカラーで。 */
+.show-threshold {
+  font-size: 0.85em;
+  color: var(--text-sub);
+  line-height: 1.4;
+  margin-bottom: 2px;
+}
+.show-threshold .th-note {
+  color: var(--text-mute);
+}
 
 /* §0.37.4 : PC はスコア独立列 (7列) ・ スマホはカード内 (cell-date-score) に統合維持 */
 .cell-date-score .card-score {

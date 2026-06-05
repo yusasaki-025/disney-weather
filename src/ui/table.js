@@ -22,7 +22,7 @@ import { getScoreReason } from '../score/scoreReason.js';
 import { daySummary } from '../score/daySummary.js';
 import { showRiskInfo } from '../score/showRisk.js';
 import { getAttractionClosures } from '../score/attractionForecast.js';
-import { isWeatherless, isSeasonal } from '../data/show-thresholds.js';
+import { isWeatherless, isSeasonal, thresholdForShow } from '../data/show-thresholds.js';
 import { heatAlertLevel } from '../score/heatAlert.js';
 import { freshnessLabel } from '../utils/freshness.js';
 import { nowcastHtml } from './nowcast.js';
@@ -190,9 +190,17 @@ function showRiskLineHtml(showName, park, risk, predWind, weatherless = false) {
   }
   // §0.44.12 : 屋内ショーは「屋内 ・ 天候影響なし」を明示 (空欄だと未取得と紛らわしいため)。
   const indoorNote = weatherless ? '<span class="sr-indoor">屋内・天候影響なし</span>' : '';
-  if (riskParts.length === 0 && !cancelHtml && !indoorNote) return '';
+  // §0.75 : 屋内以外はショー個別の風閾値 (風バ 〜 / 中止 〜) を現状値の下に小さく併記。
+  //   ユーザーが「現状の突風 vs このショーの中止基準」を一目で比較できる。一般基準 (DEFAULT) は注釈付き。
+  let thresholdHtml = '';
+  if (!weatherless) {
+    const th = thresholdForShow(showName);
+    const note = th.isDefault ? '<span class="th-note">(一般基準)</span>' : '';
+    thresholdHtml = `<div class="show-threshold">基準 : 風バ ${th.windBa}m/s 〜 ・ 中止 ${th.windCancel}m/s 〜 ${note}</div>`;
+  }
+  if (riskParts.length === 0 && !cancelHtml && !indoorNote && !thresholdHtml) return '';
   const body = [riskParts.join('・'), indoorNote, cancelHtml].filter(Boolean).join(' ');
-  return `<div class="show-risk-line">${body}</div>`;
+  return `<div class="show-risk-line">${body}</div>${thresholdHtml}`;
 }
 
 // §0.39.1 : 予報変更履歴 (直近 7 スナップショットのスコア推移)。点が 2 未満なら非表示。

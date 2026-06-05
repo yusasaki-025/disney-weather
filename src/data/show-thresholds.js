@@ -49,10 +49,10 @@ export function isSeasonal(name) {
 }
 
 // ショー名から閾値を返す (見つからなければ DEFAULT)。
+// §0.75 : 固有閾値か一般基準 (DEFAULT) かを UI で出し分けるため isDefault も返す。
 export function thresholdForShow(name) {
-  if (!name) return { ...DEFAULT_THRESHOLD };
-  const hit = SHOW_THRESHOLDS.find((t) => t.match.test(name));
-  return hit ? { ...DEFAULT_THRESHOLD, ...hit } : { ...DEFAULT_THRESHOLD };
+  const hit = name ? SHOW_THRESHOLDS.find((t) => t.match.test(name)) : null;
+  return hit ? { ...DEFAULT_THRESHOLD, ...hit, isDefault: false } : { ...DEFAULT_THRESHOLD, isDefault: true };
 }
 
 // その日 ・ パークの high 優先ショー群から「最も中止しやすい (windCancel 最小)」閾値を返す。
