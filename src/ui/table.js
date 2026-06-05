@@ -42,12 +42,13 @@ const CAT_ICON = { wind: 'air', rain: 'umbrella', wbgt: 'thermostat' };
 // 風 / 雨 / 熱セル : カテゴリアイコン(頭) ＋ 実数値(主) ＋ バッジ(副) (§0.5.2 / §0.6.6-3)
 // kind: wind/rain/wbgt。cellClass/label はスマホカード化 (§0.22) 用。
 // §0.56.4 : 見出し末尾カッコ (WBGT) は本体と分けて metric-suffix で縮小表示。
+// §0.79 : カード上の風セルは突風 (gust ・ ショー時刻のピーク) を表示しているため見出しを「突風」に。
 const METRIC_HEAD = {
-  wind: { main: '風', suffix: '' },
+  wind: { main: '突風', suffix: '' },
   rain: { main: '雨', suffix: '' },
   wbgt: { main: '熱', suffix: '(WBGT)' },
 };
-const METRIC_LABEL = { wind: '風', rain: '雨', wbgt: '熱 (WBGT)' };
+const METRIC_LABEL = { wind: '突風', rain: '雨', wbgt: '熱 (WBGT)' };
 
 // §0.56.2/.3/.4 : スマホカードの列見出し (実 DOM)。PC は thead が担うので CSS で非表示。
 //   main + 末尾カッコ (metric-suffix で縮小) ＋ 任意アイコン。全列で同サイズ ・ 同パターンに統一。
@@ -485,7 +486,7 @@ export function renderTable(els, rows, state, sources, sourceStatus, handlers, w
   thead.innerHTML = `<tr>
     <th class="col-date">日付</th>
     <th class="col-score">スコア</th>
-    ${catHead('wind', '風')}
+    ${catHead('wind', '突風')}
     ${catHead('rain', '雨')}
     <th><span class="material-symbols-rounded cat-head" aria-hidden="true">${CAT_ICON.wbgt}</span><span class="cat-head-label">熱<span class="metric-suffix">(WBGT)</span></span><span class="material-symbols-rounded wbgt-info" tabindex="0" role="img" title="暑さ指数 (WBGT)。気温 + 湿度 + 日射から算出する熱中症リスク指標。28+ で警戒、31+ で危険。" aria-label="暑さ指数 (WBGT) とは : 気温・湿度・日射から算出する熱中症リスク指標。28 以上で警戒、31 以上で危険。">info</span></th>
     ${sources
