@@ -394,11 +394,21 @@ export function bandSubscore(forecasts, band, park) {
   return { score, symbol: scoreToSymbol(score), hasData: gust != null || pop != null, factor };
 }
 
-// 時間帯サブスコアの重み付き平均 (§0.66.1 : 日スコアの基準)
-export function weightedBandTotal(subscores) {
+// §0.78.1 : 評価対象の band を showWindow (priority high ショー時刻 ±1h) に重なるものだけに絞る。
+//   日スコア (band 加重平均) とバッジ (§0.74 showWindow) を同じ時間範囲で揃え、ショー時刻外の
+//   ピークがスコアにだけ効く乖離を解消する。showWindow が無い (fallback 等) 日は全 band を使う。
+export function activeBands(park, date = null) {
+  const showHours = showWindowHours(park, 'high', 1, date);
+  if (!showHours || showHours.size === 0) return BANDS;
+  const active = BANDS.filter((b) => [...b.hours].some((h) => showHours.has(h)));
+  return active.length ? active : BANDS;
+}
+
+// 時間帯サブスコアの重み付き平均 (§0.66.1 : 日スコアの基準)。bands 省略時は全 BAND (§0.78 で activeBands を渡す)。
+export function weightedBandTotal(subscores, bands = BANDS) {
   let num = 0;
   let den = 0;
-  for (const b of BANDS) {
+  for (const b of bands) {
     const s = subscores[b.key];
     if (s && s.hasData) {
       num += s.score * b.weight;
@@ -411,10 +421,11 @@ export function weightedBandTotal(subscores) {
 // §0.66.2 : floor guard。時間帯に NG/FAIR が含まれる日は日スコアに上限を掛け、
 //   「最重視の昼が FAIR なのに日 OK」のような楽観バイアスを防ぐ。
 //   いずれか NG (< 40) → 日 ≤ 59 (FAIR) / いずれか FAIR (< 60) → 日 ≤ 74 (OK) / 全部 OK 以上 → 上限なし。
-export function bandFloorCap(subscores) {
+//   §0.78.1 : 評価対象は activeBands (showWindow 範囲) のみ。
+export function bandFloorCap(subscores, bands = BANDS) {
   let hasNg = false;
   let hasFair = false;
-  for (const b of BANDS) {
+  for (const b of bands) {
     const s = subscores[b.key];
     if (!s || !s.hasData) continue;
     if (s.score < 40) hasNg = true;
@@ -423,6 +434,21 @@ export function bandFloorCap(subscores) {
   if (hasNg) return 59;
   if (hasFair) return 74;
   return 100;
+}
+
+// §0.78.2 : 警告レベル別の下限保証 (floor)。「警告なし = 最低 GOOD」というユーザー直感を担保し、
+//   寒さ/UV 等のバッジが無い減点でスコアが下がり過ぎるのを防ぐ。cap (上限) とは別軸の下限。
+//   警告 0 → 75 / 風単独 → 60 / 雨 or 熱単独 ・ 警告 2 → 40 / 警告 3 ・ キャン濃厚 → 20 / ほぼ中止 → 0。
+export function warnFloor(badges) {
+  const sevOf = (b) => badgeSeverity(b?.text || '');
+  const sevs = [badges.wind, badges.rain, badges.wbgt].map(sevOf);
+  if (sevs.includes('critical')) return 0; // ほぼ中止
+  if (sevs.includes('danger')) return 20; // キャン濃厚 ・ 中止リスク高
+  const warns = ['wind', 'rain', 'wbgt'].filter((k) => sevOf(badges[k]) === 'warn');
+  if (warns.length === 0) return 75;
+  if (warns.length >= 3) return 20;
+  if (warns.length === 2) return 40;
+  return warns[0] === 'wind' ? 60 : 40; // 風単独 60 / 雨 or 熱単独 40
 }
 
 // --- 1 日分の総合評価 (UI が使う入口) ---
@@ -449,24 +475,26 @@ export function evaluateDay(forecasts, park, date = null) {
     wbgt: wbgtBadge(wbgtForBadge, metrics.windShowWindow, metrics.feelsLikeMax),
   };
 
-  // §0.66.1 : 日スコアの基準を「全要素加重平均 (rawScore)」から「時間帯サブスコアの加重平均」に変更。
-  //   全部通常なら高得点になる要素ベースだと「時間帯 FAIR なのに日 OK」が起きるため、時間帯ベースで整合。
-  //   時間帯データが無い日 (fallback で hourly なし等) は従来の rawScore に縮退する。
-  const bandAvg = weightedBandTotal(subscores);
+  // §0.66.1 / §0.78.1 : 日スコアの基準 = 時間帯サブスコアの加重平均。評価対象を activeBands
+  //   (showWindow に重なる band) に絞り、スコアとバッジを同じ時間範囲で揃える。
+  //   時間帯データが無い日 (fallback で hourly なし等) は rawScore に縮退する。
+  const active = activeBands(park, date);
+  const bandAvg = weightedBandTotal(subscores, active);
   const base = bandAvg != null ? bandAvg : rawScore;
 
-  // §0.66.2 : floor guard。時間帯に NG/FAIR があれば日スコアに上限を掛ける。
-  const floorCap = bandFloorCap(subscores);
+  // §0.66.2 : floor guard (上限)。activeBands に NG/FAIR があれば日スコアに上限を掛ける。
+  const floorCap = bandFloorCap(subscores, active);
 
-  // §0.16 / §0.55 : バッジ危険度 ・ 雨確率 ・ 注意バッジ同時数の上限も併用 (安全網)。
-  //   特に band 算定は precip mm/h を見ない (pop のみ) ため、強雨日は雨バッジキャップで担保する。
+  // §0.16 / §0.55 / §0.72 : バッジ危険度 ・ 雨確率 ・ 要素別注意バッジの上限 (cap)。
   const guard = applyBadgeGuard(base, badges);
   const pCap = popScoreCap(popForBadge, drizzle, metrics.precipMaxHourly);
-  const cCap = warnElementCap(badges); // §0.72 : 要素別重み付け上限 (旧 warnCountCap)
-  const score = Math.min(guard.score, pCap, cCap, floorCap);
-  // §0.68.A (監査 L-1) : §0.66 で日スコアの基準が rawScore → base (時間帯加重平均) に変わったので、
-  //   「キャップで下がったか」の判定も base と比較する (rawScore 比較だと無関係な日に capped=true になり
-  //    格下げツールチップが誤表示されていた)。
+  const cCap = warnElementCap(badges);
+  const capped_ = Math.min(guard.score, pCap, cCap, floorCap);
+  // §0.78.2 : 警告レベル別の下限保証 (floor) を最後に適用。最終 = clamp(基準, floor, cap)。
+  //   「警告なし = 最低 GOOD」を担保し、寒さ/UV 等バッジ無し減点での下げ過ぎを防ぐ。
+  const floor = warnFloor(badges);
+  const score = Math.max(floor, capped_);
+  // §0.68.A (監査 L-1) : capped は base (時間帯加重平均) と比較 (cap で下がった日のみ true)。
   const capped = score < base;
 
   // §0.66.4 : §0.42.4 (時間帯 ≦ 日 クランプ) は撤廃。日が時間帯加重平均なので自然に整合し、
@@ -484,6 +512,8 @@ export function evaluateDay(forecasts, park, date = null) {
     subscores,
     weightedTotal: bandAvg,
     floorCap,
+    floor,
+    activeBands: active.map((b) => b.key),
     badges,
   };
 }

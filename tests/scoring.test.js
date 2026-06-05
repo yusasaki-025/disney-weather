@@ -22,8 +22,41 @@ import {
   applyBadgeGuard,
   popScoreCap,
   warnElementCap,
+  warnFloor,
+  activeBands,
   BANDS,
 } from '../src/score/scoring.js';
+
+describe('warnFloor (§0.78.2 警告レベル別 下限保証)', () => {
+  const b = (wind, rain, wbgt) => ({ wind: { text: wind }, rain: { text: rain }, wbgt: { text: wbgt } });
+  it('警告 0 → 75 (最低 GOOD)', () => {
+    expect(warnFloor(b('通常', '通常', '通常'))).toBe(75);
+  });
+  it('風単独 → 60 (最低 OK)', () => {
+    expect(warnFloor(b('風バ', '通常', '通常'))).toBe(60);
+  });
+  it('雨 or 熱単独 → 40', () => {
+    expect(warnFloor(b('通常', '雨バ', '通常'))).toBe(40);
+    expect(warnFloor(b('通常', '通常', '熱バ'))).toBe(40);
+  });
+  it('警告 2 → 40 ・ 警告 3 → 20', () => {
+    expect(warnFloor(b('風バ', '雨バ', '通常'))).toBe(40);
+    expect(warnFloor(b('風バ', '雨バ', '熱バ'))).toBe(20);
+  });
+  it('キャン濃厚 (danger) → 20 ・ ほぼ中止 (critical) → 0', () => {
+    expect(warnFloor(b('中止リスク', '通常', '通常'))).toBe(20);
+    expect(warnFloor(b('中止', '通常', '通常'))).toBe(0);
+  });
+});
+
+describe('activeBands (§0.78.1 showWindow に重なる band のみ)', () => {
+  it('FALLBACK TDL (show 窓 15:00/20:30) → 昼 ・ 夜 (朝は対象外)', () => {
+    const keys = activeBands('TDL').map((b) => b.key);
+    expect(keys).toContain('noon');
+    expect(keys).toContain('night');
+    expect(keys).not.toContain('morning');
+  });
+});
 
 describe('windDeduction (§5.2 / §0.47.2 緩和)', () => {
   it('境界値', () => {
@@ -626,6 +659,25 @@ describe('evaluateDay (統合)', () => {
     // 表示数値 (gustShowWindow) と一致する「風バ」。朝の 12m/s で「中止リスク」化しない。
     expect(r.metrics.gustShowWindow).toBeLessThan(11);
     expect(r.badges.wind.text).toBe('風バ');
+  });
+
+  it('§0.78.2 : 警告 0 + 寒さ/UV 減点 → floor 75 で GOOD 保証 (下げ過ぎ防止)', () => {
+    // ショー窓 (昼 14/15時) は穏やか (全バッジ通常 = 警告 0) だが、寒さ -25 + UV -10 で band 65。
+    // floor 75 で最終 GOOD 75 に底上げされる。
+    const om = fakeForecast(
+      'open-meteo',
+      { gustMax: 3, popMax: 10, feelsLikeMax: 4, tempMax: 6, uvMax: 11 },
+      [
+        { hour: 14, gust: 3, pop: 10, wind: 2, wbgt: 20 },
+        { hour: 15, gust: 3, pop: 10, wind: 2, wbgt: 20 },
+      ],
+    );
+    const r = evaluateDay([om], 'TDL');
+    expect(r.badges.wind.text).toBe('通常');
+    expect(r.floor).toBe(75);
+    expect(r.weightedTotal).toBeLessThan(75); // band は floor 未満
+    expect(r.score).toBe(75); // floor で底上げ
+    expect(r.symbol.label).toBe('GOOD');
   });
 
   it('§0.74 : 閾値整合性ガード ・ 中止リスク高 ⇔ 表示数値 (showWindow) ≥ windCancel(11)', () => {
