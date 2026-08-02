@@ -5,22 +5,26 @@
 //           low = 通年演目のナイト公演 (参考表示のみ)。
 
 // 典型値 (公式取得が無い日・取得失敗時の FALLBACK)
+// 2026-08-02 公式サイト (tokyodisneyresort.jp) の月間スケジュールで確認 ・ 更新。
+// ジュビレーション！(TDL) ・ ウィッシュ (TDS) は公式一覧から消滅しており終了済みのため削除。
 export const FALLBACK_SCHEDULE = {
   TDL: [
     // §0.76 : ハーモニー ・ イン ・ カラーは通年演目なので high → medium (showWindow 判定対象外)。
-    { name: 'ハーモニー･イン･カラー', time: '13:00', priority: 'medium', type: 'parade' },
-    { name: 'ジュビレーション！', time: '15:00', priority: 'high', type: 'parade' },
-    { name: 'ジャンボリミッキー！', time: '11:00', priority: 'medium', type: 'show' },
-    { name: 'エレクトリカルパレード･ドリームライツ', time: '19:30', priority: 'low', type: 'parade' },
+    { name: 'ハーモニー･イン･カラー', time: '17:00', priority: 'medium', type: 'parade' },
+    // ジャンボリミッキー！は現在 3 回公演 (18:00 / 19:20 / 20:35)。
+    { name: 'ジャンボリミッキー！', time: '18:00', priority: 'medium', type: 'show' },
+    { name: 'ジャンボリミッキー！', time: '19:20', priority: 'medium', type: 'show' },
+    { name: 'ジャンボリミッキー！', time: '20:35', priority: 'medium', type: 'show' },
+    { name: 'エレクトリカルパレード･ドリームライツ', time: '19:45', priority: 'low', type: 'parade' },
     // §0.64.2 : 両パーク共通の期間限定ナイト花火。official 未取得日 (fallback) でも TDL/TDS 両方に出す。
-    // §0.76 : 期間限定花火なので high (showWindow 判定対象)。
+    // §0.76 : 期間限定花火なので high (showWindow 判定対象)。2026-08 は休止中 (時刻は前回確認値を保持)。
     { name: 'スカイ･フル･オブ･カラーズ', time: '20:30', priority: 'high', type: 'show' },
   ],
   TDS: [
-    { name: 'スパークリング･ジュビリー･セレブレーション', time: '11:30', priority: 'high', type: 'show' },
-    { name: 'ウィッシュ', time: '14:00', priority: 'high', type: 'show' },
-    { name: 'ビリーヴ！～シー･オブ･ドリームス～', time: '19:45', priority: 'low', type: 'show' },
-    // §0.64.2 / §0.76 : 期間限定ナイト花火 (fallback 日も表示) ・ high。
+    // ウィッシュ終了に伴い、後継のスパークリング ・ ジュビリー ・ セレブレーションが high 枠を引き継ぎ。
+    { name: 'スパークリング･ジュビリー･セレブレーション', time: '17:00', priority: 'high', type: 'show' },
+    { name: 'ビリーヴ！～シー･オブ･ドリームス～', time: '20:15', priority: 'low', type: 'show' },
+    // §0.64.2 / §0.76 : 期間限定ナイト花火 (fallback 日も表示) ・ high。2026-08 は休止中 (時刻は前回確認値を保持)。
     { name: 'スカイ･フル･オブ･カラーズ', time: '20:30', priority: 'high', type: 'show' },
   ],
 };

@@ -14,7 +14,7 @@ import { getScoreDiff, getScoreHistory } from '../data/forecastSnapshots.js';
 import { BANDS } from '../score/scoring.js';
 import { renderPrecipChart, renderWindChart, renderTempChart } from './chart.js';
 import { suggestOutfit } from './outfit.js';
-import { getDaySchedule } from '../data/showSchedule.js';
+import { getDaySchedule, toDecimalHour } from '../data/showSchedule.js';
 import { latestOperation } from '../data/operationLog.js';
 import { getCancelProbability } from '../score/cancelProbability.js';
 import { extremeWarning } from '../score/extremeWarning.js';
@@ -252,6 +252,12 @@ function attractionHtml(park, gust) {
       </div>`;
 }
 
+// 個別のショー名 ・ 時刻は季節 ・ 改廃で頻繁に変わるため、「この日の概要」には出さず時間帯ラベルに丸める。
+// 概ね 17 時より前を昼、以降を夜として扱う (パーク ・ 日によって多少ずれる点は許容)。
+function timeBandLabel(time) {
+  return toDecimalHour(time) < 17 ? '昼のパレード' : 'ナイトショー';
+}
+
 // §0.63.2 : 「この日の概要」を数行の解説テキストに専念させる (データ羅列は「この日の気候」へ分離)。
 function daySummaryHtml(row, today, warningData = null, park = 'TDL') {
   const m = row.eval.metrics;
@@ -263,14 +269,16 @@ function daySummaryHtml(row, today, warningData = null, park = 'TDL') {
   if (row.date === today && warningData && warningData.warnings && warningData.warnings.length) {
     warningLabel = warningData.warnings.map((w) => w.label).join('・');
   }
-  // §0.77.2 : priority high のショー (季節限定 ・ showWindow 判定対象) を概要に併記。name 重複は除き先頭から。
+  // §0.77.2 : priority high のショー (季節限定 ・ showWindow 判定対象) の時間帯を概要に併記。
+  //   ショー名は出さず「昼のパレード / ナイトショー」に丸める (§0.79 : 改廃で名前がすぐ陳腐化するため)。
   const highShows = [];
-  const seen = new Set();
+  const seenLabels = new Set();
   for (const s of getDaySchedule(row.date, park || 'TDL').shows) {
-    if (s.priority === 'high' && s.time && !seen.has(s.name)) {
-      seen.add(s.name);
-      highShows.push({ name: s.name, time: s.time });
-    }
+    if (s.priority !== 'high' || !s.time) continue;
+    const label = timeBandLabel(s.time);
+    if (seenLabels.has(label)) continue;
+    seenLabels.add(label);
+    highShows.push({ label });
   }
   const text = daySummary({ weather, warningLabel, badges: row.eval.badges, highShows });
   // (要確認) : 単独ソースの極端値 + 6 日先以降の予報誤差

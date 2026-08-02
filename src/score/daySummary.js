@@ -1,6 +1,7 @@
 // §0.77 : 「この日の概要」の解説テキスト。曖昧表現 (原則 / ことが多い / 見込み) を排し、
 //   ショーの開催可否を 3 段階 (開催予定 / 中止の可能性 / 中止濃厚) で明示する。
-//   主要ショー (priority high) があれば名前を併記して「結局ショーは見れるのか」を一目で。
+//   主要ショー (priority high) があれば時間帯ラベル (昼のパレード / ナイトショー) を併記して
+//   「結局ショーは見れるのか」を一目で。§0.79 : 個別ショー名は改廃が多いため出さない。
 
 const ELEM = { wind: '風', rain: '雨', wbgt: '熱' };
 
@@ -31,7 +32,7 @@ function statusPhrase(badges) {
 
 // 解説テキストを返す。
 // daySummary({ weather, warningLabel, badges, highShows }) -> string
-//   highShows : priority high のショー [{ name, time }] (任意 ・ 概要に名前を併記)。
+//   highShows : priority high の時間帯ラベル [{ label }] (任意 ・ 概要に併記。ショー名は含めない)。
 export function daySummary({ weather, warningLabel, badges, highShows } = {}) {
   const out = [];
   if (weather) out.push(weather);
@@ -41,9 +42,7 @@ export function daySummary({ weather, warningLabel, badges, highShows } = {}) {
   if (!phrase) {
     out.push('全ショー開催予定');
   } else if (highShows && highShows.length) {
-    const s = highShows[0];
-    const label = s.time ? `${s.name} ${s.time}` : s.name;
-    out.push(`${label} 等のショーは${phrase}`);
+    out.push(`${highShows[0].label} 等のショーは${phrase}`);
   } else {
     out.push(`屋外ショーは${phrase}`);
   }
