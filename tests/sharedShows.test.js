@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { mergeSharedShows, FALLBACK_SCHEDULE, inPeriod, getDaySchedule, showTimes } from '../src/data/showSchedule.js';
+import { mergeSharedShows, FALLBACK_SCHEDULE, inPeriod } from '../src/data/showSchedule.js';
 
 describe('inPeriod (§0.68.H.a 季節限定ショーの期間フィルタ)', () => {
   it('period 無し (undefined / 不正) は常時表示', () => {
@@ -22,22 +22,32 @@ describe('inPeriod (§0.68.H.a 季節限定ショーの期間フィルタ)', () 
 
 // §0.83 : スカイ ･ フル ･ オブ ･ カラーズは 2026-06-15 〜 2026-09-14 が夏季休止。
 //   period 未設定だと休止中の日にも fallback で表示されてしまっていた回帰ガード。
-describe('§0.83 スカイの夏季休止 (fallback 日)', () => {
-  const hasSky = (date, park) => getDaySchedule(date, park).shows.some((s) => s.name.includes('スカイ'));
-  it('休止期間中 (2026-08-10) は両パークとも出ない', () => {
-    expect(getDaySchedule('2026-08-10', 'TDL').source).toBe('fallback');
-    expect(hasSky('2026-08-10', 'TDL')).toBe(false);
-    expect(hasSky('2026-08-10', 'TDS')).toBe(false);
+//   §0.84 : 判定は FALLBACK_SCHEDULE + inPeriod に対して直接行う。getDaySchedule を日付で叩くと、
+//     その月の official 月別 JSON が入った瞬間に fallback 経路を通らなくなり前提が崩れるため。
+describe('§0.83 スカイの夏季休止 (fallback の period)', () => {
+  const skyOf = (park) => FALLBACK_SCHEDULE[park].find((s) => s.name.includes('スカイ'));
+  const activeFallback = (park, date) => FALLBACK_SCHEDULE[park].filter((s) => inPeriod(date, s.period));
+
+  it('両パークのスカイに夏季休止を除外する period が入っている', () => {
+    for (const park of ['TDL', 'TDS']) {
+      const sky = skyOf(park);
+      expect(sky).toBeTruthy();
+      expect(inPeriod('2026-08-10', sky.period)).toBe(false); // 休止中
+      expect(inPeriod('2026-09-14', sky.period)).toBe(false); // 休止最終日
+      expect(inPeriod('2026-09-15', sky.period)).toBe(true); // 再開日
+    }
   });
-  it('再開後 (2026-09-15 以降) は両パークとも出る', () => {
-    expect(hasSky('2026-09-15', 'TDL')).toBe(true);
-    expect(hasSky('2026-09-15', 'TDS')).toBe(true);
+  it('休止中の fallback 日は両パークともスカイが除外される', () => {
+    for (const park of ['TDL', 'TDS']) {
+      expect(activeFallback(park, '2026-08-10').some((s) => s.name.includes('スカイ'))).toBe(false);
+      expect(activeFallback(park, '2026-09-15').some((s) => s.name.includes('スカイ'))).toBe(true);
+    }
   });
-  it('休止中は TDL の high ショーが消え showWindow が空になる', () => {
-    // TDL の high はスカイのみ。除外されると showWindow が空 → activeBands は全 band に戻る。
-    expect(showTimes('TDL', 'high', '2026-08-10')).toEqual([]);
-    // TDS はスパークリング 17:00 が high なので残る。
-    expect(showTimes('TDS', 'high', '2026-08-10')).toEqual([17]);
+  it('休止中は TDL の fallback から high が消える (TDS はスパークリング 17:00 が残る)', () => {
+    const highs = (park, date) => activeFallback(park, date).filter((s) => s.priority === 'high').map((s) => s.time);
+    expect(highs('TDL', '2026-08-10')).toEqual([]);
+    expect(highs('TDS', '2026-08-10')).toEqual(['17:00']);
+    expect(highs('TDL', '2026-09-15')).toEqual(['20:30']);
   });
 });
 
