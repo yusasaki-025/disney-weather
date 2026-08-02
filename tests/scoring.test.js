@@ -50,8 +50,15 @@ describe('warnFloor (§0.78.2 警告レベル別 下限保証)', () => {
 });
 
 describe('activeBands (§0.78.1 showWindow に重なる band のみ)', () => {
-  it('FALLBACK TDL (show 窓 15:00/20:30) → 昼 ・ 夜 (朝は対象外)', () => {
+  it('§0.82 : FALLBACK TDL (show 窓 20:30 のみ) → 夜のみ', () => {
+    // ジュビレーション！終了で TDL の昼の high 演目が消えたため、昼枠は評価対象から外れる。
     const keys = activeBands('TDL').map((b) => b.key);
+    expect(keys).toEqual(['night']);
+  });
+  it('§0.82 : FALLBACK TDS (show 窓 17:00/20:30) → 昼 ･ 夜 (17:00 が昼枠に入る)', () => {
+    // BANDS.noon を 12-15 → 12-17 に拡張した回帰ガード。拡張前は 17:00 が昼にも夜にも
+    // 入らない隙間となり、TDS の昼枠が丸ごと評価対象から外れていた。
+    const keys = activeBands('TDS').map((b) => b.key);
     expect(keys).toContain('noon');
     expect(keys).toContain('night');
     expect(keys).not.toContain('morning');
@@ -320,9 +327,9 @@ describe('hourlyRange (§0.57.1c 「この日の概要」レンジ)', () => {
   const f1 = fakeForecast('open-meteo', {}, [
     { hour: 9, gust: 6, pop: 10, wind: 3, precip: 0, wbgt: 18 },
     { hour: 13, gust: 18, pop: 70, wind: 12, precip: 19.8, wbgt: 26 },
-    // §0.76 : ショー窓が {14,15,16,20,21} に変わったため、窓内 (15時) に既存レンジ内の値を 1 点追加
+    // §0.82 : TDL のショー窓が {20,21} に変わったため、窓内 (20時) に既存レンジ内の値を 1 点置く
     //   (ShowWindow を非 null に ・ min/max レンジは不変)。
-    { hour: 15, gust: 10, pop: 40, wind: 5, precip: 1.0, wbgt: 22 },
+    { hour: 20, gust: 10, pop: 40, wind: 5, precip: 1.0, wbgt: 22 },
     { hour: 18, gust: 9, pop: 40, wind: 5, precip: 1.2, wbgt: 22 },
   ]);
   it('全 hourly の最低 〜 最高を返す', () => {
@@ -644,15 +651,15 @@ describe('evaluateDay (統合)', () => {
   });
 
   it('§0.74 : 日バッジはショー時刻 (showWindow) 由来 ・ ショー時刻外のピークは無視', () => {
-    // 朝 9-11時に突風 12m/s (中止リスク域) があるが、ショー時刻 (13/15時±1) は 8m/s (風バ域)。
-    // 日バッジは showWindow 由来なので「中止リスク高」でなく「風バ」(表示数値 8 と一致)。
+    // 朝 9-11時に突風 12m/s (中止リスク域) があるが、ショー時刻 (§0.82 : TDL は 20:30±1) は
+    // 8m/s (風バ域)。日バッジは showWindow 由来なので「中止リスク高」でなく「風バ」(表示数値 8 と一致)。
     const om = fakeForecast(
       'open-meteo',
       { gustMax: 12, popMax: 10, feelsLikeMax: 22, tempMax: 24, uvMax: 3 },
       [
         { hour: 10, gust: 12, pop: 5, wind: 9, wbgt: 21 }, // ショー時刻外のピーク (無視されるべき)
-        { hour: 13, gust: 8, pop: 5, wind: 6, wbgt: 21 },
-        { hour: 15, gust: 8, pop: 5, wind: 6, wbgt: 21 },
+        { hour: 20, gust: 8, pop: 5, wind: 6, wbgt: 21 },
+        { hour: 21, gust: 8, pop: 5, wind: 6, wbgt: 21 },
       ],
     );
     const r = evaluateDay([om], 'TDL');
@@ -662,14 +669,14 @@ describe('evaluateDay (統合)', () => {
   });
 
   it('§0.78.2 : 警告 0 + 寒さ/UV 減点 → floor 75 で GOOD 保証 (下げ過ぎ防止)', () => {
-    // ショー窓 (昼 14/15時) は穏やか (全バッジ通常 = 警告 0) だが、寒さ -25 + UV -10 で band 65。
-    // floor 75 で最終 GOOD 75 に底上げされる。
+    // ショー窓 (§0.82 : TDL は夜 20/21時) は穏やか (全バッジ通常 = 警告 0) だが、寒さ -25 + UV -10
+    // で band 65。floor 75 で最終 GOOD 75 に底上げされる。
     const om = fakeForecast(
       'open-meteo',
       { gustMax: 3, popMax: 10, feelsLikeMax: 4, tempMax: 6, uvMax: 11 },
       [
-        { hour: 14, gust: 3, pop: 10, wind: 2, wbgt: 20 },
-        { hour: 15, gust: 3, pop: 10, wind: 2, wbgt: 20 },
+        { hour: 20, gust: 3, pop: 10, wind: 2, wbgt: 20 },
+        { hour: 21, gust: 3, pop: 10, wind: 2, wbgt: 20 },
       ],
     );
     const r = evaluateDay([om], 'TDL');
@@ -681,13 +688,15 @@ describe('evaluateDay (統合)', () => {
   });
 
   it('§0.74 : 閾値整合性ガード ・ 中止リスク高 ⇔ 表示数値 (showWindow) ≥ windCancel(11)', () => {
-    // ショー時刻に 12m/s → 中止リスク。表示数値も同じ showWindow なので 11 以上で整合。
+    // ショー時刻 (§0.82 : TDL は 20:30±1) に 12m/s → 中止リスク。表示数値も同じ showWindow なので
+    // 11 以上で整合。旧 13/15時のままだと窓外になり gustMax へのフォールバック経路を見てしまうため
+    // 窓内に置き直す。
     const om = fakeForecast(
       'open-meteo',
       { gustMax: 12, popMax: 10, feelsLikeMax: 22, tempMax: 24, uvMax: 3 },
       [
-        { hour: 13, gust: 12, pop: 5, wind: 9, wbgt: 21 },
-        { hour: 15, gust: 12, pop: 5, wind: 9, wbgt: 21 },
+        { hour: 20, gust: 12, pop: 5, wind: 9, wbgt: 21 },
+        { hour: 21, gust: 12, pop: 5, wind: 9, wbgt: 21 },
       ],
     );
     const r = evaluateDay([om], 'TDL');
@@ -718,9 +727,10 @@ describe('evaluateDay (統合)', () => {
       'open-meteo',
       { gustMax: 3, popMax: 10, feelsLikeMax: 22, tempMax: 24, uvMax: 3 },
       [
-        { hour: 14, gust: 3, pop: 10, wind: 2, wbgt: 22 },
-        { hour: 15, gust: 3, pop: 10, wind: 2, wbgt: 22 },
-        { hour: 16, gust: 3, pop: 10, wind: 2, wbgt: 22 },
+        // §0.82 : TDL のショー窓 {20,21} に合わせる (窓外だと showWindow が null になり '—' に化ける)。
+        { hour: 19, gust: 3, pop: 10, wind: 2, wbgt: 22 },
+        { hour: 20, gust: 3, pop: 10, wind: 2, wbgt: 22 },
+        { hour: 21, gust: 3, pop: 10, wind: 2, wbgt: 22 },
       ],
     );
     const r = evaluateDay([om], 'TDL');
@@ -748,16 +758,21 @@ describe('evaluateDay (統合)', () => {
 
   it('§0.66.2 : いずれかの時間帯が NG なら日 ≤ 59 (FAIR) に制限', () => {
     // 昼が強風 (12m/s) + 強雨 (95%) で NG、朝夜は穏やか → floor guard で日 ≤ 59。
+    // §0.82 : TDL は昼の high 演目が消え昼枠が非アクティブになったため、昼枠が生きている
+    //   TDS (スパークリング 17:00) で検証する。NG はショー窓かつ昼枠の 17時に置く。
     const om = fakeForecast(
       'open-meteo',
       { gustMax: 12, popMax: 95, feelsLikeMax: 22, tempMax: 24, uvMax: 3 },
       [
+        //   夜の穏やか点はショー窓 {16,17,18,20,21} の外 (19時) に置く。窓内に置くと showWindow が
+        //   平均ベース (windowMean) なので 17時の荒天と平均され、バッジが「通常」→ floor 75 が
+        //   cap 59 を上回ってしまい、テストの意図 (cap の検証) が崩れるため。
         { hour: 10, gust: 2, pop: 0, wind: 2, wbgt: 21 },
-        { hour: 13, gust: 12, pop: 95, wind: 2, wbgt: 21 },
+        { hour: 17, gust: 12, pop: 95, wind: 2, wbgt: 21 },
         { hour: 19, gust: 2, pop: 0, wind: 2, wbgt: 21 },
       ],
     );
-    const r = evaluateDay([om], 'TDL');
+    const r = evaluateDay([om], 'TDS');
     expect(r.subscores.noon.score).toBeLessThan(40); // 昼 NG
     expect(r.floorCap).toBe(59);
     expect(r.score).toBeLessThanOrEqual(59);

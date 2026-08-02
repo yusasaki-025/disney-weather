@@ -89,14 +89,17 @@ describe('reliability (Phase 2)', () => {
 });
 
 describe('showSchedule', () => {
-  it('§0.76 : TDL high = ジュビレーション 15:00 + スカイ 20:30 (ハーモニーは medium に降格)', () => {
-    // ハーモニー 13:00 は §0.76 で medium → high 窓から外れる。high = 15:00 ・ 20:30。
-    expect(showTimes('TDL', 'high')).toEqual([15, 20.5]);
-    expect([...showWindowHours('TDL', 'high', 1)].sort((a, b) => a - b)).toEqual([14, 15, 16, 20, 21]);
+  it('§0.82 : TDL high = スカイ 20:30 のみ (ジュビレーション終了で昼の high 演目は消滅)', () => {
+    // ハーモニー 17:00 は §0.76 で medium → high 窓から外れる。
+    // ジュビレーション！は終了済みで削除されたため、TDL の high は期間限定花火 20:30 だけになる。
+    expect(showTimes('TDL', 'high')).toEqual([20.5]);
+    expect([...showWindowHours('TDL', 'high', 1)].sort((a, b) => a - b)).toEqual([20, 21]);
   });
-  it('§0.76 : TDS high = スパークリング 11:30 + ウィッシュ 14:00 + スカイ 20:30', () => {
-    expect(showTimes('TDS', 'high')).toEqual([11.5, 14, 20.5]);
-    expect(allShowMarkers('TDL').length).toBe(5);
+  it('§0.82 : TDS high = スパークリング 17:00 + スカイ 20:30 (ウィッシュ終了で 11:30/14:00 は消滅)', () => {
+    expect(showTimes('TDS', 'high')).toEqual([17, 20.5]);
+    expect([...showWindowHours('TDS', 'high', 1)].sort((a, b) => a - b)).toEqual([16, 17, 18, 20, 21]);
+    // ジャンボリミッキー！が 3 回公演になったため TDL のマーカーは 5 → 6 件。
+    expect(allShowMarkers('TDL').length).toBe(6);
     expect(allShowMarkers('TDL')[0].name).toBe('ハーモニー･イン･カラー');
     // §0.64.2 : fallback TDL にもスカイ (20:30) が含まれる
     expect(allShowMarkers('TDL').some((s) => s.name.includes('スカイ'))).toBe(true);

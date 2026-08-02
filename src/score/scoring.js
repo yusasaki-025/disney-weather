@@ -356,7 +356,11 @@ export function scoreFromMetrics(m, park) {
 //   日スコアはこの重みでの時間帯加重平均で算出する (weightedBandTotal)。
 export const BANDS = [
   { key: 'morning', label: '朝', hours: new Set([9, 10, 11]), weight: 1.5 },
-  { key: 'noon', label: '昼', hours: new Set([12, 13, 14, 15]), weight: 2.0 },
+  // §0.82 : 昼を 12-15 時 → 12-17 時に拡張。ショー時刻の最新化 (スパークリング 17:00 等) で、
+  //   夕方帯が昼枠 (旧 12-15) にも夜枠 (18-20) にも入らない隙間になり、一番効くはずの
+  //   17:00 台の天気がスコアに反映されなくなっていたため。表示ラベルは hours から動的算出
+  //   (subscoreHtml の range) なので「昼 12-18時」に自動追随する。
+  { key: 'noon', label: '昼', hours: new Set([12, 13, 14, 15, 16, 17]), weight: 2.0 },
   { key: 'night', label: '夜', hours: new Set([18, 19, 20]), weight: 1.0 },
 ];
 
