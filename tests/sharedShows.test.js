@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { mergeSharedShows, FALLBACK_SCHEDULE, inPeriod } from '../src/data/showSchedule.js';
+import { mergeSharedShows, FALLBACK_SCHEDULE, inPeriod, getDaySchedule, showTimes } from '../src/data/showSchedule.js';
 
 describe('inPeriod (§0.68.H.a 季節限定ショーの期間フィルタ)', () => {
   it('period 無し (undefined / 不正) は常時表示', () => {
@@ -17,6 +17,27 @@ describe('inPeriod (§0.68.H.a 季節限定ショーの期間フィルタ)', () 
   it('片側 null は無制限', () => {
     expect(inPeriod('2026-01-01', [null, '2026-06-30'])).toBe(true);
     expect(inPeriod('2026-12-31', ['2026-04-01', null])).toBe(true);
+  });
+});
+
+// §0.83 : スカイ ･ フル ･ オブ ･ カラーズは 2026-06-15 〜 2026-09-14 が夏季休止。
+//   period 未設定だと休止中の日にも fallback で表示されてしまっていた回帰ガード。
+describe('§0.83 スカイの夏季休止 (fallback 日)', () => {
+  const hasSky = (date, park) => getDaySchedule(date, park).shows.some((s) => s.name.includes('スカイ'));
+  it('休止期間中 (2026-08-10) は両パークとも出ない', () => {
+    expect(getDaySchedule('2026-08-10', 'TDL').source).toBe('fallback');
+    expect(hasSky('2026-08-10', 'TDL')).toBe(false);
+    expect(hasSky('2026-08-10', 'TDS')).toBe(false);
+  });
+  it('再開後 (2026-09-15 以降) は両パークとも出る', () => {
+    expect(hasSky('2026-09-15', 'TDL')).toBe(true);
+    expect(hasSky('2026-09-15', 'TDS')).toBe(true);
+  });
+  it('休止中は TDL の high ショーが消え showWindow が空になる', () => {
+    // TDL の high はスカイのみ。除外されると showWindow が空 → activeBands は全 band に戻る。
+    expect(showTimes('TDL', 'high', '2026-08-10')).toEqual([]);
+    // TDS はスパークリング 17:00 が high なので残る。
+    expect(showTimes('TDS', 'high', '2026-08-10')).toEqual([17]);
   });
 });
 

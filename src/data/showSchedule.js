@@ -17,15 +17,20 @@ export const FALLBACK_SCHEDULE = {
     { name: 'ジャンボリミッキー！', time: '20:35', priority: 'medium', type: 'show' },
     { name: 'エレクトリカルパレード･ドリームライツ', time: '19:45', priority: 'low', type: 'parade' },
     // §0.64.2 : 両パーク共通の期間限定ナイト花火。official 未取得日 (fallback) でも TDL/TDS 両方に出す。
-    // §0.76 : 期間限定花火なので high (showWindow 判定対象)。2026-08 は休止中 (時刻は前回確認値を保持)。
-    { name: 'スカイ･フル･オブ･カラーズ', time: '20:30', priority: 'high', type: 'show' },
+    // §0.76 : 期間限定花火なので high (showWindow 判定対象)。
+    // §0.83 : 2026-06-15 〜 2026-09-14 は夏季休止 (両パーク) のため period で除外する。
+    //   period 未設定だと休止中の 8 月にも fallback 表示されてしまっていた。
+    //   再開後の単発休止日 (TDL : 2026-10-02 / 2026-12-04、TDS : 2026-09-25 / 2026-11-27) と
+    //   2026-12-26 〜 2027-01-12 の休止は、公式発表ベースで Yuka さんが手動更新する (§0.39.7 運用方針)。
+    { name: 'スカイ･フル･オブ･カラーズ', time: '20:30', priority: 'high', type: 'show', period: ['2026-09-15', null] },
   ],
   TDS: [
     // ウィッシュ終了に伴い、後継のスパークリング ・ ジュビリー ・ セレブレーションが high 枠を引き継ぎ。
     { name: 'スパークリング･ジュビリー･セレブレーション', time: '17:00', priority: 'high', type: 'show' },
     { name: 'ビリーヴ！～シー･オブ･ドリームス～', time: '20:15', priority: 'low', type: 'show' },
-    // §0.64.2 / §0.76 : 期間限定ナイト花火 (fallback 日も表示) ・ high。2026-08 は休止中 (時刻は前回確認値を保持)。
-    { name: 'スカイ･フル･オブ･カラーズ', time: '20:30', priority: 'high', type: 'show' },
+    // §0.64.2 / §0.76 : 期間限定ナイト花火 (fallback 日も表示) ・ high。
+    // §0.83 : 夏季休止 (2026-06-15 〜 2026-09-14) を period で除外。詳細は TDL 側のコメント参照。
+    { name: 'スカイ･フル･オブ･カラーズ', time: '20:30', priority: 'high', type: 'show', period: ['2026-09-15', null] },
   ],
 };
 
