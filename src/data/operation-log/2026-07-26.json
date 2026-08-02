@@ -1,0 +1,39 @@
+{
+  "date": "2026-07-26",
+  "snapshots": [
+    {
+      "fetchedAt": "2026-07-26T23:30:00+09:00",
+      "park": "TDL",
+      "closedShows": [
+        {
+          "text": "東京ディズニーランド・エレクリカルパレード・ドリームライツ ( Eパレ ) 19:45 運営・公演中止（悪天候のため）【雨キャン】"
+        }
+      ],
+      "modifiedShows": [
+        {
+          "text": "Reach for the Stars : Everlasting Dreams ( リーチ / リチスタ ) 20:55 ドローンなしで公演（悪天候のため）",
+          "time": "20:55"
+        }
+      ],
+      "earlyClose": null,
+      "closedAttractions": [],
+      "rawTextSnippet": "出典: X @kazekyanbunseki (ディズニー風キャン/熱キャン分析) の投稿をもとに手動で構造化"
+    },
+    {
+      "fetchedAt": "2026-07-26T23:30:00+09:00",
+      "park": "TDS",
+      "closedShows": [
+        {
+          "text": "ビリーヴ！〜シー・オブ・ドリームス〜 ( ビリーヴ ) 20:15 運営・公演中止（悪天候のため）【雨キャン】"
+        },
+        {
+          "text": "ダンス・ザ・グローブ！ ( ダングロ ) 19:40 運営・公演中止（悪天候のため）【雨キャン】"
+        }
+      ],
+      "modifiedShows": [],
+      "earlyClose": null,
+      "closedAttractions": [],
+      "rawTextSnippet": "出典: X @kazekyanbunseki (ディズニー風キャン/熱キャン分析) の投稿をもとに手動で構造化"
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "date": "2026-08-01",
+  "snapshots": [
+    {
+      "fetchedAt": "2026-08-01T23:30:00+09:00",
+      "park": "TDL",
+      "closedShows": [],
+      "modifiedShows": [],
+      "earlyClose": null,
+      "closedAttractions": [],
+      "rawTextSnippet": "出典: X @kazekyanbunseki (ディズニー風キャン/熱キャン分析) の投稿をもとに手動で構造化",
+      "ranShows": [
+        {
+          "text": "Reach for the Stars : Everlasting Dreams ( リーチ / リチスタ ) 20:55 ドローンありで公演"
+        }
+      ]
+    },
+    {
+      "fetchedAt": "2026-08-01T23:30:00+09:00",
+      "park": "TDS",
+      "closedShows": [
+        {
+          "text": "スパークリング・ジュビリー・セレブレーション ( スパジュビ / ジュビセレ / ハバグリ ) 17:00 運営・公演中止（高気温のため）【熱キャン】"
+        }
+      ],
+      "modifiedShows": [],
+      "earlyClose": null,
+      "closedAttractions": [],
+      "rawTextSnippet": "出典: X @kazekyanbunseki (ディズニー風キャン/熱キャン分析) の投稿をもとに手動で構造化"
+    },
+    {
+      "fetchedAt": "2026-08-01T23:30:00+09:00",
+      "park": "UNKNOWN",
+      "closedShows": [],
+      "modifiedShows": [],
+      "earlyClose": null,
+      "closedAttractions": [],
+      "rawTextSnippet": "出典: X @kazekyanbunseki (ディズニー風キャン/熱キャン分析) の投稿をもとに手動で構造化",
+      "notes": [
+        {
+          "text": "アプリ表記はないがキャンセル報告あり"
+        }
+      ]
+    }
+  ]
+}

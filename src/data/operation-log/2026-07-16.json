@@ -1,0 +1,18 @@
+{
+  "date": "2026-07-16",
+  "snapshots": [
+    {
+      "fetchedAt": "2026-07-16T23:30:00+09:00",
+      "park": "TDL",
+      "closedShows": [],
+      "modifiedShows": [
+        {
+          "text": "Reach for the Stars : Everlasting Dreams ( リーチ / リチスタ ) システム不具合のためドローンなし"
+        }
+      ],
+      "earlyClose": null,
+      "closedAttractions": [],
+      "rawTextSnippet": "出典: X @kazekyanbunseki (ディズニー風キャン/熱キャン分析) の投稿をもとに手動で構造化"
+    }
+  ]
+}

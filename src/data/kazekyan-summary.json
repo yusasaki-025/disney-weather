@@ -1,0 +1,99 @@
+{
+  "source": "X @kazekyanbunseki (ディズニー風キャン/熱キャン分析)",
+  "note": "画像付き投稿 (グラフ・年間実績カード) 8件は未収録。テキストの集計・分析投稿のみを構造化。",
+  "records": [
+    {
+      "postedAt": "2026-06-28",
+      "show": "ダンス・ザ・グローブ！ ( ダングロ )",
+      "park": "TDS",
+      "asOf": "2026-06-28",
+      "totalShows": 664,
+      "held": 547,
+      "heldRate": 0.84,
+      "cancelled": 117,
+      "cancelBreakdown": { "強風": 21, "悪天候": 85, "高気温": 4, "不具合": 1, "ステージコンディション不良": 6 },
+      "noData": 0
+    },
+    {
+      "postedAt": "2026-06-28",
+      "show": "ビリーヴ！〜シー・オブ・ドリームス〜 ( ビリーヴ )",
+      "park": "TDS",
+      "asOf": "2026-06-28",
+      "totalShows": 141,
+      "held": 119,
+      "heldRate": 0.84,
+      "cancelled": 22,
+      "cancelBreakdown": { "強風": 9, "悪天候": 11, "高気温": 0, "不具合": 2 },
+      "noData": 0
+    },
+    {
+      "postedAt": "2026-06-28",
+      "show": "東京ディズニーランド・エレクトリカルパレード・ドリームライツ ( Eパレ )",
+      "park": "TDL",
+      "asOf": "2026-06-28",
+      "totalShows": 177,
+      "held": 141,
+      "heldRate": 0.80,
+      "cancelled": 36,
+      "cancelBreakdown": { "強風": 11, "悪天候": 25, "高気温": 0, "不具合": 0 },
+      "noData": 0
+    },
+    {
+      "postedAt": "2026-06-28",
+      "show": "ディズニー・ハーモニー・イン・カラー ( ハモカラ )",
+      "park": "TDL",
+      "asOf": "2026-06-28",
+      "totalShows": 139,
+      "held": 130,
+      "heldRate": 0.94,
+      "cancelled": 9,
+      "cancelBreakdown": { "強風": 5, "悪天候": 4, "高気温": 0, "不具合": 0 },
+      "noData": 0
+    },
+    {
+      "postedAt": "2026-07-21",
+      "show": "ディズニー・ハーモニー・イン・カラー ( ハモカラ )",
+      "park": "TDL",
+      "asOf": "2026-07-20",
+      "label": "2026年記録",
+      "totalShows": 162,
+      "held": 152,
+      "heldRate": 0.94,
+      "cancelled": 10,
+      "cancelBreakdown": { "風キャン": 5, "雨キャン": 4, "熱キャン": 1 },
+      "rawText": "例年と比べ開催率が高いです。"
+    },
+    {
+      "postedAt": "2026-07-21",
+      "show": "ディズニー・ハーモニー・イン・カラー ( ハモカラ )",
+      "park": "TDL",
+      "label": "熱キャン記録 (年比較)",
+      "years": {
+        "2025": { "first": "06-16", "last": "09-18", "countAsOf0720": 17, "countTotal": 36 },
+        "2026": { "first": "07-16", "last": null, "countAsOf0720": 1, "countTotal": null }
+      },
+      "rawText": "昨年と比べ梅雨明けが遅かったため、気温が上がらず高気温バージョンで開催できています。"
+    },
+    {
+      "postedAt": "2026-07-11",
+      "show": "Reach for the Stars : Everlasting Dreams ( リーチ / リチスタ )",
+      "park": "TDL",
+      "label": "強風によるドローン有無 (風速しきい値分析)",
+      "dataPoints": [
+        { "date": "2026-07-09", "time": "20:50", "windAvg": 6.3, "windMax": 8.5, "windDir": "南南西", "droneFlew": false },
+        { "date": "2026-07-10", "time": "20:50", "windAvg": 5.2, "windMax": 7.2, "windDir": "南南西", "droneFlew": true }
+      ],
+      "rawText": "風向きは関係ない。7/1〜7/10のドローン飛んだ日の平均風速は全て〜5m台。現状、平均5m台までがセーフ。"
+    },
+    {
+      "postedAt": "2026-07-15",
+      "show": "Reach for the Stars : Everlasting Dreams ( リーチ / リチスタ )",
+      "park": "TDL",
+      "label": "強風によるドローン有無 (風速しきい値分析・続報)",
+      "dataPoints": [
+        { "date": "2026-07-14", "time": "20:50", "location": "江戸川臨海", "windAvg": 4.9, "windMax": 6.5, "droneFlew": false }
+      ],
+      "rawText": "初めて平均5m以下でドローンが飛びませんでした。ただし、1時間前は平均6m以上だったので、ドローン飛ぶ基準値は1時間前の数値の可能性があります。"
+    }
+  ]
+}
