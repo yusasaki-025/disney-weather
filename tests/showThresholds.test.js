@@ -32,6 +32,10 @@ describe('isWeatherless (§0.44.12 屋内ショー判定)', () => {
     expect(isWeatherless('ダッフィー&フレンズのワンダフル･フレンドシップ')).toBe(true);
     expect(isWeatherless('ドリームス･テイク･フライト')).toBe(true);
     expect(isWeatherless('【環境演出】スパークリング･ジュビリー･ナイト')).toBe(true);
+    // 屋内レストランショー。WEATHERLESS 未登録で一般基準 (風バ 8 / 中止 12) が誤表示されていた回帰ガード。
+    // 公式表記の全角中黒と、既存データの半角中黒の両方で判定できること。
+    expect(isWeatherless('ザ・ダイヤモンド・バラエティマスター')).toBe(true);
+    expect(isWeatherless('ザ･ダイヤモンド･バラエティマスター')).toBe(true);
   });
 
   it('屋外ショー ・ 花火は false (セレブレーションを誤検知しない)', () => {

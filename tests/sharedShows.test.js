@@ -22,7 +22,7 @@ describe('inPeriod (§0.68.H.a 季節限定ショーの期間フィルタ)', () 
 
 // §0.83 : スカイ ･ フル ･ オブ ･ カラーズは 2026-06-15 〜 2026-09-14 が夏季休止。
 //   period 未設定だと休止中の日にも fallback で表示されてしまっていた回帰ガード。
-//   §0.84 : 判定は FALLBACK_SCHEDULE + inPeriod に対して直接行う。getDaySchedule を日付で叩くと、
+//   判定は FALLBACK_SCHEDULE + inPeriod に対して直接行う。getDaySchedule を日付で叩くと、
 //     その月の official 月別 JSON が入った瞬間に fallback 経路を通らなくなり前提が崩れるため。
 describe('§0.83 スカイの夏季休止 (fallback の period)', () => {
   const skyOf = (park) => FALLBACK_SCHEDULE[park].find((s) => s.name.includes('スカイ'));
