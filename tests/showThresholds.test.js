@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { isWeatherless, isSeasonal, thresholdForShow } from '../src/data/show-thresholds.js';
+import { isWeatherless, isSeasonal, thresholdForShow, weatherlessKind } from '../src/data/show-thresholds.js';
 
 describe('thresholdForShow (§0.75 ショー個別の風閾値 + isDefault)', () => {
   it('固有閾値ショー (ハーモニー) は windBa6/windCancel12 ・ isDefault=false', () => {
@@ -54,6 +54,25 @@ describe('isWeatherless (§0.44.12 屋内ショー判定)', () => {
     expect(isWeatherless('スカイ･フル･オブ･カラーズ')).toBe(false);
     expect(isWeatherless('')).toBe(false);
     expect(isWeatherless(null)).toBe(false);
+  });
+});
+
+// §0.93 回帰 : weatherless を屋内組と屋外組 (風のみ影響なし) で出し分けるための種別判定。
+//   一律「天候影響なし」だと、屋外のプロジェクションマッピング (雨・熱は屋外どおり) を誤解させるため。
+describe('weatherlessKind (§0.93 屋内/屋外の種別)', () => {
+  it('屋内組は indoor', () => {
+    expect(weatherlessKind('ミッキーのレインボー･ルアウ')).toBe('indoor');
+    expect(weatherlessKind('ミッキーのマジカルミュージックワールド')).toBe('indoor');
+    expect(weatherlessKind('ザ・ダイヤモンド・バラエティマスター')).toBe('indoor');
+  });
+  it('屋外・風のみ (【環境演出】ナイト) は outdoor-wind-only', () => {
+    expect(weatherlessKind('【環境演出】スパークリング･ジュビリー･ナイト')).toBe('outdoor-wind-only');
+  });
+  it('weatherless でない演目 ・ 空は null', () => {
+    expect(weatherlessKind('スパークリング･ジュビリー･セレブレーション')).toBe(null);
+    expect(weatherlessKind('スカイ･フル･オブ･カラーズ')).toBe(null);
+    expect(weatherlessKind('')).toBe(null);
+    expect(weatherlessKind(null)).toBe(null);
   });
 });
 

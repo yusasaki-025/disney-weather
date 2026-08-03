@@ -15,14 +15,14 @@ import { BANDS } from '../score/scoring.js';
 import { renderPrecipChart, renderWindChart, renderTempChart } from './chart.js';
 import { suggestOutfit } from './outfit.js';
 import { getDaySchedule, toDecimalHour } from '../data/showSchedule.js';
-import { latestOperation } from '../data/operationLog.js';
+import { latestOperation, getShowIncidents } from '../data/operationLog.js';
 import { getCancelProbability } from '../score/cancelProbability.js';
 import { extremeWarning } from '../score/extremeWarning.js';
 import { getScoreReason } from '../score/scoreReason.js';
 import { daySummary } from '../score/daySummary.js';
 import { showRiskInfo } from '../score/showRisk.js';
 import { getAttractionClosures } from '../score/attractionForecast.js';
-import { isWeatherless, isSeasonal, thresholdForShow } from '../data/show-thresholds.js';
+import { isWeatherless, isSeasonal, thresholdForShow, weatherlessKind } from '../data/show-thresholds.js';
 import { heatAlertLevel } from '../score/heatAlert.js';
 import { freshnessLabel } from '../utils/freshness.js';
 import { nowcastHtml } from './nowcast.js';
@@ -194,9 +194,33 @@ function showRiskLineHtml(showName, park, risk, predWind, weatherless = false) {
       // §0.84 : 「過去中止」だけだと雨 ・ 熱を含むと誤解されるため、風 (突風) 基準であることを明示。
       cancelHtml = `<span class="cancel-prob ${cls}" title="過去同条件 (突風 ${fmtNum(predWind, 0)}m/s ±2m/s) ${r.sampleSize}件中 ${r.cancelCount}件中止">［過去中止(風) ${r.probability}% (${r.cancelCount}/${r.sampleSize}件)］${lowSample}</span>`;
     }
+    // §0.92 : cancel-history (風速実測付き) は該当0件のショーが多い。運用ログ (@kazekyanbunseki 由来 ・
+    //   風速無しだが原因タグ付き) から直近の中止 ・ 変更事例と原因内訳を補助表示する。r の有無に関わらず
+    //   独立して出す (r が無くても運用ログだけはある、というケースの方が現状多いため)。
+    const incidents = getShowIncidents(showName, park);
+    if (incidents.length) {
+      const CAUSE_LABEL = { wind: '風', rain: '雨', heat: '熱', other: '他' };
+      const counts = { wind: 0, rain: 0, heat: 0, other: 0 };
+      incidents.forEach((it) => { counts[it.cause] += 1; });
+      const breakdown = Object.entries(counts)
+        .filter(([, n]) => n > 0)
+        .map(([k, n]) => `${CAUSE_LABEL[k]}${n}`)
+        .join(' ');
+      const recentDates = incidents.slice(0, 5).map((it) => it.date.slice(5).replace('-', '/')).join(' ・ ');
+      cancelHtml += `<span class="cancel-log" title="運用ログ (@kazekyanbunseki 由来) で確認できた中止 ・ 変更事例。日付 : ${esc(recentDates)}${incidents.length > 5 ? ' 他' : ''}">［運用ログ実績 ${incidents.length}件 : ${breakdown}］</span>`;
+    }
   }
-  // §0.44.12 : 屋内ショーは「屋内 ・ 天候影響なし」を明示 (空欄だと未取得と紛らわしいため)。
-  const indoorNote = weatherless ? '<span class="sr-indoor">屋内・天候影響なし</span>' : '';
+  // §0.44.12 : weatherless (風の影響を受けない演目) は明示ラベルを出す (空欄だと未取得と紛らわしいため)。
+  // §0.93 : 屋内組と屋外組 (【環境演出】プロジェクションマッピング等) でラベルを出し分ける。
+  //   屋内組は風・雨とも影響なし。屋外組 (風のみ影響なし) は雨・熱は通常どおり屋外の影響を受けるため、
+  //   「天候影響なし」と一括りにすると誤解を招く (Yuka さん指摘)。
+  const wKind = weatherless ? weatherlessKind(showName) : null;
+  const indoorNote =
+    wKind === 'outdoor-wind-only'
+      ? '<span class="sr-indoor">屋外・風の影響なし (プロジェクションマッピング、雨・熱は通常どおり)</span>'
+      : wKind === 'indoor'
+        ? '<span class="sr-indoor">屋内・風雨の影響なし</span>'
+        : '';
   // §0.75 : 屋内以外はショー個別の風閾値 (風バ 〜 / 中止 〜) を現状値の下に小さく併記。
   //   ユーザーが「現状の突風 vs このショーの中止基準」を一目で比較できる。一般基準 (DEFAULT) は注釈付き。
   // §0.88 : pyroLimit (花火カット基準) が設定されているショーは併記する (従来 thresholdForShow が

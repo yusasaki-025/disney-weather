@@ -18,21 +18,38 @@ const SHOW_THRESHOLDS = [
   { match: /スパークリング[・･]ジュビリー[・･]セレブレーション/, windCancel: 12 },
 ];
 
-// §0.44.12 : 屋内ショー ・ プロジェクションマッピングは突風の影響を受けないため、
-//   風バッジ ・ 過去中止率を出さない (熱バッジは屋内でも夏は暑いので継続)。name 部分一致で判定。
-const WEATHERLESS_SHOWS = [
+// §0.44.12 / §0.93 : 風雨の影響を受けない演目を屋内組と屋外組に分けて管理する。
+//   屋内 (INDOOR) : 会場自体が屋内のため風 ・ 雨とも影響を受けない (Yuka さん確認済み : マジカル
+//     ミュージックワールド ・ ワンダフル・フレンドシップ ・ ドリームス・テイク・フライトも屋内)。
+//     熱バッジのみ継続表示 (屋内でも空調が弱く夏は暑いため)。
+//   屋外 ・ 風のみ (OUTDOOR_WIND_ONLY) : 会場は屋外だがプロジェクションマッピング等で風による
+//     演出変更/中止が原則発生しない演目。雨 ・ 熱は通常どおり屋外の影響を受ける
+//     (§0.91 で「風の影響なし」に統一したが、Yuka さん指摘のとおり「屋外なら熱・雨は普通に
+//     影響を受けるはず」で、屋内組と同列に扱うのは誤りだった。表示ラベルも屋内/屋外で出し分ける)。
+//   風バッジ ・ 過去中止率 (風ベース) は両方とも出さない (風の影響を受けない、という点は共通)。
+const INDOOR_WEATHERLESS_SHOWS = [
   /レインボー[・･]ルアウ/,
   /マジカルミュージックワールド/,
   /ワンダフル[・･]フレンドシップ/,
   /ドリームス[・･]テイク[・･]フライト/,
-  /スパークリング[・･]ジュビリー[・･]ナイト/,
   /ダイヤモンド[・･]バラエティマスター/, // §0.84 : 屋内レストランショー。WEATHERLESS 未登録のため一般基準の風バッジが誤表示されていた不具合の修正。
 ];
+const OUTDOOR_WIND_ONLY_SHOWS = [
+  /スパークリング[・･]ジュビリー[・･]ナイト/, // 【環境演出】: 屋外のプロジェクションマッピング。風のみ影響なし、雨・熱は屋外どおり。
+];
 
-// その演目が屋内 ・ 天候影響なし (weatherless) かを返す。
+// その演目が風の影響を受けない (weatherless) かを返す。
 export function isWeatherless(name) {
   if (!name) return false;
-  return WEATHERLESS_SHOWS.some((re) => re.test(name));
+  return INDOOR_WEATHERLESS_SHOWS.some((re) => re.test(name)) || OUTDOOR_WIND_ONLY_SHOWS.some((re) => re.test(name));
+}
+
+// weatherless な演目の種別を返す ('indoor' | 'outdoor-wind-only' | null)。UI のラベル出し分けに使う。
+export function weatherlessKind(name) {
+  if (!name) return null;
+  if (INDOOR_WEATHERLESS_SHOWS.some((re) => re.test(name))) return 'indoor';
+  if (OUTDOOR_WIND_ONLY_SHOWS.some((re) => re.test(name))) return 'outdoor-wind-only';
+  return null;
 }
 
 // §0.46.6 : 「期間限定」タグを付ける季節限定演目。priority:high からの自動付与をやめ、
