@@ -51,18 +51,13 @@ export function isSeasonal(name) {
 
 // ショー名から閾値を返す (見つからなければ DEFAULT)。
 // §0.75 : 固有閾値か一般基準 (DEFAULT) かを UI で出し分けるため isDefault も返す。
+// §0.87 : isDefault は「windBa/windCancel を個別上書きしたか」だけで判定する。旧実装は
+//   SHOW_THRESHOLDS に 1 件でもヒットすれば isDefault:false にしていたため、Reach for the Stars
+//   (pyroLimit のみ上書き) が「個別検証済みの風バ/中止基準」であるかのように (一般基準) 注記なしで
+//   表示されていた (実際の windBa/windCancel は DEFAULT のまま)。
 export function thresholdForShow(name) {
   const hit = name ? SHOW_THRESHOLDS.find((t) => t.match.test(name)) : null;
-  return hit ? { ...DEFAULT_THRESHOLD, ...hit, isDefault: false } : { ...DEFAULT_THRESHOLD, isDefault: true };
-}
-
-// その日 ・ パークの high 優先ショー群から「最も中止しやすい (windCancel 最小)」閾値を返す。
-// 日別スコアの風バッジ判定に使う (一番シビアなショーに合わせる = 安全側)。
-export function strictestThreshold(shows) {
-  let strict = null;
-  for (const s of shows || []) {
-    const t = thresholdForShow(s.name);
-    if (!strict || t.windCancel < strict.windCancel) strict = t;
-  }
-  return strict || { ...DEFAULT_THRESHOLD };
+  if (!hit) return { ...DEFAULT_THRESHOLD, isDefault: true };
+  const isDefault = hit.windBa === undefined && hit.windCancel === undefined;
+  return { ...DEFAULT_THRESHOLD, ...hit, isDefault };
 }

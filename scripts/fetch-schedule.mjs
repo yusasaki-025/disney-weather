@@ -15,6 +15,9 @@
 //       SELECTORS と parseDay() を実 DOM に合わせて調整する。失敗時はアプリ側が
 //       固定値 (showSchedule.js の FALLBACK) に自動フォールバックするので、本スクリプトの
 //       失敗がアプリを壊すことはない。
+//       §0.90 : 現行の itemSelectors は公式 DOM 変更で全て 0 件になっている (2026-08 時点、
+//       docs/Cowork依頼_disney-weather_2026-08スケジュール取得_20260803.md 確認済み)。
+//       実 DOM は `li > a > div.listTextArea > p.heading3` 構造。セレクタ自体の修正は別タスク。
 
 import { writeFile, mkdir } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
@@ -31,28 +34,49 @@ const NAV_TIMEOUT = 30000;
 
 const PARKS = ['tdl', 'tds'];
 
+// §0.90 : 予約必須のショーレストランは時刻に関わらず priority:null / kind:'show-restaurant' として
+//   別扱いする (build_schedule_2026_08.py / Cowork依頼文の RESTAURANT_SHOWS と同じ判定を踏襲)。
+//   name は公式サイト表記 (全角 ・) のまま比較すること (halfwidth 変換前)。
+const RESTAURANT_SHOWS = new Set([
+  'ミッキーのレインボー・ルアウ',
+  'ザ・ダイヤモンド・バラエティマスター',
+  'ダッフィー＆フレンズのワンダフル・フレンドシップ',
+]);
+
 // 公演名 → priority / kind の分類 (SPEC §3.10 の showPriority 相当)。
-// high: 季節限定の昼公演 (最重要)、medium: 屋内 ・ エントリー受付、low: 通年のナイト演目。
+// high: 季節限定の昼公演 ・ 花火 (最重要、スコア算定窓に直結)、medium: 屋内 ・ エントリー受付、
+// low: 通年のナイト演目 ・ 環境演出。
+// §0.90 : 2026-06/2026-08 の公式取得データ (src/data/schedule/*.json、docs/Cowork依頼_...20260803.md の
+//   分類テーブル) に合わせて全面改訂。旧ルールは §0.76 で降格済みのハーモニーが high のまま、終了済み
+//   演目 (ウィッシュ ・ ジュビレーション) が残存、スカイの priority/kind が実データと逆、
+//   【環境演出】が「スパークリング ・ ジュビリー」の広いマッチで high に誤分類、等の食い違いがあった。
 const PRIORITY_RULES = [
-  { re: /ハーモニー[・･]イン[・･]カラー/, priority: 'high', kind: 'parade-day' },
-  { re: /スウィーツフルタイム/, priority: 'high', kind: 'show-day' },
+  { re: /【環境演出】/, priority: 'low', kind: 'environment' },
+  { re: /ハーモニー[・･]イン[・･]カラー/, priority: 'medium', kind: 'parade-day' },
+  { re: /スウィーツ[・･]?フルタイム/, priority: 'high', kind: 'show-day' },
   { re: /Reach for the Stars/i, priority: 'high', kind: 'show-day' },
-  { re: /ジュビレーション/, priority: 'high', kind: 'parade-day' },
   { re: /スパークリング[・･]ジュビリー/, priority: 'high', kind: 'show-day' },
-  { re: /ウィッシュ/, priority: 'high', kind: 'show-day' },
   { re: /ジャンボリミッキー/, priority: 'medium', kind: 'show-indoor' },
   { re: /エレクトリカルパレード|ドリームライツ/, priority: 'low', kind: 'parade-night' },
-  { re: /スカイ[・･]フル[・･]オブ[・･]カラーズ/, priority: 'low', kind: 'show-night' },
+  { re: /スカイ[・･]フル[・･]オブ[・･]カラーズ/, priority: 'high', kind: 'fireworks' },
   { re: /ビリーヴ|ナイトハーバー/, priority: 'low', kind: 'show-night' },
+  { re: /ダンス[・･]ザ[・･]グローブ/, priority: 'medium', kind: 'show-indoor' },
+  { re: /ドリームス[・･]テイク[・･]フライト/, priority: 'medium', kind: 'show-indoor' },
+  { re: /マジカルミュージックワールド/, priority: 'medium', kind: 'show-unknown' },
+  { re: /ベイマックスのミッション[・･]クールダウン/, priority: 'medium', kind: 'show-unknown' },
 ];
 
 function classify(name) {
+  if (RESTAURANT_SHOWS.has(name)) return { priority: null, kind: 'show-restaurant' };
   for (const r of PRIORITY_RULES) {
     if (r.re.test(name)) return { priority: r.priority, kind: r.kind };
   }
-  // 未知の公演: 時刻が昼帯 (11-16) なら medium、それ以外 low (安全側)
+  // 未知の公演: 安全側 (スコア算定窓を広げすぎない) に倒して medium
   return { priority: 'medium', kind: 'show-unknown' };
 }
+
+// 公式表記 (全角 ・) を既存データの半角 ･ に統一 (§0.90、build_schedule スクリプトの halfwidth() と同じ)。
+const halfwidth = (name) => name.replace(/・/g, '･');
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
@@ -148,7 +172,9 @@ async function fetchMonth(ym) {
       try {
         await page.goto(url, { waitUntil: 'networkidle' });
         const parsed = await page.evaluate(parseDayInBrowser);
-        const shows = parsed.shows.map((s) => ({ ...s, ...classify(s.name) }));
+        // §0.90 : classify() は公式表記 (全角 ・) のまま判定し、出力時にだけ半角 ･ へ変換する
+        //   (既存 JSON の表記規則に合わせる。RESTAURANT_SHOWS / PRIORITY_RULES も全角基準)。
+        const shows = parsed.shows.map((s) => ({ ...s, name: halfwidth(s.name), ...classify(s.name) }));
         days[date][park.toUpperCase()] = {
           openHour: parsed.openHour,
           closeHour: parsed.closeHour,

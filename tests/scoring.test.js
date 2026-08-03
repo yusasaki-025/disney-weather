@@ -535,6 +535,13 @@ describe('popScoreCap (§0.55.1 雨確率キャップ)', () => {
     expect(popScoreCap(80, true, 0.7)).toBe(74); // 高確率でも軽霧雨は OK まで
     expect(popScoreCap(80, true, 1.2)).toBe(59); // 1mm/h 以上は FAIR
   });
+  // §0.85 回帰 : drizzle は「緩和」であって「格下げ」ではない。pop が低く本来上限なし (100) の日は、
+  //   霧雨検知だけで 74/59 に下げてはいけない (旧実装は独立 return で格下げしていた)。max を取り緩和方向のみ。
+  it('低 pop + 霧雨は格下げしない (normalCap との max)', () => {
+    expect(popScoreCap(10, true, 0.5)).toBe(100); // pop 低 → 上限なしのまま (霧雨で 74 に下げない)
+    expect(popScoreCap(10, true, 1.5)).toBe(100); // 1mm/h 以上でも normalCap 100 を下回らない
+    expect(popScoreCap(60, true, 0.5)).toBe(74); // pop 中 (normal 74) と drizzle 74 が一致
+  });
 });
 
 describe('warnElementCap (§0.72 要素別重み付け ・ 風 < 雨 ・ 熱)', () => {

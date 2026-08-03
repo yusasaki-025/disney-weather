@@ -191,19 +191,23 @@ function showRiskLineHtml(showName, park, risk, predWind, weatherless = false) {
     if (r) {
       const cls = r.probability >= 50 ? 'cp-danger' : r.probability >= 30 ? 'cp-warn' : 'cp-mute';
       const lowSample = r.sampleSize < 3 ? '<span class="cp-check">(要確認)</span>' : '';
-      cancelHtml = `<span class="cancel-prob ${cls}" title="過去同条件 (突風 ${fmtNum(predWind, 0)}m/s ±2m/s) ${r.sampleSize}件中 ${r.cancelCount}件中止">［過去中止 ${r.probability}% (${r.cancelCount}/${r.sampleSize}件)］${lowSample}</span>`;
+      // §0.84 : 「過去中止」だけだと雨 ・ 熱を含むと誤解されるため、風 (突風) 基準であることを明示。
+      cancelHtml = `<span class="cancel-prob ${cls}" title="過去同条件 (突風 ${fmtNum(predWind, 0)}m/s ±2m/s) ${r.sampleSize}件中 ${r.cancelCount}件中止">［過去中止(風) ${r.probability}% (${r.cancelCount}/${r.sampleSize}件)］${lowSample}</span>`;
     }
   }
   // §0.44.12 : 屋内ショーは「屋内 ・ 天候影響なし」を明示 (空欄だと未取得と紛らわしいため)。
   const indoorNote = weatherless ? '<span class="sr-indoor">屋内・天候影響なし</span>' : '';
   // §0.75 : 屋内以外はショー個別の風閾値 (風バ 〜 / 中止 〜) を現状値の下に小さく併記。
   //   ユーザーが「現状の突風 vs このショーの中止基準」を一目で比較できる。一般基準 (DEFAULT) は注釈付き。
+  // §0.88 : pyroLimit (花火カット基準) が設定されているショーは併記する (従来 thresholdForShow が
+  //   返していても表示されておらず、Reach for the Stars の花火カット 8m/s〜 が UI から見えなかった)。
   let thresholdHtml = '';
   if (!weatherless) {
     const th = thresholdForShow(showName);
     const note = th.isDefault ? '<span class="th-note">(一般基準)</span>' : '';
+    const pyro = th.pyroLimit != null ? ` ｜ 花火カット ${th.pyroLimit}m/s 〜` : '';
     // §0.81.3 : 基準も ｜ 区切り。行全体は薄グレー (最も控えめな階層)。
-    thresholdHtml = `<div class="show-threshold"><span class="sr-lead">基準</span> 風バ ${th.windBa}m/s 〜 ｜ 中止 ${th.windCancel}m/s 〜 ${note}</div>`;
+    thresholdHtml = `<div class="show-threshold"><span class="sr-lead">基準</span> 風バ ${th.windBa}m/s 〜 ｜ 中止 ${th.windCancel}m/s 〜${pyro} ${note}</div>`;
   }
   if (riskParts.length === 0 && !cancelHtml && !indoorNote && !thresholdHtml) return '';
   // §0.81.2/.3 : 現状行 = 「現状」ラベル (中グレー) + データ (濃黒 ・ ｜ 区切り) ・ 過去中止率 (中グレー)。
@@ -565,11 +569,17 @@ export function renderTable(els, rows, state, sources, sourceStatus, handlers, w
       let scoreTitle = '';
       if (row.eval.capped) {
         const ev = row.eval;
-        const worstBadge = [
+        // §0.89 : 旧実装は wind→rain→wbgt の先頭一致 (find) で「最悪」を装っていたが、実際には
+        //   最初にヒットしたカテゴリを返すだけだった (wind が level2 中止リスク でも wbgt が level3
+        //   中止 ならこちらを出すべき)。level 降順ソートで本当の最悪バッジを選ぶよう修正。
+        //   `${b.text}` && は常に真になる無意味なガードだったため削除。
+        const candidates = [
           ['wind', ev.badges.wind, peakTxt(m.gustPeak, 'm/s')],
           ['rain', ev.badges.rain, peakTxt(m.popPeak, '%')],
           ['wbgt', ev.badges.wbgt, peakTxt(m.wbgtPeak, '', 1)],
-        ].find(([, b]) => `${b.text}` && b.level >= 2 && b.text !== '—');
+        ].filter(([, b]) => b.level >= 2 && b.text !== '—');
+        candidates.sort((a, b) => b[1].level - a[1].level);
+        const worstBadge = candidates[0];
         const reasonBadge = worstBadge ? `バッジ「${worstBadge[1].text}」${worstBadge[2] ? ` (${worstBadge[2]})` : ''}` : 'バッジ判定';
         // §0.68.A (監査 D-1) : §0.66 で日スコアは時間帯加重平均 (base) ベースになったため、
         //   表示も rawScore (旧 ・ 全要素平均) でなく ev.base を「時間帯平均スコア」として示す。

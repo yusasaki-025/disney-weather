@@ -213,12 +213,14 @@ export function applyBadgeGuard(rawScore, badges) {
 // §0.55.1 : 雨確率に応じたスコア上限 (降りそうな日は BEST にしない)。
 //   < 30% 上限なし / 30-49% GOOD(89) / 50-69% OK(74) / 70%+ FAIR(59)。
 //   霧雨 (drizzle) は弱雨が長時間 ・ ショー原則開催のため緩和 : < 1mm/h は OK(74) まで許容、≥ 1mm/h は FAIR(59)。
+// §0.85 : drizzle 分岐が独立 return だったため、pop が低い (通常なら 100 のまま) 日でも霧雨検知だけで
+//   74/59 に「格下げ」されてしまっていた (本来 drizzle は「緩和」であり、通常判定より悪化させてはいけない)。
+//   通常の pop ベース上限と drizzle 上限の max を取り、緩和方向にしか働かないよう修正。
 export function popScoreCap(pop, drizzle = false, precipHourly = null) {
-  if (drizzle) return precipHourly != null && precipHourly >= 1 ? 59 : 74;
-  if (pop == null || pop < 30) return 100;
-  if (pop < 50) return 89; // GOOD
-  if (pop < 70) return 74; // OK
-  return 59; // FAIR
+  const normalCap = pop == null || pop < 30 ? 100 : pop < 50 ? 89 : pop < 70 ? 74 : 59;
+  if (!drizzle) return normalCap;
+  const drizzleCap = precipHourly != null && precipHourly >= 1 ? 59 : 74;
+  return Math.max(normalCap, drizzleCap);
 }
 
 // §0.72 : 注意バッジ (風バ/雨バ/熱バ = warn) の要素別上限 (§0.55.5 の個数ベースを置換)。
@@ -373,6 +375,10 @@ export function bandSubscore(forecasts, band, park) {
   const pop = windowMax(forecasts, band.hours, 'pop');
   const wbgt = windowMax(forecasts, band.hours, 'wbgt');
   const wind = windowMax(forecasts, band.hours, 'wind');
+  // §0.86 : rainDeduction に precip を渡していなかったため、pop が低くても時間降水量が
+  //   多い時間帯 (局地的な大雨予報等) が band スコアでほぼ無罰になっていた不具合を修正。
+  //   日スコア (scoreFromMetrics) 側は precipMaxHourly を渡しているのと揃える。
+  const precip = windowMax(forecasts, band.hours, 'precip');
   const feelsLikeMax = mean(forecasts.map((f) => f.feelsLikeMax));
   // §0.68.H.b (監査 L-2) : 寒さ ・ UV も band に組み込み、日スコア (時間帯加重平均) に反映させる。
   //   §0.66 で日スコアが band 平均ベースになり、要素ベース rawScore に入る cold/uv が捨てられて
@@ -380,7 +386,7 @@ export function bandSubscore(forecasts, band, park) {
   const tempMax = mean(forecasts.map((f) => f.tempMax));
   const uvMax = mean(forecasts.map((f) => f.uvMax));
   const dWind = windDeduction(gust, park);
-  const dRain = rainDeduction(pop, null);
+  const dRain = rainDeduction(pop, precip);
   const dHeat = heatDeduction(wbgt, feelsLikeMax, wind);
   const dCold = coldDeduction(feelsLikeMax, tempMax);
   const dUv = uvDeduction(uvMax);
