@@ -1424,5 +1424,28 @@
         "wbgtError": null
       }
     }
+  },
+  "2026-08-03": {
+    "actualMaxWind": 5.1,
+    "actualMaxTemp": 26.6,
+    "actualMaxWbgt": null,
+    "forecasts": {
+      "jma": {
+        "predictedMaxWind": null,
+        "windError": null,
+        "predictedMaxTemp": 28,
+        "tempError": 1.4,
+        "predictedMaxWbgt": null,
+        "wbgtError": null
+      },
+      "open-meteo": {
+        "predictedMaxWind": 12.8,
+        "windError": 7.7,
+        "predictedMaxTemp": 26.1,
+        "tempError": 0.5,
+        "predictedMaxWbgt": 26,
+        "wbgtError": null
+      }
+    }
   }
 }
