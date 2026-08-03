@@ -186,6 +186,9 @@ function showRiskLineHtml(showName, park, risk, predWind, weatherless = false) {
   if (risk && risk.wbgt != null) riskParts.push(`熱 WBGT${fmtNum(risk.wbgt, 1)}`); // §0.65.1 : 小数 1 桁
   // 過去中止率 (§0.31)。サンプル不足は表示せず (誤情報回避)、3 件未満は (要確認) 併記 (§0.38-10)。
   let cancelHtml = '';
+  // §0.94 : 運用ログ実績は「現状」行でなく「基準」行に併記する (Yuka さん指摘 : 現状データと同じ行に
+  //   ぶら下げると読みにくい ・ 基準の隣の方が「実績としてどれくらい中止してきたか」が伝わりやすい)。
+  let incidentHtml = '';
   if (!weatherless) {
     const r = getCancelProbability(showName, park, predWind);
     if (r) {
@@ -207,7 +210,7 @@ function showRiskLineHtml(showName, park, risk, predWind, weatherless = false) {
         .map(([k, n]) => `${CAUSE_LABEL[k]}${n}`)
         .join(' ');
       const recentDates = incidents.slice(0, 5).map((it) => it.date.slice(5).replace('-', '/')).join(' ・ ');
-      cancelHtml += `<span class="cancel-log" title="運用ログ (@kazekyanbunseki 由来) で確認できた中止 ・ 変更事例。日付 : ${esc(recentDates)}${incidents.length > 5 ? ' 他' : ''}">［運用ログ実績 ${incidents.length}件 : ${breakdown}］</span>`;
+      incidentHtml = `<span class="cancel-log" title="運用ログ (@kazekyanbunseki 由来) で確認できた中止 ・ 変更事例。日付 : ${esc(recentDates)}${incidents.length > 5 ? ' 他' : ''}">［運用ログ実績 ${incidents.length}件 : ${breakdown}］</span>`;
     }
   }
   // §0.44.12 : weatherless (風の影響を受けない演目) は明示ラベルを出す (空欄だと未取得と紛らわしいため)。
@@ -231,11 +234,14 @@ function showRiskLineHtml(showName, park, risk, predWind, weatherless = false) {
     const note = th.isDefault ? '<span class="th-note">(一般基準)</span>' : '';
     const pyro = th.pyroLimit != null ? ` ｜ 花火カット ${th.pyroLimit}m/s 〜` : '';
     // §0.81.3 : 基準も ｜ 区切り。行全体は薄グレー (最も控えめな階層)。
-    thresholdHtml = `<div class="show-threshold"><span class="sr-lead">基準</span> 風バ ${th.windBa}m/s 〜 ｜ 中止 ${th.windCancel}m/s 〜${pyro} ${note}</div>`;
+    // §0.94 : 運用ログ実績 (incidentHtml) をこの行の末尾に併記。
+    thresholdHtml = `<div class="show-threshold"><span class="sr-lead">基準</span> 風バ ${th.windBa}m/s 〜 ｜ 中止 ${th.windCancel}m/s 〜${pyro} ${note}${incidentHtml}</div>`;
   }
   if (riskParts.length === 0 && !cancelHtml && !indoorNote && !thresholdHtml) return '';
   // §0.81.2/.3 : 現状行 = 「現状」ラベル (中グレー) + データ (濃黒 ・ ｜ 区切り) ・ 過去中止率 (中グレー)。
-  const dataInner = [riskParts.join(' ｜ '), cancelHtml].filter(Boolean).join(' ・ ');
+  // §0.94 : riskParts (風/突風/熱) と cancelHtml (過去中止(風)) の間の「 ・ 」区切りが
+  //   不要とのご指摘のため、他行 (weatherless 分岐) と揃えてスペース区切りに統一。
+  const dataInner = [riskParts.join(' ｜ '), cancelHtml].filter(Boolean).join(' ');
   let statusLine = '';
   if (weatherless) {
     statusLine = `<div class="show-risk-line">${[riskParts.join(' ｜ '), indoorNote].filter(Boolean).join(' ')}</div>`;
