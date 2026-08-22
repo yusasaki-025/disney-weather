@@ -1,10 +1,10 @@
 {
-  "month": "2026-08",
+  "month": "2026-09",
   "fetchedAt": "2026-08-22T14:20:00+09:00",
   "source": "Cowork Chrome MCP 経由で取得",
-  "note": "8/3〜8/17 と 8/22〜8/31 を取得 (8/18〜8/21 は取得時点で過去日のため未取得)。8/7 (金) はTDL早閉め (9:00-18:30) でReach for the Stars・エレクトリカルパレード休止。スカイ・フル・オブ・カラーズは夏季休止 (2026-06-15〜09-14) のため8月は全日時刻なしで除外。ベイマックスのミッション・クールダウンとミッキーのマジカルミュージックワールドは既存ルールに無い新規ショーのため medium/show-unknown。",
+  "note": "9/1〜9/30 (30日分) を取得。9/14でサマープログラム終了 (Reach for the Stars・ベイマックスのミッション・クールダウンが9/15以降なし)、9/15からスカイ・フル・オブ・カラーズ再開 (20:50)、ハーモニー・イン・カラーが17:00→13:00に移動。9/16からハロウィーン開始でザ・ヴィランズ・ハロウィーン“Into the Frenzy” (TDL昼)・ナイトハイ・ハロウィーン (両パーク夜)・ディズニー・ハロウィーン・グリーティング (TDS昼) が追加、9/30からThe D-Groovationz4 Live (TDL) が追加。いずれも既存 PRIORITY_RULES に無いため medium/show-unknown で暫定登録 (high はスコア算定窓に直結するため安全側)。",
   "days": {
-    "2026-08-03": {
+    "2026-09-01": {
       "TDL": {
         "openHour": "09:00",
         "closeHour": "21:00",
@@ -34,7 +34,7 @@
           {
             "name": "東京ディズニーランド･エレクトリカルパレード･ドリームライツ",
             "times": [
-              "19:45"
+              "20:25"
             ],
             "priority": "low",
             "kind": "parade-night",
@@ -45,7 +45,7 @@
           {
             "name": "Reach for the Stars: Everlasting Dreams",
             "times": [
-              "20:55"
+              "19:15"
             ],
             "priority": "high",
             "kind": "show-day",
@@ -56,9 +56,9 @@
           {
             "name": "ジャンボリミッキー！レッツ･ダンス！",
             "times": [
-              "18:00",
-              "19:20",
-              "20:35"
+              "17:40",
+              "18:55",
+              "20:10"
             ],
             "priority": "medium",
             "kind": "show-indoor",
@@ -87,8 +87,8 @@
             "priority": "medium",
             "kind": "show-unknown",
             "tags": [
-              "エントリー受付",
-              "プレミアアクセス"
+              "プレミアアクセス",
+              "エントリー受付"
             ]
           },
           {
@@ -96,9 +96,7 @@
             "times": [],
             "priority": null,
             "kind": "show-restaurant",
-            "tags": [
-              "予約必須"
-            ]
+            "tags": []
           }
         ]
       },
@@ -153,8 +151,8 @@
             "priority": "medium",
             "kind": "show-indoor",
             "tags": [
-              "エントリー受付",
-              "プレミアアクセス"
+              "プレミアアクセス",
+              "エントリー受付"
             ]
           },
           {
@@ -169,14 +167,14 @@
             "priority": "medium",
             "kind": "show-indoor",
             "tags": [
-              "エントリー受付",
-              "プレミアアクセス"
+              "プレミアアクセス",
+              "エントリー受付"
             ]
           }
         ]
       }
     },
-    "2026-08-04": {
+    "2026-09-02": {
       "TDL": {
         "openHour": "09:00",
         "closeHour": "21:00",
@@ -206,7 +204,7 @@
           {
             "name": "東京ディズニーランド･エレクトリカルパレード･ドリームライツ",
             "times": [
-              "19:45"
+              "20:25"
             ],
             "priority": "low",
             "kind": "parade-night",
@@ -217,7 +215,7 @@
           {
             "name": "Reach for the Stars: Everlasting Dreams",
             "times": [
-              "20:55"
+              "19:15"
             ],
             "priority": "high",
             "kind": "show-day",
@@ -228,9 +226,9 @@
           {
             "name": "ジャンボリミッキー！レッツ･ダンス！",
             "times": [
-              "18:00",
-              "19:20",
-              "20:35"
+              "17:40",
+              "18:55",
+              "20:10"
             ],
             "priority": "medium",
             "kind": "show-indoor",
@@ -259,8 +257,8 @@
             "priority": "medium",
             "kind": "show-unknown",
             "tags": [
-              "エントリー受付",
-              "プレミアアクセス"
+              "プレミアアクセス",
+              "エントリー受付"
             ]
           },
           {
@@ -268,9 +266,7 @@
             "times": [],
             "priority": null,
             "kind": "show-restaurant",
-            "tags": [
-              "予約必須"
-            ]
+            "tags": []
           }
         ]
       },
@@ -325,8 +321,8 @@
             "priority": "medium",
             "kind": "show-indoor",
             "tags": [
-              "エントリー受付",
-              "プレミアアクセス"
+              "プレミアアクセス",
+              "エントリー受付"
             ]
           },
           {
@@ -341,14 +337,14 @@
             "priority": "medium",
             "kind": "show-indoor",
             "tags": [
-              "エントリー受付",
-              "プレミアアクセス"
+              "プレミアアクセス",
+              "エントリー受付"
             ]
           }
         ]
       }
     },
-    "2026-08-05": {
+    "2026-09-03": {
       "TDL": {
         "openHour": "09:00",
         "closeHour": "21:00",
@@ -378,7 +374,7 @@
           {
             "name": "東京ディズニーランド･エレクトリカルパレード･ドリームライツ",
             "times": [
-              "19:45"
+              "20:25"
             ],
             "priority": "low",
             "kind": "parade-night",
@@ -389,7 +385,7 @@
           {
             "name": "Reach for the Stars: Everlasting Dreams",
             "times": [
-              "20:55"
+              "19:15"
             ],
             "priority": "high",
             "kind": "show-day",
@@ -400,9 +396,9 @@
           {
             "name": "ジャンボリミッキー！レッツ･ダンス！",
             "times": [
-              "18:00",
-              "19:20",
-              "20:35"
+              "17:40",
+              "18:55",
+              "20:10"
             ],
             "priority": "medium",
             "kind": "show-indoor",
@@ -431,8 +427,8 @@
             "priority": "medium",
             "kind": "show-unknown",
             "tags": [
-              "エントリー受付",
-              "プレミアアクセス"
+              "プレミアアクセス",
+              "エントリー受付"
             ]
           },
           {
@@ -440,9 +436,7 @@
             "times": [],
             "priority": null,
             "kind": "show-restaurant",
-            "tags": [
-              "予約必須"
-            ]
+            "tags": []
           }
         ]
       },
@@ -497,8 +491,8 @@
             "priority": "medium",
             "kind": "show-indoor",
             "tags": [
-              "エントリー受付",
-              "プレミアアクセス"
+              "プレミアアクセス",
+              "エントリー受付"
             ]
           },
           {
@@ -513,14 +507,14 @@
             "priority": "medium",
             "kind": "show-indoor",
             "tags": [
-              "エントリー受付",
-              "プレミアアクセス"
+              "プレミアアクセス",
+              "エントリー受付"
             ]
           }
         ]
       }
     },
-    "2026-08-06": {
+    "2026-09-04": {
       "TDL": {
         "openHour": "09:00",
         "closeHour": "21:00",
@@ -550,7 +544,7 @@
           {
             "name": "東京ディズニーランド･エレクトリカルパレード･ドリームライツ",
             "times": [
-              "19:45"
+              "20:25"
             ],
             "priority": "low",
             "kind": "parade-night",
@@ -561,7 +555,7 @@
           {
             "name": "Reach for the Stars: Everlasting Dreams",
             "times": [
-              "20:55"
+              "19:15"
             ],
             "priority": "high",
             "kind": "show-day",
@@ -572,9 +566,9 @@
           {
             "name": "ジャンボリミッキー！レッツ･ダンス！",
             "times": [
-              "18:00",
-              "19:20",
-              "20:35"
+              "17:40",
+              "18:55",
+              "20:10"
             ],
             "priority": "medium",
             "kind": "show-indoor",
@@ -603,8 +597,8 @@
             "priority": "medium",
             "kind": "show-unknown",
             "tags": [
-              "エントリー受付",
-              "プレミアアクセス"
+              "プレミアアクセス",
+              "エントリー受付"
             ]
           },
           {
@@ -612,9 +606,7 @@
             "times": [],
             "priority": null,
             "kind": "show-restaurant",
-            "tags": [
-              "予約必須"
-            ]
+            "tags": []
           }
         ]
       },
@@ -669,8 +661,8 @@
             "priority": "medium",
             "kind": "show-indoor",
             "tags": [
-              "エントリー受付",
-              "プレミアアクセス"
+              "プレミアアクセス",
+              "エントリー受付"
             ]
           },
           {
@@ -685,119 +677,3720 @@
             "priority": "medium",
             "kind": "show-indoor",
             "tags": [
-              "エントリー受付",
-              "プレミアアクセス"
+              "プレミアアクセス",
+              "エントリー受付"
             ]
           }
         ]
       }
     },
-    "2026-08-07": {
+    "2026-09-05": {
       "TDL": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "ベイマックスのミッション･クールダウン",
+            "times": [
+              "10:00",
+              "12:50",
+              "14:55"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": []
+          },
+          {
+            "name": "ディズニー･ハーモニー･イン･カラー",
+            "times": [
+              "17:00"
+            ],
+            "priority": "medium",
+            "kind": "parade-day",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "東京ディズニーランド･エレクトリカルパレード･ドリームライツ",
+            "times": [
+              "20:25"
+            ],
+            "priority": "low",
+            "kind": "parade-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "Reach for the Stars: Everlasting Dreams",
+            "times": [
+              "19:15"
+            ],
+            "priority": "high",
+            "kind": "show-day",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ジャンボリミッキー！レッツ･ダンス！",
+            "times": [
+              "17:40",
+              "18:55",
+              "20:10"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ミッキーのレインボー･ルアウ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ミッキーのマジカルミュージックワールド",
+            "times": [
+              "10:50",
+              "12:15",
+              "13:40",
+              "15:45",
+              "17:10"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": [
+              "プレミアアクセス",
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ザ･ダイヤモンド･バラエティマスター",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": []
+          }
+        ]
+      },
+      "TDS": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "スパークリング･ジュビリー･セレブレーション",
+            "times": [
+              "17:00"
+            ],
+            "priority": "high",
+            "kind": "show-day",
+            "tags": []
+          },
+          {
+            "name": "【環境演出】スパークリング･ジュビリー･ナイト",
+            "times": [
+              "20:55"
+            ],
+            "priority": "low",
+            "kind": "environment",
+            "tags": []
+          },
+          {
+            "name": "ビリーヴ！～シー･オブ･ドリームス～",
+            "times": [
+              "20:15"
+            ],
+            "priority": "low",
+            "kind": "show-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ダッフィー＆フレンズのワンダフル･フレンドシップ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ダンス･ザ･グローブ！",
+            "times": [
+              "17:55",
+              "19:40"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "プレミアアクセス",
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ドリームス･テイク･フライト",
+            "times": [
+              "11:00",
+              "12:25",
+              "13:50",
+              "15:55",
+              "17:20"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "プレミアアクセス",
+              "エントリー受付"
+            ]
+          }
+        ]
+      }
+    },
+    "2026-09-06": {
+      "TDL": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "ベイマックスのミッション･クールダウン",
+            "times": [
+              "10:00",
+              "12:50",
+              "14:55"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": []
+          },
+          {
+            "name": "ディズニー･ハーモニー･イン･カラー",
+            "times": [
+              "17:00"
+            ],
+            "priority": "medium",
+            "kind": "parade-day",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "東京ディズニーランド･エレクトリカルパレード･ドリームライツ",
+            "times": [
+              "20:25"
+            ],
+            "priority": "low",
+            "kind": "parade-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "Reach for the Stars: Everlasting Dreams",
+            "times": [
+              "19:15"
+            ],
+            "priority": "high",
+            "kind": "show-day",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ジャンボリミッキー！レッツ･ダンス！",
+            "times": [
+              "17:40",
+              "18:55",
+              "20:10"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ミッキーのレインボー･ルアウ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ミッキーのマジカルミュージックワールド",
+            "times": [
+              "10:50",
+              "12:15",
+              "13:40",
+              "15:45",
+              "17:10"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": [
+              "プレミアアクセス",
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ザ･ダイヤモンド･バラエティマスター",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": []
+          }
+        ]
+      },
+      "TDS": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "スパークリング･ジュビリー･セレブレーション",
+            "times": [
+              "17:00"
+            ],
+            "priority": "high",
+            "kind": "show-day",
+            "tags": []
+          },
+          {
+            "name": "【環境演出】スパークリング･ジュビリー･ナイト",
+            "times": [
+              "20:55"
+            ],
+            "priority": "low",
+            "kind": "environment",
+            "tags": []
+          },
+          {
+            "name": "ビリーヴ！～シー･オブ･ドリームス～",
+            "times": [
+              "20:15"
+            ],
+            "priority": "low",
+            "kind": "show-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ダッフィー＆フレンズのワンダフル･フレンドシップ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ダンス･ザ･グローブ！",
+            "times": [
+              "17:55",
+              "19:40"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "プレミアアクセス",
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ドリームス･テイク･フライト",
+            "times": [
+              "11:00",
+              "12:25",
+              "13:50",
+              "15:55",
+              "17:20"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "プレミアアクセス",
+              "エントリー受付"
+            ]
+          }
+        ]
+      }
+    },
+    "2026-09-07": {
+      "TDL": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "ベイマックスのミッション･クールダウン",
+            "times": [
+              "09:50",
+              "12:40",
+              "14:45"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": []
+          },
+          {
+            "name": "ディズニー･ハーモニー･イン･カラー",
+            "times": [
+              "17:00"
+            ],
+            "priority": "medium",
+            "kind": "parade-day",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "東京ディズニーランド･エレクトリカルパレード･ドリームライツ",
+            "times": [
+              "20:25"
+            ],
+            "priority": "low",
+            "kind": "parade-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "Reach for the Stars: Everlasting Dreams",
+            "times": [
+              "19:15"
+            ],
+            "priority": "high",
+            "kind": "show-day",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ジャンボリミッキー！レッツ･ダンス！",
+            "times": [
+              "17:40",
+              "18:55",
+              "20:10"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ミッキーのレインボー･ルアウ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ミッキーのマジカルミュージックワールド",
+            "times": [
+              "10:50",
+              "12:15",
+              "13:40",
+              "15:45",
+              "17:10"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": [
+              "プレミアアクセス",
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ザ･ダイヤモンド･バラエティマスター",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": []
+          }
+        ]
+      },
+      "TDS": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "スパークリング･ジュビリー･セレブレーション",
+            "times": [
+              "17:00"
+            ],
+            "priority": "high",
+            "kind": "show-day",
+            "tags": []
+          },
+          {
+            "name": "【環境演出】スパークリング･ジュビリー･ナイト",
+            "times": [
+              "20:55"
+            ],
+            "priority": "low",
+            "kind": "environment",
+            "tags": []
+          },
+          {
+            "name": "ビリーヴ！～シー･オブ･ドリームス～",
+            "times": [
+              "20:15"
+            ],
+            "priority": "low",
+            "kind": "show-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ダッフィー＆フレンズのワンダフル･フレンドシップ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ダンス･ザ･グローブ！",
+            "times": [
+              "17:55",
+              "19:40"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "プレミアアクセス",
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ドリームス･テイク･フライト",
+            "times": [
+              "11:00",
+              "12:25",
+              "13:50",
+              "15:55",
+              "17:20"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "プレミアアクセス",
+              "エントリー受付"
+            ]
+          }
+        ]
+      }
+    },
+    "2026-09-08": {
+      "TDL": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "ベイマックスのミッション･クールダウン",
+            "times": [
+              "09:50",
+              "12:40",
+              "14:45"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": []
+          },
+          {
+            "name": "ディズニー･ハーモニー･イン･カラー",
+            "times": [
+              "17:00"
+            ],
+            "priority": "medium",
+            "kind": "parade-day",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "東京ディズニーランド･エレクトリカルパレード･ドリームライツ",
+            "times": [
+              "20:25"
+            ],
+            "priority": "low",
+            "kind": "parade-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "Reach for the Stars: Everlasting Dreams",
+            "times": [
+              "19:15"
+            ],
+            "priority": "high",
+            "kind": "show-day",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ジャンボリミッキー！レッツ･ダンス！",
+            "times": [
+              "17:40",
+              "18:55",
+              "20:10"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ミッキーのレインボー･ルアウ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ミッキーのマジカルミュージックワールド",
+            "times": [
+              "10:50",
+              "12:15",
+              "13:40",
+              "15:45",
+              "17:10"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": [
+              "プレミアアクセス",
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ザ･ダイヤモンド･バラエティマスター",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": []
+          }
+        ]
+      },
+      "TDS": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "スパークリング･ジュビリー･セレブレーション",
+            "times": [
+              "17:00"
+            ],
+            "priority": "high",
+            "kind": "show-day",
+            "tags": []
+          },
+          {
+            "name": "【環境演出】スパークリング･ジュビリー･ナイト",
+            "times": [
+              "20:55"
+            ],
+            "priority": "low",
+            "kind": "environment",
+            "tags": []
+          },
+          {
+            "name": "ビリーヴ！～シー･オブ･ドリームス～",
+            "times": [
+              "20:15"
+            ],
+            "priority": "low",
+            "kind": "show-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ダッフィー＆フレンズのワンダフル･フレンドシップ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ダンス･ザ･グローブ！",
+            "times": [
+              "17:55",
+              "19:40"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "プレミアアクセス",
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ドリームス･テイク･フライト",
+            "times": [
+              "11:00",
+              "12:25",
+              "13:50",
+              "15:55",
+              "17:20"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "プレミアアクセス",
+              "エントリー受付"
+            ]
+          }
+        ]
+      }
+    },
+    "2026-09-09": {
+      "TDL": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "ベイマックスのミッション･クールダウン",
+            "times": [
+              "09:50",
+              "12:40",
+              "14:45"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": []
+          },
+          {
+            "name": "ディズニー･ハーモニー･イン･カラー",
+            "times": [
+              "17:00"
+            ],
+            "priority": "medium",
+            "kind": "parade-day",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "東京ディズニーランド･エレクトリカルパレード･ドリームライツ",
+            "times": [
+              "20:25"
+            ],
+            "priority": "low",
+            "kind": "parade-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "Reach for the Stars: Everlasting Dreams",
+            "times": [
+              "19:15"
+            ],
+            "priority": "high",
+            "kind": "show-day",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ジャンボリミッキー！レッツ･ダンス！",
+            "times": [
+              "17:40",
+              "18:55",
+              "20:10"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ミッキーのレインボー･ルアウ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ミッキーのマジカルミュージックワールド",
+            "times": [
+              "10:50",
+              "12:15",
+              "13:40",
+              "15:45",
+              "17:10"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": [
+              "プレミアアクセス",
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ザ･ダイヤモンド･バラエティマスター",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": []
+          }
+        ]
+      },
+      "TDS": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "スパークリング･ジュビリー･セレブレーション",
+            "times": [
+              "17:00"
+            ],
+            "priority": "high",
+            "kind": "show-day",
+            "tags": []
+          },
+          {
+            "name": "【環境演出】スパークリング･ジュビリー･ナイト",
+            "times": [
+              "20:55"
+            ],
+            "priority": "low",
+            "kind": "environment",
+            "tags": []
+          },
+          {
+            "name": "ビリーヴ！～シー･オブ･ドリームス～",
+            "times": [
+              "20:15"
+            ],
+            "priority": "low",
+            "kind": "show-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ダッフィー＆フレンズのワンダフル･フレンドシップ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ダンス･ザ･グローブ！",
+            "times": [
+              "17:55",
+              "19:40"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "プレミアアクセス",
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ドリームス･テイク･フライト",
+            "times": [
+              "11:00",
+              "12:25",
+              "13:50",
+              "15:55",
+              "17:20"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "プレミアアクセス",
+              "エントリー受付"
+            ]
+          }
+        ]
+      }
+    },
+    "2026-09-10": {
+      "TDL": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "ベイマックスのミッション･クールダウン",
+            "times": [
+              "09:50",
+              "12:40",
+              "14:45"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": []
+          },
+          {
+            "name": "ディズニー･ハーモニー･イン･カラー",
+            "times": [
+              "17:00"
+            ],
+            "priority": "medium",
+            "kind": "parade-day",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "東京ディズニーランド･エレクトリカルパレード･ドリームライツ",
+            "times": [
+              "20:25"
+            ],
+            "priority": "low",
+            "kind": "parade-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "Reach for the Stars: Everlasting Dreams",
+            "times": [
+              "19:15"
+            ],
+            "priority": "high",
+            "kind": "show-day",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ジャンボリミッキー！レッツ･ダンス！",
+            "times": [
+              "17:40",
+              "18:55",
+              "20:10"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ミッキーのレインボー･ルアウ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ミッキーのマジカルミュージックワールド",
+            "times": [
+              "10:50",
+              "12:15",
+              "13:40",
+              "15:45",
+              "17:10"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": [
+              "プレミアアクセス",
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ザ･ダイヤモンド･バラエティマスター",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": []
+          }
+        ]
+      },
+      "TDS": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "スパークリング･ジュビリー･セレブレーション",
+            "times": [
+              "17:00"
+            ],
+            "priority": "high",
+            "kind": "show-day",
+            "tags": []
+          },
+          {
+            "name": "【環境演出】スパークリング･ジュビリー･ナイト",
+            "times": [
+              "20:55"
+            ],
+            "priority": "low",
+            "kind": "environment",
+            "tags": []
+          },
+          {
+            "name": "ビリーヴ！～シー･オブ･ドリームス～",
+            "times": [
+              "20:15"
+            ],
+            "priority": "low",
+            "kind": "show-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ダッフィー＆フレンズのワンダフル･フレンドシップ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ダンス･ザ･グローブ！",
+            "times": [
+              "17:55",
+              "19:40"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "プレミアアクセス",
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ドリームス･テイク･フライト",
+            "times": [
+              "11:00",
+              "12:25",
+              "13:50",
+              "15:55",
+              "17:20"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "プレミアアクセス",
+              "エントリー受付"
+            ]
+          }
+        ]
+      }
+    },
+    "2026-09-11": {
+      "TDL": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "ベイマックスのミッション･クールダウン",
+            "times": [
+              "09:50",
+              "12:40",
+              "14:45"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": []
+          },
+          {
+            "name": "ディズニー･ハーモニー･イン･カラー",
+            "times": [
+              "17:00"
+            ],
+            "priority": "medium",
+            "kind": "parade-day",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "東京ディズニーランド･エレクトリカルパレード･ドリームライツ",
+            "times": [
+              "20:25"
+            ],
+            "priority": "low",
+            "kind": "parade-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "Reach for the Stars: Everlasting Dreams",
+            "times": [
+              "19:15"
+            ],
+            "priority": "high",
+            "kind": "show-day",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ジャンボリミッキー！レッツ･ダンス！",
+            "times": [
+              "17:40",
+              "18:55",
+              "20:10"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ミッキーのレインボー･ルアウ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ミッキーのマジカルミュージックワールド",
+            "times": [
+              "10:50",
+              "12:15",
+              "13:40",
+              "15:45",
+              "17:10"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": [
+              "プレミアアクセス",
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ザ･ダイヤモンド･バラエティマスター",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": []
+          }
+        ]
+      },
+      "TDS": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "スパークリング･ジュビリー･セレブレーション",
+            "times": [
+              "17:00"
+            ],
+            "priority": "high",
+            "kind": "show-day",
+            "tags": []
+          },
+          {
+            "name": "【環境演出】スパークリング･ジュビリー･ナイト",
+            "times": [
+              "20:55"
+            ],
+            "priority": "low",
+            "kind": "environment",
+            "tags": []
+          },
+          {
+            "name": "ビリーヴ！～シー･オブ･ドリームス～",
+            "times": [
+              "20:15"
+            ],
+            "priority": "low",
+            "kind": "show-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ダッフィー＆フレンズのワンダフル･フレンドシップ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ダンス･ザ･グローブ！",
+            "times": [
+              "17:55",
+              "19:40"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "プレミアアクセス",
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ドリームス･テイク･フライト",
+            "times": [
+              "11:00",
+              "12:25",
+              "13:50",
+              "15:55",
+              "17:20"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "プレミアアクセス",
+              "エントリー受付"
+            ]
+          }
+        ]
+      }
+    },
+    "2026-09-12": {
+      "TDL": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "ベイマックスのミッション･クールダウン",
+            "times": [
+              "09:50",
+              "12:40",
+              "14:45"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": []
+          },
+          {
+            "name": "ディズニー･ハーモニー･イン･カラー",
+            "times": [
+              "17:00"
+            ],
+            "priority": "medium",
+            "kind": "parade-day",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "東京ディズニーランド･エレクトリカルパレード･ドリームライツ",
+            "times": [
+              "20:25"
+            ],
+            "priority": "low",
+            "kind": "parade-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "Reach for the Stars: Everlasting Dreams",
+            "times": [
+              "19:15"
+            ],
+            "priority": "high",
+            "kind": "show-day",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ジャンボリミッキー！レッツ･ダンス！",
+            "times": [
+              "17:40",
+              "18:55",
+              "20:10"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ミッキーのレインボー･ルアウ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ミッキーのマジカルミュージックワールド",
+            "times": [
+              "10:50",
+              "12:15",
+              "13:40",
+              "15:45",
+              "17:10"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": [
+              "プレミアアクセス",
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ザ･ダイヤモンド･バラエティマスター",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": []
+          }
+        ]
+      },
+      "TDS": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "スパークリング･ジュビリー･セレブレーション",
+            "times": [
+              "17:00"
+            ],
+            "priority": "high",
+            "kind": "show-day",
+            "tags": []
+          },
+          {
+            "name": "【環境演出】スパークリング･ジュビリー･ナイト",
+            "times": [
+              "20:55"
+            ],
+            "priority": "low",
+            "kind": "environment",
+            "tags": []
+          },
+          {
+            "name": "ビリーヴ！～シー･オブ･ドリームス～",
+            "times": [
+              "20:15"
+            ],
+            "priority": "low",
+            "kind": "show-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ダッフィー＆フレンズのワンダフル･フレンドシップ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ダンス･ザ･グローブ！",
+            "times": [
+              "17:55",
+              "19:40"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "プレミアアクセス",
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ドリームス･テイク･フライト",
+            "times": [
+              "11:00",
+              "12:25",
+              "13:50",
+              "15:55",
+              "17:20"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "プレミアアクセス",
+              "エントリー受付"
+            ]
+          }
+        ]
+      }
+    },
+    "2026-09-13": {
+      "TDL": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "ベイマックスのミッション･クールダウン",
+            "times": [
+              "09:50",
+              "12:40",
+              "14:45"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": []
+          },
+          {
+            "name": "ディズニー･ハーモニー･イン･カラー",
+            "times": [
+              "17:00"
+            ],
+            "priority": "medium",
+            "kind": "parade-day",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "東京ディズニーランド･エレクトリカルパレード･ドリームライツ",
+            "times": [
+              "20:25"
+            ],
+            "priority": "low",
+            "kind": "parade-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "Reach for the Stars: Everlasting Dreams",
+            "times": [
+              "19:15"
+            ],
+            "priority": "high",
+            "kind": "show-day",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ジャンボリミッキー！レッツ･ダンス！",
+            "times": [
+              "17:40",
+              "18:55",
+              "20:10"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ミッキーのレインボー･ルアウ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ミッキーのマジカルミュージックワールド",
+            "times": [
+              "10:50",
+              "12:15",
+              "13:40",
+              "15:45",
+              "17:10"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": [
+              "プレミアアクセス",
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ザ･ダイヤモンド･バラエティマスター",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": []
+          }
+        ]
+      },
+      "TDS": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "スパークリング･ジュビリー･セレブレーション",
+            "times": [
+              "17:00"
+            ],
+            "priority": "high",
+            "kind": "show-day",
+            "tags": []
+          },
+          {
+            "name": "【環境演出】スパークリング･ジュビリー･ナイト",
+            "times": [
+              "20:55"
+            ],
+            "priority": "low",
+            "kind": "environment",
+            "tags": []
+          },
+          {
+            "name": "ビリーヴ！～シー･オブ･ドリームス～",
+            "times": [
+              "20:15"
+            ],
+            "priority": "low",
+            "kind": "show-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ダッフィー＆フレンズのワンダフル･フレンドシップ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ダンス･ザ･グローブ！",
+            "times": [
+              "17:55",
+              "19:40"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "プレミアアクセス",
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ドリームス･テイク･フライト",
+            "times": [
+              "11:00",
+              "12:25",
+              "13:50",
+              "15:55",
+              "17:20"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "プレミアアクセス",
+              "エントリー受付"
+            ]
+          }
+        ]
+      }
+    },
+    "2026-09-14": {
+      "TDL": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "ベイマックスのミッション･クールダウン",
+            "times": [
+              "09:50",
+              "12:40",
+              "14:45"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": []
+          },
+          {
+            "name": "ディズニー･ハーモニー･イン･カラー",
+            "times": [
+              "17:00"
+            ],
+            "priority": "medium",
+            "kind": "parade-day",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "東京ディズニーランド･エレクトリカルパレード･ドリームライツ",
+            "times": [
+              "20:25"
+            ],
+            "priority": "low",
+            "kind": "parade-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "Reach for the Stars: Everlasting Dreams",
+            "times": [
+              "19:15"
+            ],
+            "priority": "high",
+            "kind": "show-day",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ジャンボリミッキー！レッツ･ダンス！",
+            "times": [
+              "17:40",
+              "18:55",
+              "20:10"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ミッキーのレインボー･ルアウ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ミッキーのマジカルミュージックワールド",
+            "times": [
+              "10:50",
+              "12:15",
+              "13:40",
+              "15:45",
+              "17:10"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": [
+              "プレミアアクセス",
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ザ･ダイヤモンド･バラエティマスター",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": []
+          }
+        ]
+      },
+      "TDS": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "スパークリング･ジュビリー･セレブレーション",
+            "times": [
+              "17:00"
+            ],
+            "priority": "high",
+            "kind": "show-day",
+            "tags": []
+          },
+          {
+            "name": "【環境演出】スパークリング･ジュビリー･ナイト",
+            "times": [
+              "20:55"
+            ],
+            "priority": "low",
+            "kind": "environment",
+            "tags": []
+          },
+          {
+            "name": "ビリーヴ！～シー･オブ･ドリームス～",
+            "times": [
+              "20:15"
+            ],
+            "priority": "low",
+            "kind": "show-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ダッフィー＆フレンズのワンダフル･フレンドシップ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ダンス･ザ･グローブ！",
+            "times": [
+              "17:55",
+              "19:40"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "プレミアアクセス",
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ドリームス･テイク･フライト",
+            "times": [
+              "11:00",
+              "12:25",
+              "13:50",
+              "15:55",
+              "17:20"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "プレミアアクセス",
+              "エントリー受付"
+            ]
+          }
+        ]
+      }
+    },
+    "2026-09-15": {
+      "TDL": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "ディズニー･ハーモニー･イン･カラー",
+            "times": [
+              "13:00"
+            ],
+            "priority": "medium",
+            "kind": "parade-day",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "東京ディズニーランド･エレクトリカルパレード･ドリームライツ",
+            "times": [
+              "19:35"
+            ],
+            "priority": "low",
+            "kind": "parade-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "スカイ･フル･オブ･カラーズ",
+            "times": [
+              "20:50"
+            ],
+            "priority": "high",
+            "kind": "fireworks",
+            "tags": []
+          },
+          {
+            "name": "ジャンボリミッキー！レッツ･ダンス！",
+            "times": [
+              "14:40",
+              "15:55",
+              "17:45",
+              "19:00"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ミッキーのレインボー･ルアウ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ミッキーのマジカルミュージックワールド",
+            "times": [
+              "11:20",
+              "12:45",
+              "14:10",
+              "16:15",
+              "17:40"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": [
+              "プレミアアクセス",
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ザ･ダイヤモンド･バラエティマスター",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": []
+          }
+        ]
+      },
+      "TDS": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "スカイ･フル･オブ･カラーズ",
+            "times": [
+              "20:50"
+            ],
+            "priority": "high",
+            "kind": "fireworks",
+            "tags": []
+          },
+          {
+            "name": "スパークリング･ジュビリー･セレブレーション",
+            "times": [
+              "11:30",
+              "15:00"
+            ],
+            "priority": "high",
+            "kind": "show-day",
+            "tags": []
+          },
+          {
+            "name": "【環境演出】スパークリング･ジュビリー･ナイト",
+            "times": [
+              "20:35"
+            ],
+            "priority": "low",
+            "kind": "environment",
+            "tags": []
+          },
+          {
+            "name": "ビリーヴ！～シー･オブ･ドリームス～",
+            "times": [
+              "19:50"
+            ],
+            "priority": "low",
+            "kind": "show-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ダッフィー＆フレンズのワンダフル･フレンドシップ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ダンス･ザ･グローブ！",
+            "times": [
+              "12:40",
+              "14:25",
+              "16:45",
+              "18:30"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "プレミアアクセス",
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ドリームス･テイク･フライト",
+            "times": [
+              "11:00",
+              "12:25",
+              "13:50",
+              "15:55",
+              "17:20"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "プレミアアクセス",
+              "エントリー受付"
+            ]
+          }
+        ]
+      }
+    },
+    "2026-09-16": {
+      "TDL": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "ザ･ヴィランズ･ハロウィーン“Into the Frenzy”",
+            "times": [
+              "16:50"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ディズニー･ハーモニー･イン･カラー",
+            "times": [
+              "13:00"
+            ],
+            "priority": "medium",
+            "kind": "parade-day",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "東京ディズニーランド･エレクトリカルパレード･ドリームライツ",
+            "times": [
+              "19:35"
+            ],
+            "priority": "low",
+            "kind": "parade-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ナイトハイ･ハロウィーン",
+            "times": [
+              "20:50"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": []
+          },
+          {
+            "name": "ジャンボリミッキー！レッツ･ダンス！",
+            "times": [
+              "14:40",
+              "15:55",
+              "17:45",
+              "19:00"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ミッキーのレインボー･ルアウ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ミッキーのマジカルミュージックワールド",
+            "times": [
+              "11:20",
+              "12:45",
+              "14:10",
+              "16:15",
+              "17:40"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": [
+              "プレミアアクセス",
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ザ･ダイヤモンド･バラエティマスター",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": []
+          }
+        ]
+      },
+      "TDS": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "ナイトハイ･ハロウィーン",
+            "times": [
+              "20:50"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": []
+          },
+          {
+            "name": "スパークリング･ジュビリー･セレブレーション",
+            "times": [
+              "11:30",
+              "15:00"
+            ],
+            "priority": "high",
+            "kind": "show-day",
+            "tags": []
+          },
+          {
+            "name": "ディズニー･ハロウィーン･グリーティング",
+            "times": [
+              "13:15",
+              "16:15"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": []
+          },
+          {
+            "name": "【環境演出】スパークリング･ジュビリー･ナイト",
+            "times": [
+              "20:35"
+            ],
+            "priority": "low",
+            "kind": "environment",
+            "tags": []
+          },
+          {
+            "name": "ビリーヴ！～シー･オブ･ドリームス～",
+            "times": [
+              "19:50"
+            ],
+            "priority": "low",
+            "kind": "show-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ダッフィー＆フレンズのワンダフル･フレンドシップ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ダンス･ザ･グローブ！",
+            "times": [
+              "12:40",
+              "14:25",
+              "16:45",
+              "18:30"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "プレミアアクセス",
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ドリームス･テイク･フライト",
+            "times": [
+              "11:00",
+              "12:25",
+              "13:50",
+              "15:55",
+              "17:20"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "プレミアアクセス",
+              "エントリー受付"
+            ]
+          }
+        ]
+      }
+    },
+    "2026-09-17": {
+      "TDL": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "ザ･ヴィランズ･ハロウィーン“Into the Frenzy”",
+            "times": [
+              "16:50"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ディズニー･ハーモニー･イン･カラー",
+            "times": [
+              "13:00"
+            ],
+            "priority": "medium",
+            "kind": "parade-day",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "東京ディズニーランド･エレクトリカルパレード･ドリームライツ",
+            "times": [
+              "19:35"
+            ],
+            "priority": "low",
+            "kind": "parade-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ナイトハイ･ハロウィーン",
+            "times": [
+              "20:50"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": []
+          },
+          {
+            "name": "ジャンボリミッキー！レッツ･ダンス！",
+            "times": [
+              "14:40",
+              "15:55",
+              "17:45",
+              "19:00"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ミッキーのレインボー･ルアウ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ミッキーのマジカルミュージックワールド",
+            "times": [
+              "11:20",
+              "12:45",
+              "14:10",
+              "16:15",
+              "17:40"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": [
+              "プレミアアクセス",
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ザ･ダイヤモンド･バラエティマスター",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": []
+          }
+        ]
+      },
+      "TDS": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "ナイトハイ･ハロウィーン",
+            "times": [
+              "20:50"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": []
+          },
+          {
+            "name": "スパークリング･ジュビリー･セレブレーション",
+            "times": [
+              "11:30",
+              "15:00"
+            ],
+            "priority": "high",
+            "kind": "show-day",
+            "tags": []
+          },
+          {
+            "name": "ディズニー･ハロウィーン･グリーティング",
+            "times": [
+              "13:15",
+              "16:15"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": []
+          },
+          {
+            "name": "【環境演出】スパークリング･ジュビリー･ナイト",
+            "times": [
+              "20:35"
+            ],
+            "priority": "low",
+            "kind": "environment",
+            "tags": []
+          },
+          {
+            "name": "ビリーヴ！～シー･オブ･ドリームス～",
+            "times": [
+              "19:50"
+            ],
+            "priority": "low",
+            "kind": "show-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ダッフィー＆フレンズのワンダフル･フレンドシップ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ダンス･ザ･グローブ！",
+            "times": [
+              "12:40",
+              "14:25",
+              "16:45",
+              "18:30"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "プレミアアクセス",
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ドリームス･テイク･フライト",
+            "times": [
+              "11:00",
+              "12:25",
+              "13:50",
+              "15:55",
+              "17:20"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "プレミアアクセス",
+              "エントリー受付"
+            ]
+          }
+        ]
+      }
+    },
+    "2026-09-18": {
+      "TDL": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "ザ･ヴィランズ･ハロウィーン“Into the Frenzy”",
+            "times": [
+              "16:50"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ディズニー･ハーモニー･イン･カラー",
+            "times": [
+              "13:00"
+            ],
+            "priority": "medium",
+            "kind": "parade-day",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "東京ディズニーランド･エレクトリカルパレード･ドリームライツ",
+            "times": [
+              "19:35"
+            ],
+            "priority": "low",
+            "kind": "parade-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ナイトハイ･ハロウィーン",
+            "times": [
+              "20:50"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": []
+          },
+          {
+            "name": "ジャンボリミッキー！レッツ･ダンス！",
+            "times": [
+              "14:40",
+              "15:55",
+              "17:45",
+              "19:00"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ミッキーのレインボー･ルアウ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ミッキーのマジカルミュージックワールド",
+            "times": [
+              "11:20",
+              "12:45",
+              "14:10",
+              "16:15",
+              "17:40"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": [
+              "プレミアアクセス",
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ザ･ダイヤモンド･バラエティマスター",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": []
+          }
+        ]
+      },
+      "TDS": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "ナイトハイ･ハロウィーン",
+            "times": [
+              "20:50"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": []
+          },
+          {
+            "name": "スパークリング･ジュビリー･セレブレーション",
+            "times": [
+              "11:30",
+              "15:00"
+            ],
+            "priority": "high",
+            "kind": "show-day",
+            "tags": []
+          },
+          {
+            "name": "ディズニー･ハロウィーン･グリーティング",
+            "times": [
+              "13:15",
+              "16:15"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": []
+          },
+          {
+            "name": "【環境演出】スパークリング･ジュビリー･ナイト",
+            "times": [
+              "20:35"
+            ],
+            "priority": "low",
+            "kind": "environment",
+            "tags": []
+          },
+          {
+            "name": "ビリーヴ！～シー･オブ･ドリームス～",
+            "times": [
+              "19:50"
+            ],
+            "priority": "low",
+            "kind": "show-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ダッフィー＆フレンズのワンダフル･フレンドシップ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ダンス･ザ･グローブ！",
+            "times": [
+              "12:40",
+              "14:25",
+              "16:45",
+              "18:30"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "プレミアアクセス",
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ドリームス･テイク･フライト",
+            "times": [
+              "11:00",
+              "12:25",
+              "13:50",
+              "15:55",
+              "17:20"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "プレミアアクセス",
+              "エントリー受付"
+            ]
+          }
+        ]
+      }
+    },
+    "2026-09-19": {
+      "TDL": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "ザ･ヴィランズ･ハロウィーン“Into the Frenzy”",
+            "times": [
+              "16:50"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ディズニー･ハーモニー･イン･カラー",
+            "times": [
+              "13:00"
+            ],
+            "priority": "medium",
+            "kind": "parade-day",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "東京ディズニーランド･エレクトリカルパレード･ドリームライツ",
+            "times": [
+              "19:35"
+            ],
+            "priority": "low",
+            "kind": "parade-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ナイトハイ･ハロウィーン",
+            "times": [
+              "20:50"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": []
+          },
+          {
+            "name": "ジャンボリミッキー！レッツ･ダンス！",
+            "times": [
+              "14:40",
+              "15:55",
+              "17:45",
+              "19:00"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ミッキーのレインボー･ルアウ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ミッキーのマジカルミュージックワールド",
+            "times": [
+              "11:20",
+              "12:45",
+              "14:10",
+              "16:15",
+              "17:40"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": [
+              "プレミアアクセス",
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ザ･ダイヤモンド･バラエティマスター",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": []
+          }
+        ]
+      },
+      "TDS": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "ナイトハイ･ハロウィーン",
+            "times": [
+              "20:50"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": []
+          },
+          {
+            "name": "スパークリング･ジュビリー･セレブレーション",
+            "times": [
+              "11:30",
+              "15:00"
+            ],
+            "priority": "high",
+            "kind": "show-day",
+            "tags": []
+          },
+          {
+            "name": "ディズニー･ハロウィーン･グリーティング",
+            "times": [
+              "13:15",
+              "16:15"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": []
+          },
+          {
+            "name": "【環境演出】スパークリング･ジュビリー･ナイト",
+            "times": [
+              "20:35"
+            ],
+            "priority": "low",
+            "kind": "environment",
+            "tags": []
+          },
+          {
+            "name": "ビリーヴ！～シー･オブ･ドリームス～",
+            "times": [
+              "19:50"
+            ],
+            "priority": "low",
+            "kind": "show-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ダッフィー＆フレンズのワンダフル･フレンドシップ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ダンス･ザ･グローブ！",
+            "times": [
+              "12:40",
+              "14:25",
+              "16:45",
+              "18:30"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "プレミアアクセス",
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ドリームス･テイク･フライト",
+            "times": [
+              "11:00",
+              "12:25",
+              "13:50",
+              "15:55",
+              "17:20"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "プレミアアクセス",
+              "エントリー受付"
+            ]
+          }
+        ]
+      }
+    },
+    "2026-09-20": {
+      "TDL": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "ザ･ヴィランズ･ハロウィーン“Into the Frenzy”",
+            "times": [
+              "16:50"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ディズニー･ハーモニー･イン･カラー",
+            "times": [
+              "13:00"
+            ],
+            "priority": "medium",
+            "kind": "parade-day",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "東京ディズニーランド･エレクトリカルパレード･ドリームライツ",
+            "times": [
+              "19:35"
+            ],
+            "priority": "low",
+            "kind": "parade-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ナイトハイ･ハロウィーン",
+            "times": [
+              "20:50"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": []
+          },
+          {
+            "name": "ジャンボリミッキー！レッツ･ダンス！",
+            "times": [
+              "14:40",
+              "15:55",
+              "17:45",
+              "19:00"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ミッキーのレインボー･ルアウ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ミッキーのマジカルミュージックワールド",
+            "times": [
+              "11:20",
+              "12:45",
+              "14:10",
+              "16:15",
+              "17:40"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": [
+              "プレミアアクセス",
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ザ･ダイヤモンド･バラエティマスター",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": []
+          }
+        ]
+      },
+      "TDS": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "ナイトハイ･ハロウィーン",
+            "times": [
+              "20:50"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": []
+          },
+          {
+            "name": "スパークリング･ジュビリー･セレブレーション",
+            "times": [
+              "11:30",
+              "15:00"
+            ],
+            "priority": "high",
+            "kind": "show-day",
+            "tags": []
+          },
+          {
+            "name": "ディズニー･ハロウィーン･グリーティング",
+            "times": [
+              "13:15",
+              "16:15"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": []
+          },
+          {
+            "name": "【環境演出】スパークリング･ジュビリー･ナイト",
+            "times": [
+              "20:35"
+            ],
+            "priority": "low",
+            "kind": "environment",
+            "tags": []
+          },
+          {
+            "name": "ビリーヴ！～シー･オブ･ドリームス～",
+            "times": [
+              "19:50"
+            ],
+            "priority": "low",
+            "kind": "show-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ダッフィー＆フレンズのワンダフル･フレンドシップ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ダンス･ザ･グローブ！",
+            "times": [
+              "12:40",
+              "14:25",
+              "16:45",
+              "18:30"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "プレミアアクセス",
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ドリームス･テイク･フライト",
+            "times": [
+              "11:00",
+              "12:25",
+              "13:50",
+              "15:55",
+              "17:20"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "プレミアアクセス",
+              "エントリー受付"
+            ]
+          }
+        ]
+      }
+    },
+    "2026-09-21": {
+      "TDL": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "ザ･ヴィランズ･ハロウィーン“Into the Frenzy”",
+            "times": [
+              "16:35"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ディズニー･ハーモニー･イン･カラー",
+            "times": [
+              "13:00"
+            ],
+            "priority": "medium",
+            "kind": "parade-day",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "東京ディズニーランド･エレクトリカルパレード･ドリームライツ",
+            "times": [
+              "19:35"
+            ],
+            "priority": "low",
+            "kind": "parade-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ナイトハイ･ハロウィーン",
+            "times": [
+              "20:50"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": []
+          },
+          {
+            "name": "ジャンボリミッキー！レッツ･ダンス！",
+            "times": [
+              "14:40",
+              "15:55",
+              "17:45",
+              "19:00"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ミッキーのレインボー･ルアウ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ミッキーのマジカルミュージックワールド",
+            "times": [
+              "11:20",
+              "12:45",
+              "14:10",
+              "16:15",
+              "17:40"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": [
+              "プレミアアクセス",
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ザ･ダイヤモンド･バラエティマスター",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": []
+          }
+        ]
+      },
+      "TDS": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "ナイトハイ･ハロウィーン",
+            "times": [
+              "20:50"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": []
+          },
+          {
+            "name": "スパークリング･ジュビリー･セレブレーション",
+            "times": [
+              "11:30",
+              "15:00"
+            ],
+            "priority": "high",
+            "kind": "show-day",
+            "tags": []
+          },
+          {
+            "name": "ディズニー･ハロウィーン･グリーティング",
+            "times": [
+              "13:15",
+              "16:15"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": []
+          },
+          {
+            "name": "【環境演出】スパークリング･ジュビリー･ナイト",
+            "times": [
+              "20:35"
+            ],
+            "priority": "low",
+            "kind": "environment",
+            "tags": []
+          },
+          {
+            "name": "ビリーヴ！～シー･オブ･ドリームス～",
+            "times": [
+              "19:50"
+            ],
+            "priority": "low",
+            "kind": "show-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ダッフィー＆フレンズのワンダフル･フレンドシップ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ダンス･ザ･グローブ！",
+            "times": [
+              "12:40",
+              "14:25",
+              "16:45",
+              "18:30"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "プレミアアクセス",
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ドリームス･テイク･フライト",
+            "times": [
+              "11:00",
+              "12:25",
+              "13:50",
+              "15:55",
+              "17:20"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "プレミアアクセス",
+              "エントリー受付"
+            ]
+          }
+        ]
+      }
+    },
+    "2026-09-22": {
+      "TDL": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "ザ･ヴィランズ･ハロウィーン“Into the Frenzy”",
+            "times": [
+              "16:35"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ディズニー･ハーモニー･イン･カラー",
+            "times": [
+              "13:00"
+            ],
+            "priority": "medium",
+            "kind": "parade-day",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "東京ディズニーランド･エレクトリカルパレード･ドリームライツ",
+            "times": [
+              "19:35"
+            ],
+            "priority": "low",
+            "kind": "parade-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ナイトハイ･ハロウィーン",
+            "times": [
+              "20:50"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": []
+          },
+          {
+            "name": "ジャンボリミッキー！レッツ･ダンス！",
+            "times": [
+              "14:40",
+              "15:55",
+              "17:45",
+              "19:00"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ミッキーのレインボー･ルアウ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ミッキーのマジカルミュージックワールド",
+            "times": [
+              "11:20",
+              "12:45",
+              "14:10",
+              "16:15",
+              "17:40"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": [
+              "プレミアアクセス",
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ザ･ダイヤモンド･バラエティマスター",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": []
+          }
+        ]
+      },
+      "TDS": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "ナイトハイ･ハロウィーン",
+            "times": [
+              "20:50"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": []
+          },
+          {
+            "name": "スパークリング･ジュビリー･セレブレーション",
+            "times": [
+              "11:30",
+              "15:00"
+            ],
+            "priority": "high",
+            "kind": "show-day",
+            "tags": []
+          },
+          {
+            "name": "ディズニー･ハロウィーン･グリーティング",
+            "times": [
+              "13:15",
+              "16:15"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": []
+          },
+          {
+            "name": "【環境演出】スパークリング･ジュビリー･ナイト",
+            "times": [
+              "20:35"
+            ],
+            "priority": "low",
+            "kind": "environment",
+            "tags": []
+          },
+          {
+            "name": "ビリーヴ！～シー･オブ･ドリームス～",
+            "times": [
+              "19:50"
+            ],
+            "priority": "low",
+            "kind": "show-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ダッフィー＆フレンズのワンダフル･フレンドシップ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ダンス･ザ･グローブ！",
+            "times": [
+              "12:40",
+              "14:25",
+              "16:45",
+              "18:30"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "プレミアアクセス",
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ドリームス･テイク･フライト",
+            "times": [
+              "11:00",
+              "12:25",
+              "13:50",
+              "15:55",
+              "17:20"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "プレミアアクセス",
+              "エントリー受付"
+            ]
+          }
+        ]
+      }
+    },
+    "2026-09-23": {
+      "TDL": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "ザ･ヴィランズ･ハロウィーン“Into the Frenzy”",
+            "times": [
+              "16:35"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ディズニー･ハーモニー･イン･カラー",
+            "times": [
+              "13:00"
+            ],
+            "priority": "medium",
+            "kind": "parade-day",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "東京ディズニーランド･エレクトリカルパレード･ドリームライツ",
+            "times": [
+              "19:35"
+            ],
+            "priority": "low",
+            "kind": "parade-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ナイトハイ･ハロウィーン",
+            "times": [
+              "20:50"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": []
+          },
+          {
+            "name": "ジャンボリミッキー！レッツ･ダンス！",
+            "times": [
+              "14:40",
+              "15:55",
+              "17:45",
+              "19:00"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ミッキーのレインボー･ルアウ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ミッキーのマジカルミュージックワールド",
+            "times": [
+              "11:20",
+              "12:45",
+              "14:10",
+              "16:15",
+              "17:40"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": [
+              "プレミアアクセス",
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ザ･ダイヤモンド･バラエティマスター",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": []
+          }
+        ]
+      },
+      "TDS": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "ナイトハイ･ハロウィーン",
+            "times": [
+              "20:50"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": []
+          },
+          {
+            "name": "スパークリング･ジュビリー･セレブレーション",
+            "times": [
+              "11:30",
+              "15:00"
+            ],
+            "priority": "high",
+            "kind": "show-day",
+            "tags": []
+          },
+          {
+            "name": "ディズニー･ハロウィーン･グリーティング",
+            "times": [
+              "13:15",
+              "16:15"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": []
+          },
+          {
+            "name": "【環境演出】スパークリング･ジュビリー･ナイト",
+            "times": [
+              "20:35"
+            ],
+            "priority": "low",
+            "kind": "environment",
+            "tags": []
+          },
+          {
+            "name": "ビリーヴ！～シー･オブ･ドリームス～",
+            "times": [
+              "19:50"
+            ],
+            "priority": "low",
+            "kind": "show-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ダッフィー＆フレンズのワンダフル･フレンドシップ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ダンス･ザ･グローブ！",
+            "times": [
+              "12:40",
+              "14:25",
+              "16:45",
+              "18:30"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "プレミアアクセス",
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ドリームス･テイク･フライト",
+            "times": [
+              "11:00",
+              "12:25",
+              "13:50",
+              "15:55",
+              "17:20"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "プレミアアクセス",
+              "エントリー受付"
+            ]
+          }
+        ]
+      }
+    },
+    "2026-09-24": {
+      "TDL": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "ザ･ヴィランズ･ハロウィーン“Into the Frenzy”",
+            "times": [
+              "16:35"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ディズニー･ハーモニー･イン･カラー",
+            "times": [
+              "13:00"
+            ],
+            "priority": "medium",
+            "kind": "parade-day",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "東京ディズニーランド･エレクトリカルパレード･ドリームライツ",
+            "times": [
+              "19:35"
+            ],
+            "priority": "low",
+            "kind": "parade-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ナイトハイ･ハロウィーン",
+            "times": [
+              "20:50"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": []
+          },
+          {
+            "name": "ジャンボリミッキー！レッツ･ダンス！",
+            "times": [
+              "14:40",
+              "15:55",
+              "17:45",
+              "19:00"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ミッキーのレインボー･ルアウ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ミッキーのマジカルミュージックワールド",
+            "times": [
+              "11:20",
+              "12:45",
+              "14:10",
+              "16:15",
+              "17:40"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": [
+              "プレミアアクセス",
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ザ･ダイヤモンド･バラエティマスター",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": []
+          }
+        ]
+      },
+      "TDS": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "ナイトハイ･ハロウィーン",
+            "times": [
+              "20:50"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": []
+          },
+          {
+            "name": "スパークリング･ジュビリー･セレブレーション",
+            "times": [
+              "11:30",
+              "15:00"
+            ],
+            "priority": "high",
+            "kind": "show-day",
+            "tags": []
+          },
+          {
+            "name": "ディズニー･ハロウィーン･グリーティング",
+            "times": [
+              "13:15",
+              "16:15"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": []
+          },
+          {
+            "name": "【環境演出】スパークリング･ジュビリー･ナイト",
+            "times": [
+              "20:35"
+            ],
+            "priority": "low",
+            "kind": "environment",
+            "tags": []
+          },
+          {
+            "name": "ビリーヴ！～シー･オブ･ドリームス～",
+            "times": [
+              "19:50"
+            ],
+            "priority": "low",
+            "kind": "show-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ダッフィー＆フレンズのワンダフル･フレンドシップ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ダンス･ザ･グローブ！",
+            "times": [
+              "12:40",
+              "14:25",
+              "16:45",
+              "18:30"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "プレミアアクセス",
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ドリームス･テイク･フライト",
+            "times": [
+              "11:00",
+              "12:25",
+              "13:50",
+              "15:55",
+              "17:20"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "プレミアアクセス",
+              "エントリー受付"
+            ]
+          }
+        ]
+      }
+    },
+    "2026-09-25": {
+      "TDL": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "ザ･ヴィランズ･ハロウィーン“Into the Frenzy”",
+            "times": [
+              "16:35"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ディズニー･ハーモニー･イン･カラー",
+            "times": [
+              "13:00"
+            ],
+            "priority": "medium",
+            "kind": "parade-day",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "東京ディズニーランド･エレクトリカルパレード･ドリームライツ",
+            "times": [
+              "19:25"
+            ],
+            "priority": "low",
+            "kind": "parade-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ナイトハイ･ハロウィーン",
+            "times": [
+              "20:25"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": []
+          },
+          {
+            "name": "ジャンボリミッキー！レッツ･ダンス！",
+            "times": [
+              "14:40",
+              "15:55",
+              "17:45",
+              "19:00"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ミッキーのレインボー･ルアウ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ミッキーのマジカルミュージックワールド",
+            "times": [
+              "11:20",
+              "12:45",
+              "14:10",
+              "16:15",
+              "17:40"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": [
+              "プレミアアクセス",
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ザ･ダイヤモンド･バラエティマスター",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": []
+          }
+        ]
+      },
+      "TDS": {
         "openHour": "09:00",
         "closeHour": "18:30",
         "shows": [
           {
-            "name": "ベイマックスのミッション･クールダウン",
-            "times": [
-              "10:00",
-              "12:50",
-              "14:55"
-            ],
-            "priority": "medium",
-            "kind": "show-unknown",
-            "tags": []
-          },
-          {
-            "name": "ディズニー･ハーモニー･イン･カラー",
-            "times": [
-              "17:00"
-            ],
-            "priority": "medium",
-            "kind": "parade-day",
-            "tags": [
-              "プレミアアクセス"
-            ]
-          },
-          {
-            "name": "ジャンボリミッキー！レッツ･ダンス！",
-            "times": [
-              "16:50",
-              "18:05"
-            ],
-            "priority": "medium",
-            "kind": "show-indoor",
-            "tags": [
-              "エントリー受付"
-            ]
-          },
-          {
-            "name": "ミッキーのレインボー･ルアウ",
-            "times": [],
-            "priority": null,
-            "kind": "show-restaurant",
-            "tags": [
-              "予約必須"
-            ]
-          },
-          {
-            "name": "ミッキーのマジカルミュージックワールド",
-            "times": [
-              "12:15",
-              "13:40",
-              "15:45",
-              "17:10"
-            ],
-            "priority": "medium",
-            "kind": "show-unknown",
-            "tags": [
-              "エントリー受付",
-              "プレミアアクセス"
-            ]
-          },
-          {
-            "name": "ザ･ダイヤモンド･バラエティマスター",
-            "times": [],
-            "priority": null,
-            "kind": "show-restaurant",
-            "tags": [
-              "予約必須"
-            ]
-          }
-        ]
-      },
-      "TDS": {
-        "openHour": "09:00",
-        "closeHour": "21:00",
-        "shows": [
-          {
             "name": "スパークリング･ジュビリー･セレブレーション",
             "times": [
-              "17:00"
+              "11:30",
+              "15:00"
             ],
             "priority": "high",
             "kind": "show-day",
             "tags": []
           },
           {
-            "name": "【環境演出】スパークリング･ジュビリー･ナイト",
+            "name": "ディズニー･ハロウィーン･グリーティング",
             "times": [
-              "20:55"
+              "13:15",
+              "16:15"
             ],
-            "priority": "low",
-            "kind": "environment",
+            "priority": "medium",
+            "kind": "show-unknown",
             "tags": []
-          },
-          {
-            "name": "ビリーヴ！～シー･オブ･ドリームス～",
-            "times": [
-              "20:15"
-            ],
-            "priority": "low",
-            "kind": "show-night",
-            "tags": [
-              "プレミアアクセス"
-            ]
           },
           {
             "name": "ダッフィー＆フレンズのワンダフル･フレンドシップ",
@@ -811,20 +4404,20 @@
           {
             "name": "ダンス･ザ･グローブ！",
             "times": [
-              "17:55",
-              "19:40"
+              "12:40",
+              "14:25",
+              "16:45"
             ],
             "priority": "medium",
             "kind": "show-indoor",
             "tags": [
-              "エントリー受付",
-              "プレミアアクセス"
+              "プレミアアクセス",
+              "エントリー受付"
             ]
           },
           {
             "name": "ドリームス･テイク･フライト",
             "times": [
-              "11:00",
               "12:25",
               "13:50",
               "15:55",
@@ -833,33 +4426,33 @@
             "priority": "medium",
             "kind": "show-indoor",
             "tags": [
-              "エントリー受付",
-              "プレミアアクセス"
+              "プレミアアクセス",
+              "エントリー受付"
             ]
           }
         ]
       }
     },
-    "2026-08-08": {
+    "2026-09-26": {
       "TDL": {
         "openHour": "09:00",
         "closeHour": "21:00",
         "shows": [
           {
-            "name": "ベイマックスのミッション･クールダウン",
+            "name": "ザ･ヴィランズ･ハロウィーン“Into the Frenzy”",
             "times": [
-              "10:00",
-              "12:50",
-              "14:55"
+              "16:35"
             ],
             "priority": "medium",
             "kind": "show-unknown",
-            "tags": []
+            "tags": [
+              "プレミアアクセス"
+            ]
           },
           {
             "name": "ディズニー･ハーモニー･イン･カラー",
             "times": [
-              "17:00"
+              "13:00"
             ],
             "priority": "medium",
             "kind": "parade-day",
@@ -870,7 +4463,7 @@
           {
             "name": "東京ディズニーランド･エレクトリカルパレード･ドリームライツ",
             "times": [
-              "19:45"
+              "19:35"
             ],
             "priority": "low",
             "kind": "parade-night",
@@ -879,22 +4472,21 @@
             ]
           },
           {
-            "name": "Reach for the Stars: Everlasting Dreams",
+            "name": "ナイトハイ･ハロウィーン",
             "times": [
-              "20:55"
+              "20:50"
             ],
-            "priority": "high",
-            "kind": "show-day",
-            "tags": [
-              "プレミアアクセス"
-            ]
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": []
           },
           {
             "name": "ジャンボリミッキー！レッツ･ダンス！",
             "times": [
-              "18:00",
-              "19:20",
-              "20:35"
+              "14:40",
+              "15:55",
+              "17:45",
+              "19:00"
             ],
             "priority": "medium",
             "kind": "show-indoor",
@@ -914,17 +4506,17 @@
           {
             "name": "ミッキーのマジカルミュージックワールド",
             "times": [
-              "10:50",
-              "12:15",
-              "13:40",
-              "15:45",
-              "17:10"
+              "11:20",
+              "12:45",
+              "14:10",
+              "16:15",
+              "17:40"
             ],
             "priority": "medium",
             "kind": "show-unknown",
             "tags": [
-              "エントリー受付",
-              "プレミアアクセス"
+              "プレミアアクセス",
+              "エントリー受付"
             ]
           },
           {
@@ -932,9 +4524,7 @@
             "times": [],
             "priority": null,
             "kind": "show-restaurant",
-            "tags": [
-              "予約必須"
-            ]
+            "tags": []
           }
         ]
       },
@@ -943,18 +4533,38 @@
         "closeHour": "21:00",
         "shows": [
           {
+            "name": "ナイトハイ･ハロウィーン",
+            "times": [
+              "20:50"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": []
+          },
+          {
             "name": "スパークリング･ジュビリー･セレブレーション",
             "times": [
-              "17:00"
+              "11:30",
+              "15:00"
             ],
             "priority": "high",
             "kind": "show-day",
             "tags": []
           },
           {
+            "name": "ディズニー･ハロウィーン･グリーティング",
+            "times": [
+              "13:15",
+              "16:15"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": []
+          },
+          {
             "name": "【環境演出】スパークリング･ジュビリー･ナイト",
             "times": [
-              "20:55"
+              "20:35"
             ],
             "priority": "low",
             "kind": "environment",
@@ -963,7 +4573,7 @@
           {
             "name": "ビリーヴ！～シー･オブ･ドリームス～",
             "times": [
-              "20:15"
+              "19:50"
             ],
             "priority": "low",
             "kind": "show-night",
@@ -983,14 +4593,16 @@
           {
             "name": "ダンス･ザ･グローブ！",
             "times": [
-              "17:55",
-              "19:40"
+              "12:40",
+              "14:25",
+              "16:45",
+              "18:30"
             ],
             "priority": "medium",
             "kind": "show-indoor",
             "tags": [
-              "エントリー受付",
-              "プレミアアクセス"
+              "プレミアアクセス",
+              "エントリー受付"
             ]
           },
           {
@@ -1005,33 +4617,33 @@
             "priority": "medium",
             "kind": "show-indoor",
             "tags": [
-              "エントリー受付",
-              "プレミアアクセス"
+              "プレミアアクセス",
+              "エントリー受付"
             ]
           }
         ]
       }
     },
-    "2026-08-09": {
+    "2026-09-27": {
       "TDL": {
         "openHour": "09:00",
         "closeHour": "21:00",
         "shows": [
           {
-            "name": "ベイマックスのミッション･クールダウン",
+            "name": "ザ･ヴィランズ･ハロウィーン“Into the Frenzy”",
             "times": [
-              "10:00",
-              "12:50",
-              "14:55"
+              "16:35"
             ],
             "priority": "medium",
             "kind": "show-unknown",
-            "tags": []
+            "tags": [
+              "プレミアアクセス"
+            ]
           },
           {
             "name": "ディズニー･ハーモニー･イン･カラー",
             "times": [
-              "17:00"
+              "13:00"
             ],
             "priority": "medium",
             "kind": "parade-day",
@@ -1042,7 +4654,7 @@
           {
             "name": "東京ディズニーランド･エレクトリカルパレード･ドリームライツ",
             "times": [
-              "19:45"
+              "19:35"
             ],
             "priority": "low",
             "kind": "parade-night",
@@ -1051,22 +4663,21 @@
             ]
           },
           {
-            "name": "Reach for the Stars: Everlasting Dreams",
+            "name": "ナイトハイ･ハロウィーン",
             "times": [
-              "20:55"
+              "20:50"
             ],
-            "priority": "high",
-            "kind": "show-day",
-            "tags": [
-              "プレミアアクセス"
-            ]
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": []
           },
           {
             "name": "ジャンボリミッキー！レッツ･ダンス！",
             "times": [
-              "18:00",
-              "19:20",
-              "20:35"
+              "14:40",
+              "15:55",
+              "17:45",
+              "19:00"
             ],
             "priority": "medium",
             "kind": "show-indoor",
@@ -1086,17 +4697,17 @@
           {
             "name": "ミッキーのマジカルミュージックワールド",
             "times": [
-              "10:50",
-              "12:15",
-              "13:40",
-              "15:45",
-              "17:10"
+              "11:20",
+              "12:45",
+              "14:10",
+              "16:15",
+              "17:40"
             ],
             "priority": "medium",
             "kind": "show-unknown",
             "tags": [
-              "エントリー受付",
-              "プレミアアクセス"
+              "プレミアアクセス",
+              "エントリー受付"
             ]
           },
           {
@@ -1104,9 +4715,7 @@
             "times": [],
             "priority": null,
             "kind": "show-restaurant",
-            "tags": [
-              "予約必須"
-            ]
+            "tags": []
           }
         ]
       },
@@ -1115,18 +4724,38 @@
         "closeHour": "21:00",
         "shows": [
           {
+            "name": "ナイトハイ･ハロウィーン",
+            "times": [
+              "20:50"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": []
+          },
+          {
             "name": "スパークリング･ジュビリー･セレブレーション",
             "times": [
-              "17:00"
+              "11:30",
+              "15:00"
             ],
             "priority": "high",
             "kind": "show-day",
             "tags": []
           },
           {
+            "name": "ディズニー･ハロウィーン･グリーティング",
+            "times": [
+              "13:15",
+              "16:15"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": []
+          },
+          {
             "name": "【環境演出】スパークリング･ジュビリー･ナイト",
             "times": [
-              "20:55"
+              "20:35"
             ],
             "priority": "low",
             "kind": "environment",
@@ -1135,7 +4764,7 @@
           {
             "name": "ビリーヴ！～シー･オブ･ドリームス～",
             "times": [
-              "20:15"
+              "19:50"
             ],
             "priority": "low",
             "kind": "show-night",
@@ -1155,14 +4784,16 @@
           {
             "name": "ダンス･ザ･グローブ！",
             "times": [
-              "17:55",
-              "19:40"
+              "12:40",
+              "14:25",
+              "16:45",
+              "18:30"
             ],
             "priority": "medium",
             "kind": "show-indoor",
             "tags": [
-              "エントリー受付",
-              "プレミアアクセス"
+              "プレミアアクセス",
+              "エントリー受付"
             ]
           },
           {
@@ -1177,33 +4808,33 @@
             "priority": "medium",
             "kind": "show-indoor",
             "tags": [
-              "エントリー受付",
-              "プレミアアクセス"
+              "プレミアアクセス",
+              "エントリー受付"
             ]
           }
         ]
       }
     },
-    "2026-08-10": {
+    "2026-09-28": {
       "TDL": {
         "openHour": "09:00",
         "closeHour": "21:00",
         "shows": [
           {
-            "name": "ベイマックスのミッション･クールダウン",
+            "name": "ザ･ヴィランズ･ハロウィーン“Into the Frenzy”",
             "times": [
-              "10:00",
-              "12:50",
-              "14:55"
+              "16:20"
             ],
             "priority": "medium",
             "kind": "show-unknown",
-            "tags": []
+            "tags": [
+              "プレミアアクセス"
+            ]
           },
           {
             "name": "ディズニー･ハーモニー･イン･カラー",
             "times": [
-              "17:00"
+              "13:00"
             ],
             "priority": "medium",
             "kind": "parade-day",
@@ -1214,7 +4845,7 @@
           {
             "name": "東京ディズニーランド･エレクトリカルパレード･ドリームライツ",
             "times": [
-              "19:45"
+              "19:20"
             ],
             "priority": "low",
             "kind": "parade-night",
@@ -1223,22 +4854,22 @@
             ]
           },
           {
-            "name": "Reach for the Stars: Everlasting Dreams",
+            "name": "ナイトハイ･ハロウィーン",
             "times": [
-              "20:55"
+              "20:50"
             ],
-            "priority": "high",
-            "kind": "show-day",
-            "tags": [
-              "プレミアアクセス"
-            ]
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": []
           },
           {
             "name": "ジャンボリミッキー！レッツ･ダンス！",
             "times": [
-              "18:00",
-              "19:20",
-              "20:35"
+              "11:30",
+              "12:45",
+              "14:00",
+              "15:50",
+              "17:05"
             ],
             "priority": "medium",
             "kind": "show-indoor",
@@ -1258,17 +4889,17 @@
           {
             "name": "ミッキーのマジカルミュージックワールド",
             "times": [
-              "10:50",
-              "12:15",
-              "13:40",
-              "15:45",
-              "17:10"
+              "11:20",
+              "12:45",
+              "14:10",
+              "16:15",
+              "17:40"
             ],
             "priority": "medium",
             "kind": "show-unknown",
             "tags": [
-              "エントリー受付",
-              "プレミアアクセス"
+              "プレミアアクセス",
+              "エントリー受付"
             ]
           },
           {
@@ -1276,9 +4907,7 @@
             "times": [],
             "priority": null,
             "kind": "show-restaurant",
-            "tags": [
-              "予約必須"
-            ]
+            "tags": []
           }
         ]
       },
@@ -1287,18 +4916,38 @@
         "closeHour": "21:00",
         "shows": [
           {
+            "name": "ナイトハイ･ハロウィーン",
+            "times": [
+              "20:50"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": []
+          },
+          {
             "name": "スパークリング･ジュビリー･セレブレーション",
             "times": [
-              "17:00"
+              "11:30",
+              "15:00"
             ],
             "priority": "high",
             "kind": "show-day",
             "tags": []
           },
           {
+            "name": "ディズニー･ハロウィーン･グリーティング",
+            "times": [
+              "13:15",
+              "16:15"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": []
+          },
+          {
             "name": "【環境演出】スパークリング･ジュビリー･ナイト",
             "times": [
-              "20:55"
+              "20:35"
             ],
             "priority": "low",
             "kind": "environment",
@@ -1307,7 +4956,7 @@
           {
             "name": "ビリーヴ！～シー･オブ･ドリームス～",
             "times": [
-              "20:15"
+              "19:50"
             ],
             "priority": "low",
             "kind": "show-night",
@@ -1327,14 +4976,16 @@
           {
             "name": "ダンス･ザ･グローブ！",
             "times": [
-              "17:55",
-              "19:40"
+              "12:40",
+              "14:25",
+              "16:45",
+              "18:30"
             ],
             "priority": "medium",
             "kind": "show-indoor",
             "tags": [
-              "エントリー受付",
-              "プレミアアクセス"
+              "プレミアアクセス",
+              "エントリー受付"
             ]
           },
           {
@@ -1349,33 +5000,33 @@
             "priority": "medium",
             "kind": "show-indoor",
             "tags": [
-              "エントリー受付",
-              "プレミアアクセス"
+              "プレミアアクセス",
+              "エントリー受付"
             ]
           }
         ]
       }
     },
-    "2026-08-11": {
+    "2026-09-29": {
       "TDL": {
         "openHour": "09:00",
         "closeHour": "21:00",
         "shows": [
           {
-            "name": "ベイマックスのミッション･クールダウン",
+            "name": "ザ･ヴィランズ･ハロウィーン“Into the Frenzy”",
             "times": [
-              "10:00",
-              "12:50",
-              "14:55"
+              "16:20"
             ],
             "priority": "medium",
             "kind": "show-unknown",
-            "tags": []
+            "tags": [
+              "プレミアアクセス"
+            ]
           },
           {
             "name": "ディズニー･ハーモニー･イン･カラー",
             "times": [
-              "17:00"
+              "13:00"
             ],
             "priority": "medium",
             "kind": "parade-day",
@@ -1386,7 +5037,7 @@
           {
             "name": "東京ディズニーランド･エレクトリカルパレード･ドリームライツ",
             "times": [
-              "19:45"
+              "19:20"
             ],
             "priority": "low",
             "kind": "parade-night",
@@ -1395,22 +5046,22 @@
             ]
           },
           {
-            "name": "Reach for the Stars: Everlasting Dreams",
+            "name": "ナイトハイ･ハロウィーン",
             "times": [
-              "20:55"
+              "20:50"
             ],
-            "priority": "high",
-            "kind": "show-day",
-            "tags": [
-              "プレミアアクセス"
-            ]
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": []
           },
           {
             "name": "ジャンボリミッキー！レッツ･ダンス！",
             "times": [
-              "18:00",
-              "19:20",
-              "20:35"
+              "11:30",
+              "12:45",
+              "14:00",
+              "15:50",
+              "17:05"
             ],
             "priority": "medium",
             "kind": "show-indoor",
@@ -1430,17 +5081,17 @@
           {
             "name": "ミッキーのマジカルミュージックワールド",
             "times": [
-              "10:50",
-              "12:15",
-              "13:40",
-              "15:45",
-              "17:10"
+              "11:20",
+              "12:45",
+              "14:10",
+              "16:15",
+              "17:40"
             ],
             "priority": "medium",
             "kind": "show-unknown",
             "tags": [
-              "エントリー受付",
-              "プレミアアクセス"
+              "プレミアアクセス",
+              "エントリー受付"
             ]
           },
           {
@@ -1448,9 +5099,7 @@
             "times": [],
             "priority": null,
             "kind": "show-restaurant",
-            "tags": [
-              "予約必須"
-            ]
+            "tags": []
           }
         ]
       },
@@ -1459,18 +5108,38 @@
         "closeHour": "21:00",
         "shows": [
           {
+            "name": "ナイトハイ･ハロウィーン",
+            "times": [
+              "20:50"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": []
+          },
+          {
             "name": "スパークリング･ジュビリー･セレブレーション",
             "times": [
-              "17:00"
+              "11:30",
+              "15:00"
             ],
             "priority": "high",
             "kind": "show-day",
             "tags": []
           },
           {
+            "name": "ディズニー･ハロウィーン･グリーティング",
+            "times": [
+              "13:15",
+              "16:15"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": []
+          },
+          {
             "name": "【環境演出】スパークリング･ジュビリー･ナイト",
             "times": [
-              "20:55"
+              "20:35"
             ],
             "priority": "low",
             "kind": "environment",
@@ -1479,7 +5148,7 @@
           {
             "name": "ビリーヴ！～シー･オブ･ドリームス～",
             "times": [
-              "20:15"
+              "19:50"
             ],
             "priority": "low",
             "kind": "show-night",
@@ -1499,14 +5168,16 @@
           {
             "name": "ダンス･ザ･グローブ！",
             "times": [
-              "17:55",
-              "19:40"
+              "12:40",
+              "14:25",
+              "16:45",
+              "18:30"
             ],
             "priority": "medium",
             "kind": "show-indoor",
             "tags": [
-              "エントリー受付",
-              "プレミアアクセス"
+              "プレミアアクセス",
+              "エントリー受付"
             ]
           },
           {
@@ -1521,33 +5192,33 @@
             "priority": "medium",
             "kind": "show-indoor",
             "tags": [
-              "エントリー受付",
-              "プレミアアクセス"
+              "プレミアアクセス",
+              "エントリー受付"
             ]
           }
         ]
       }
     },
-    "2026-08-12": {
+    "2026-09-30": {
       "TDL": {
         "openHour": "09:00",
         "closeHour": "21:00",
         "shows": [
           {
-            "name": "ベイマックスのミッション･クールダウン",
+            "name": "ザ･ヴィランズ･ハロウィーン“Into the Frenzy”",
             "times": [
-              "10:00",
-              "12:50",
-              "14:55"
+              "16:20"
             ],
             "priority": "medium",
             "kind": "show-unknown",
-            "tags": []
+            "tags": [
+              "プレミアアクセス"
+            ]
           },
           {
             "name": "ディズニー･ハーモニー･イン･カラー",
             "times": [
-              "17:00"
+              "13:00"
             ],
             "priority": "medium",
             "kind": "parade-day",
@@ -1558,7 +5229,7 @@
           {
             "name": "東京ディズニーランド･エレクトリカルパレード･ドリームライツ",
             "times": [
-              "19:45"
+              "19:20"
             ],
             "priority": "low",
             "kind": "parade-night",
@@ -1567,83 +5238,117 @@
             ]
           },
           {
-            "name": "Reach for the Stars: Everlasting Dreams",
+            "name": "ナイトハイ･ハロウィーン",
             "times": [
-              "20:55"
+              "20:50"
             ],
-            "priority": "high",
-            "kind": "show-day",
-            "tags": [
-              "プレミアアクセス"
-            ]
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": []
           },
           {
             "name": "ジャンボリミッキー！レッツ･ダンス！",
             "times": [
-              "18:00",
-              "19:20",
+              "11:30",
+              "12:45",
+              "14:00",
+              "15:50",
+              "17:05"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ミッキーのレインボー･ルアウ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ミッキーのマジカルミュージックワールド",
+            "times": [
+              "11:20",
+              "12:45",
+              "14:10",
+              "16:15",
+              "17:40"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": [
+              "プレミアアクセス",
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "The D-Groovationz4 Live: Happy! Funky! Groovy! Tour",
+            "times": [
+              "12:30",
+              "13:55",
+              "15:20",
+              "17:25",
+              "18:50"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": [
+              "プレミアアクセス",
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ザ･ダイヤモンド･バラエティマスター",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": []
+          }
+        ]
+      },
+      "TDS": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "ナイトハイ･ハロウィーン",
+            "times": [
+              "20:50"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": []
+          },
+          {
+            "name": "スパークリング･ジュビリー･セレブレーション",
+            "times": [
+              "11:30",
+              "15:00"
+            ],
+            "priority": "high",
+            "kind": "show-day",
+            "tags": []
+          },
+          {
+            "name": "ディズニー･ハロウィーン･グリーティング",
+            "times": [
+              "13:15",
+              "16:15"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": []
+          },
+          {
+            "name": "【環境演出】スパークリング･ジュビリー･ナイト",
+            "times": [
               "20:35"
             ],
-            "priority": "medium",
-            "kind": "show-indoor",
-            "tags": [
-              "エントリー受付"
-            ]
-          },
-          {
-            "name": "ミッキーのレインボー･ルアウ",
-            "times": [],
-            "priority": null,
-            "kind": "show-restaurant",
-            "tags": [
-              "予約必須"
-            ]
-          },
-          {
-            "name": "ミッキーのマジカルミュージックワールド",
-            "times": [
-              "10:50",
-              "12:15",
-              "13:40",
-              "15:45",
-              "17:10"
-            ],
-            "priority": "medium",
-            "kind": "show-unknown",
-            "tags": [
-              "エントリー受付",
-              "プレミアアクセス"
-            ]
-          },
-          {
-            "name": "ザ･ダイヤモンド･バラエティマスター",
-            "times": [],
-            "priority": null,
-            "kind": "show-restaurant",
-            "tags": [
-              "予約必須"
-            ]
-          }
-        ]
-      },
-      "TDS": {
-        "openHour": "09:00",
-        "closeHour": "21:00",
-        "shows": [
-          {
-            "name": "スパークリング･ジュビリー･セレブレーション",
-            "times": [
-              "17:00"
-            ],
-            "priority": "high",
-            "kind": "show-day",
-            "tags": []
-          },
-          {
-            "name": "【環境演出】スパークリング･ジュビリー･ナイト",
-            "times": [
-              "20:55"
-            ],
             "priority": "low",
             "kind": "environment",
             "tags": []
@@ -1651,7 +5356,7 @@
           {
             "name": "ビリーヴ！～シー･オブ･ドリームス～",
             "times": [
-              "20:15"
+              "19:50"
             ],
             "priority": "low",
             "kind": "show-night",
@@ -1671,2544 +5376,10 @@
           {
             "name": "ダンス･ザ･グローブ！",
             "times": [
-              "17:55",
-              "19:40"
-            ],
-            "priority": "medium",
-            "kind": "show-indoor",
-            "tags": [
-              "エントリー受付",
-              "プレミアアクセス"
-            ]
-          },
-          {
-            "name": "ドリームス･テイク･フライト",
-            "times": [
-              "11:00",
-              "12:25",
-              "13:50",
-              "15:55",
-              "17:20"
-            ],
-            "priority": "medium",
-            "kind": "show-indoor",
-            "tags": [
-              "エントリー受付",
-              "プレミアアクセス"
-            ]
-          }
-        ]
-      }
-    },
-    "2026-08-13": {
-      "TDL": {
-        "openHour": "09:00",
-        "closeHour": "21:00",
-        "shows": [
-          {
-            "name": "ベイマックスのミッション･クールダウン",
-            "times": [
-              "10:00",
-              "12:50",
-              "14:55"
-            ],
-            "priority": "medium",
-            "kind": "show-unknown",
-            "tags": []
-          },
-          {
-            "name": "ディズニー･ハーモニー･イン･カラー",
-            "times": [
-              "17:00"
-            ],
-            "priority": "medium",
-            "kind": "parade-day",
-            "tags": [
-              "プレミアアクセス"
-            ]
-          },
-          {
-            "name": "東京ディズニーランド･エレクトリカルパレード･ドリームライツ",
-            "times": [
-              "19:45"
-            ],
-            "priority": "low",
-            "kind": "parade-night",
-            "tags": [
-              "プレミアアクセス"
-            ]
-          },
-          {
-            "name": "Reach for the Stars: Everlasting Dreams",
-            "times": [
-              "20:55"
-            ],
-            "priority": "high",
-            "kind": "show-day",
-            "tags": [
-              "プレミアアクセス"
-            ]
-          },
-          {
-            "name": "ジャンボリミッキー！レッツ･ダンス！",
-            "times": [
-              "18:00",
-              "19:20",
-              "20:35"
-            ],
-            "priority": "medium",
-            "kind": "show-indoor",
-            "tags": [
-              "エントリー受付"
-            ]
-          },
-          {
-            "name": "ミッキーのレインボー･ルアウ",
-            "times": [],
-            "priority": null,
-            "kind": "show-restaurant",
-            "tags": [
-              "予約必須"
-            ]
-          },
-          {
-            "name": "ミッキーのマジカルミュージックワールド",
-            "times": [
-              "10:50",
-              "12:15",
-              "13:40",
-              "15:45",
-              "17:10"
-            ],
-            "priority": "medium",
-            "kind": "show-unknown",
-            "tags": [
-              "エントリー受付",
-              "プレミアアクセス"
-            ]
-          },
-          {
-            "name": "ザ･ダイヤモンド･バラエティマスター",
-            "times": [],
-            "priority": null,
-            "kind": "show-restaurant",
-            "tags": [
-              "予約必須"
-            ]
-          }
-        ]
-      },
-      "TDS": {
-        "openHour": "09:00",
-        "closeHour": "21:00",
-        "shows": [
-          {
-            "name": "スパークリング･ジュビリー･セレブレーション",
-            "times": [
-              "17:00"
-            ],
-            "priority": "high",
-            "kind": "show-day",
-            "tags": []
-          },
-          {
-            "name": "【環境演出】スパークリング･ジュビリー･ナイト",
-            "times": [
-              "20:55"
-            ],
-            "priority": "low",
-            "kind": "environment",
-            "tags": []
-          },
-          {
-            "name": "ビリーヴ！～シー･オブ･ドリームス～",
-            "times": [
-              "20:15"
-            ],
-            "priority": "low",
-            "kind": "show-night",
-            "tags": [
-              "プレミアアクセス"
-            ]
-          },
-          {
-            "name": "ダッフィー＆フレンズのワンダフル･フレンドシップ",
-            "times": [],
-            "priority": null,
-            "kind": "show-restaurant",
-            "tags": [
-              "予約必須"
-            ]
-          },
-          {
-            "name": "ダンス･ザ･グローブ！",
-            "times": [
-              "17:55",
-              "19:40"
-            ],
-            "priority": "medium",
-            "kind": "show-indoor",
-            "tags": [
-              "エントリー受付",
-              "プレミアアクセス"
-            ]
-          },
-          {
-            "name": "ドリームス･テイク･フライト",
-            "times": [
-              "11:00",
-              "12:25",
-              "13:50",
-              "15:55",
-              "17:20"
-            ],
-            "priority": "medium",
-            "kind": "show-indoor",
-            "tags": [
-              "エントリー受付",
-              "プレミアアクセス"
-            ]
-          }
-        ]
-      }
-    },
-    "2026-08-14": {
-      "TDL": {
-        "openHour": "09:00",
-        "closeHour": "21:00",
-        "shows": [
-          {
-            "name": "ベイマックスのミッション･クールダウン",
-            "times": [
-              "10:00",
-              "12:50",
-              "14:55"
-            ],
-            "priority": "medium",
-            "kind": "show-unknown",
-            "tags": []
-          },
-          {
-            "name": "ディズニー･ハーモニー･イン･カラー",
-            "times": [
-              "17:00"
-            ],
-            "priority": "medium",
-            "kind": "parade-day",
-            "tags": [
-              "プレミアアクセス"
-            ]
-          },
-          {
-            "name": "東京ディズニーランド･エレクトリカルパレード･ドリームライツ",
-            "times": [
-              "19:45"
-            ],
-            "priority": "low",
-            "kind": "parade-night",
-            "tags": [
-              "プレミアアクセス"
-            ]
-          },
-          {
-            "name": "Reach for the Stars: Everlasting Dreams",
-            "times": [
-              "20:55"
-            ],
-            "priority": "high",
-            "kind": "show-day",
-            "tags": [
-              "プレミアアクセス"
-            ]
-          },
-          {
-            "name": "ジャンボリミッキー！レッツ･ダンス！",
-            "times": [
-              "18:00",
-              "19:20",
-              "20:35"
-            ],
-            "priority": "medium",
-            "kind": "show-indoor",
-            "tags": [
-              "エントリー受付"
-            ]
-          },
-          {
-            "name": "ミッキーのレインボー･ルアウ",
-            "times": [],
-            "priority": null,
-            "kind": "show-restaurant",
-            "tags": [
-              "予約必須"
-            ]
-          },
-          {
-            "name": "ミッキーのマジカルミュージックワールド",
-            "times": [
-              "10:50",
-              "12:15",
-              "13:40",
-              "15:45",
-              "17:10"
-            ],
-            "priority": "medium",
-            "kind": "show-unknown",
-            "tags": [
-              "エントリー受付",
-              "プレミアアクセス"
-            ]
-          },
-          {
-            "name": "ザ･ダイヤモンド･バラエティマスター",
-            "times": [],
-            "priority": null,
-            "kind": "show-restaurant",
-            "tags": [
-              "予約必須"
-            ]
-          }
-        ]
-      },
-      "TDS": {
-        "openHour": "09:00",
-        "closeHour": "21:00",
-        "shows": [
-          {
-            "name": "スパークリング･ジュビリー･セレブレーション",
-            "times": [
-              "17:00"
-            ],
-            "priority": "high",
-            "kind": "show-day",
-            "tags": []
-          },
-          {
-            "name": "【環境演出】スパークリング･ジュビリー･ナイト",
-            "times": [
-              "20:55"
-            ],
-            "priority": "low",
-            "kind": "environment",
-            "tags": []
-          },
-          {
-            "name": "ビリーヴ！～シー･オブ･ドリームス～",
-            "times": [
-              "20:15"
-            ],
-            "priority": "low",
-            "kind": "show-night",
-            "tags": [
-              "プレミアアクセス"
-            ]
-          },
-          {
-            "name": "ダッフィー＆フレンズのワンダフル･フレンドシップ",
-            "times": [],
-            "priority": null,
-            "kind": "show-restaurant",
-            "tags": [
-              "予約必須"
-            ]
-          },
-          {
-            "name": "ダンス･ザ･グローブ！",
-            "times": [
-              "17:55",
-              "19:40"
-            ],
-            "priority": "medium",
-            "kind": "show-indoor",
-            "tags": [
-              "エントリー受付",
-              "プレミアアクセス"
-            ]
-          },
-          {
-            "name": "ドリームス･テイク･フライト",
-            "times": [
-              "11:00",
-              "12:25",
-              "13:50",
-              "15:55",
-              "17:20"
-            ],
-            "priority": "medium",
-            "kind": "show-indoor",
-            "tags": [
-              "エントリー受付",
-              "プレミアアクセス"
-            ]
-          }
-        ]
-      }
-    },
-    "2026-08-15": {
-      "TDL": {
-        "openHour": "09:00",
-        "closeHour": "21:00",
-        "shows": [
-          {
-            "name": "ベイマックスのミッション･クールダウン",
-            "times": [
-              "10:00",
-              "12:50",
-              "14:55"
-            ],
-            "priority": "medium",
-            "kind": "show-unknown",
-            "tags": []
-          },
-          {
-            "name": "ディズニー･ハーモニー･イン･カラー",
-            "times": [
-              "17:00"
-            ],
-            "priority": "medium",
-            "kind": "parade-day",
-            "tags": [
-              "プレミアアクセス"
-            ]
-          },
-          {
-            "name": "東京ディズニーランド･エレクトリカルパレード･ドリームライツ",
-            "times": [
-              "19:45"
-            ],
-            "priority": "low",
-            "kind": "parade-night",
-            "tags": [
-              "プレミアアクセス"
-            ]
-          },
-          {
-            "name": "Reach for the Stars: Everlasting Dreams",
-            "times": [
-              "20:55"
-            ],
-            "priority": "high",
-            "kind": "show-day",
-            "tags": [
-              "プレミアアクセス"
-            ]
-          },
-          {
-            "name": "ジャンボリミッキー！レッツ･ダンス！",
-            "times": [
-              "18:00",
-              "19:20",
-              "20:35"
-            ],
-            "priority": "medium",
-            "kind": "show-indoor",
-            "tags": [
-              "エントリー受付"
-            ]
-          },
-          {
-            "name": "ミッキーのレインボー･ルアウ",
-            "times": [],
-            "priority": null,
-            "kind": "show-restaurant",
-            "tags": [
-              "予約必須"
-            ]
-          },
-          {
-            "name": "ミッキーのマジカルミュージックワールド",
-            "times": [
-              "10:50",
-              "12:15",
-              "13:40",
-              "15:45",
-              "17:10"
-            ],
-            "priority": "medium",
-            "kind": "show-unknown",
-            "tags": [
-              "エントリー受付",
-              "プレミアアクセス"
-            ]
-          },
-          {
-            "name": "ザ･ダイヤモンド･バラエティマスター",
-            "times": [],
-            "priority": null,
-            "kind": "show-restaurant",
-            "tags": [
-              "予約必須"
-            ]
-          }
-        ]
-      },
-      "TDS": {
-        "openHour": "09:00",
-        "closeHour": "21:00",
-        "shows": [
-          {
-            "name": "スパークリング･ジュビリー･セレブレーション",
-            "times": [
-              "17:00"
-            ],
-            "priority": "high",
-            "kind": "show-day",
-            "tags": []
-          },
-          {
-            "name": "【環境演出】スパークリング･ジュビリー･ナイト",
-            "times": [
-              "20:55"
-            ],
-            "priority": "low",
-            "kind": "environment",
-            "tags": []
-          },
-          {
-            "name": "ビリーヴ！～シー･オブ･ドリームス～",
-            "times": [
-              "20:15"
-            ],
-            "priority": "low",
-            "kind": "show-night",
-            "tags": [
-              "プレミアアクセス"
-            ]
-          },
-          {
-            "name": "ダッフィー＆フレンズのワンダフル･フレンドシップ",
-            "times": [],
-            "priority": null,
-            "kind": "show-restaurant",
-            "tags": [
-              "予約必須"
-            ]
-          },
-          {
-            "name": "ダンス･ザ･グローブ！",
-            "times": [
-              "17:55",
-              "19:40"
-            ],
-            "priority": "medium",
-            "kind": "show-indoor",
-            "tags": [
-              "エントリー受付",
-              "プレミアアクセス"
-            ]
-          },
-          {
-            "name": "ドリームス･テイク･フライト",
-            "times": [
-              "11:00",
-              "12:25",
-              "13:50",
-              "15:55",
-              "17:20"
-            ],
-            "priority": "medium",
-            "kind": "show-indoor",
-            "tags": [
-              "エントリー受付",
-              "プレミアアクセス"
-            ]
-          }
-        ]
-      }
-    },
-    "2026-08-16": {
-      "TDL": {
-        "openHour": "09:00",
-        "closeHour": "21:00",
-        "shows": [
-          {
-            "name": "ベイマックスのミッション･クールダウン",
-            "times": [
-              "10:00",
-              "12:50",
-              "14:55"
-            ],
-            "priority": "medium",
-            "kind": "show-unknown",
-            "tags": []
-          },
-          {
-            "name": "ディズニー･ハーモニー･イン･カラー",
-            "times": [
-              "17:00"
-            ],
-            "priority": "medium",
-            "kind": "parade-day",
-            "tags": [
-              "プレミアアクセス"
-            ]
-          },
-          {
-            "name": "東京ディズニーランド･エレクトリカルパレード･ドリームライツ",
-            "times": [
-              "19:45"
-            ],
-            "priority": "low",
-            "kind": "parade-night",
-            "tags": [
-              "プレミアアクセス"
-            ]
-          },
-          {
-            "name": "Reach for the Stars: Everlasting Dreams",
-            "times": [
-              "20:55"
-            ],
-            "priority": "high",
-            "kind": "show-day",
-            "tags": [
-              "プレミアアクセス"
-            ]
-          },
-          {
-            "name": "ジャンボリミッキー！レッツ･ダンス！",
-            "times": [
-              "18:00",
-              "19:20",
-              "20:35"
-            ],
-            "priority": "medium",
-            "kind": "show-indoor",
-            "tags": [
-              "エントリー受付"
-            ]
-          },
-          {
-            "name": "ミッキーのレインボー･ルアウ",
-            "times": [],
-            "priority": null,
-            "kind": "show-restaurant",
-            "tags": [
-              "予約必須"
-            ]
-          },
-          {
-            "name": "ミッキーのマジカルミュージックワールド",
-            "times": [
-              "10:50",
-              "12:15",
-              "13:40",
-              "15:45",
-              "17:10"
-            ],
-            "priority": "medium",
-            "kind": "show-unknown",
-            "tags": [
-              "エントリー受付",
-              "プレミアアクセス"
-            ]
-          },
-          {
-            "name": "ザ･ダイヤモンド･バラエティマスター",
-            "times": [],
-            "priority": null,
-            "kind": "show-restaurant",
-            "tags": [
-              "予約必須"
-            ]
-          }
-        ]
-      },
-      "TDS": {
-        "openHour": "09:00",
-        "closeHour": "21:00",
-        "shows": [
-          {
-            "name": "スパークリング･ジュビリー･セレブレーション",
-            "times": [
-              "17:00"
-            ],
-            "priority": "high",
-            "kind": "show-day",
-            "tags": []
-          },
-          {
-            "name": "【環境演出】スパークリング･ジュビリー･ナイト",
-            "times": [
-              "20:55"
-            ],
-            "priority": "low",
-            "kind": "environment",
-            "tags": []
-          },
-          {
-            "name": "ビリーヴ！～シー･オブ･ドリームス～",
-            "times": [
-              "20:15"
-            ],
-            "priority": "low",
-            "kind": "show-night",
-            "tags": [
-              "プレミアアクセス"
-            ]
-          },
-          {
-            "name": "ダッフィー＆フレンズのワンダフル･フレンドシップ",
-            "times": [],
-            "priority": null,
-            "kind": "show-restaurant",
-            "tags": [
-              "予約必須"
-            ]
-          },
-          {
-            "name": "ダンス･ザ･グローブ！",
-            "times": [
-              "17:55",
-              "19:40"
-            ],
-            "priority": "medium",
-            "kind": "show-indoor",
-            "tags": [
-              "エントリー受付",
-              "プレミアアクセス"
-            ]
-          },
-          {
-            "name": "ドリームス･テイク･フライト",
-            "times": [
-              "11:00",
-              "12:25",
-              "13:50",
-              "15:55",
-              "17:20"
-            ],
-            "priority": "medium",
-            "kind": "show-indoor",
-            "tags": [
-              "エントリー受付",
-              "プレミアアクセス"
-            ]
-          }
-        ]
-      }
-    },
-    "2026-08-17": {
-      "TDL": {
-        "openHour": "09:00",
-        "closeHour": "21:00",
-        "shows": [
-          {
-            "name": "ベイマックスのミッション･クールダウン",
-            "times": [
-              "10:00",
-              "12:50",
-              "14:55"
-            ],
-            "priority": "medium",
-            "kind": "show-unknown",
-            "tags": []
-          },
-          {
-            "name": "ディズニー･ハーモニー･イン･カラー",
-            "times": [
-              "17:00"
-            ],
-            "priority": "medium",
-            "kind": "parade-day",
-            "tags": [
-              "プレミアアクセス"
-            ]
-          },
-          {
-            "name": "東京ディズニーランド･エレクトリカルパレード･ドリームライツ",
-            "times": [
-              "19:45"
-            ],
-            "priority": "low",
-            "kind": "parade-night",
-            "tags": [
-              "プレミアアクセス"
-            ]
-          },
-          {
-            "name": "Reach for the Stars: Everlasting Dreams",
-            "times": [
-              "20:55"
-            ],
-            "priority": "high",
-            "kind": "show-day",
-            "tags": [
-              "プレミアアクセス"
-            ]
-          },
-          {
-            "name": "ジャンボリミッキー！レッツ･ダンス！",
-            "times": [
-              "18:00",
-              "19:20",
-              "20:35"
-            ],
-            "priority": "medium",
-            "kind": "show-indoor",
-            "tags": [
-              "エントリー受付"
-            ]
-          },
-          {
-            "name": "ミッキーのレインボー･ルアウ",
-            "times": [],
-            "priority": null,
-            "kind": "show-restaurant",
-            "tags": [
-              "予約必須"
-            ]
-          },
-          {
-            "name": "ミッキーのマジカルミュージックワールド",
-            "times": [
-              "10:50",
-              "12:15",
-              "13:40",
-              "15:45",
-              "17:10"
-            ],
-            "priority": "medium",
-            "kind": "show-unknown",
-            "tags": [
-              "エントリー受付",
-              "プレミアアクセス"
-            ]
-          },
-          {
-            "name": "ザ･ダイヤモンド･バラエティマスター",
-            "times": [],
-            "priority": null,
-            "kind": "show-restaurant",
-            "tags": [
-              "予約必須"
-            ]
-          }
-        ]
-      },
-      "TDS": {
-        "openHour": "09:00",
-        "closeHour": "21:00",
-        "shows": [
-          {
-            "name": "スパークリング･ジュビリー･セレブレーション",
-            "times": [
-              "17:00"
-            ],
-            "priority": "high",
-            "kind": "show-day",
-            "tags": []
-          },
-          {
-            "name": "【環境演出】スパークリング･ジュビリー･ナイト",
-            "times": [
-              "20:55"
-            ],
-            "priority": "low",
-            "kind": "environment",
-            "tags": []
-          },
-          {
-            "name": "ビリーヴ！～シー･オブ･ドリームス～",
-            "times": [
-              "20:15"
-            ],
-            "priority": "low",
-            "kind": "show-night",
-            "tags": [
-              "プレミアアクセス"
-            ]
-          },
-          {
-            "name": "ダッフィー＆フレンズのワンダフル･フレンドシップ",
-            "times": [],
-            "priority": null,
-            "kind": "show-restaurant",
-            "tags": [
-              "予約必須"
-            ]
-          },
-          {
-            "name": "ダンス･ザ･グローブ！",
-            "times": [
-              "17:55",
-              "19:40"
-            ],
-            "priority": "medium",
-            "kind": "show-indoor",
-            "tags": [
-              "エントリー受付",
-              "プレミアアクセス"
-            ]
-          },
-          {
-            "name": "ドリームス･テイク･フライト",
-            "times": [
-              "11:00",
-              "12:25",
-              "13:50",
-              "15:55",
-              "17:20"
-            ],
-            "priority": "medium",
-            "kind": "show-indoor",
-            "tags": [
-              "エントリー受付",
-              "プレミアアクセス"
-            ]
-          }
-        ]
-      }
-    },
-    "2026-08-22": {
-      "TDL": {
-        "openHour": "09:00",
-        "closeHour": "21:00",
-        "shows": [
-          {
-            "name": "ベイマックスのミッション･クールダウン",
-            "times": [
-              "10:00",
-              "12:50",
-              "14:55"
-            ],
-            "priority": "medium",
-            "kind": "show-unknown",
-            "tags": []
-          },
-          {
-            "name": "ディズニー･ハーモニー･イン･カラー",
-            "times": [
-              "17:00"
-            ],
-            "priority": "medium",
-            "kind": "parade-day",
-            "tags": [
-              "プレミアアクセス"
-            ]
-          },
-          {
-            "name": "東京ディズニーランド･エレクトリカルパレード･ドリームライツ",
-            "times": [
-              "19:45"
-            ],
-            "priority": "low",
-            "kind": "parade-night",
-            "tags": [
-              "プレミアアクセス"
-            ]
-          },
-          {
-            "name": "Reach for the Stars: Everlasting Dreams",
-            "times": [
-              "20:55"
-            ],
-            "priority": "high",
-            "kind": "show-day",
-            "tags": [
-              "プレミアアクセス"
-            ]
-          },
-          {
-            "name": "ジャンボリミッキー！レッツ･ダンス！",
-            "times": [
-              "18:00",
-              "19:20",
-              "20:35"
-            ],
-            "priority": "medium",
-            "kind": "show-indoor",
-            "tags": [
-              "エントリー受付"
-            ]
-          },
-          {
-            "name": "ミッキーのレインボー･ルアウ",
-            "times": [],
-            "priority": null,
-            "kind": "show-restaurant",
-            "tags": [
-              "予約必須"
-            ]
-          },
-          {
-            "name": "ミッキーのマジカルミュージックワールド",
-            "times": [
-              "10:50",
-              "12:15",
-              "13:40",
-              "15:45",
-              "17:10"
-            ],
-            "priority": "medium",
-            "kind": "show-unknown",
-            "tags": [
-              "プレミアアクセス",
-              "エントリー受付"
-            ]
-          },
-          {
-            "name": "ザ･ダイヤモンド･バラエティマスター",
-            "times": [],
-            "priority": null,
-            "kind": "show-restaurant",
-            "tags": []
-          }
-        ]
-      },
-      "TDS": {
-        "openHour": "09:00",
-        "closeHour": "21:00",
-        "shows": [
-          {
-            "name": "スパークリング･ジュビリー･セレブレーション",
-            "times": [
-              "17:00"
-            ],
-            "priority": "high",
-            "kind": "show-day",
-            "tags": []
-          },
-          {
-            "name": "【環境演出】スパークリング･ジュビリー･ナイト",
-            "times": [
-              "20:55"
-            ],
-            "priority": "low",
-            "kind": "environment",
-            "tags": []
-          },
-          {
-            "name": "ビリーヴ！～シー･オブ･ドリームス～",
-            "times": [
-              "20:15"
-            ],
-            "priority": "low",
-            "kind": "show-night",
-            "tags": [
-              "プレミアアクセス"
-            ]
-          },
-          {
-            "name": "ダッフィー＆フレンズのワンダフル･フレンドシップ",
-            "times": [],
-            "priority": null,
-            "kind": "show-restaurant",
-            "tags": [
-              "予約必須"
-            ]
-          },
-          {
-            "name": "ダンス･ザ･グローブ！",
-            "times": [
-              "17:55",
-              "19:40"
-            ],
-            "priority": "medium",
-            "kind": "show-indoor",
-            "tags": [
-              "プレミアアクセス",
-              "エントリー受付"
-            ]
-          },
-          {
-            "name": "ドリームス･テイク･フライト",
-            "times": [
-              "11:00",
-              "12:25",
-              "13:50",
-              "15:55",
-              "17:20"
-            ],
-            "priority": "medium",
-            "kind": "show-indoor",
-            "tags": [
-              "プレミアアクセス",
-              "エントリー受付"
-            ]
-          }
-        ]
-      }
-    },
-    "2026-08-23": {
-      "TDL": {
-        "openHour": "09:00",
-        "closeHour": "21:00",
-        "shows": [
-          {
-            "name": "ベイマックスのミッション･クールダウン",
-            "times": [
-              "10:00",
-              "12:50",
-              "14:55"
-            ],
-            "priority": "medium",
-            "kind": "show-unknown",
-            "tags": []
-          },
-          {
-            "name": "ディズニー･ハーモニー･イン･カラー",
-            "times": [
-              "17:00"
-            ],
-            "priority": "medium",
-            "kind": "parade-day",
-            "tags": [
-              "プレミアアクセス"
-            ]
-          },
-          {
-            "name": "東京ディズニーランド･エレクトリカルパレード･ドリームライツ",
-            "times": [
-              "19:45"
-            ],
-            "priority": "low",
-            "kind": "parade-night",
-            "tags": [
-              "プレミアアクセス"
-            ]
-          },
-          {
-            "name": "Reach for the Stars: Everlasting Dreams",
-            "times": [
-              "20:55"
-            ],
-            "priority": "high",
-            "kind": "show-day",
-            "tags": [
-              "プレミアアクセス"
-            ]
-          },
-          {
-            "name": "ジャンボリミッキー！レッツ･ダンス！",
-            "times": [
-              "18:00",
-              "19:20",
-              "20:35"
-            ],
-            "priority": "medium",
-            "kind": "show-indoor",
-            "tags": [
-              "エントリー受付"
-            ]
-          },
-          {
-            "name": "ミッキーのレインボー･ルアウ",
-            "times": [],
-            "priority": null,
-            "kind": "show-restaurant",
-            "tags": [
-              "予約必須"
-            ]
-          },
-          {
-            "name": "ミッキーのマジカルミュージックワールド",
-            "times": [
-              "10:50",
-              "12:15",
-              "13:40",
-              "15:45",
-              "17:10"
-            ],
-            "priority": "medium",
-            "kind": "show-unknown",
-            "tags": [
-              "プレミアアクセス",
-              "エントリー受付"
-            ]
-          },
-          {
-            "name": "ザ･ダイヤモンド･バラエティマスター",
-            "times": [],
-            "priority": null,
-            "kind": "show-restaurant",
-            "tags": []
-          }
-        ]
-      },
-      "TDS": {
-        "openHour": "09:00",
-        "closeHour": "21:00",
-        "shows": [
-          {
-            "name": "スパークリング･ジュビリー･セレブレーション",
-            "times": [
-              "17:00"
-            ],
-            "priority": "high",
-            "kind": "show-day",
-            "tags": []
-          },
-          {
-            "name": "【環境演出】スパークリング･ジュビリー･ナイト",
-            "times": [
-              "20:55"
-            ],
-            "priority": "low",
-            "kind": "environment",
-            "tags": []
-          },
-          {
-            "name": "ビリーヴ！～シー･オブ･ドリームス～",
-            "times": [
-              "20:15"
-            ],
-            "priority": "low",
-            "kind": "show-night",
-            "tags": [
-              "プレミアアクセス"
-            ]
-          },
-          {
-            "name": "ダッフィー＆フレンズのワンダフル･フレンドシップ",
-            "times": [],
-            "priority": null,
-            "kind": "show-restaurant",
-            "tags": [
-              "予約必須"
-            ]
-          },
-          {
-            "name": "ダンス･ザ･グローブ！",
-            "times": [
-              "17:55",
-              "19:40"
-            ],
-            "priority": "medium",
-            "kind": "show-indoor",
-            "tags": [
-              "プレミアアクセス",
-              "エントリー受付"
-            ]
-          },
-          {
-            "name": "ドリームス･テイク･フライト",
-            "times": [
-              "11:00",
-              "12:25",
-              "13:50",
-              "15:55",
-              "17:20"
-            ],
-            "priority": "medium",
-            "kind": "show-indoor",
-            "tags": [
-              "プレミアアクセス",
-              "エントリー受付"
-            ]
-          }
-        ]
-      }
-    },
-    "2026-08-24": {
-      "TDL": {
-        "openHour": "09:00",
-        "closeHour": "21:00",
-        "shows": [
-          {
-            "name": "ベイマックスのミッション･クールダウン",
-            "times": [
-              "10:00",
-              "12:50",
-              "14:55"
-            ],
-            "priority": "medium",
-            "kind": "show-unknown",
-            "tags": []
-          },
-          {
-            "name": "ディズニー･ハーモニー･イン･カラー",
-            "times": [
-              "17:00"
-            ],
-            "priority": "medium",
-            "kind": "parade-day",
-            "tags": [
-              "プレミアアクセス"
-            ]
-          },
-          {
-            "name": "東京ディズニーランド･エレクトリカルパレード･ドリームライツ",
-            "times": [
-              "19:45"
-            ],
-            "priority": "low",
-            "kind": "parade-night",
-            "tags": [
-              "プレミアアクセス"
-            ]
-          },
-          {
-            "name": "Reach for the Stars: Everlasting Dreams",
-            "times": [
-              "20:55"
-            ],
-            "priority": "high",
-            "kind": "show-day",
-            "tags": [
-              "プレミアアクセス"
-            ]
-          },
-          {
-            "name": "ジャンボリミッキー！レッツ･ダンス！",
-            "times": [
-              "18:00",
-              "19:20",
-              "20:35"
-            ],
-            "priority": "medium",
-            "kind": "show-indoor",
-            "tags": [
-              "エントリー受付"
-            ]
-          },
-          {
-            "name": "ミッキーのレインボー･ルアウ",
-            "times": [],
-            "priority": null,
-            "kind": "show-restaurant",
-            "tags": [
-              "予約必須"
-            ]
-          },
-          {
-            "name": "ミッキーのマジカルミュージックワールド",
-            "times": [
-              "10:50",
-              "12:15",
-              "13:40",
-              "15:45",
-              "17:10"
-            ],
-            "priority": "medium",
-            "kind": "show-unknown",
-            "tags": [
-              "プレミアアクセス",
-              "エントリー受付"
-            ]
-          },
-          {
-            "name": "ザ･ダイヤモンド･バラエティマスター",
-            "times": [],
-            "priority": null,
-            "kind": "show-restaurant",
-            "tags": []
-          }
-        ]
-      },
-      "TDS": {
-        "openHour": "09:00",
-        "closeHour": "21:00",
-        "shows": [
-          {
-            "name": "スパークリング･ジュビリー･セレブレーション",
-            "times": [
-              "17:00"
-            ],
-            "priority": "high",
-            "kind": "show-day",
-            "tags": []
-          },
-          {
-            "name": "【環境演出】スパークリング･ジュビリー･ナイト",
-            "times": [
-              "20:55"
-            ],
-            "priority": "low",
-            "kind": "environment",
-            "tags": []
-          },
-          {
-            "name": "ビリーヴ！～シー･オブ･ドリームス～",
-            "times": [
-              "20:15"
-            ],
-            "priority": "low",
-            "kind": "show-night",
-            "tags": [
-              "プレミアアクセス"
-            ]
-          },
-          {
-            "name": "ダッフィー＆フレンズのワンダフル･フレンドシップ",
-            "times": [],
-            "priority": null,
-            "kind": "show-restaurant",
-            "tags": [
-              "予約必須"
-            ]
-          },
-          {
-            "name": "ダンス･ザ･グローブ！",
-            "times": [
-              "17:55",
-              "19:40"
-            ],
-            "priority": "medium",
-            "kind": "show-indoor",
-            "tags": [
-              "プレミアアクセス",
-              "エントリー受付"
-            ]
-          },
-          {
-            "name": "ドリームス･テイク･フライト",
-            "times": [
-              "11:00",
-              "12:25",
-              "13:50",
-              "15:55",
-              "17:20"
-            ],
-            "priority": "medium",
-            "kind": "show-indoor",
-            "tags": [
-              "プレミアアクセス",
-              "エントリー受付"
-            ]
-          }
-        ]
-      }
-    },
-    "2026-08-25": {
-      "TDL": {
-        "openHour": "09:00",
-        "closeHour": "21:00",
-        "shows": [
-          {
-            "name": "ベイマックスのミッション･クールダウン",
-            "times": [
-              "10:00",
-              "12:50",
-              "14:55"
-            ],
-            "priority": "medium",
-            "kind": "show-unknown",
-            "tags": []
-          },
-          {
-            "name": "ディズニー･ハーモニー･イン･カラー",
-            "times": [
-              "17:00"
-            ],
-            "priority": "medium",
-            "kind": "parade-day",
-            "tags": [
-              "プレミアアクセス"
-            ]
-          },
-          {
-            "name": "東京ディズニーランド･エレクトリカルパレード･ドリームライツ",
-            "times": [
-              "19:45"
-            ],
-            "priority": "low",
-            "kind": "parade-night",
-            "tags": [
-              "プレミアアクセス"
-            ]
-          },
-          {
-            "name": "Reach for the Stars: Everlasting Dreams",
-            "times": [
-              "20:55"
-            ],
-            "priority": "high",
-            "kind": "show-day",
-            "tags": [
-              "プレミアアクセス"
-            ]
-          },
-          {
-            "name": "ジャンボリミッキー！レッツ･ダンス！",
-            "times": [
-              "18:00",
-              "19:20",
-              "20:35"
-            ],
-            "priority": "medium",
-            "kind": "show-indoor",
-            "tags": [
-              "エントリー受付"
-            ]
-          },
-          {
-            "name": "ミッキーのレインボー･ルアウ",
-            "times": [],
-            "priority": null,
-            "kind": "show-restaurant",
-            "tags": [
-              "予約必須"
-            ]
-          },
-          {
-            "name": "ミッキーのマジカルミュージックワールド",
-            "times": [
-              "10:50",
-              "12:15",
-              "13:40",
-              "15:45",
-              "17:10"
-            ],
-            "priority": "medium",
-            "kind": "show-unknown",
-            "tags": [
-              "プレミアアクセス",
-              "エントリー受付"
-            ]
-          },
-          {
-            "name": "ザ･ダイヤモンド･バラエティマスター",
-            "times": [],
-            "priority": null,
-            "kind": "show-restaurant",
-            "tags": []
-          }
-        ]
-      },
-      "TDS": {
-        "openHour": "09:00",
-        "closeHour": "21:00",
-        "shows": [
-          {
-            "name": "スパークリング･ジュビリー･セレブレーション",
-            "times": [
-              "17:00"
-            ],
-            "priority": "high",
-            "kind": "show-day",
-            "tags": []
-          },
-          {
-            "name": "【環境演出】スパークリング･ジュビリー･ナイト",
-            "times": [
-              "20:55"
-            ],
-            "priority": "low",
-            "kind": "environment",
-            "tags": []
-          },
-          {
-            "name": "ビリーヴ！～シー･オブ･ドリームス～",
-            "times": [
-              "20:15"
-            ],
-            "priority": "low",
-            "kind": "show-night",
-            "tags": [
-              "プレミアアクセス"
-            ]
-          },
-          {
-            "name": "ダッフィー＆フレンズのワンダフル･フレンドシップ",
-            "times": [],
-            "priority": null,
-            "kind": "show-restaurant",
-            "tags": [
-              "予約必須"
-            ]
-          },
-          {
-            "name": "ダンス･ザ･グローブ！",
-            "times": [
-              "17:55",
-              "19:40"
-            ],
-            "priority": "medium",
-            "kind": "show-indoor",
-            "tags": [
-              "プレミアアクセス",
-              "エントリー受付"
-            ]
-          },
-          {
-            "name": "ドリームス･テイク･フライト",
-            "times": [
-              "11:00",
-              "12:25",
-              "13:50",
-              "15:55",
-              "17:20"
-            ],
-            "priority": "medium",
-            "kind": "show-indoor",
-            "tags": [
-              "プレミアアクセス",
-              "エントリー受付"
-            ]
-          }
-        ]
-      }
-    },
-    "2026-08-26": {
-      "TDL": {
-        "openHour": "09:00",
-        "closeHour": "21:00",
-        "shows": [
-          {
-            "name": "ベイマックスのミッション･クールダウン",
-            "times": [
-              "10:00",
-              "12:50",
-              "14:55"
-            ],
-            "priority": "medium",
-            "kind": "show-unknown",
-            "tags": []
-          },
-          {
-            "name": "ディズニー･ハーモニー･イン･カラー",
-            "times": [
-              "17:00"
-            ],
-            "priority": "medium",
-            "kind": "parade-day",
-            "tags": [
-              "プレミアアクセス"
-            ]
-          },
-          {
-            "name": "東京ディズニーランド･エレクトリカルパレード･ドリームライツ",
-            "times": [
-              "19:45"
-            ],
-            "priority": "low",
-            "kind": "parade-night",
-            "tags": [
-              "プレミアアクセス"
-            ]
-          },
-          {
-            "name": "Reach for the Stars: Everlasting Dreams",
-            "times": [
-              "20:55"
-            ],
-            "priority": "high",
-            "kind": "show-day",
-            "tags": [
-              "プレミアアクセス"
-            ]
-          },
-          {
-            "name": "ジャンボリミッキー！レッツ･ダンス！",
-            "times": [
-              "18:00",
-              "19:20",
-              "20:35"
-            ],
-            "priority": "medium",
-            "kind": "show-indoor",
-            "tags": [
-              "エントリー受付"
-            ]
-          },
-          {
-            "name": "ミッキーのレインボー･ルアウ",
-            "times": [],
-            "priority": null,
-            "kind": "show-restaurant",
-            "tags": [
-              "予約必須"
-            ]
-          },
-          {
-            "name": "ミッキーのマジカルミュージックワールド",
-            "times": [
-              "10:50",
-              "12:15",
-              "13:40",
-              "15:45",
-              "17:10"
-            ],
-            "priority": "medium",
-            "kind": "show-unknown",
-            "tags": [
-              "プレミアアクセス",
-              "エントリー受付"
-            ]
-          },
-          {
-            "name": "ザ･ダイヤモンド･バラエティマスター",
-            "times": [],
-            "priority": null,
-            "kind": "show-restaurant",
-            "tags": []
-          }
-        ]
-      },
-      "TDS": {
-        "openHour": "09:00",
-        "closeHour": "21:00",
-        "shows": [
-          {
-            "name": "スパークリング･ジュビリー･セレブレーション",
-            "times": [
-              "17:00"
-            ],
-            "priority": "high",
-            "kind": "show-day",
-            "tags": []
-          },
-          {
-            "name": "【環境演出】スパークリング･ジュビリー･ナイト",
-            "times": [
-              "20:55"
-            ],
-            "priority": "low",
-            "kind": "environment",
-            "tags": []
-          },
-          {
-            "name": "ビリーヴ！～シー･オブ･ドリームス～",
-            "times": [
-              "20:15"
-            ],
-            "priority": "low",
-            "kind": "show-night",
-            "tags": [
-              "プレミアアクセス"
-            ]
-          },
-          {
-            "name": "ダッフィー＆フレンズのワンダフル･フレンドシップ",
-            "times": [],
-            "priority": null,
-            "kind": "show-restaurant",
-            "tags": [
-              "予約必須"
-            ]
-          },
-          {
-            "name": "ダンス･ザ･グローブ！",
-            "times": [
-              "17:55",
-              "19:40"
-            ],
-            "priority": "medium",
-            "kind": "show-indoor",
-            "tags": [
-              "プレミアアクセス",
-              "エントリー受付"
-            ]
-          },
-          {
-            "name": "ドリームス･テイク･フライト",
-            "times": [
-              "11:00",
-              "12:25",
-              "13:50",
-              "15:55",
-              "17:20"
-            ],
-            "priority": "medium",
-            "kind": "show-indoor",
-            "tags": [
-              "プレミアアクセス",
-              "エントリー受付"
-            ]
-          }
-        ]
-      }
-    },
-    "2026-08-27": {
-      "TDL": {
-        "openHour": "09:00",
-        "closeHour": "21:00",
-        "shows": [
-          {
-            "name": "ベイマックスのミッション･クールダウン",
-            "times": [
-              "10:00",
-              "12:50",
-              "14:55"
-            ],
-            "priority": "medium",
-            "kind": "show-unknown",
-            "tags": []
-          },
-          {
-            "name": "ディズニー･ハーモニー･イン･カラー",
-            "times": [
-              "17:00"
-            ],
-            "priority": "medium",
-            "kind": "parade-day",
-            "tags": [
-              "プレミアアクセス"
-            ]
-          },
-          {
-            "name": "東京ディズニーランド･エレクトリカルパレード･ドリームライツ",
-            "times": [
-              "19:45"
-            ],
-            "priority": "low",
-            "kind": "parade-night",
-            "tags": [
-              "プレミアアクセス"
-            ]
-          },
-          {
-            "name": "Reach for the Stars: Everlasting Dreams",
-            "times": [
-              "20:55"
-            ],
-            "priority": "high",
-            "kind": "show-day",
-            "tags": [
-              "プレミアアクセス"
-            ]
-          },
-          {
-            "name": "ジャンボリミッキー！レッツ･ダンス！",
-            "times": [
-              "18:00",
-              "19:20",
-              "20:35"
-            ],
-            "priority": "medium",
-            "kind": "show-indoor",
-            "tags": [
-              "エントリー受付"
-            ]
-          },
-          {
-            "name": "ミッキーのレインボー･ルアウ",
-            "times": [],
-            "priority": null,
-            "kind": "show-restaurant",
-            "tags": [
-              "予約必須"
-            ]
-          },
-          {
-            "name": "ミッキーのマジカルミュージックワールド",
-            "times": [
-              "10:50",
-              "12:15",
-              "13:40",
-              "15:45",
-              "17:10"
-            ],
-            "priority": "medium",
-            "kind": "show-unknown",
-            "tags": [
-              "プレミアアクセス",
-              "エントリー受付"
-            ]
-          },
-          {
-            "name": "ザ･ダイヤモンド･バラエティマスター",
-            "times": [],
-            "priority": null,
-            "kind": "show-restaurant",
-            "tags": []
-          }
-        ]
-      },
-      "TDS": {
-        "openHour": "09:00",
-        "closeHour": "21:00",
-        "shows": [
-          {
-            "name": "スパークリング･ジュビリー･セレブレーション",
-            "times": [
-              "17:00"
-            ],
-            "priority": "high",
-            "kind": "show-day",
-            "tags": []
-          },
-          {
-            "name": "【環境演出】スパークリング･ジュビリー･ナイト",
-            "times": [
-              "20:55"
-            ],
-            "priority": "low",
-            "kind": "environment",
-            "tags": []
-          },
-          {
-            "name": "ビリーヴ！～シー･オブ･ドリームス～",
-            "times": [
-              "20:15"
-            ],
-            "priority": "low",
-            "kind": "show-night",
-            "tags": [
-              "プレミアアクセス"
-            ]
-          },
-          {
-            "name": "ダッフィー＆フレンズのワンダフル･フレンドシップ",
-            "times": [],
-            "priority": null,
-            "kind": "show-restaurant",
-            "tags": [
-              "予約必須"
-            ]
-          },
-          {
-            "name": "ダンス･ザ･グローブ！",
-            "times": [
-              "17:55",
-              "19:40"
-            ],
-            "priority": "medium",
-            "kind": "show-indoor",
-            "tags": [
-              "プレミアアクセス",
-              "エントリー受付"
-            ]
-          },
-          {
-            "name": "ドリームス･テイク･フライト",
-            "times": [
-              "11:00",
-              "12:25",
-              "13:50",
-              "15:55",
-              "17:20"
-            ],
-            "priority": "medium",
-            "kind": "show-indoor",
-            "tags": [
-              "プレミアアクセス",
-              "エントリー受付"
-            ]
-          }
-        ]
-      }
-    },
-    "2026-08-28": {
-      "TDL": {
-        "openHour": "09:00",
-        "closeHour": "18:30",
-        "shows": [
-          {
-            "name": "ベイマックスのミッション･クールダウン",
-            "times": [
-              "10:00",
-              "12:50",
-              "14:55"
-            ],
-            "priority": "medium",
-            "kind": "show-unknown",
-            "tags": []
-          },
-          {
-            "name": "ディズニー･ハーモニー･イン･カラー",
-            "times": [
-              "17:00"
-            ],
-            "priority": "medium",
-            "kind": "parade-day",
-            "tags": [
-              "プレミアアクセス"
-            ]
-          },
-          {
-            "name": "ジャンボリミッキー！レッツ･ダンス！",
-            "times": [
-              "16:50",
-              "18:05"
-            ],
-            "priority": "medium",
-            "kind": "show-indoor",
-            "tags": [
-              "エントリー受付"
-            ]
-          },
-          {
-            "name": "ミッキーのレインボー･ルアウ",
-            "times": [],
-            "priority": null,
-            "kind": "show-restaurant",
-            "tags": [
-              "予約必須"
-            ]
-          },
-          {
-            "name": "ミッキーのマジカルミュージックワールド",
-            "times": [
-              "12:15",
-              "13:40",
-              "15:45",
-              "17:10"
-            ],
-            "priority": "medium",
-            "kind": "show-unknown",
-            "tags": [
-              "プレミアアクセス",
-              "エントリー受付"
-            ]
-          },
-          {
-            "name": "ザ･ダイヤモンド･バラエティマスター",
-            "times": [],
-            "priority": null,
-            "kind": "show-restaurant",
-            "tags": []
-          }
-        ]
-      },
-      "TDS": {
-        "openHour": "09:00",
-        "closeHour": "21:00",
-        "shows": [
-          {
-            "name": "スパークリング･ジュビリー･セレブレーション",
-            "times": [
-              "17:00"
-            ],
-            "priority": "high",
-            "kind": "show-day",
-            "tags": []
-          },
-          {
-            "name": "【環境演出】スパークリング･ジュビリー･ナイト",
-            "times": [
-              "20:55"
-            ],
-            "priority": "low",
-            "kind": "environment",
-            "tags": []
-          },
-          {
-            "name": "ビリーヴ！～シー･オブ･ドリームス～",
-            "times": [
-              "20:15"
-            ],
-            "priority": "low",
-            "kind": "show-night",
-            "tags": [
-              "プレミアアクセス"
-            ]
-          },
-          {
-            "name": "ダッフィー＆フレンズのワンダフル･フレンドシップ",
-            "times": [],
-            "priority": null,
-            "kind": "show-restaurant",
-            "tags": [
-              "予約必須"
-            ]
-          },
-          {
-            "name": "ダンス･ザ･グローブ！",
-            "times": [
-              "17:55",
-              "19:40"
-            ],
-            "priority": "medium",
-            "kind": "show-indoor",
-            "tags": [
-              "プレミアアクセス",
-              "エントリー受付"
-            ]
-          },
-          {
-            "name": "ドリームス･テイク･フライト",
-            "times": [
-              "11:00",
-              "12:25",
-              "13:50",
-              "15:55",
-              "17:20"
-            ],
-            "priority": "medium",
-            "kind": "show-indoor",
-            "tags": [
-              "プレミアアクセス",
-              "エントリー受付"
-            ]
-          }
-        ]
-      }
-    },
-    "2026-08-29": {
-      "TDL": {
-        "openHour": "09:00",
-        "closeHour": "21:00",
-        "shows": [
-          {
-            "name": "ベイマックスのミッション･クールダウン",
-            "times": [
-              "10:00",
-              "12:50",
-              "14:55"
-            ],
-            "priority": "medium",
-            "kind": "show-unknown",
-            "tags": []
-          },
-          {
-            "name": "ディズニー･ハーモニー･イン･カラー",
-            "times": [
-              "17:00"
-            ],
-            "priority": "medium",
-            "kind": "parade-day",
-            "tags": [
-              "プレミアアクセス"
-            ]
-          },
-          {
-            "name": "東京ディズニーランド･エレクトリカルパレード･ドリームライツ",
-            "times": [
-              "19:45"
-            ],
-            "priority": "low",
-            "kind": "parade-night",
-            "tags": [
-              "プレミアアクセス"
-            ]
-          },
-          {
-            "name": "Reach for the Stars: Everlasting Dreams",
-            "times": [
-              "20:55"
-            ],
-            "priority": "high",
-            "kind": "show-day",
-            "tags": [
-              "プレミアアクセス"
-            ]
-          },
-          {
-            "name": "ジャンボリミッキー！レッツ･ダンス！",
-            "times": [
-              "18:00",
-              "19:20",
-              "20:35"
-            ],
-            "priority": "medium",
-            "kind": "show-indoor",
-            "tags": [
-              "エントリー受付"
-            ]
-          },
-          {
-            "name": "ミッキーのレインボー･ルアウ",
-            "times": [],
-            "priority": null,
-            "kind": "show-restaurant",
-            "tags": [
-              "予約必須"
-            ]
-          },
-          {
-            "name": "ミッキーのマジカルミュージックワールド",
-            "times": [
-              "10:50",
-              "12:15",
-              "13:40",
-              "15:45",
-              "17:10"
-            ],
-            "priority": "medium",
-            "kind": "show-unknown",
-            "tags": [
-              "プレミアアクセス",
-              "エントリー受付"
-            ]
-          },
-          {
-            "name": "ザ･ダイヤモンド･バラエティマスター",
-            "times": [],
-            "priority": null,
-            "kind": "show-restaurant",
-            "tags": []
-          }
-        ]
-      },
-      "TDS": {
-        "openHour": "09:00",
-        "closeHour": "21:00",
-        "shows": [
-          {
-            "name": "スパークリング･ジュビリー･セレブレーション",
-            "times": [
-              "17:00"
-            ],
-            "priority": "high",
-            "kind": "show-day",
-            "tags": []
-          },
-          {
-            "name": "【環境演出】スパークリング･ジュビリー･ナイト",
-            "times": [
-              "20:55"
-            ],
-            "priority": "low",
-            "kind": "environment",
-            "tags": []
-          },
-          {
-            "name": "ビリーヴ！～シー･オブ･ドリームス～",
-            "times": [
-              "20:15"
-            ],
-            "priority": "low",
-            "kind": "show-night",
-            "tags": [
-              "プレミアアクセス"
-            ]
-          },
-          {
-            "name": "ダッフィー＆フレンズのワンダフル･フレンドシップ",
-            "times": [],
-            "priority": null,
-            "kind": "show-restaurant",
-            "tags": [
-              "予約必須"
-            ]
-          },
-          {
-            "name": "ダンス･ザ･グローブ！",
-            "times": [
-              "17:55",
-              "19:40"
-            ],
-            "priority": "medium",
-            "kind": "show-indoor",
-            "tags": [
-              "プレミアアクセス",
-              "エントリー受付"
-            ]
-          },
-          {
-            "name": "ドリームス･テイク･フライト",
-            "times": [
-              "11:00",
-              "12:25",
-              "13:50",
-              "15:55",
-              "17:20"
-            ],
-            "priority": "medium",
-            "kind": "show-indoor",
-            "tags": [
-              "プレミアアクセス",
-              "エントリー受付"
-            ]
-          }
-        ]
-      }
-    },
-    "2026-08-30": {
-      "TDL": {
-        "openHour": "09:00",
-        "closeHour": "21:00",
-        "shows": [
-          {
-            "name": "ベイマックスのミッション･クールダウン",
-            "times": [
-              "10:00",
-              "12:50",
-              "14:55"
-            ],
-            "priority": "medium",
-            "kind": "show-unknown",
-            "tags": []
-          },
-          {
-            "name": "ディズニー･ハーモニー･イン･カラー",
-            "times": [
-              "17:00"
-            ],
-            "priority": "medium",
-            "kind": "parade-day",
-            "tags": [
-              "プレミアアクセス"
-            ]
-          },
-          {
-            "name": "東京ディズニーランド･エレクトリカルパレード･ドリームライツ",
-            "times": [
-              "19:45"
-            ],
-            "priority": "low",
-            "kind": "parade-night",
-            "tags": [
-              "プレミアアクセス"
-            ]
-          },
-          {
-            "name": "Reach for the Stars: Everlasting Dreams",
-            "times": [
-              "20:55"
-            ],
-            "priority": "high",
-            "kind": "show-day",
-            "tags": [
-              "プレミアアクセス"
-            ]
-          },
-          {
-            "name": "ジャンボリミッキー！レッツ･ダンス！",
-            "times": [
-              "18:00",
-              "19:20",
-              "20:35"
-            ],
-            "priority": "medium",
-            "kind": "show-indoor",
-            "tags": [
-              "エントリー受付"
-            ]
-          },
-          {
-            "name": "ミッキーのレインボー･ルアウ",
-            "times": [],
-            "priority": null,
-            "kind": "show-restaurant",
-            "tags": [
-              "予約必須"
-            ]
-          },
-          {
-            "name": "ミッキーのマジカルミュージックワールド",
-            "times": [
-              "10:50",
-              "12:15",
-              "13:40",
-              "15:45",
-              "17:10"
-            ],
-            "priority": "medium",
-            "kind": "show-unknown",
-            "tags": [
-              "プレミアアクセス",
-              "エントリー受付"
-            ]
-          },
-          {
-            "name": "ザ･ダイヤモンド･バラエティマスター",
-            "times": [],
-            "priority": null,
-            "kind": "show-restaurant",
-            "tags": []
-          }
-        ]
-      },
-      "TDS": {
-        "openHour": "09:00",
-        "closeHour": "21:00",
-        "shows": [
-          {
-            "name": "スパークリング･ジュビリー･セレブレーション",
-            "times": [
-              "17:00"
-            ],
-            "priority": "high",
-            "kind": "show-day",
-            "tags": []
-          },
-          {
-            "name": "【環境演出】スパークリング･ジュビリー･ナイト",
-            "times": [
-              "20:55"
-            ],
-            "priority": "low",
-            "kind": "environment",
-            "tags": []
-          },
-          {
-            "name": "ビリーヴ！～シー･オブ･ドリームス～",
-            "times": [
-              "20:15"
-            ],
-            "priority": "low",
-            "kind": "show-night",
-            "tags": [
-              "プレミアアクセス"
-            ]
-          },
-          {
-            "name": "ダッフィー＆フレンズのワンダフル･フレンドシップ",
-            "times": [],
-            "priority": null,
-            "kind": "show-restaurant",
-            "tags": [
-              "予約必須"
-            ]
-          },
-          {
-            "name": "ダンス･ザ･グローブ！",
-            "times": [
-              "17:55",
-              "19:40"
-            ],
-            "priority": "medium",
-            "kind": "show-indoor",
-            "tags": [
-              "プレミアアクセス",
-              "エントリー受付"
-            ]
-          },
-          {
-            "name": "ドリームス･テイク･フライト",
-            "times": [
-              "11:00",
-              "12:25",
-              "13:50",
-              "15:55",
-              "17:20"
-            ],
-            "priority": "medium",
-            "kind": "show-indoor",
-            "tags": [
-              "プレミアアクセス",
-              "エントリー受付"
-            ]
-          }
-        ]
-      }
-    },
-    "2026-08-31": {
-      "TDL": {
-        "openHour": "09:00",
-        "closeHour": "21:00",
-        "shows": [
-          {
-            "name": "ベイマックスのミッション･クールダウン",
-            "times": [
-              "10:00",
-              "12:50",
-              "14:55"
-            ],
-            "priority": "medium",
-            "kind": "show-unknown",
-            "tags": []
-          },
-          {
-            "name": "ディズニー･ハーモニー･イン･カラー",
-            "times": [
-              "17:00"
-            ],
-            "priority": "medium",
-            "kind": "parade-day",
-            "tags": [
-              "プレミアアクセス"
-            ]
-          },
-          {
-            "name": "東京ディズニーランド･エレクトリカルパレード･ドリームライツ",
-            "times": [
-              "19:45"
-            ],
-            "priority": "low",
-            "kind": "parade-night",
-            "tags": [
-              "プレミアアクセス"
-            ]
-          },
-          {
-            "name": "Reach for the Stars: Everlasting Dreams",
-            "times": [
-              "20:55"
-            ],
-            "priority": "high",
-            "kind": "show-day",
-            "tags": [
-              "プレミアアクセス"
-            ]
-          },
-          {
-            "name": "ジャンボリミッキー！レッツ･ダンス！",
-            "times": [
-              "18:00",
-              "19:20",
-              "20:35"
-            ],
-            "priority": "medium",
-            "kind": "show-indoor",
-            "tags": [
-              "エントリー受付"
-            ]
-          },
-          {
-            "name": "ミッキーのレインボー･ルアウ",
-            "times": [],
-            "priority": null,
-            "kind": "show-restaurant",
-            "tags": [
-              "予約必須"
-            ]
-          },
-          {
-            "name": "ミッキーのマジカルミュージックワールド",
-            "times": [
-              "10:50",
-              "12:15",
-              "13:40",
-              "15:45",
-              "17:10"
-            ],
-            "priority": "medium",
-            "kind": "show-unknown",
-            "tags": [
-              "プレミアアクセス",
-              "エントリー受付"
-            ]
-          },
-          {
-            "name": "ザ･ダイヤモンド･バラエティマスター",
-            "times": [],
-            "priority": null,
-            "kind": "show-restaurant",
-            "tags": []
-          }
-        ]
-      },
-      "TDS": {
-        "openHour": "09:00",
-        "closeHour": "21:00",
-        "shows": [
-          {
-            "name": "スパークリング･ジュビリー･セレブレーション",
-            "times": [
-              "17:00"
-            ],
-            "priority": "high",
-            "kind": "show-day",
-            "tags": []
-          },
-          {
-            "name": "【環境演出】スパークリング･ジュビリー･ナイト",
-            "times": [
-              "20:55"
-            ],
-            "priority": "low",
-            "kind": "environment",
-            "tags": []
-          },
-          {
-            "name": "ビリーヴ！～シー･オブ･ドリームス～",
-            "times": [
-              "20:15"
-            ],
-            "priority": "low",
-            "kind": "show-night",
-            "tags": [
-              "プレミアアクセス"
-            ]
-          },
-          {
-            "name": "ダッフィー＆フレンズのワンダフル･フレンドシップ",
-            "times": [],
-            "priority": null,
-            "kind": "show-restaurant",
-            "tags": [
-              "予約必須"
-            ]
-          },
-          {
-            "name": "ダンス･ザ･グローブ！",
-            "times": [
-              "17:55",
-              "19:40"
+              "12:40",
+              "14:25",
+              "16:45",
+              "18:30"
             ],
             "priority": "medium",
             "kind": "show-indoor",
