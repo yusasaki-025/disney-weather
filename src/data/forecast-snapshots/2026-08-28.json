@@ -1,0 +1,178 @@
+{
+  "date": "2026-08-28",
+  "fetchedAt": "2026-08-28T14:55:02.589+09:00",
+  "sources": {
+    "jma": {
+      "2026-08-28": {
+        "gustMax": null,
+        "windMax": null,
+        "popMax": 30,
+        "tempMax": 33,
+        "wbgtMax": null
+      },
+      "2026-08-29": {
+        "gustMax": null,
+        "windMax": null,
+        "popMax": 50,
+        "tempMax": 28,
+        "wbgtMax": null
+      },
+      "2026-08-30": {
+        "gustMax": null,
+        "windMax": null,
+        "popMax": 50,
+        "tempMax": 30,
+        "wbgtMax": null
+      },
+      "2026-08-31": {
+        "gustMax": null,
+        "windMax": null,
+        "popMax": 30,
+        "tempMax": 32,
+        "wbgtMax": null
+      },
+      "2026-09-01": {
+        "gustMax": null,
+        "windMax": null,
+        "popMax": 30,
+        "tempMax": 31,
+        "wbgtMax": null
+      },
+      "2026-09-02": {
+        "gustMax": null,
+        "windMax": null,
+        "popMax": 30,
+        "tempMax": 32,
+        "wbgtMax": null
+      },
+      "2026-09-03": {
+        "gustMax": null,
+        "windMax": null,
+        "popMax": 60,
+        "tempMax": 30,
+        "wbgtMax": null
+      },
+      "2026-09-04": {
+        "gustMax": null,
+        "windMax": null,
+        "popMax": 50,
+        "tempMax": 27,
+        "wbgtMax": null
+      }
+    },
+    "open-meteo": {
+      "2026-08-28": {
+        "gustMax": 10.8,
+        "windMax": 3.88,
+        "popMax": 65,
+        "tempMax": 30.3,
+        "wbgtMax": 31
+      },
+      "2026-08-29": {
+        "gustMax": 11.7,
+        "windMax": 3.49,
+        "popMax": 99,
+        "tempMax": 26.3,
+        "wbgtMax": 25
+      },
+      "2026-08-30": {
+        "gustMax": 6.3,
+        "windMax": 2.83,
+        "popMax": 16,
+        "tempMax": 26.6,
+        "wbgtMax": 28
+      },
+      "2026-08-31": {
+        "gustMax": 5.1,
+        "windMax": 1.53,
+        "popMax": 43,
+        "tempMax": 29.6,
+        "wbgtMax": 32.90457750501926
+      },
+      "2026-09-01": {
+        "gustMax": 5.8,
+        "windMax": 2.59,
+        "popMax": 43,
+        "tempMax": 30,
+        "wbgtMax": 32.70473230966447
+      },
+      "2026-09-02": {
+        "gustMax": 7.6,
+        "windMax": 2.87,
+        "popMax": 29,
+        "tempMax": 29.4,
+        "wbgtMax": 31.772350843516428
+      },
+      "2026-09-03": {
+        "gustMax": 11,
+        "windMax": 3.72,
+        "popMax": 61,
+        "tempMax": 28,
+        "wbgtMax": 31.957857866735555
+      },
+      "2026-09-04": {
+        "gustMax": 9.7,
+        "windMax": 3.83,
+        "popMax": 55,
+        "tempMax": 26.9,
+        "wbgtMax": 30.469807670151273
+      },
+      "2026-09-05": {
+        "gustMax": 12.3,
+        "windMax": 4.7,
+        "popMax": 38,
+        "tempMax": 23.6,
+        "wbgtMax": 25.56645112852166
+      },
+      "2026-09-06": {
+        "gustMax": 11.7,
+        "windMax": 4.84,
+        "popMax": 45,
+        "tempMax": 22,
+        "wbgtMax": 25.014571259716146
+      },
+      "2026-09-07": {
+        "gustMax": 11.2,
+        "windMax": 4.71,
+        "popMax": 51,
+        "tempMax": 24.2,
+        "wbgtMax": 25.11654199497835
+      },
+      "2026-09-08": {
+        "gustMax": 13.9,
+        "windMax": 4.9,
+        "popMax": 35,
+        "tempMax": 25.8,
+        "wbgtMax": 25.336484352172423
+      },
+      "2026-09-09": {
+        "gustMax": 11.6,
+        "windMax": 4.26,
+        "popMax": 45,
+        "tempMax": 26.4,
+        "wbgtMax": 26.663098290265022
+      },
+      "2026-09-10": {
+        "gustMax": 8.3,
+        "windMax": 2.38,
+        "popMax": 33,
+        "tempMax": 26.2,
+        "wbgtMax": 28.29599637980927
+      },
+      "2026-09-11": {
+        "gustMax": 8.1,
+        "windMax": 4.95,
+        "popMax": 45,
+        "tempMax": 27.2,
+        "wbgtMax": 30.995392530085827
+      },
+      "2026-09-12": {
+        "gustMax": 6.9,
+        "windMax": 6.33,
+        "popMax": 39,
+        "tempMax": 30.7,
+        "wbgtMax": 30.418724485825624
+      }
+    }
+  }
+}
