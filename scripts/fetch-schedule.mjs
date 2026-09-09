@@ -22,6 +22,8 @@
 import { writeFile, mkdir } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+// §0.95 : 季節イベント (期間限定) ･ 屋内の判定は runtime と同じ src/data/show-thresholds.js を正とする。
+import { isSeasonal, isWeatherless } from '../src/data/show-thresholds.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const OUT_DIR = resolve(__dirname, '../src/data/schedule');
@@ -52,6 +54,23 @@ const RESTAURANT_SHOWS = new Set([
 //   【環境演出】が「スパークリング ・ ジュビリー」の広いマッチで high に誤分類、等の食い違いがあった。
 const PRIORITY_RULES = [
   { re: /【環境演出】/, priority: 'low', kind: 'environment' },
+  // §0.95 : 季節イベントの演目を high にする (Yuka さん方針 2026-09-09 :
+  //   「ハロウィーン ･ クリスマス ･ イースター ･ 夏まつりなど、季節イベントっぽいものは high」)。
+  //   背景 : Reach for the Stars 終了とスカイ ･ フル ･ オブ ･ カラーズの休止継続で TDL の
+  //   priority:high が消え、showWindow が空 → スコアが1日全体の最大値ベースに退化していた。
+  //   ここに書くのは会場を公式のショー詳細で確認済みの演目。未登録の季節演目は classify() の
+  //   フォールバック (isSeasonal && !isWeatherless → high) が拾うので、窓が空になることはない。
+  //   ディズニー ･ ハロウィーン (2026-09-15 〜 10-31)
+  { re: /ヴィランズ[・･]ハロウィーン/, priority: 'high', kind: 'parade-day' }, // パークワイド (パレードルート) ･ 屋外 ･ 45分
+  { re: /ナイトハイ[・･]ハロウィーン/, priority: 'high', kind: 'fireworks' }, // パークワイド ･ 屋外 ･ 花火 ･ 5分 (両パーク)
+  { re: /ディズニー[・･]ハロウィーン[・･]グリーティング/, priority: 'high', kind: 'show-day' }, // メディテレーニアンハーバー ･ 屋外 ･ 15分
+  //   ディズニー ･ クリスマス (2026-11-11 〜 12-25)。11月以降のスケジュールは公式が未公開のため
+  //   データはまだ無いが、公開されたときに medium で入らないよう先に登録しておく。
+  { re: /トイズ[・･]ワンダラス[・･]クリスマス/, priority: 'high', kind: 'parade-day' }, // パークワイド (パレードルート) ･ 屋外 ･ 45分
+  { re: /スターブライト[・･]クリスマス/, priority: 'high', kind: 'fireworks' }, // パークワイド ･ 屋外 ･ 花火 ･ 5分 (両パーク)
+  { re: /ディズニー[・･]クリスマス[・･]グリーティング/, priority: 'high', kind: 'show-day' }, // メディテレーニアンハーバー ･ 屋外 ･ 15分
+  //   通年 ･ 屋内の演目 (季節キーワードを持たないので下のフォールバックには乗らない)
+  { re: /D-Groovationz4/i, priority: 'medium', kind: 'show-indoor' }, // トゥモローランド (ショーベース) ･ 屋内 ･ 25分
   { re: /ハーモニー[・･]イン[・･]カラー/, priority: 'medium', kind: 'parade-day' },
   { re: /スウィーツ[・･]?フルタイム/, priority: 'high', kind: 'show-day' },
   { re: /Reach for the Stars/i, priority: 'high', kind: 'show-day' },
@@ -66,11 +85,20 @@ const PRIORITY_RULES = [
   { re: /ベイマックスのミッション[・･]クールダウン/, priority: 'medium', kind: 'show-unknown' },
 ];
 
-function classify(name) {
-  if (RESTAURANT_SHOWS.has(name)) return { priority: null, kind: 'show-restaurant' };
+// §0.95 : tags も見る。「予約が必須」のショーレストランは RESTAURANT_SHOWS に無い新演目でも
+//   restaurant 扱いにする (季節イベントのディナーショーが下のフォールバックで high になるのを防ぐ)。
+function classify(name, tags = []) {
+  if (RESTAURANT_SHOWS.has(name) || tags.includes('予約必須')) {
+    return { priority: null, kind: 'show-restaurant' };
+  }
   for (const r of PRIORITY_RULES) {
     if (r.re.test(name)) return { priority: r.priority, kind: r.kind };
   }
+  // §0.95 : ルール未登録でも季節イベント (期間限定) の屋外演目は high にする。
+  //   季節が変わって high 演目が入れ替わるたびに showWindow が空になる事故を防ぐための保険。
+  //   屋内 ･ 風の影響を受けない演目 (isWeatherless) は除外する。昼夜は名前から決められないので
+  //   kind は show-unknown のまま (kind は parade 判定とレストラン判定にしか使われない)。
+  if (isSeasonal(name) && !isWeatherless(name)) return { priority: 'high', kind: 'show-unknown' };
   // 未知の公演: 安全側 (スコア算定窓を広げすぎない) に倒して medium
   return { priority: 'medium', kind: 'show-unknown' };
 }
@@ -174,7 +202,7 @@ async function fetchMonth(ym) {
         const parsed = await page.evaluate(parseDayInBrowser);
         // §0.90 : classify() は公式表記 (全角 ・) のまま判定し、出力時にだけ半角 ･ へ変換する
         //   (既存 JSON の表記規則に合わせる。RESTAURANT_SHOWS / PRIORITY_RULES も全角基準)。
-        const shows = parsed.shows.map((s) => ({ ...s, name: halfwidth(s.name), ...classify(s.name) }));
+        const shows = parsed.shows.map((s) => ({ ...s, name: halfwidth(s.name), ...classify(s.name, s.tags) }));
         days[date][park.toUpperCase()] = {
           openHour: parsed.openHour,
           closeHour: parsed.closeHour,
@@ -217,7 +245,13 @@ async function main() {
   console.error(`保存しました: ${outPath}`);
 }
 
-main().catch((e) => {
-  console.error(e);
-  process.exit(1);
-});
+// §0.95 : classify を単体テストできるように、直接実行されたときだけ main() を走らせる
+//   (`import` しただけで使い方メッセージを出して exit するのを防ぐ)。
+if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  main().catch((e) => {
+    console.error(e);
+    process.exit(1);
+  });
+}
+
+export { classify, PRIORITY_RULES, RESTAURANT_SHOWS };

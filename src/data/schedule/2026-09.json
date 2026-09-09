@@ -2,7 +2,7 @@
   "month": "2026-09",
   "fetchedAt": "2026-09-09T21:55:15.197+09:00",
   "source": "Cowork Chrome MCP 経由で公式サイト (tokyodisneyresort.jp) の tdl/tds daily calendar を取得",
-  "note": "9/9〜9/30 (22日分) を 2026-09-09 に再取得し、8/22 取得分を上書き。9/1〜9/8 は過去日のため 8/22 取得のまま。8/22 時点からの主な変化 : (1) ディズニー・ハロウィーンの開始が 9/16 → 9/15 に前倒し (ザ･ヴィランズ･ハロウィーン“Into the Frenzy”・ナイトハイ･ハロウィーン・ディズニー･ハロウィーン･グリーティングが 9/15 から)。(2) スカイ･フル･オブ･カラーズは 9/15 再開の予定が取り消され、9/16 以降は公式の休止情報に掲載 (両パーク) → 全日から削除。(3) ザ･ダイヤモンド･バラエティマスターも休止情報に掲載されているため 9/9 以降は削除 (8/22 取得分は休止情報の項目を誤って取り込んでいた)。(4) Reach for the Stars は 9/14 まで。9/25 は TDS が 18:30 閉園。ハロウィーン関連の新演目は既存 PRIORITY_RULES に無いため medium/show-unknown で暫定登録 (high はスコア算定窓に直結するため安全側)。",
+  "note": "9/9〜9/30 (22日分) を 2026-09-09 に再取得し、8/22 取得分を上書き。9/1〜9/8 は過去日のため 8/22 取得のまま。8/22 時点からの主な変化 : (1) ディズニー・ハロウィーンの開始が 9/16 → 9/15 に前倒し (ザ･ヴィランズ･ハロウィーン“Into the Frenzy”・ナイトハイ･ハロウィーン・ディズニー･ハロウィーン･グリーティングが 9/15 から)。(2) スカイ･フル･オブ･カラーズは 9/15 再開の予定が取り消され、9/16 以降は公式の休止情報に掲載 (両パーク) → 全日から削除。(3) ザ･ダイヤモンド･バラエティマスターも休止情報に掲載されているため 9/9 以降は削除 (8/22 取得分は休止情報の項目を誤って取り込んでいた)。(4) Reach for the Stars は 9/14 まで。9/25 は TDS が 18:30 閉園。ハロウィーンの3演目 (ザ･ヴィランズ･ハロウィーン“Into the Frenzy” ･ ナイトハイ･ハロウィーン ･ ディズニー･ハロウィーン･グリーティング) は §0.95 で priority=high。The D-Groovationz4 Live は公式で屋内 (ショーベース) を確認したため medium/show-indoor。",
   "days": {
     "2026-09-01": {
       "TDL": {
@@ -2352,8 +2352,8 @@
             "times": [
               "16:50"
             ],
-            "priority": "medium",
-            "kind": "show-unknown",
+            "priority": "high",
+            "kind": "parade-day",
             "tags": [
               "プレミアアクセス"
             ]
@@ -2385,8 +2385,8 @@
             "times": [
               "20:50"
             ],
-            "priority": "medium",
-            "kind": "show-unknown",
+            "priority": "high",
+            "kind": "fireworks",
             "tags": []
           },
           {
@@ -2439,8 +2439,8 @@
             "times": [
               "20:50"
             ],
-            "priority": "medium",
-            "kind": "show-unknown",
+            "priority": "high",
+            "kind": "fireworks",
             "tags": []
           },
           {
@@ -2459,8 +2459,8 @@
               "13:15",
               "16:15"
             ],
-            "priority": "medium",
-            "kind": "show-unknown",
+            "priority": "high",
+            "kind": "show-day",
             "tags": []
           },
           {
@@ -2536,8 +2536,8 @@
             "times": [
               "16:50"
             ],
-            "priority": "medium",
-            "kind": "show-unknown",
+            "priority": "high",
+            "kind": "parade-day",
             "tags": [
               "プレミアアクセス"
             ]
@@ -2569,8 +2569,8 @@
             "times": [
               "20:50"
             ],
-            "priority": "medium",
-            "kind": "show-unknown",
+            "priority": "high",
+            "kind": "fireworks",
             "tags": []
           },
           {
@@ -2623,8 +2623,8 @@
             "times": [
               "20:50"
             ],
-            "priority": "medium",
-            "kind": "show-unknown",
+            "priority": "high",
+            "kind": "fireworks",
             "tags": []
           },
           {
@@ -2643,8 +2643,8 @@
               "13:15",
               "16:15"
             ],
-            "priority": "medium",
-            "kind": "show-unknown",
+            "priority": "high",
+            "kind": "show-day",
             "tags": []
           },
           {
@@ -2720,8 +2720,8 @@
             "times": [
               "16:50"
             ],
-            "priority": "medium",
-            "kind": "show-unknown",
+            "priority": "high",
+            "kind": "parade-day",
             "tags": [
               "プレミアアクセス"
             ]
@@ -2753,8 +2753,8 @@
             "times": [
               "20:50"
             ],
-            "priority": "medium",
-            "kind": "show-unknown",
+            "priority": "high",
+            "kind": "fireworks",
             "tags": []
           },
           {
@@ -2807,8 +2807,8 @@
             "times": [
               "20:50"
             ],
-            "priority": "medium",
-            "kind": "show-unknown",
+            "priority": "high",
+            "kind": "fireworks",
             "tags": []
           },
           {
@@ -2827,8 +2827,8 @@
               "13:15",
               "16:15"
             ],
-            "priority": "medium",
-            "kind": "show-unknown",
+            "priority": "high",
+            "kind": "show-day",
             "tags": []
           },
           {
@@ -2904,8 +2904,8 @@
             "times": [
               "16:50"
             ],
-            "priority": "medium",
-            "kind": "show-unknown",
+            "priority": "high",
+            "kind": "parade-day",
             "tags": [
               "プレミアアクセス"
             ]
@@ -2937,8 +2937,8 @@
             "times": [
               "20:50"
             ],
-            "priority": "medium",
-            "kind": "show-unknown",
+            "priority": "high",
+            "kind": "fireworks",
             "tags": []
           },
           {
@@ -2991,8 +2991,8 @@
             "times": [
               "20:50"
             ],
-            "priority": "medium",
-            "kind": "show-unknown",
+            "priority": "high",
+            "kind": "fireworks",
             "tags": []
           },
           {
@@ -3011,8 +3011,8 @@
               "13:15",
               "16:15"
             ],
-            "priority": "medium",
-            "kind": "show-unknown",
+            "priority": "high",
+            "kind": "show-day",
             "tags": []
           },
           {
@@ -3088,8 +3088,8 @@
             "times": [
               "16:50"
             ],
-            "priority": "medium",
-            "kind": "show-unknown",
+            "priority": "high",
+            "kind": "parade-day",
             "tags": [
               "プレミアアクセス"
             ]
@@ -3121,8 +3121,8 @@
             "times": [
               "20:50"
             ],
-            "priority": "medium",
-            "kind": "show-unknown",
+            "priority": "high",
+            "kind": "fireworks",
             "tags": []
           },
           {
@@ -3175,8 +3175,8 @@
             "times": [
               "20:50"
             ],
-            "priority": "medium",
-            "kind": "show-unknown",
+            "priority": "high",
+            "kind": "fireworks",
             "tags": []
           },
           {
@@ -3195,8 +3195,8 @@
               "13:15",
               "16:15"
             ],
-            "priority": "medium",
-            "kind": "show-unknown",
+            "priority": "high",
+            "kind": "show-day",
             "tags": []
           },
           {
@@ -3272,8 +3272,8 @@
             "times": [
               "16:50"
             ],
-            "priority": "medium",
-            "kind": "show-unknown",
+            "priority": "high",
+            "kind": "parade-day",
             "tags": [
               "プレミアアクセス"
             ]
@@ -3305,8 +3305,8 @@
             "times": [
               "20:50"
             ],
-            "priority": "medium",
-            "kind": "show-unknown",
+            "priority": "high",
+            "kind": "fireworks",
             "tags": []
           },
           {
@@ -3359,8 +3359,8 @@
             "times": [
               "20:50"
             ],
-            "priority": "medium",
-            "kind": "show-unknown",
+            "priority": "high",
+            "kind": "fireworks",
             "tags": []
           },
           {
@@ -3379,8 +3379,8 @@
               "13:15",
               "16:15"
             ],
-            "priority": "medium",
-            "kind": "show-unknown",
+            "priority": "high",
+            "kind": "show-day",
             "tags": []
           },
           {
@@ -3456,8 +3456,8 @@
             "times": [
               "16:35"
             ],
-            "priority": "medium",
-            "kind": "show-unknown",
+            "priority": "high",
+            "kind": "parade-day",
             "tags": [
               "プレミアアクセス"
             ]
@@ -3489,8 +3489,8 @@
             "times": [
               "20:50"
             ],
-            "priority": "medium",
-            "kind": "show-unknown",
+            "priority": "high",
+            "kind": "fireworks",
             "tags": []
           },
           {
@@ -3543,8 +3543,8 @@
             "times": [
               "20:50"
             ],
-            "priority": "medium",
-            "kind": "show-unknown",
+            "priority": "high",
+            "kind": "fireworks",
             "tags": []
           },
           {
@@ -3563,8 +3563,8 @@
               "13:15",
               "16:15"
             ],
-            "priority": "medium",
-            "kind": "show-unknown",
+            "priority": "high",
+            "kind": "show-day",
             "tags": []
           },
           {
@@ -3640,8 +3640,8 @@
             "times": [
               "16:35"
             ],
-            "priority": "medium",
-            "kind": "show-unknown",
+            "priority": "high",
+            "kind": "parade-day",
             "tags": [
               "プレミアアクセス"
             ]
@@ -3673,8 +3673,8 @@
             "times": [
               "20:50"
             ],
-            "priority": "medium",
-            "kind": "show-unknown",
+            "priority": "high",
+            "kind": "fireworks",
             "tags": []
           },
           {
@@ -3727,8 +3727,8 @@
             "times": [
               "20:50"
             ],
-            "priority": "medium",
-            "kind": "show-unknown",
+            "priority": "high",
+            "kind": "fireworks",
             "tags": []
           },
           {
@@ -3747,8 +3747,8 @@
               "13:15",
               "16:15"
             ],
-            "priority": "medium",
-            "kind": "show-unknown",
+            "priority": "high",
+            "kind": "show-day",
             "tags": []
           },
           {
@@ -3824,8 +3824,8 @@
             "times": [
               "16:35"
             ],
-            "priority": "medium",
-            "kind": "show-unknown",
+            "priority": "high",
+            "kind": "parade-day",
             "tags": [
               "プレミアアクセス"
             ]
@@ -3857,8 +3857,8 @@
             "times": [
               "20:50"
             ],
-            "priority": "medium",
-            "kind": "show-unknown",
+            "priority": "high",
+            "kind": "fireworks",
             "tags": []
           },
           {
@@ -3911,8 +3911,8 @@
             "times": [
               "20:50"
             ],
-            "priority": "medium",
-            "kind": "show-unknown",
+            "priority": "high",
+            "kind": "fireworks",
             "tags": []
           },
           {
@@ -3931,8 +3931,8 @@
               "13:15",
               "16:15"
             ],
-            "priority": "medium",
-            "kind": "show-unknown",
+            "priority": "high",
+            "kind": "show-day",
             "tags": []
           },
           {
@@ -4008,8 +4008,8 @@
             "times": [
               "16:35"
             ],
-            "priority": "medium",
-            "kind": "show-unknown",
+            "priority": "high",
+            "kind": "parade-day",
             "tags": [
               "プレミアアクセス"
             ]
@@ -4041,8 +4041,8 @@
             "times": [
               "20:50"
             ],
-            "priority": "medium",
-            "kind": "show-unknown",
+            "priority": "high",
+            "kind": "fireworks",
             "tags": []
           },
           {
@@ -4095,8 +4095,8 @@
             "times": [
               "20:50"
             ],
-            "priority": "medium",
-            "kind": "show-unknown",
+            "priority": "high",
+            "kind": "fireworks",
             "tags": []
           },
           {
@@ -4115,8 +4115,8 @@
               "13:15",
               "16:15"
             ],
-            "priority": "medium",
-            "kind": "show-unknown",
+            "priority": "high",
+            "kind": "show-day",
             "tags": []
           },
           {
@@ -4192,8 +4192,8 @@
             "times": [
               "16:35"
             ],
-            "priority": "medium",
-            "kind": "show-unknown",
+            "priority": "high",
+            "kind": "parade-day",
             "tags": [
               "プレミアアクセス"
             ]
@@ -4225,8 +4225,8 @@
             "times": [
               "20:25"
             ],
-            "priority": "medium",
-            "kind": "show-unknown",
+            "priority": "high",
+            "kind": "fireworks",
             "tags": []
           },
           {
@@ -4290,8 +4290,8 @@
               "13:15",
               "16:15"
             ],
-            "priority": "medium",
-            "kind": "show-unknown",
+            "priority": "high",
+            "kind": "show-day",
             "tags": []
           },
           {
@@ -4345,8 +4345,8 @@
             "times": [
               "16:35"
             ],
-            "priority": "medium",
-            "kind": "show-unknown",
+            "priority": "high",
+            "kind": "parade-day",
             "tags": [
               "プレミアアクセス"
             ]
@@ -4378,8 +4378,8 @@
             "times": [
               "20:50"
             ],
-            "priority": "medium",
-            "kind": "show-unknown",
+            "priority": "high",
+            "kind": "fireworks",
             "tags": []
           },
           {
@@ -4432,8 +4432,8 @@
             "times": [
               "20:50"
             ],
-            "priority": "medium",
-            "kind": "show-unknown",
+            "priority": "high",
+            "kind": "fireworks",
             "tags": []
           },
           {
@@ -4452,8 +4452,8 @@
               "13:15",
               "16:15"
             ],
-            "priority": "medium",
-            "kind": "show-unknown",
+            "priority": "high",
+            "kind": "show-day",
             "tags": []
           },
           {
@@ -4529,8 +4529,8 @@
             "times": [
               "16:35"
             ],
-            "priority": "medium",
-            "kind": "show-unknown",
+            "priority": "high",
+            "kind": "parade-day",
             "tags": [
               "プレミアアクセス"
             ]
@@ -4562,8 +4562,8 @@
             "times": [
               "20:50"
             ],
-            "priority": "medium",
-            "kind": "show-unknown",
+            "priority": "high",
+            "kind": "fireworks",
             "tags": []
           },
           {
@@ -4616,8 +4616,8 @@
             "times": [
               "20:50"
             ],
-            "priority": "medium",
-            "kind": "show-unknown",
+            "priority": "high",
+            "kind": "fireworks",
             "tags": []
           },
           {
@@ -4636,8 +4636,8 @@
               "13:15",
               "16:15"
             ],
-            "priority": "medium",
-            "kind": "show-unknown",
+            "priority": "high",
+            "kind": "show-day",
             "tags": []
           },
           {
@@ -4713,8 +4713,8 @@
             "times": [
               "16:20"
             ],
-            "priority": "medium",
-            "kind": "show-unknown",
+            "priority": "high",
+            "kind": "parade-day",
             "tags": [
               "プレミアアクセス"
             ]
@@ -4746,8 +4746,8 @@
             "times": [
               "20:50"
             ],
-            "priority": "medium",
-            "kind": "show-unknown",
+            "priority": "high",
+            "kind": "fireworks",
             "tags": []
           },
           {
@@ -4801,8 +4801,8 @@
             "times": [
               "20:50"
             ],
-            "priority": "medium",
-            "kind": "show-unknown",
+            "priority": "high",
+            "kind": "fireworks",
             "tags": []
           },
           {
@@ -4821,8 +4821,8 @@
               "13:15",
               "16:15"
             ],
-            "priority": "medium",
-            "kind": "show-unknown",
+            "priority": "high",
+            "kind": "show-day",
             "tags": []
           },
           {
@@ -4898,8 +4898,8 @@
             "times": [
               "16:20"
             ],
-            "priority": "medium",
-            "kind": "show-unknown",
+            "priority": "high",
+            "kind": "parade-day",
             "tags": [
               "プレミアアクセス"
             ]
@@ -4931,8 +4931,8 @@
             "times": [
               "20:50"
             ],
-            "priority": "medium",
-            "kind": "show-unknown",
+            "priority": "high",
+            "kind": "fireworks",
             "tags": []
           },
           {
@@ -4986,8 +4986,8 @@
             "times": [
               "20:50"
             ],
-            "priority": "medium",
-            "kind": "show-unknown",
+            "priority": "high",
+            "kind": "fireworks",
             "tags": []
           },
           {
@@ -5006,8 +5006,8 @@
               "13:15",
               "16:15"
             ],
-            "priority": "medium",
-            "kind": "show-unknown",
+            "priority": "high",
+            "kind": "show-day",
             "tags": []
           },
           {
@@ -5083,8 +5083,8 @@
             "times": [
               "16:20"
             ],
-            "priority": "medium",
-            "kind": "show-unknown",
+            "priority": "high",
+            "kind": "parade-day",
             "tags": [
               "プレミアアクセス"
             ]
@@ -5116,8 +5116,8 @@
             "times": [
               "20:50"
             ],
-            "priority": "medium",
-            "kind": "show-unknown",
+            "priority": "high",
+            "kind": "fireworks",
             "tags": []
           },
           {
@@ -5170,7 +5170,7 @@
               "18:50"
             ],
             "priority": "medium",
-            "kind": "show-unknown",
+            "kind": "show-indoor",
             "tags": [
               "エントリー受付",
               "プレミアアクセス"
@@ -5187,8 +5187,8 @@
             "times": [
               "20:50"
             ],
-            "priority": "medium",
-            "kind": "show-unknown",
+            "priority": "high",
+            "kind": "fireworks",
             "tags": []
           },
           {
@@ -5207,8 +5207,8 @@
               "13:15",
               "16:15"
             ],
-            "priority": "medium",
-            "kind": "show-unknown",
+            "priority": "high",
+            "kind": "show-day",
             "tags": []
           },
           {

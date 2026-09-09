@@ -46,6 +46,9 @@ describe('isWeatherless (§0.44.12 屋内ショー判定)', () => {
     // 公式表記の全角中黒と、既存データの半角中黒の両方で判定できること。
     expect(isWeatherless('ザ・ダイヤモンド・バラエティマスター')).toBe(true);
     expect(isWeatherless('ザ･ダイヤモンド･バラエティマスター')).toBe(true);
+    // §0.95 : トゥモローランド (ショーベース) の屋内ショー。公式のショー詳細で「特徴 : 屋内」を確認済み。
+    expect(isWeatherless('The D-Groovationz4 Live: Happy! Funky! Groovy! Tour')).toBe(true);
+    expect(weatherlessKind('The D-Groovationz4 Live: Happy! Funky! Groovy! Tour')).toBe('indoor');
   });
 
   it('屋外ショー ・ 花火は false (セレブレーションを誤検知しない)', () => {
@@ -89,5 +92,20 @@ describe('isSeasonal (§0.46.6 期間限定タグ判定)', () => {
     expect(isSeasonal('ジャンボリミッキー!レッツ･ダンス!')).toBe(false);
     expect(isSeasonal('')).toBe(false);
     expect(isSeasonal(null)).toBe(false);
+  });
+
+  // §0.95 : 季節イベント名をキーワードで拾う。名前を明示リストに足し忘れても、季節イベントの
+  //   演目が priority:high から漏れて showWindow が空になる事故を防ぐための保険。
+  it('季節イベント名を含む演目はキーワードで true (未登録の新演目も拾う)', () => {
+    expect(isSeasonal('ザ･ヴィランズ･ハロウィーン“Into the Frenzy”')).toBe(true);
+    expect(isSeasonal('ナイトハイ･ハロウィーン')).toBe(true);
+    expect(isSeasonal('ディズニー･ハロウィーン･グリーティング')).toBe(true);
+    expect(isSeasonal('トイズ･ワンダラス･クリスマス!')).toBe(true);
+    expect(isSeasonal('スターブライト･クリスマス')).toBe(true);
+    expect(isSeasonal('ディズニー･クリスマス･グリーティング')).toBe(true);
+    expect(isSeasonal('ディズニー･イースター･グリーティング')).toBe(true);
+    expect(isSeasonal('ミッキーの夏まつり')).toBe(true);
+    // 公式表記の全角中黒でも判定できること
+    expect(isSeasonal('ザ・ヴィランズ・ハロウィーン“Into the Frenzy”')).toBe(true);
   });
 });

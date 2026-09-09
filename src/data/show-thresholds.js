@@ -33,6 +33,7 @@ const INDOOR_WEATHERLESS_SHOWS = [
   /ワンダフル[・･]フレンドシップ/,
   /ドリームス[・･]テイク[・･]フライト/,
   /ダイヤモンド[・･]バラエティマスター/, // §0.84 : 屋内レストランショー。WEATHERLESS 未登録のため一般基準の風バッジが誤表示されていた不具合の修正。
+  /D-Groovationz4/i, // §0.95 : トゥモローランド (ショーベース) の屋内ショー。公式のショー詳細で「特徴 : 屋内」を確認済み。
 ];
 const OUTDOOR_WIND_ONLY_SHOWS = [
   /スパークリング[・･]ジュビリー[・･]ナイト/, // 【環境演出】: 屋外のプロジェクションマッピング。風のみ影響なし、雨・熱は屋外どおり。
@@ -60,10 +61,18 @@ const SEASONAL_SHOWS = [
   /スカイ[・･]フル[・･]オブ[・･]カラーズ/, // 期間限定花火
 ];
 
+// §0.95 : 季節イベント名を含む演目はキーワードで拾う (Yuka さん方針 2026-09-09 :
+//   「ハロウィーン ･ クリスマス ･ イースター ･ 夏まつりなど、季節イベントっぽいものは high」)。
+//   演目名にイベント名が入らないもの (Reach for the Stars ･ うさたま大脱走! 等) は上の
+//   SEASONAL_SHOWS で補う。両方合わせて「期間限定」タグと priority:high の判定に使う
+//   (priority の付与は scripts/fetch-schedule.mjs の classify)。
+const SEASONAL_KEYWORD =
+  /ハロウィーン|クリスマス|イースター|夏まつり|夏祭り|サマー|七夕|ニューイヤー|お正月|新春|ウィンター|スプリング|アニバーサリー|周年/;
+
 // その演目が季節限定 (「期間限定」タグ対象) かを返す。
 export function isSeasonal(name) {
   if (!name) return false;
-  return SEASONAL_SHOWS.some((re) => re.test(name));
+  return SEASONAL_KEYWORD.test(name) || SEASONAL_SHOWS.some((re) => re.test(name));
 }
 
 // ショー名から閾値を返す (見つからなければ DEFAULT)。
