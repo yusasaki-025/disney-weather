@@ -1,0 +1,171 @@
+{
+  "date": "2026-10-09",
+  "fetchedAt": "2026-10-09T10:41:16.499+09:00",
+  "sources": {
+    "jma": {
+      "2026-10-09": {
+        "gustMax": null,
+        "windMax": null,
+        "popMax": 0,
+        "tempMax": 26,
+        "wbgtMax": null
+      },
+      "2026-10-10": {
+        "gustMax": null,
+        "windMax": null,
+        "popMax": 0,
+        "tempMax": 25,
+        "wbgtMax": null
+      },
+      "2026-10-11": {
+        "gustMax": null,
+        "windMax": null,
+        "popMax": 20,
+        "tempMax": 23,
+        "wbgtMax": null
+      },
+      "2026-10-12": {
+        "gustMax": null,
+        "windMax": null,
+        "popMax": 30,
+        "tempMax": 22,
+        "wbgtMax": null
+      },
+      "2026-10-13": {
+        "gustMax": null,
+        "windMax": null,
+        "popMax": 30,
+        "tempMax": 24,
+        "wbgtMax": null
+      },
+      "2026-10-14": {
+        "gustMax": null,
+        "windMax": null,
+        "popMax": 40,
+        "tempMax": 25,
+        "wbgtMax": null
+      },
+      "2026-10-15": {
+        "gustMax": null,
+        "windMax": null,
+        "popMax": 40,
+        "tempMax": 22,
+        "wbgtMax": null
+      }
+    },
+    "open-meteo": {
+      "2026-10-09": {
+        "gustMax": 7.4,
+        "windMax": 3.35,
+        "popMax": 0,
+        "tempMax": 24.4,
+        "wbgtMax": 22
+      },
+      "2026-10-10": {
+        "gustMax": 8.4,
+        "windMax": 3.83,
+        "popMax": 0,
+        "tempMax": 24.4,
+        "wbgtMax": 23
+      },
+      "2026-10-11": {
+        "gustMax": 7.7,
+        "windMax": 3.2,
+        "popMax": 0,
+        "tempMax": 25,
+        "wbgtMax": 23
+      },
+      "2026-10-12": {
+        "gustMax": 10.9,
+        "windMax": 4.35,
+        "popMax": 0,
+        "tempMax": 23.9,
+        "wbgtMax": 24.000040285499114
+      },
+      "2026-10-13": {
+        "gustMax": 8.2,
+        "windMax": 3.08,
+        "popMax": 7,
+        "tempMax": 24.5,
+        "wbgtMax": 25.180593897246617
+      },
+      "2026-10-14": {
+        "gustMax": 16.7,
+        "windMax": 6.65,
+        "popMax": 27,
+        "tempMax": 25.5,
+        "wbgtMax": 26.978065612735385
+      },
+      "2026-10-15": {
+        "gustMax": 9,
+        "windMax": 3.28,
+        "popMax": 29,
+        "tempMax": 23.2,
+        "wbgtMax": 22.77761667757473
+      },
+      "2026-10-16": {
+        "gustMax": 8.1,
+        "windMax": 3.29,
+        "popMax": 12,
+        "tempMax": 20.7,
+        "wbgtMax": 22.375904000737993
+      },
+      "2026-10-17": {
+        "gustMax": 8.4,
+        "windMax": 3.07,
+        "popMax": 20,
+        "tempMax": 24.2,
+        "wbgtMax": 22.66485624474014
+      },
+      "2026-10-18": {
+        "gustMax": 7,
+        "windMax": 2.64,
+        "popMax": 20,
+        "tempMax": 21.8,
+        "wbgtMax": 22.954429985022983
+      },
+      "2026-10-19": {
+        "gustMax": 20.1,
+        "windMax": 8.88,
+        "popMax": 27,
+        "tempMax": 23.6,
+        "wbgtMax": 27.363129088830604
+      },
+      "2026-10-20": {
+        "gustMax": 20.1,
+        "windMax": 5.16,
+        "popMax": 32,
+        "tempMax": 23.2,
+        "wbgtMax": 24.68050872746139
+      },
+      "2026-10-21": {
+        "gustMax": 8.5,
+        "windMax": 3.5,
+        "popMax": 33,
+        "tempMax": 19,
+        "wbgtMax": 19.537014708762314
+      },
+      "2026-10-22": {
+        "gustMax": 7.8,
+        "windMax": 2.65,
+        "popMax": 36,
+        "tempMax": 19.5,
+        "wbgtMax": 21.661240831260795
+      },
+      "2026-10-23": {
+        "gustMax": 9.7,
+        "windMax": 5.44,
+        "popMax": 37,
+        "tempMax": 22.3,
+        "wbgtMax": 24.17608941838581
+      },
+      "2026-10-24": {
+        "gustMax": 9.4,
+        "windMax": 5.12,
+        "popMax": 21,
+        "tempMax": 24.7,
+        "wbgtMax": 25.02911874263619
+      }
+    }
+  }
+}
