@@ -1,0 +1,5935 @@
+{
+  "month": "2026-11",
+  "fetchedAt": "2026-10-28T00:50:00+09:00",
+  "source": "Cowork Chrome MCP 経由で公式サイト (tokyodisneyresort.jp) の tdl/tds daily calendar を取得",
+  "note": "11/1〜11/30 (30日分) を新規取得。スカイ･フル･オブ･カラーズが両パークで再開 (11/1〜11/10)。11/11 からディズニー･クリスマス : TDL = トイズ･ワンダラス･クリスマス！･スターブライト･クリスマス、TDS = ディズニー･クリスマス･グリーティング･スターブライト･クリスマス (いずれも §0.95 で priority=high)。ザ･ダイヤモンド･バラエティマスター (予約制ショーレストラン) は 11/21 から掲載。11/27 は TDS が 18:30 閉園で、スターブライト･クリスマス･ビリーヴ！･【環境演出】が無い (この3演目のみ29日分)。同日の TDL はスターブライト･クリスマスが 20:25。同時に再取得した 10/28〜10/31 は既存の 2026-10.json と完全一致。",
+  "days": {
+    "2026-11-01": {
+      "TDL": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "ディズニー･ハーモニー･イン･カラー",
+            "times": [
+              "14:15"
+            ],
+            "priority": "medium",
+            "kind": "parade-day",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "東京ディズニーランド･エレクトリカルパレード･ドリームライツ",
+            "times": [
+              "18:55"
+            ],
+            "priority": "low",
+            "kind": "parade-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "スカイ･フル･オブ･カラーズ",
+            "times": [
+              "20:30"
+            ],
+            "priority": "high",
+            "kind": "fireworks",
+            "tags": []
+          },
+          {
+            "name": "ジャンボリミッキー！レッツ･ダンス！",
+            "times": [
+              "11:30",
+              "12:45",
+              "14:00",
+              "15:50",
+              "17:05"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ミッキーのレインボー･ルアウ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ミッキーのマジカルミュージックワールド",
+            "times": [
+              "10:50",
+              "12:15",
+              "13:40",
+              "15:45",
+              "17:10"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "The D-Groovationz4 Live: Happy! Funky! Groovy! Tour",
+            "times": [
+              "12:10",
+              "13:35",
+              "15:00",
+              "17:05",
+              "18:30"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          }
+        ]
+      },
+      "TDS": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "スカイ･フル･オブ･カラーズ",
+            "times": [
+              "20:30"
+            ],
+            "priority": "high",
+            "kind": "fireworks",
+            "tags": []
+          },
+          {
+            "name": "スパークリング･ジュビリー･セレブレーション",
+            "times": [
+              "11:30",
+              "14:00",
+              "16:00"
+            ],
+            "priority": "high",
+            "kind": "show-day",
+            "tags": []
+          },
+          {
+            "name": "【環境演出】スパークリング･ジュビリー･ナイト",
+            "times": [
+              "20:15",
+              "20:40",
+              "20:55"
+            ],
+            "priority": "low",
+            "kind": "environment",
+            "tags": []
+          },
+          {
+            "name": "ビリーヴ！～シー･オブ･ドリームス～",
+            "times": [
+              "19:15"
+            ],
+            "priority": "low",
+            "kind": "show-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ダッフィー＆フレンズのワンダフル･フレンドシップ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ダンス･ザ･グローブ！",
+            "times": [
+              "12:50",
+              "14:35",
+              "16:55",
+              "18:40"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ドリームス･テイク･フライト",
+            "times": [
+              "11:00",
+              "12:25",
+              "13:50",
+              "15:55",
+              "17:20"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          }
+        ]
+      }
+    },
+    "2026-11-02": {
+      "TDL": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "ディズニー･ハーモニー･イン･カラー",
+            "times": [
+              "14:15"
+            ],
+            "priority": "medium",
+            "kind": "parade-day",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "東京ディズニーランド･エレクトリカルパレード･ドリームライツ",
+            "times": [
+              "18:55"
+            ],
+            "priority": "low",
+            "kind": "parade-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "スカイ･フル･オブ･カラーズ",
+            "times": [
+              "20:30"
+            ],
+            "priority": "high",
+            "kind": "fireworks",
+            "tags": []
+          },
+          {
+            "name": "ジャンボリミッキー！レッツ･ダンス！",
+            "times": [
+              "11:30",
+              "12:45",
+              "14:00",
+              "15:50",
+              "17:05"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ミッキーのレインボー･ルアウ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ミッキーのマジカルミュージックワールド",
+            "times": [
+              "10:50",
+              "12:15",
+              "13:40",
+              "15:45",
+              "17:10"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "The D-Groovationz4 Live: Happy! Funky! Groovy! Tour",
+            "times": [
+              "12:10",
+              "13:35",
+              "15:00",
+              "17:05",
+              "18:30"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          }
+        ]
+      },
+      "TDS": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "スカイ･フル･オブ･カラーズ",
+            "times": [
+              "20:30"
+            ],
+            "priority": "high",
+            "kind": "fireworks",
+            "tags": []
+          },
+          {
+            "name": "スパークリング･ジュビリー･セレブレーション",
+            "times": [
+              "11:30",
+              "14:00",
+              "16:00"
+            ],
+            "priority": "high",
+            "kind": "show-day",
+            "tags": []
+          },
+          {
+            "name": "【環境演出】スパークリング･ジュビリー･ナイト",
+            "times": [
+              "20:15",
+              "20:40",
+              "20:55"
+            ],
+            "priority": "low",
+            "kind": "environment",
+            "tags": []
+          },
+          {
+            "name": "ビリーヴ！～シー･オブ･ドリームス～",
+            "times": [
+              "19:15"
+            ],
+            "priority": "low",
+            "kind": "show-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ダッフィー＆フレンズのワンダフル･フレンドシップ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ダンス･ザ･グローブ！",
+            "times": [
+              "12:50",
+              "14:35",
+              "16:55",
+              "18:40"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ドリームス･テイク･フライト",
+            "times": [
+              "11:00",
+              "12:25",
+              "13:50",
+              "15:55",
+              "17:20"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          }
+        ]
+      }
+    },
+    "2026-11-03": {
+      "TDL": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "ディズニー･ハーモニー･イン･カラー",
+            "times": [
+              "14:15"
+            ],
+            "priority": "medium",
+            "kind": "parade-day",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "東京ディズニーランド･エレクトリカルパレード･ドリームライツ",
+            "times": [
+              "18:55"
+            ],
+            "priority": "low",
+            "kind": "parade-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "スカイ･フル･オブ･カラーズ",
+            "times": [
+              "20:30"
+            ],
+            "priority": "high",
+            "kind": "fireworks",
+            "tags": []
+          },
+          {
+            "name": "ジャンボリミッキー！レッツ･ダンス！",
+            "times": [
+              "11:30",
+              "12:45",
+              "14:00",
+              "15:50",
+              "17:05"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ミッキーのレインボー･ルアウ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ミッキーのマジカルミュージックワールド",
+            "times": [
+              "10:50",
+              "12:15",
+              "13:40",
+              "15:45",
+              "17:10"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "The D-Groovationz4 Live: Happy! Funky! Groovy! Tour",
+            "times": [
+              "12:10",
+              "13:35",
+              "15:00",
+              "17:05",
+              "18:30"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          }
+        ]
+      },
+      "TDS": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "スカイ･フル･オブ･カラーズ",
+            "times": [
+              "20:30"
+            ],
+            "priority": "high",
+            "kind": "fireworks",
+            "tags": []
+          },
+          {
+            "name": "スパークリング･ジュビリー･セレブレーション",
+            "times": [
+              "11:30",
+              "14:00",
+              "16:00"
+            ],
+            "priority": "high",
+            "kind": "show-day",
+            "tags": []
+          },
+          {
+            "name": "【環境演出】スパークリング･ジュビリー･ナイト",
+            "times": [
+              "20:15",
+              "20:40",
+              "20:55"
+            ],
+            "priority": "low",
+            "kind": "environment",
+            "tags": []
+          },
+          {
+            "name": "ビリーヴ！～シー･オブ･ドリームス～",
+            "times": [
+              "19:15"
+            ],
+            "priority": "low",
+            "kind": "show-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ダッフィー＆フレンズのワンダフル･フレンドシップ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ダンス･ザ･グローブ！",
+            "times": [
+              "12:50",
+              "14:35",
+              "16:55",
+              "18:40"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ドリームス･テイク･フライト",
+            "times": [
+              "11:00",
+              "12:25",
+              "13:50",
+              "15:55",
+              "17:20"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          }
+        ]
+      }
+    },
+    "2026-11-04": {
+      "TDL": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "ディズニー･ハーモニー･イン･カラー",
+            "times": [
+              "14:15"
+            ],
+            "priority": "medium",
+            "kind": "parade-day",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "東京ディズニーランド･エレクトリカルパレード･ドリームライツ",
+            "times": [
+              "18:55"
+            ],
+            "priority": "low",
+            "kind": "parade-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "スカイ･フル･オブ･カラーズ",
+            "times": [
+              "20:30"
+            ],
+            "priority": "high",
+            "kind": "fireworks",
+            "tags": []
+          },
+          {
+            "name": "ジャンボリミッキー！レッツ･ダンス！",
+            "times": [
+              "11:30",
+              "12:45",
+              "14:00",
+              "15:50",
+              "17:05"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ミッキーのレインボー･ルアウ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ミッキーのマジカルミュージックワールド",
+            "times": [
+              "10:50",
+              "12:15",
+              "13:40",
+              "15:45",
+              "17:10"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "The D-Groovationz4 Live: Happy! Funky! Groovy! Tour",
+            "times": [
+              "12:10",
+              "13:35",
+              "15:00",
+              "17:05",
+              "18:30"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          }
+        ]
+      },
+      "TDS": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "スカイ･フル･オブ･カラーズ",
+            "times": [
+              "20:30"
+            ],
+            "priority": "high",
+            "kind": "fireworks",
+            "tags": []
+          },
+          {
+            "name": "スパークリング･ジュビリー･セレブレーション",
+            "times": [
+              "11:30",
+              "14:00",
+              "16:00"
+            ],
+            "priority": "high",
+            "kind": "show-day",
+            "tags": []
+          },
+          {
+            "name": "【環境演出】スパークリング･ジュビリー･ナイト",
+            "times": [
+              "20:15",
+              "20:40",
+              "20:55"
+            ],
+            "priority": "low",
+            "kind": "environment",
+            "tags": []
+          },
+          {
+            "name": "ビリーヴ！～シー･オブ･ドリームス～",
+            "times": [
+              "19:15"
+            ],
+            "priority": "low",
+            "kind": "show-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ダッフィー＆フレンズのワンダフル･フレンドシップ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ダンス･ザ･グローブ！",
+            "times": [
+              "12:50",
+              "14:35",
+              "16:55",
+              "18:40"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ドリームス･テイク･フライト",
+            "times": [
+              "11:00",
+              "12:25",
+              "13:50",
+              "15:55",
+              "17:20"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          }
+        ]
+      }
+    },
+    "2026-11-05": {
+      "TDL": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "ディズニー･ハーモニー･イン･カラー",
+            "times": [
+              "14:15"
+            ],
+            "priority": "medium",
+            "kind": "parade-day",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "東京ディズニーランド･エレクトリカルパレード･ドリームライツ",
+            "times": [
+              "18:55"
+            ],
+            "priority": "low",
+            "kind": "parade-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "スカイ･フル･オブ･カラーズ",
+            "times": [
+              "20:30"
+            ],
+            "priority": "high",
+            "kind": "fireworks",
+            "tags": []
+          },
+          {
+            "name": "ジャンボリミッキー！レッツ･ダンス！",
+            "times": [
+              "11:30",
+              "12:45",
+              "14:00",
+              "15:50",
+              "17:05"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ミッキーのレインボー･ルアウ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ミッキーのマジカルミュージックワールド",
+            "times": [
+              "10:50",
+              "12:15",
+              "13:40",
+              "15:45",
+              "17:10"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "The D-Groovationz4 Live: Happy! Funky! Groovy! Tour",
+            "times": [
+              "12:10",
+              "13:35",
+              "15:00",
+              "17:05",
+              "18:30"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          }
+        ]
+      },
+      "TDS": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "スカイ･フル･オブ･カラーズ",
+            "times": [
+              "20:30"
+            ],
+            "priority": "high",
+            "kind": "fireworks",
+            "tags": []
+          },
+          {
+            "name": "スパークリング･ジュビリー･セレブレーション",
+            "times": [
+              "11:30",
+              "14:00",
+              "16:00"
+            ],
+            "priority": "high",
+            "kind": "show-day",
+            "tags": []
+          },
+          {
+            "name": "【環境演出】スパークリング･ジュビリー･ナイト",
+            "times": [
+              "20:15",
+              "20:40",
+              "20:55"
+            ],
+            "priority": "low",
+            "kind": "environment",
+            "tags": []
+          },
+          {
+            "name": "ビリーヴ！～シー･オブ･ドリームス～",
+            "times": [
+              "19:15"
+            ],
+            "priority": "low",
+            "kind": "show-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ダッフィー＆フレンズのワンダフル･フレンドシップ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ダンス･ザ･グローブ！",
+            "times": [
+              "12:50",
+              "14:35",
+              "16:55",
+              "18:40"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ドリームス･テイク･フライト",
+            "times": [
+              "11:00",
+              "12:25",
+              "13:50",
+              "15:55",
+              "17:20"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          }
+        ]
+      }
+    },
+    "2026-11-06": {
+      "TDL": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "ディズニー･ハーモニー･イン･カラー",
+            "times": [
+              "14:15"
+            ],
+            "priority": "medium",
+            "kind": "parade-day",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "東京ディズニーランド･エレクトリカルパレード･ドリームライツ",
+            "times": [
+              "18:55"
+            ],
+            "priority": "low",
+            "kind": "parade-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "スカイ･フル･オブ･カラーズ",
+            "times": [
+              "20:30"
+            ],
+            "priority": "high",
+            "kind": "fireworks",
+            "tags": []
+          },
+          {
+            "name": "ジャンボリミッキー！レッツ･ダンス！",
+            "times": [
+              "11:30",
+              "12:45",
+              "14:00",
+              "15:50",
+              "17:05"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ミッキーのレインボー･ルアウ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ミッキーのマジカルミュージックワールド",
+            "times": [
+              "10:50",
+              "12:15",
+              "13:40",
+              "15:45",
+              "17:10"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "The D-Groovationz4 Live: Happy! Funky! Groovy! Tour",
+            "times": [
+              "12:10",
+              "13:35",
+              "15:00",
+              "17:05",
+              "18:30"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          }
+        ]
+      },
+      "TDS": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "スカイ･フル･オブ･カラーズ",
+            "times": [
+              "20:30"
+            ],
+            "priority": "high",
+            "kind": "fireworks",
+            "tags": []
+          },
+          {
+            "name": "スパークリング･ジュビリー･セレブレーション",
+            "times": [
+              "11:30",
+              "14:00",
+              "16:00"
+            ],
+            "priority": "high",
+            "kind": "show-day",
+            "tags": []
+          },
+          {
+            "name": "【環境演出】スパークリング･ジュビリー･ナイト",
+            "times": [
+              "20:15",
+              "20:40",
+              "20:55"
+            ],
+            "priority": "low",
+            "kind": "environment",
+            "tags": []
+          },
+          {
+            "name": "ビリーヴ！～シー･オブ･ドリームス～",
+            "times": [
+              "19:15"
+            ],
+            "priority": "low",
+            "kind": "show-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ダッフィー＆フレンズのワンダフル･フレンドシップ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ダンス･ザ･グローブ！",
+            "times": [
+              "12:50",
+              "14:35",
+              "16:55",
+              "18:40"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ドリームス･テイク･フライト",
+            "times": [
+              "11:00",
+              "12:25",
+              "13:50",
+              "15:55",
+              "17:20"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          }
+        ]
+      }
+    },
+    "2026-11-07": {
+      "TDL": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "ディズニー･ハーモニー･イン･カラー",
+            "times": [
+              "14:15"
+            ],
+            "priority": "medium",
+            "kind": "parade-day",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "東京ディズニーランド･エレクトリカルパレード･ドリームライツ",
+            "times": [
+              "18:55"
+            ],
+            "priority": "low",
+            "kind": "parade-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "スカイ･フル･オブ･カラーズ",
+            "times": [
+              "20:30"
+            ],
+            "priority": "high",
+            "kind": "fireworks",
+            "tags": []
+          },
+          {
+            "name": "ジャンボリミッキー！レッツ･ダンス！",
+            "times": [
+              "11:30",
+              "12:45",
+              "14:00",
+              "15:50",
+              "17:05"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ミッキーのレインボー･ルアウ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ミッキーのマジカルミュージックワールド",
+            "times": [
+              "10:50",
+              "12:15",
+              "13:40",
+              "15:45",
+              "17:10"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "The D-Groovationz4 Live: Happy! Funky! Groovy! Tour",
+            "times": [
+              "12:10",
+              "13:35",
+              "15:00",
+              "17:05",
+              "18:30"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          }
+        ]
+      },
+      "TDS": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "スカイ･フル･オブ･カラーズ",
+            "times": [
+              "20:30"
+            ],
+            "priority": "high",
+            "kind": "fireworks",
+            "tags": []
+          },
+          {
+            "name": "スパークリング･ジュビリー･セレブレーション",
+            "times": [
+              "11:30",
+              "14:00",
+              "16:00"
+            ],
+            "priority": "high",
+            "kind": "show-day",
+            "tags": []
+          },
+          {
+            "name": "【環境演出】スパークリング･ジュビリー･ナイト",
+            "times": [
+              "20:15",
+              "20:40",
+              "20:55"
+            ],
+            "priority": "low",
+            "kind": "environment",
+            "tags": []
+          },
+          {
+            "name": "ビリーヴ！～シー･オブ･ドリームス～",
+            "times": [
+              "19:15"
+            ],
+            "priority": "low",
+            "kind": "show-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ダッフィー＆フレンズのワンダフル･フレンドシップ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ダンス･ザ･グローブ！",
+            "times": [
+              "12:50",
+              "14:35",
+              "16:55",
+              "18:40"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ドリームス･テイク･フライト",
+            "times": [
+              "11:00",
+              "12:25",
+              "13:50",
+              "15:55",
+              "17:20"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          }
+        ]
+      }
+    },
+    "2026-11-08": {
+      "TDL": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "ディズニー･ハーモニー･イン･カラー",
+            "times": [
+              "14:15"
+            ],
+            "priority": "medium",
+            "kind": "parade-day",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "東京ディズニーランド･エレクトリカルパレード･ドリームライツ",
+            "times": [
+              "18:55"
+            ],
+            "priority": "low",
+            "kind": "parade-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "スカイ･フル･オブ･カラーズ",
+            "times": [
+              "20:30"
+            ],
+            "priority": "high",
+            "kind": "fireworks",
+            "tags": []
+          },
+          {
+            "name": "ジャンボリミッキー！レッツ･ダンス！",
+            "times": [
+              "12:30",
+              "13:45",
+              "15:00",
+              "16:50",
+              "18:05"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ミッキーのレインボー･ルアウ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ミッキーのマジカルミュージックワールド",
+            "times": [
+              "10:50",
+              "12:15",
+              "13:40",
+              "15:45",
+              "17:10"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "The D-Groovationz4 Live: Happy! Funky! Groovy! Tour",
+            "times": [
+              "12:10",
+              "13:35",
+              "15:00",
+              "17:05",
+              "18:30"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          }
+        ]
+      },
+      "TDS": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "スカイ･フル･オブ･カラーズ",
+            "times": [
+              "20:30"
+            ],
+            "priority": "high",
+            "kind": "fireworks",
+            "tags": []
+          },
+          {
+            "name": "スパークリング･ジュビリー･セレブレーション",
+            "times": [
+              "11:30",
+              "14:00",
+              "16:00"
+            ],
+            "priority": "high",
+            "kind": "show-day",
+            "tags": []
+          },
+          {
+            "name": "【環境演出】スパークリング･ジュビリー･ナイト",
+            "times": [
+              "20:15",
+              "20:40",
+              "20:55"
+            ],
+            "priority": "low",
+            "kind": "environment",
+            "tags": []
+          },
+          {
+            "name": "ビリーヴ！～シー･オブ･ドリームス～",
+            "times": [
+              "19:15"
+            ],
+            "priority": "low",
+            "kind": "show-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ダッフィー＆フレンズのワンダフル･フレンドシップ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ダンス･ザ･グローブ！",
+            "times": [
+              "12:50",
+              "14:35",
+              "16:55",
+              "18:40"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ドリームス･テイク･フライト",
+            "times": [
+              "11:00",
+              "12:25",
+              "13:50",
+              "15:55",
+              "17:20"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          }
+        ]
+      }
+    },
+    "2026-11-09": {
+      "TDL": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "ディズニー･ハーモニー･イン･カラー",
+            "times": [
+              "14:15"
+            ],
+            "priority": "medium",
+            "kind": "parade-day",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "東京ディズニーランド･エレクトリカルパレード･ドリームライツ",
+            "times": [
+              "18:55"
+            ],
+            "priority": "low",
+            "kind": "parade-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "スカイ･フル･オブ･カラーズ",
+            "times": [
+              "20:30"
+            ],
+            "priority": "high",
+            "kind": "fireworks",
+            "tags": []
+          },
+          {
+            "name": "ジャンボリミッキー！レッツ･ダンス！",
+            "times": [
+              "11:30",
+              "12:45",
+              "14:00",
+              "15:50",
+              "17:05"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ミッキーのレインボー･ルアウ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ミッキーのマジカルミュージックワールド",
+            "times": [
+              "10:50",
+              "12:15",
+              "13:40",
+              "15:45",
+              "17:10"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "The D-Groovationz4 Live: Happy! Funky! Groovy! Tour",
+            "times": [
+              "12:10",
+              "13:35",
+              "15:00",
+              "17:05",
+              "18:30"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          }
+        ]
+      },
+      "TDS": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "スカイ･フル･オブ･カラーズ",
+            "times": [
+              "20:30"
+            ],
+            "priority": "high",
+            "kind": "fireworks",
+            "tags": []
+          },
+          {
+            "name": "スパークリング･ジュビリー･セレブレーション",
+            "times": [
+              "11:30",
+              "14:00",
+              "16:00"
+            ],
+            "priority": "high",
+            "kind": "show-day",
+            "tags": []
+          },
+          {
+            "name": "【環境演出】スパークリング･ジュビリー･ナイト",
+            "times": [
+              "20:15",
+              "20:40",
+              "20:55"
+            ],
+            "priority": "low",
+            "kind": "environment",
+            "tags": []
+          },
+          {
+            "name": "ビリーヴ！～シー･オブ･ドリームス～",
+            "times": [
+              "19:30"
+            ],
+            "priority": "low",
+            "kind": "show-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ダッフィー＆フレンズのワンダフル･フレンドシップ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ダンス･ザ･グローブ！",
+            "times": [
+              "12:50",
+              "14:35",
+              "16:55",
+              "18:40"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ドリームス･テイク･フライト",
+            "times": [
+              "11:00",
+              "12:25",
+              "13:50",
+              "15:55",
+              "17:20"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          }
+        ]
+      }
+    },
+    "2026-11-10": {
+      "TDL": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "ディズニー･ハーモニー･イン･カラー",
+            "times": [
+              "15:25"
+            ],
+            "priority": "medium",
+            "kind": "parade-day",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "東京ディズニーランド･エレクトリカルパレード･ドリームライツ",
+            "times": [
+              "19:00"
+            ],
+            "priority": "low",
+            "kind": "parade-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "スカイ･フル･オブ･カラーズ",
+            "times": [
+              "20:30"
+            ],
+            "priority": "high",
+            "kind": "fireworks",
+            "tags": []
+          },
+          {
+            "name": "ジャンボリミッキー！レッツ･ダンス！",
+            "times": [
+              "12:30",
+              "13:45",
+              "15:00",
+              "16:50",
+              "18:05"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ミッキーのレインボー･ルアウ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ミッキーのマジカルミュージックワールド",
+            "times": [
+              "10:50",
+              "12:15",
+              "13:40",
+              "15:45",
+              "17:10"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "The D-Groovationz4 Live: Happy! Funky! Groovy! Tour",
+            "times": [
+              "12:10",
+              "13:35",
+              "15:00",
+              "17:05",
+              "18:30"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          }
+        ]
+      },
+      "TDS": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "スカイ･フル･オブ･カラーズ",
+            "times": [
+              "20:30"
+            ],
+            "priority": "high",
+            "kind": "fireworks",
+            "tags": []
+          },
+          {
+            "name": "スパークリング･ジュビリー･セレブレーション",
+            "times": [
+              "11:15",
+              "14:45"
+            ],
+            "priority": "high",
+            "kind": "show-day",
+            "tags": []
+          },
+          {
+            "name": "【環境演出】スパークリング･ジュビリー･ナイト",
+            "times": [
+              "20:15",
+              "20:55"
+            ],
+            "priority": "low",
+            "kind": "environment",
+            "tags": []
+          },
+          {
+            "name": "ビリーヴ！～シー･オブ･ドリームス～",
+            "times": [
+              "19:30"
+            ],
+            "priority": "low",
+            "kind": "show-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ダッフィー＆フレンズのワンダフル･フレンドシップ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ダンス･ザ･グローブ！",
+            "times": [
+              "12:20",
+              "14:05",
+              "16:25",
+              "18:10"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ドリームス･テイク･フライト",
+            "times": [
+              "11:00",
+              "12:25",
+              "13:50",
+              "15:55",
+              "17:20"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          }
+        ]
+      }
+    },
+    "2026-11-11": {
+      "TDL": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "トイズ･ワンダラス･クリスマス！",
+            "times": [
+              "12:45"
+            ],
+            "priority": "high",
+            "kind": "parade-day",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ディズニー･ハーモニー･イン･カラー",
+            "times": [
+              "15:25"
+            ],
+            "priority": "medium",
+            "kind": "parade-day",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "東京ディズニーランド･エレクトリカルパレード･ドリームライツ",
+            "times": [
+              "19:00"
+            ],
+            "priority": "low",
+            "kind": "parade-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "スターブライト･クリスマス",
+            "times": [
+              "20:30"
+            ],
+            "priority": "high",
+            "kind": "fireworks",
+            "tags": []
+          },
+          {
+            "name": "ジャンボリミッキー！レッツ･ダンス！",
+            "times": [
+              "12:30",
+              "13:45",
+              "15:00",
+              "16:50",
+              "18:05"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ミッキーのレインボー･ルアウ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ミッキーのマジカルミュージックワールド",
+            "times": [
+              "10:50",
+              "12:15",
+              "13:40",
+              "15:45",
+              "17:10"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "The D-Groovationz4 Live: Happy! Funky! Groovy! Tour",
+            "times": [
+              "12:10",
+              "13:35",
+              "15:00",
+              "17:05",
+              "18:30"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          }
+        ]
+      },
+      "TDS": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "スターブライト･クリスマス",
+            "times": [
+              "20:30"
+            ],
+            "priority": "high",
+            "kind": "fireworks",
+            "tags": []
+          },
+          {
+            "name": "スパークリング･ジュビリー･セレブレーション",
+            "times": [
+              "10:30",
+              "14:00"
+            ],
+            "priority": "high",
+            "kind": "show-day",
+            "tags": []
+          },
+          {
+            "name": "ディズニー･クリスマス･グリーティング",
+            "times": [
+              "11:35",
+              "15:15"
+            ],
+            "priority": "high",
+            "kind": "show-day",
+            "tags": []
+          },
+          {
+            "name": "【環境演出】スパークリング･ジュビリー･ナイト",
+            "times": [
+              "20:15",
+              "20:55"
+            ],
+            "priority": "low",
+            "kind": "environment",
+            "tags": []
+          },
+          {
+            "name": "ビリーヴ！～シー･オブ･ドリームス～",
+            "times": [
+              "19:30"
+            ],
+            "priority": "low",
+            "kind": "show-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ダッフィー＆フレンズのワンダフル･フレンドシップ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ダンス･ザ･グローブ！",
+            "times": [
+              "12:50",
+              "14:35",
+              "16:55",
+              "18:40"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ドリームス･テイク･フライト",
+            "times": [
+              "11:00",
+              "12:25",
+              "13:50",
+              "15:55",
+              "17:20"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          }
+        ]
+      }
+    },
+    "2026-11-12": {
+      "TDL": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "トイズ･ワンダラス･クリスマス！",
+            "times": [
+              "12:45"
+            ],
+            "priority": "high",
+            "kind": "parade-day",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ディズニー･ハーモニー･イン･カラー",
+            "times": [
+              "15:25"
+            ],
+            "priority": "medium",
+            "kind": "parade-day",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "東京ディズニーランド･エレクトリカルパレード･ドリームライツ",
+            "times": [
+              "19:00"
+            ],
+            "priority": "low",
+            "kind": "parade-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "スターブライト･クリスマス",
+            "times": [
+              "20:30"
+            ],
+            "priority": "high",
+            "kind": "fireworks",
+            "tags": []
+          },
+          {
+            "name": "ジャンボリミッキー！レッツ･ダンス！",
+            "times": [
+              "12:30",
+              "13:45",
+              "15:00",
+              "16:50",
+              "18:05"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ミッキーのレインボー･ルアウ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ミッキーのマジカルミュージックワールド",
+            "times": [
+              "10:50",
+              "12:15",
+              "13:40",
+              "15:45",
+              "17:10"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "The D-Groovationz4 Live: Happy! Funky! Groovy! Tour",
+            "times": [
+              "12:10",
+              "13:35",
+              "15:00",
+              "17:05",
+              "18:30"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          }
+        ]
+      },
+      "TDS": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "スターブライト･クリスマス",
+            "times": [
+              "20:30"
+            ],
+            "priority": "high",
+            "kind": "fireworks",
+            "tags": []
+          },
+          {
+            "name": "スパークリング･ジュビリー･セレブレーション",
+            "times": [
+              "10:30",
+              "14:00"
+            ],
+            "priority": "high",
+            "kind": "show-day",
+            "tags": []
+          },
+          {
+            "name": "ディズニー･クリスマス･グリーティング",
+            "times": [
+              "11:35",
+              "15:15"
+            ],
+            "priority": "high",
+            "kind": "show-day",
+            "tags": []
+          },
+          {
+            "name": "【環境演出】スパークリング･ジュビリー･ナイト",
+            "times": [
+              "20:15",
+              "20:55"
+            ],
+            "priority": "low",
+            "kind": "environment",
+            "tags": []
+          },
+          {
+            "name": "ビリーヴ！～シー･オブ･ドリームス～",
+            "times": [
+              "19:30"
+            ],
+            "priority": "low",
+            "kind": "show-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ダッフィー＆フレンズのワンダフル･フレンドシップ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ダンス･ザ･グローブ！",
+            "times": [
+              "12:50",
+              "14:35",
+              "16:55",
+              "18:40"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ドリームス･テイク･フライト",
+            "times": [
+              "11:00",
+              "12:25",
+              "13:50",
+              "15:55",
+              "17:20"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          }
+        ]
+      }
+    },
+    "2026-11-13": {
+      "TDL": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "トイズ･ワンダラス･クリスマス！",
+            "times": [
+              "12:45"
+            ],
+            "priority": "high",
+            "kind": "parade-day",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ディズニー･ハーモニー･イン･カラー",
+            "times": [
+              "15:25"
+            ],
+            "priority": "medium",
+            "kind": "parade-day",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "東京ディズニーランド･エレクトリカルパレード･ドリームライツ",
+            "times": [
+              "19:00"
+            ],
+            "priority": "low",
+            "kind": "parade-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "スターブライト･クリスマス",
+            "times": [
+              "20:30"
+            ],
+            "priority": "high",
+            "kind": "fireworks",
+            "tags": []
+          },
+          {
+            "name": "ジャンボリミッキー！レッツ･ダンス！",
+            "times": [
+              "12:30",
+              "13:45",
+              "15:00",
+              "16:50",
+              "18:05"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ミッキーのレインボー･ルアウ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ミッキーのマジカルミュージックワールド",
+            "times": [
+              "10:50",
+              "12:15",
+              "13:40",
+              "15:45",
+              "17:10"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "The D-Groovationz4 Live: Happy! Funky! Groovy! Tour",
+            "times": [
+              "12:10",
+              "13:35",
+              "15:00",
+              "17:05",
+              "18:30"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          }
+        ]
+      },
+      "TDS": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "スターブライト･クリスマス",
+            "times": [
+              "20:30"
+            ],
+            "priority": "high",
+            "kind": "fireworks",
+            "tags": []
+          },
+          {
+            "name": "スパークリング･ジュビリー･セレブレーション",
+            "times": [
+              "10:30",
+              "14:00"
+            ],
+            "priority": "high",
+            "kind": "show-day",
+            "tags": []
+          },
+          {
+            "name": "ディズニー･クリスマス･グリーティング",
+            "times": [
+              "11:35",
+              "15:15"
+            ],
+            "priority": "high",
+            "kind": "show-day",
+            "tags": []
+          },
+          {
+            "name": "【環境演出】スパークリング･ジュビリー･ナイト",
+            "times": [
+              "20:15",
+              "20:55"
+            ],
+            "priority": "low",
+            "kind": "environment",
+            "tags": []
+          },
+          {
+            "name": "ビリーヴ！～シー･オブ･ドリームス～",
+            "times": [
+              "19:30"
+            ],
+            "priority": "low",
+            "kind": "show-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ダッフィー＆フレンズのワンダフル･フレンドシップ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ダンス･ザ･グローブ！",
+            "times": [
+              "12:50",
+              "14:35",
+              "16:55",
+              "18:40"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ドリームス･テイク･フライト",
+            "times": [
+              "11:00",
+              "12:25",
+              "13:50",
+              "15:55",
+              "17:20"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          }
+        ]
+      }
+    },
+    "2026-11-14": {
+      "TDL": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "トイズ･ワンダラス･クリスマス！",
+            "times": [
+              "12:45"
+            ],
+            "priority": "high",
+            "kind": "parade-day",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ディズニー･ハーモニー･イン･カラー",
+            "times": [
+              "15:25"
+            ],
+            "priority": "medium",
+            "kind": "parade-day",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "東京ディズニーランド･エレクトリカルパレード･ドリームライツ",
+            "times": [
+              "19:00"
+            ],
+            "priority": "low",
+            "kind": "parade-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "スターブライト･クリスマス",
+            "times": [
+              "20:30"
+            ],
+            "priority": "high",
+            "kind": "fireworks",
+            "tags": []
+          },
+          {
+            "name": "ジャンボリミッキー！レッツ･ダンス！",
+            "times": [
+              "12:30",
+              "13:45",
+              "15:00",
+              "16:50",
+              "18:05"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ミッキーのレインボー･ルアウ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ミッキーのマジカルミュージックワールド",
+            "times": [
+              "10:50",
+              "12:15",
+              "13:40",
+              "15:45",
+              "17:10"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "The D-Groovationz4 Live: Happy! Funky! Groovy! Tour",
+            "times": [
+              "12:10",
+              "13:35",
+              "15:00",
+              "17:05",
+              "18:30"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          }
+        ]
+      },
+      "TDS": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "スターブライト･クリスマス",
+            "times": [
+              "20:30"
+            ],
+            "priority": "high",
+            "kind": "fireworks",
+            "tags": []
+          },
+          {
+            "name": "スパークリング･ジュビリー･セレブレーション",
+            "times": [
+              "10:30",
+              "14:00"
+            ],
+            "priority": "high",
+            "kind": "show-day",
+            "tags": []
+          },
+          {
+            "name": "ディズニー･クリスマス･グリーティング",
+            "times": [
+              "11:35",
+              "15:15"
+            ],
+            "priority": "high",
+            "kind": "show-day",
+            "tags": []
+          },
+          {
+            "name": "【環境演出】スパークリング･ジュビリー･ナイト",
+            "times": [
+              "20:15",
+              "20:55"
+            ],
+            "priority": "low",
+            "kind": "environment",
+            "tags": []
+          },
+          {
+            "name": "ビリーヴ！～シー･オブ･ドリームス～",
+            "times": [
+              "19:30"
+            ],
+            "priority": "low",
+            "kind": "show-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ダッフィー＆フレンズのワンダフル･フレンドシップ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ダンス･ザ･グローブ！",
+            "times": [
+              "12:50",
+              "14:35",
+              "16:55",
+              "18:40"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ドリームス･テイク･フライト",
+            "times": [
+              "11:00",
+              "12:25",
+              "13:50",
+              "15:55",
+              "17:20"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          }
+        ]
+      }
+    },
+    "2026-11-15": {
+      "TDL": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "トイズ･ワンダラス･クリスマス！",
+            "times": [
+              "12:45"
+            ],
+            "priority": "high",
+            "kind": "parade-day",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ディズニー･ハーモニー･イン･カラー",
+            "times": [
+              "15:25"
+            ],
+            "priority": "medium",
+            "kind": "parade-day",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "東京ディズニーランド･エレクトリカルパレード･ドリームライツ",
+            "times": [
+              "19:00"
+            ],
+            "priority": "low",
+            "kind": "parade-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "スターブライト･クリスマス",
+            "times": [
+              "20:30"
+            ],
+            "priority": "high",
+            "kind": "fireworks",
+            "tags": []
+          },
+          {
+            "name": "ジャンボリミッキー！レッツ･ダンス！",
+            "times": [
+              "12:30",
+              "13:45",
+              "15:00",
+              "16:50",
+              "18:05"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ミッキーのレインボー･ルアウ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ミッキーのマジカルミュージックワールド",
+            "times": [
+              "10:50",
+              "12:15",
+              "13:40",
+              "15:45",
+              "17:10"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "The D-Groovationz4 Live: Happy! Funky! Groovy! Tour",
+            "times": [
+              "12:10",
+              "13:35",
+              "15:00",
+              "17:05",
+              "18:30"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          }
+        ]
+      },
+      "TDS": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "スターブライト･クリスマス",
+            "times": [
+              "20:30"
+            ],
+            "priority": "high",
+            "kind": "fireworks",
+            "tags": []
+          },
+          {
+            "name": "スパークリング･ジュビリー･セレブレーション",
+            "times": [
+              "10:30",
+              "14:00"
+            ],
+            "priority": "high",
+            "kind": "show-day",
+            "tags": []
+          },
+          {
+            "name": "ディズニー･クリスマス･グリーティング",
+            "times": [
+              "11:35",
+              "15:15"
+            ],
+            "priority": "high",
+            "kind": "show-day",
+            "tags": []
+          },
+          {
+            "name": "【環境演出】スパークリング･ジュビリー･ナイト",
+            "times": [
+              "20:15",
+              "20:55"
+            ],
+            "priority": "low",
+            "kind": "environment",
+            "tags": []
+          },
+          {
+            "name": "ビリーヴ！～シー･オブ･ドリームス～",
+            "times": [
+              "19:30"
+            ],
+            "priority": "low",
+            "kind": "show-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ダッフィー＆フレンズのワンダフル･フレンドシップ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ダンス･ザ･グローブ！",
+            "times": [
+              "12:50",
+              "14:35",
+              "16:55",
+              "18:40"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ドリームス･テイク･フライト",
+            "times": [
+              "11:00",
+              "12:25",
+              "13:50",
+              "15:55",
+              "17:20"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          }
+        ]
+      }
+    },
+    "2026-11-16": {
+      "TDL": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "トイズ･ワンダラス･クリスマス！",
+            "times": [
+              "12:45"
+            ],
+            "priority": "high",
+            "kind": "parade-day",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ディズニー･ハーモニー･イン･カラー",
+            "times": [
+              "15:25"
+            ],
+            "priority": "medium",
+            "kind": "parade-day",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "東京ディズニーランド･エレクトリカルパレード･ドリームライツ",
+            "times": [
+              "19:00"
+            ],
+            "priority": "low",
+            "kind": "parade-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "スターブライト･クリスマス",
+            "times": [
+              "20:30"
+            ],
+            "priority": "high",
+            "kind": "fireworks",
+            "tags": []
+          },
+          {
+            "name": "ジャンボリミッキー！レッツ･ダンス！",
+            "times": [
+              "12:30",
+              "13:45",
+              "15:00",
+              "16:50",
+              "18:05"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ミッキーのレインボー･ルアウ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ミッキーのマジカルミュージックワールド",
+            "times": [
+              "10:50",
+              "12:15",
+              "13:40",
+              "15:45",
+              "17:10"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "The D-Groovationz4 Live: Happy! Funky! Groovy! Tour",
+            "times": [
+              "12:10",
+              "13:35",
+              "15:00",
+              "17:05",
+              "18:30"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          }
+        ]
+      },
+      "TDS": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "スターブライト･クリスマス",
+            "times": [
+              "20:30"
+            ],
+            "priority": "high",
+            "kind": "fireworks",
+            "tags": []
+          },
+          {
+            "name": "スパークリング･ジュビリー･セレブレーション",
+            "times": [
+              "10:30",
+              "14:00"
+            ],
+            "priority": "high",
+            "kind": "show-day",
+            "tags": []
+          },
+          {
+            "name": "ディズニー･クリスマス･グリーティング",
+            "times": [
+              "11:35",
+              "15:15"
+            ],
+            "priority": "high",
+            "kind": "show-day",
+            "tags": []
+          },
+          {
+            "name": "【環境演出】スパークリング･ジュビリー･ナイト",
+            "times": [
+              "20:15",
+              "20:55"
+            ],
+            "priority": "low",
+            "kind": "environment",
+            "tags": []
+          },
+          {
+            "name": "ビリーヴ！～シー･オブ･ドリームス～",
+            "times": [
+              "19:30"
+            ],
+            "priority": "low",
+            "kind": "show-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ダッフィー＆フレンズのワンダフル･フレンドシップ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ダンス･ザ･グローブ！",
+            "times": [
+              "12:50",
+              "14:35",
+              "16:55",
+              "18:40"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ドリームス･テイク･フライト",
+            "times": [
+              "11:00",
+              "12:25",
+              "13:50",
+              "15:55",
+              "17:20"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          }
+        ]
+      }
+    },
+    "2026-11-17": {
+      "TDL": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "トイズ･ワンダラス･クリスマス！",
+            "times": [
+              "12:45"
+            ],
+            "priority": "high",
+            "kind": "parade-day",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ディズニー･ハーモニー･イン･カラー",
+            "times": [
+              "15:25"
+            ],
+            "priority": "medium",
+            "kind": "parade-day",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "東京ディズニーランド･エレクトリカルパレード･ドリームライツ",
+            "times": [
+              "19:00"
+            ],
+            "priority": "low",
+            "kind": "parade-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "スターブライト･クリスマス",
+            "times": [
+              "20:30"
+            ],
+            "priority": "high",
+            "kind": "fireworks",
+            "tags": []
+          },
+          {
+            "name": "ジャンボリミッキー！レッツ･ダンス！",
+            "times": [
+              "12:30",
+              "13:45",
+              "15:00",
+              "16:50",
+              "18:05"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ミッキーのレインボー･ルアウ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ミッキーのマジカルミュージックワールド",
+            "times": [
+              "10:50",
+              "12:15",
+              "13:40",
+              "15:45",
+              "17:10"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "The D-Groovationz4 Live: Happy! Funky! Groovy! Tour",
+            "times": [
+              "12:10",
+              "13:35",
+              "15:00",
+              "17:05",
+              "18:30"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          }
+        ]
+      },
+      "TDS": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "スターブライト･クリスマス",
+            "times": [
+              "20:30"
+            ],
+            "priority": "high",
+            "kind": "fireworks",
+            "tags": []
+          },
+          {
+            "name": "スパークリング･ジュビリー･セレブレーション",
+            "times": [
+              "10:30",
+              "14:00"
+            ],
+            "priority": "high",
+            "kind": "show-day",
+            "tags": []
+          },
+          {
+            "name": "ディズニー･クリスマス･グリーティング",
+            "times": [
+              "11:35",
+              "15:15"
+            ],
+            "priority": "high",
+            "kind": "show-day",
+            "tags": []
+          },
+          {
+            "name": "【環境演出】スパークリング･ジュビリー･ナイト",
+            "times": [
+              "20:15",
+              "20:55"
+            ],
+            "priority": "low",
+            "kind": "environment",
+            "tags": []
+          },
+          {
+            "name": "ビリーヴ！～シー･オブ･ドリームス～",
+            "times": [
+              "19:30"
+            ],
+            "priority": "low",
+            "kind": "show-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ダッフィー＆フレンズのワンダフル･フレンドシップ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ダンス･ザ･グローブ！",
+            "times": [
+              "12:50",
+              "14:35",
+              "16:55",
+              "18:40"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ドリームス･テイク･フライト",
+            "times": [
+              "11:00",
+              "12:25",
+              "13:50",
+              "15:55",
+              "17:20"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          }
+        ]
+      }
+    },
+    "2026-11-18": {
+      "TDL": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "トイズ･ワンダラス･クリスマス！",
+            "times": [
+              "12:45"
+            ],
+            "priority": "high",
+            "kind": "parade-day",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ディズニー･ハーモニー･イン･カラー",
+            "times": [
+              "15:25"
+            ],
+            "priority": "medium",
+            "kind": "parade-day",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "東京ディズニーランド･エレクトリカルパレード･ドリームライツ",
+            "times": [
+              "19:00"
+            ],
+            "priority": "low",
+            "kind": "parade-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "スターブライト･クリスマス",
+            "times": [
+              "20:30"
+            ],
+            "priority": "high",
+            "kind": "fireworks",
+            "tags": []
+          },
+          {
+            "name": "ジャンボリミッキー！レッツ･ダンス！",
+            "times": [
+              "12:30",
+              "13:45",
+              "15:00",
+              "16:50",
+              "18:05"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ミッキーのレインボー･ルアウ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ミッキーのマジカルミュージックワールド",
+            "times": [
+              "10:50",
+              "12:15",
+              "13:40",
+              "15:45",
+              "17:10"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "The D-Groovationz4 Live: Happy! Funky! Groovy! Tour",
+            "times": [
+              "12:10",
+              "13:35",
+              "15:00",
+              "17:05",
+              "18:30"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          }
+        ]
+      },
+      "TDS": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "スターブライト･クリスマス",
+            "times": [
+              "20:30"
+            ],
+            "priority": "high",
+            "kind": "fireworks",
+            "tags": []
+          },
+          {
+            "name": "スパークリング･ジュビリー･セレブレーション",
+            "times": [
+              "10:30",
+              "14:00"
+            ],
+            "priority": "high",
+            "kind": "show-day",
+            "tags": []
+          },
+          {
+            "name": "ディズニー･クリスマス･グリーティング",
+            "times": [
+              "11:35",
+              "15:15"
+            ],
+            "priority": "high",
+            "kind": "show-day",
+            "tags": []
+          },
+          {
+            "name": "【環境演出】スパークリング･ジュビリー･ナイト",
+            "times": [
+              "20:15",
+              "20:55"
+            ],
+            "priority": "low",
+            "kind": "environment",
+            "tags": []
+          },
+          {
+            "name": "ビリーヴ！～シー･オブ･ドリームス～",
+            "times": [
+              "19:30"
+            ],
+            "priority": "low",
+            "kind": "show-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ダッフィー＆フレンズのワンダフル･フレンドシップ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ダンス･ザ･グローブ！",
+            "times": [
+              "12:50",
+              "14:35",
+              "16:55",
+              "18:40"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ドリームス･テイク･フライト",
+            "times": [
+              "11:00",
+              "12:25",
+              "13:50",
+              "15:55",
+              "17:20"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          }
+        ]
+      }
+    },
+    "2026-11-19": {
+      "TDL": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "トイズ･ワンダラス･クリスマス！",
+            "times": [
+              "12:45"
+            ],
+            "priority": "high",
+            "kind": "parade-day",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ディズニー･ハーモニー･イン･カラー",
+            "times": [
+              "15:25"
+            ],
+            "priority": "medium",
+            "kind": "parade-day",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "東京ディズニーランド･エレクトリカルパレード･ドリームライツ",
+            "times": [
+              "19:00"
+            ],
+            "priority": "low",
+            "kind": "parade-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "スターブライト･クリスマス",
+            "times": [
+              "20:30"
+            ],
+            "priority": "high",
+            "kind": "fireworks",
+            "tags": []
+          },
+          {
+            "name": "ジャンボリミッキー！レッツ･ダンス！",
+            "times": [
+              "12:30",
+              "13:45",
+              "15:00",
+              "16:50",
+              "18:05"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ミッキーのレインボー･ルアウ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ミッキーのマジカルミュージックワールド",
+            "times": [
+              "10:50",
+              "12:15",
+              "13:40",
+              "15:45",
+              "17:10"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "The D-Groovationz4 Live: Happy! Funky! Groovy! Tour",
+            "times": [
+              "12:10",
+              "13:35",
+              "15:00",
+              "17:05",
+              "18:30"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          }
+        ]
+      },
+      "TDS": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "スターブライト･クリスマス",
+            "times": [
+              "20:30"
+            ],
+            "priority": "high",
+            "kind": "fireworks",
+            "tags": []
+          },
+          {
+            "name": "スパークリング･ジュビリー･セレブレーション",
+            "times": [
+              "10:30",
+              "14:00"
+            ],
+            "priority": "high",
+            "kind": "show-day",
+            "tags": []
+          },
+          {
+            "name": "ディズニー･クリスマス･グリーティング",
+            "times": [
+              "11:35",
+              "15:15"
+            ],
+            "priority": "high",
+            "kind": "show-day",
+            "tags": []
+          },
+          {
+            "name": "【環境演出】スパークリング･ジュビリー･ナイト",
+            "times": [
+              "20:15",
+              "20:55"
+            ],
+            "priority": "low",
+            "kind": "environment",
+            "tags": []
+          },
+          {
+            "name": "ビリーヴ！～シー･オブ･ドリームス～",
+            "times": [
+              "19:30"
+            ],
+            "priority": "low",
+            "kind": "show-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ダッフィー＆フレンズのワンダフル･フレンドシップ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ダンス･ザ･グローブ！",
+            "times": [
+              "12:50",
+              "14:35",
+              "16:55",
+              "18:40"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ドリームス･テイク･フライト",
+            "times": [
+              "11:00",
+              "12:25",
+              "13:50",
+              "15:55",
+              "17:20"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          }
+        ]
+      }
+    },
+    "2026-11-20": {
+      "TDL": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "トイズ･ワンダラス･クリスマス！",
+            "times": [
+              "12:45"
+            ],
+            "priority": "high",
+            "kind": "parade-day",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ディズニー･ハーモニー･イン･カラー",
+            "times": [
+              "15:25"
+            ],
+            "priority": "medium",
+            "kind": "parade-day",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "東京ディズニーランド･エレクトリカルパレード･ドリームライツ",
+            "times": [
+              "19:00"
+            ],
+            "priority": "low",
+            "kind": "parade-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "スターブライト･クリスマス",
+            "times": [
+              "20:30"
+            ],
+            "priority": "high",
+            "kind": "fireworks",
+            "tags": []
+          },
+          {
+            "name": "ジャンボリミッキー！レッツ･ダンス！",
+            "times": [
+              "12:30",
+              "13:45",
+              "15:00",
+              "16:50",
+              "18:05"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ミッキーのレインボー･ルアウ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ミッキーのマジカルミュージックワールド",
+            "times": [
+              "10:50",
+              "12:15",
+              "13:40",
+              "15:45",
+              "17:10"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "The D-Groovationz4 Live: Happy! Funky! Groovy! Tour",
+            "times": [
+              "12:10",
+              "13:35",
+              "15:00",
+              "17:05",
+              "18:30"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          }
+        ]
+      },
+      "TDS": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "スターブライト･クリスマス",
+            "times": [
+              "20:30"
+            ],
+            "priority": "high",
+            "kind": "fireworks",
+            "tags": []
+          },
+          {
+            "name": "スパークリング･ジュビリー･セレブレーション",
+            "times": [
+              "10:30",
+              "14:00"
+            ],
+            "priority": "high",
+            "kind": "show-day",
+            "tags": []
+          },
+          {
+            "name": "ディズニー･クリスマス･グリーティング",
+            "times": [
+              "11:35",
+              "15:15"
+            ],
+            "priority": "high",
+            "kind": "show-day",
+            "tags": []
+          },
+          {
+            "name": "【環境演出】スパークリング･ジュビリー･ナイト",
+            "times": [
+              "20:15",
+              "20:55"
+            ],
+            "priority": "low",
+            "kind": "environment",
+            "tags": []
+          },
+          {
+            "name": "ビリーヴ！～シー･オブ･ドリームス～",
+            "times": [
+              "19:30"
+            ],
+            "priority": "low",
+            "kind": "show-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ダッフィー＆フレンズのワンダフル･フレンドシップ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ダンス･ザ･グローブ！",
+            "times": [
+              "12:50",
+              "14:35",
+              "16:55",
+              "18:40"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ドリームス･テイク･フライト",
+            "times": [
+              "11:00",
+              "12:25",
+              "13:50",
+              "15:55",
+              "17:20"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          }
+        ]
+      }
+    },
+    "2026-11-21": {
+      "TDL": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "トイズ･ワンダラス･クリスマス！",
+            "times": [
+              "12:45"
+            ],
+            "priority": "high",
+            "kind": "parade-day",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ディズニー･ハーモニー･イン･カラー",
+            "times": [
+              "15:25"
+            ],
+            "priority": "medium",
+            "kind": "parade-day",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "東京ディズニーランド･エレクトリカルパレード･ドリームライツ",
+            "times": [
+              "19:00"
+            ],
+            "priority": "low",
+            "kind": "parade-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "スターブライト･クリスマス",
+            "times": [
+              "20:30"
+            ],
+            "priority": "high",
+            "kind": "fireworks",
+            "tags": []
+          },
+          {
+            "name": "ジャンボリミッキー！レッツ･ダンス！",
+            "times": [
+              "12:30",
+              "13:45",
+              "15:00",
+              "16:50",
+              "18:05"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ミッキーのレインボー･ルアウ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ザ･ダイヤモンド･バラエティマスター",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ミッキーのマジカルミュージックワールド",
+            "times": [
+              "10:50",
+              "12:15",
+              "13:40",
+              "15:45",
+              "17:10"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "The D-Groovationz4 Live: Happy! Funky! Groovy! Tour",
+            "times": [
+              "12:10",
+              "13:35",
+              "15:00",
+              "17:05",
+              "18:30"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          }
+        ]
+      },
+      "TDS": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "スターブライト･クリスマス",
+            "times": [
+              "20:30"
+            ],
+            "priority": "high",
+            "kind": "fireworks",
+            "tags": []
+          },
+          {
+            "name": "スパークリング･ジュビリー･セレブレーション",
+            "times": [
+              "10:30",
+              "14:00"
+            ],
+            "priority": "high",
+            "kind": "show-day",
+            "tags": []
+          },
+          {
+            "name": "ディズニー･クリスマス･グリーティング",
+            "times": [
+              "11:35",
+              "15:15"
+            ],
+            "priority": "high",
+            "kind": "show-day",
+            "tags": []
+          },
+          {
+            "name": "【環境演出】スパークリング･ジュビリー･ナイト",
+            "times": [
+              "20:15",
+              "20:55"
+            ],
+            "priority": "low",
+            "kind": "environment",
+            "tags": []
+          },
+          {
+            "name": "ビリーヴ！～シー･オブ･ドリームス～",
+            "times": [
+              "19:30"
+            ],
+            "priority": "low",
+            "kind": "show-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ダッフィー＆フレンズのワンダフル･フレンドシップ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ダンス･ザ･グローブ！",
+            "times": [
+              "12:50",
+              "14:35",
+              "16:55",
+              "18:40"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ドリームス･テイク･フライト",
+            "times": [
+              "11:00",
+              "12:25",
+              "13:50",
+              "15:55",
+              "17:20"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          }
+        ]
+      }
+    },
+    "2026-11-22": {
+      "TDL": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "トイズ･ワンダラス･クリスマス！",
+            "times": [
+              "12:45"
+            ],
+            "priority": "high",
+            "kind": "parade-day",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ディズニー･ハーモニー･イン･カラー",
+            "times": [
+              "15:25"
+            ],
+            "priority": "medium",
+            "kind": "parade-day",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "東京ディズニーランド･エレクトリカルパレード･ドリームライツ",
+            "times": [
+              "19:00"
+            ],
+            "priority": "low",
+            "kind": "parade-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "スターブライト･クリスマス",
+            "times": [
+              "20:30"
+            ],
+            "priority": "high",
+            "kind": "fireworks",
+            "tags": []
+          },
+          {
+            "name": "ジャンボリミッキー！レッツ･ダンス！",
+            "times": [
+              "12:30",
+              "13:45",
+              "15:00",
+              "16:50",
+              "18:05"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ミッキーのレインボー･ルアウ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ザ･ダイヤモンド･バラエティマスター",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ミッキーのマジカルミュージックワールド",
+            "times": [
+              "10:50",
+              "12:15",
+              "13:40",
+              "15:45",
+              "17:10"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "The D-Groovationz4 Live: Happy! Funky! Groovy! Tour",
+            "times": [
+              "12:10",
+              "13:35",
+              "15:00",
+              "17:05",
+              "18:30"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          }
+        ]
+      },
+      "TDS": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "スターブライト･クリスマス",
+            "times": [
+              "20:30"
+            ],
+            "priority": "high",
+            "kind": "fireworks",
+            "tags": []
+          },
+          {
+            "name": "スパークリング･ジュビリー･セレブレーション",
+            "times": [
+              "10:30",
+              "14:00"
+            ],
+            "priority": "high",
+            "kind": "show-day",
+            "tags": []
+          },
+          {
+            "name": "ディズニー･クリスマス･グリーティング",
+            "times": [
+              "11:35",
+              "15:15"
+            ],
+            "priority": "high",
+            "kind": "show-day",
+            "tags": []
+          },
+          {
+            "name": "【環境演出】スパークリング･ジュビリー･ナイト",
+            "times": [
+              "20:15",
+              "20:55"
+            ],
+            "priority": "low",
+            "kind": "environment",
+            "tags": []
+          },
+          {
+            "name": "ビリーヴ！～シー･オブ･ドリームス～",
+            "times": [
+              "19:30"
+            ],
+            "priority": "low",
+            "kind": "show-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ダッフィー＆フレンズのワンダフル･フレンドシップ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ダンス･ザ･グローブ！",
+            "times": [
+              "12:50",
+              "14:35",
+              "16:55",
+              "18:40"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ドリームス･テイク･フライト",
+            "times": [
+              "11:00",
+              "12:25",
+              "13:50",
+              "15:55",
+              "17:20"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          }
+        ]
+      }
+    },
+    "2026-11-23": {
+      "TDL": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "トイズ･ワンダラス･クリスマス！",
+            "times": [
+              "12:45"
+            ],
+            "priority": "high",
+            "kind": "parade-day",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ディズニー･ハーモニー･イン･カラー",
+            "times": [
+              "15:25"
+            ],
+            "priority": "medium",
+            "kind": "parade-day",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "東京ディズニーランド･エレクトリカルパレード･ドリームライツ",
+            "times": [
+              "19:00"
+            ],
+            "priority": "low",
+            "kind": "parade-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "スターブライト･クリスマス",
+            "times": [
+              "20:30"
+            ],
+            "priority": "high",
+            "kind": "fireworks",
+            "tags": []
+          },
+          {
+            "name": "ジャンボリミッキー！レッツ･ダンス！",
+            "times": [
+              "12:30",
+              "13:45",
+              "15:00",
+              "16:50",
+              "18:05"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ミッキーのレインボー･ルアウ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ザ･ダイヤモンド･バラエティマスター",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ミッキーのマジカルミュージックワールド",
+            "times": [
+              "10:50",
+              "12:15",
+              "13:40",
+              "15:45",
+              "17:10"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "The D-Groovationz4 Live: Happy! Funky! Groovy! Tour",
+            "times": [
+              "12:10",
+              "13:35",
+              "15:00",
+              "17:05",
+              "18:30"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          }
+        ]
+      },
+      "TDS": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "スターブライト･クリスマス",
+            "times": [
+              "20:30"
+            ],
+            "priority": "high",
+            "kind": "fireworks",
+            "tags": []
+          },
+          {
+            "name": "スパークリング･ジュビリー･セレブレーション",
+            "times": [
+              "10:30",
+              "14:00"
+            ],
+            "priority": "high",
+            "kind": "show-day",
+            "tags": []
+          },
+          {
+            "name": "ディズニー･クリスマス･グリーティング",
+            "times": [
+              "11:35",
+              "15:15"
+            ],
+            "priority": "high",
+            "kind": "show-day",
+            "tags": []
+          },
+          {
+            "name": "【環境演出】スパークリング･ジュビリー･ナイト",
+            "times": [
+              "20:15",
+              "20:55"
+            ],
+            "priority": "low",
+            "kind": "environment",
+            "tags": []
+          },
+          {
+            "name": "ビリーヴ！～シー･オブ･ドリームス～",
+            "times": [
+              "19:30"
+            ],
+            "priority": "low",
+            "kind": "show-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ダッフィー＆フレンズのワンダフル･フレンドシップ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ダンス･ザ･グローブ！",
+            "times": [
+              "12:50",
+              "14:35",
+              "16:55",
+              "18:40"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ドリームス･テイク･フライト",
+            "times": [
+              "11:00",
+              "12:25",
+              "13:50",
+              "15:55",
+              "17:20"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          }
+        ]
+      }
+    },
+    "2026-11-24": {
+      "TDL": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "トイズ･ワンダラス･クリスマス！",
+            "times": [
+              "12:45"
+            ],
+            "priority": "high",
+            "kind": "parade-day",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ディズニー･ハーモニー･イン･カラー",
+            "times": [
+              "15:25"
+            ],
+            "priority": "medium",
+            "kind": "parade-day",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "東京ディズニーランド･エレクトリカルパレード･ドリームライツ",
+            "times": [
+              "19:00"
+            ],
+            "priority": "low",
+            "kind": "parade-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "スターブライト･クリスマス",
+            "times": [
+              "20:30"
+            ],
+            "priority": "high",
+            "kind": "fireworks",
+            "tags": []
+          },
+          {
+            "name": "ジャンボリミッキー！レッツ･ダンス！",
+            "times": [
+              "12:30",
+              "13:45",
+              "15:00",
+              "16:50",
+              "18:05"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ミッキーのレインボー･ルアウ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ザ･ダイヤモンド･バラエティマスター",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ミッキーのマジカルミュージックワールド",
+            "times": [
+              "10:50",
+              "12:15",
+              "13:40",
+              "15:45",
+              "17:10"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "The D-Groovationz4 Live: Happy! Funky! Groovy! Tour",
+            "times": [
+              "12:10",
+              "13:35",
+              "15:00",
+              "17:05",
+              "18:30"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          }
+        ]
+      },
+      "TDS": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "スターブライト･クリスマス",
+            "times": [
+              "20:30"
+            ],
+            "priority": "high",
+            "kind": "fireworks",
+            "tags": []
+          },
+          {
+            "name": "スパークリング･ジュビリー･セレブレーション",
+            "times": [
+              "10:30",
+              "14:00"
+            ],
+            "priority": "high",
+            "kind": "show-day",
+            "tags": []
+          },
+          {
+            "name": "ディズニー･クリスマス･グリーティング",
+            "times": [
+              "11:35",
+              "15:15"
+            ],
+            "priority": "high",
+            "kind": "show-day",
+            "tags": []
+          },
+          {
+            "name": "【環境演出】スパークリング･ジュビリー･ナイト",
+            "times": [
+              "20:15",
+              "20:55"
+            ],
+            "priority": "low",
+            "kind": "environment",
+            "tags": []
+          },
+          {
+            "name": "ビリーヴ！～シー･オブ･ドリームス～",
+            "times": [
+              "19:30"
+            ],
+            "priority": "low",
+            "kind": "show-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ダッフィー＆フレンズのワンダフル･フレンドシップ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ダンス･ザ･グローブ！",
+            "times": [
+              "12:50",
+              "14:35",
+              "16:55",
+              "18:40"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ドリームス･テイク･フライト",
+            "times": [
+              "11:00",
+              "12:25",
+              "13:50",
+              "15:55",
+              "17:20"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          }
+        ]
+      }
+    },
+    "2026-11-25": {
+      "TDL": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "トイズ･ワンダラス･クリスマス！",
+            "times": [
+              "12:45"
+            ],
+            "priority": "high",
+            "kind": "parade-day",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ディズニー･ハーモニー･イン･カラー",
+            "times": [
+              "15:25"
+            ],
+            "priority": "medium",
+            "kind": "parade-day",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "東京ディズニーランド･エレクトリカルパレード･ドリームライツ",
+            "times": [
+              "19:00"
+            ],
+            "priority": "low",
+            "kind": "parade-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "スターブライト･クリスマス",
+            "times": [
+              "20:30"
+            ],
+            "priority": "high",
+            "kind": "fireworks",
+            "tags": []
+          },
+          {
+            "name": "ジャンボリミッキー！レッツ･ダンス！",
+            "times": [
+              "12:30",
+              "13:45",
+              "15:00",
+              "16:50",
+              "18:05"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ミッキーのレインボー･ルアウ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ザ･ダイヤモンド･バラエティマスター",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ミッキーのマジカルミュージックワールド",
+            "times": [
+              "10:50",
+              "12:15",
+              "13:40",
+              "15:45",
+              "17:10"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "The D-Groovationz4 Live: Happy! Funky! Groovy! Tour",
+            "times": [
+              "12:10",
+              "13:35",
+              "15:00",
+              "17:05",
+              "18:30"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          }
+        ]
+      },
+      "TDS": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "スターブライト･クリスマス",
+            "times": [
+              "20:30"
+            ],
+            "priority": "high",
+            "kind": "fireworks",
+            "tags": []
+          },
+          {
+            "name": "スパークリング･ジュビリー･セレブレーション",
+            "times": [
+              "10:30",
+              "14:00"
+            ],
+            "priority": "high",
+            "kind": "show-day",
+            "tags": []
+          },
+          {
+            "name": "ディズニー･クリスマス･グリーティング",
+            "times": [
+              "11:35",
+              "15:15"
+            ],
+            "priority": "high",
+            "kind": "show-day",
+            "tags": []
+          },
+          {
+            "name": "【環境演出】スパークリング･ジュビリー･ナイト",
+            "times": [
+              "20:15",
+              "20:55"
+            ],
+            "priority": "low",
+            "kind": "environment",
+            "tags": []
+          },
+          {
+            "name": "ビリーヴ！～シー･オブ･ドリームス～",
+            "times": [
+              "19:30"
+            ],
+            "priority": "low",
+            "kind": "show-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ダッフィー＆フレンズのワンダフル･フレンドシップ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ダンス･ザ･グローブ！",
+            "times": [
+              "12:50",
+              "14:35",
+              "16:55",
+              "18:40"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ドリームス･テイク･フライト",
+            "times": [
+              "11:00",
+              "12:25",
+              "13:50",
+              "15:55",
+              "17:20"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          }
+        ]
+      }
+    },
+    "2026-11-26": {
+      "TDL": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "トイズ･ワンダラス･クリスマス！",
+            "times": [
+              "12:45"
+            ],
+            "priority": "high",
+            "kind": "parade-day",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ディズニー･ハーモニー･イン･カラー",
+            "times": [
+              "15:25"
+            ],
+            "priority": "medium",
+            "kind": "parade-day",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "東京ディズニーランド･エレクトリカルパレード･ドリームライツ",
+            "times": [
+              "19:00"
+            ],
+            "priority": "low",
+            "kind": "parade-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "スターブライト･クリスマス",
+            "times": [
+              "20:30"
+            ],
+            "priority": "high",
+            "kind": "fireworks",
+            "tags": []
+          },
+          {
+            "name": "ジャンボリミッキー！レッツ･ダンス！",
+            "times": [
+              "12:30",
+              "13:45",
+              "15:00",
+              "16:50",
+              "18:05"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ミッキーのレインボー･ルアウ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ザ･ダイヤモンド･バラエティマスター",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ミッキーのマジカルミュージックワールド",
+            "times": [
+              "10:50",
+              "12:15",
+              "13:40",
+              "15:45",
+              "17:10"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "The D-Groovationz4 Live: Happy! Funky! Groovy! Tour",
+            "times": [
+              "12:10",
+              "13:35",
+              "15:00",
+              "17:05",
+              "18:30"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          }
+        ]
+      },
+      "TDS": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "スターブライト･クリスマス",
+            "times": [
+              "20:30"
+            ],
+            "priority": "high",
+            "kind": "fireworks",
+            "tags": []
+          },
+          {
+            "name": "スパークリング･ジュビリー･セレブレーション",
+            "times": [
+              "10:30",
+              "14:00"
+            ],
+            "priority": "high",
+            "kind": "show-day",
+            "tags": []
+          },
+          {
+            "name": "ディズニー･クリスマス･グリーティング",
+            "times": [
+              "11:35",
+              "15:15"
+            ],
+            "priority": "high",
+            "kind": "show-day",
+            "tags": []
+          },
+          {
+            "name": "【環境演出】スパークリング･ジュビリー･ナイト",
+            "times": [
+              "20:15",
+              "20:55"
+            ],
+            "priority": "low",
+            "kind": "environment",
+            "tags": []
+          },
+          {
+            "name": "ビリーヴ！～シー･オブ･ドリームス～",
+            "times": [
+              "19:30"
+            ],
+            "priority": "low",
+            "kind": "show-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ダッフィー＆フレンズのワンダフル･フレンドシップ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ダンス･ザ･グローブ！",
+            "times": [
+              "12:50",
+              "14:35",
+              "16:55",
+              "18:40"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ドリームス･テイク･フライト",
+            "times": [
+              "11:00",
+              "12:25",
+              "13:50",
+              "15:55",
+              "17:20"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          }
+        ]
+      }
+    },
+    "2026-11-27": {
+      "TDL": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "トイズ･ワンダラス･クリスマス！",
+            "times": [
+              "12:45"
+            ],
+            "priority": "high",
+            "kind": "parade-day",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ディズニー･ハーモニー･イン･カラー",
+            "times": [
+              "15:25"
+            ],
+            "priority": "medium",
+            "kind": "parade-day",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "東京ディズニーランド･エレクトリカルパレード･ドリームライツ",
+            "times": [
+              "19:00"
+            ],
+            "priority": "low",
+            "kind": "parade-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "スターブライト･クリスマス",
+            "times": [
+              "20:25"
+            ],
+            "priority": "high",
+            "kind": "fireworks",
+            "tags": []
+          },
+          {
+            "name": "ジャンボリミッキー！レッツ･ダンス！",
+            "times": [
+              "12:30",
+              "13:45",
+              "15:00",
+              "16:50",
+              "18:05"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ミッキーのレインボー･ルアウ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ザ･ダイヤモンド･バラエティマスター",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ミッキーのマジカルミュージックワールド",
+            "times": [
+              "10:50",
+              "12:15",
+              "13:40",
+              "15:45",
+              "17:10"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "The D-Groovationz4 Live: Happy! Funky! Groovy! Tour",
+            "times": [
+              "12:10",
+              "13:35",
+              "15:00",
+              "17:05",
+              "18:30"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          }
+        ]
+      },
+      "TDS": {
+        "openHour": "09:00",
+        "closeHour": "18:30",
+        "shows": [
+          {
+            "name": "スパークリング･ジュビリー･セレブレーション",
+            "times": [
+              "10:30",
+              "14:00"
+            ],
+            "priority": "high",
+            "kind": "show-day",
+            "tags": []
+          },
+          {
+            "name": "ディズニー･クリスマス･グリーティング",
+            "times": [
+              "11:35",
+              "15:15"
+            ],
+            "priority": "high",
+            "kind": "show-day",
+            "tags": []
+          },
+          {
+            "name": "ダッフィー＆フレンズのワンダフル･フレンドシップ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ダンス･ザ･グローブ！",
+            "times": [
+              "12:45",
+              "14:30",
+              "16:50"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ドリームス･テイク･フライト",
+            "times": [
+              "11:00",
+              "12:25",
+              "13:50",
+              "15:55",
+              "17:20"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          }
+        ]
+      }
+    },
+    "2026-11-28": {
+      "TDL": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "トイズ･ワンダラス･クリスマス！",
+            "times": [
+              "12:45"
+            ],
+            "priority": "high",
+            "kind": "parade-day",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ディズニー･ハーモニー･イン･カラー",
+            "times": [
+              "15:25"
+            ],
+            "priority": "medium",
+            "kind": "parade-day",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "東京ディズニーランド･エレクトリカルパレード･ドリームライツ",
+            "times": [
+              "19:00"
+            ],
+            "priority": "low",
+            "kind": "parade-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "スターブライト･クリスマス",
+            "times": [
+              "20:30"
+            ],
+            "priority": "high",
+            "kind": "fireworks",
+            "tags": []
+          },
+          {
+            "name": "ジャンボリミッキー！レッツ･ダンス！",
+            "times": [
+              "12:30",
+              "13:45",
+              "15:00",
+              "16:50",
+              "18:05"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ミッキーのレインボー･ルアウ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ザ･ダイヤモンド･バラエティマスター",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ミッキーのマジカルミュージックワールド",
+            "times": [
+              "10:50",
+              "12:15",
+              "13:40",
+              "15:45",
+              "17:10"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "The D-Groovationz4 Live: Happy! Funky! Groovy! Tour",
+            "times": [
+              "12:10",
+              "13:35",
+              "15:00",
+              "17:05",
+              "18:30"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          }
+        ]
+      },
+      "TDS": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "スターブライト･クリスマス",
+            "times": [
+              "20:30"
+            ],
+            "priority": "high",
+            "kind": "fireworks",
+            "tags": []
+          },
+          {
+            "name": "スパークリング･ジュビリー･セレブレーション",
+            "times": [
+              "10:30",
+              "14:00"
+            ],
+            "priority": "high",
+            "kind": "show-day",
+            "tags": []
+          },
+          {
+            "name": "ディズニー･クリスマス･グリーティング",
+            "times": [
+              "11:35",
+              "15:15"
+            ],
+            "priority": "high",
+            "kind": "show-day",
+            "tags": []
+          },
+          {
+            "name": "【環境演出】スパークリング･ジュビリー･ナイト",
+            "times": [
+              "20:15",
+              "20:55"
+            ],
+            "priority": "low",
+            "kind": "environment",
+            "tags": []
+          },
+          {
+            "name": "ビリーヴ！～シー･オブ･ドリームス～",
+            "times": [
+              "19:30"
+            ],
+            "priority": "low",
+            "kind": "show-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ダッフィー＆フレンズのワンダフル･フレンドシップ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ダンス･ザ･グローブ！",
+            "times": [
+              "12:50",
+              "14:35",
+              "16:55",
+              "18:40"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ドリームス･テイク･フライト",
+            "times": [
+              "11:00",
+              "12:25",
+              "13:50",
+              "15:55",
+              "17:20"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          }
+        ]
+      }
+    },
+    "2026-11-29": {
+      "TDL": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "トイズ･ワンダラス･クリスマス！",
+            "times": [
+              "12:45"
+            ],
+            "priority": "high",
+            "kind": "parade-day",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ディズニー･ハーモニー･イン･カラー",
+            "times": [
+              "15:25"
+            ],
+            "priority": "medium",
+            "kind": "parade-day",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "東京ディズニーランド･エレクトリカルパレード･ドリームライツ",
+            "times": [
+              "19:00"
+            ],
+            "priority": "low",
+            "kind": "parade-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "スターブライト･クリスマス",
+            "times": [
+              "20:30"
+            ],
+            "priority": "high",
+            "kind": "fireworks",
+            "tags": []
+          },
+          {
+            "name": "ジャンボリミッキー！レッツ･ダンス！",
+            "times": [
+              "12:30",
+              "13:45",
+              "15:00",
+              "16:50",
+              "18:05"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ミッキーのレインボー･ルアウ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ザ･ダイヤモンド･バラエティマスター",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ミッキーのマジカルミュージックワールド",
+            "times": [
+              "10:50",
+              "12:15",
+              "13:40",
+              "15:45",
+              "17:10"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "The D-Groovationz4 Live: Happy! Funky! Groovy! Tour",
+            "times": [
+              "12:10",
+              "13:35",
+              "15:00",
+              "17:05",
+              "18:30"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          }
+        ]
+      },
+      "TDS": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "スターブライト･クリスマス",
+            "times": [
+              "20:30"
+            ],
+            "priority": "high",
+            "kind": "fireworks",
+            "tags": []
+          },
+          {
+            "name": "スパークリング･ジュビリー･セレブレーション",
+            "times": [
+              "10:30",
+              "14:00"
+            ],
+            "priority": "high",
+            "kind": "show-day",
+            "tags": []
+          },
+          {
+            "name": "ディズニー･クリスマス･グリーティング",
+            "times": [
+              "11:35",
+              "15:15"
+            ],
+            "priority": "high",
+            "kind": "show-day",
+            "tags": []
+          },
+          {
+            "name": "【環境演出】スパークリング･ジュビリー･ナイト",
+            "times": [
+              "20:15",
+              "20:55"
+            ],
+            "priority": "low",
+            "kind": "environment",
+            "tags": []
+          },
+          {
+            "name": "ビリーヴ！～シー･オブ･ドリームス～",
+            "times": [
+              "19:30"
+            ],
+            "priority": "low",
+            "kind": "show-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ダッフィー＆フレンズのワンダフル･フレンドシップ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ダンス･ザ･グローブ！",
+            "times": [
+              "12:50",
+              "14:35",
+              "16:55",
+              "18:40"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ドリームス･テイク･フライト",
+            "times": [
+              "11:00",
+              "12:25",
+              "13:50",
+              "15:55",
+              "17:20"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          }
+        ]
+      }
+    },
+    "2026-11-30": {
+      "TDL": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "トイズ･ワンダラス･クリスマス！",
+            "times": [
+              "12:45"
+            ],
+            "priority": "high",
+            "kind": "parade-day",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ディズニー･ハーモニー･イン･カラー",
+            "times": [
+              "15:25"
+            ],
+            "priority": "medium",
+            "kind": "parade-day",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "東京ディズニーランド･エレクトリカルパレード･ドリームライツ",
+            "times": [
+              "19:00"
+            ],
+            "priority": "low",
+            "kind": "parade-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "スターブライト･クリスマス",
+            "times": [
+              "20:30"
+            ],
+            "priority": "high",
+            "kind": "fireworks",
+            "tags": []
+          },
+          {
+            "name": "ジャンボリミッキー！レッツ･ダンス！",
+            "times": [
+              "12:30",
+              "13:45",
+              "15:00",
+              "16:50",
+              "18:05"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付"
+            ]
+          },
+          {
+            "name": "ミッキーのレインボー･ルアウ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ザ･ダイヤモンド･バラエティマスター",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ミッキーのマジカルミュージックワールド",
+            "times": [
+              "10:50",
+              "12:15",
+              "13:40",
+              "15:45",
+              "17:10"
+            ],
+            "priority": "medium",
+            "kind": "show-unknown",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "The D-Groovationz4 Live: Happy! Funky! Groovy! Tour",
+            "times": [
+              "12:10",
+              "13:35",
+              "15:00",
+              "17:05",
+              "18:30"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          }
+        ]
+      },
+      "TDS": {
+        "openHour": "09:00",
+        "closeHour": "21:00",
+        "shows": [
+          {
+            "name": "スターブライト･クリスマス",
+            "times": [
+              "20:30"
+            ],
+            "priority": "high",
+            "kind": "fireworks",
+            "tags": []
+          },
+          {
+            "name": "スパークリング･ジュビリー･セレブレーション",
+            "times": [
+              "10:30",
+              "14:00"
+            ],
+            "priority": "high",
+            "kind": "show-day",
+            "tags": []
+          },
+          {
+            "name": "ディズニー･クリスマス･グリーティング",
+            "times": [
+              "11:35",
+              "15:15"
+            ],
+            "priority": "high",
+            "kind": "show-day",
+            "tags": []
+          },
+          {
+            "name": "【環境演出】スパークリング･ジュビリー･ナイト",
+            "times": [
+              "20:15",
+              "20:55"
+            ],
+            "priority": "low",
+            "kind": "environment",
+            "tags": []
+          },
+          {
+            "name": "ビリーヴ！～シー･オブ･ドリームス～",
+            "times": [
+              "19:30"
+            ],
+            "priority": "low",
+            "kind": "show-night",
+            "tags": [
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ダッフィー＆フレンズのワンダフル･フレンドシップ",
+            "times": [],
+            "priority": null,
+            "kind": "show-restaurant",
+            "tags": [
+              "予約必須"
+            ]
+          },
+          {
+            "name": "ダンス･ザ･グローブ！",
+            "times": [
+              "12:50",
+              "14:35",
+              "16:55",
+              "18:40"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          },
+          {
+            "name": "ドリームス･テイク･フライト",
+            "times": [
+              "11:00",
+              "12:25",
+              "13:50",
+              "15:55",
+              "17:20"
+            ],
+            "priority": "medium",
+            "kind": "show-indoor",
+            "tags": [
+              "エントリー受付",
+              "プレミアアクセス"
+            ]
+          }
+        ]
+      }
+    }
+  }
+}
