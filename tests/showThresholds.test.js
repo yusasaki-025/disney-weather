@@ -105,6 +105,8 @@ describe('isSeasonal (§0.46.6 期間限定タグ判定)', () => {
     expect(isSeasonal('ディズニー･クリスマス･グリーティング')).toBe(true);
     expect(isSeasonal('ディズニー･イースター･グリーティング')).toBe(true);
     expect(isSeasonal('ミッキーの夏まつり')).toBe(true);
+    // 名前に季節キーワードが無い正月限定パレードは SEASONAL_SHOWS の明示リストで拾う
+    expect(isSeasonal('ニューデイ、ニュードリームス')).toBe(true);
     // 公式表記の全角中黒でも判定できること
     expect(isSeasonal('ザ・ヴィランズ・ハロウィーン“Into the Frenzy”')).toBe(true);
   });

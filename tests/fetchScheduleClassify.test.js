@@ -15,6 +15,8 @@ describe('classify (§0.95 季節イベント = high)', () => {
     expect(classify('トイズ・ワンダラス・クリスマス！')).toEqual({ priority: 'high', kind: 'parade-day' });
     expect(classify('スターブライト・クリスマス')).toEqual({ priority: 'high', kind: 'fireworks' });
     expect(classify('ディズニー・クリスマス・グリーティング')).toEqual({ priority: 'high', kind: 'show-day' });
+    // 正月限定パレード。名前に季節キーワードが無いので明示ルールで拾う
+    expect(classify('ニューデイ、ニュードリームス')).toEqual({ priority: 'high', kind: 'parade-night' });
   });
 
   it('ルール未登録でも季節イベント名なら high (次のシーズンで窓が空にならない保険)', () => {

@@ -69,6 +69,8 @@ const PRIORITY_RULES = [
   { re: /トイズ[・･]ワンダラス[・･]クリスマス/, priority: 'high', kind: 'parade-day' }, // パークワイド (パレードルート) ･ 屋外 ･ 45分
   { re: /スターブライト[・･]クリスマス/, priority: 'high', kind: 'fireworks' }, // パークワイド ･ 屋外 ･ 花火 ･ 5分 (両パーク)
   { re: /ディズニー[・･]クリスマス[・･]グリーティング/, priority: 'high', kind: 'show-day' }, // メディテレーニアンハーバー ･ 屋外 ･ 15分
+  //   お正月 (2026-12-26 〜)。名前に季節キーワードが無いので明示登録する (Yuka さん 2026-11-09 : 正月限定パレード ･ high)
+  { re: /ニューデイ[、,]\s*ニュードリームス/, priority: 'high', kind: 'parade-night' }, // 両パーク ･ 20:30
   //   通年 ･ 屋内の演目 (季節キーワードを持たないので下のフォールバックには乗らない)
   { re: /D-Groovationz4/i, priority: 'medium', kind: 'show-indoor' }, // トゥモローランド (ショーベース) ･ 屋内 ･ 25分
   { re: /ハーモニー[・･]イン[・･]カラー/, priority: 'medium', kind: 'parade-day' },
