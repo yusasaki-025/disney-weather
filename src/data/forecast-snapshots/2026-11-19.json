@@ -1,0 +1,178 @@
+{
+  "date": "2026-11-19",
+  "fetchedAt": "2026-11-19T11:54:38.460+09:00",
+  "sources": {
+    "jma": {
+      "2026-11-19": {
+        "gustMax": null,
+        "windMax": null,
+        "popMax": 0,
+        "tempMax": 21,
+        "wbgtMax": null
+      },
+      "2026-11-20": {
+        "gustMax": null,
+        "windMax": null,
+        "popMax": 10,
+        "tempMax": 16,
+        "wbgtMax": null
+      },
+      "2026-11-21": {
+        "gustMax": null,
+        "windMax": null,
+        "popMax": 10,
+        "tempMax": 15,
+        "wbgtMax": null
+      },
+      "2026-11-22": {
+        "gustMax": null,
+        "windMax": null,
+        "popMax": 20,
+        "tempMax": 14,
+        "wbgtMax": null
+      },
+      "2026-11-23": {
+        "gustMax": null,
+        "windMax": null,
+        "popMax": 20,
+        "tempMax": 17,
+        "wbgtMax": null
+      },
+      "2026-11-24": {
+        "gustMax": null,
+        "windMax": null,
+        "popMax": 60,
+        "tempMax": 19,
+        "wbgtMax": null
+      },
+      "2026-11-25": {
+        "gustMax": null,
+        "windMax": null,
+        "popMax": 40,
+        "tempMax": 15,
+        "wbgtMax": null
+      },
+      "2026-11-26": {
+        "gustMax": null,
+        "windMax": null,
+        "popMax": 30,
+        "tempMax": 17,
+        "wbgtMax": null
+      }
+    },
+    "open-meteo": {
+      "2026-11-19": {
+        "gustMax": 10.1,
+        "windMax": 7.4,
+        "popMax": 31,
+        "tempMax": 18.8,
+        "wbgtMax": 17.832474845765077
+      },
+      "2026-11-20": {
+        "gustMax": 19,
+        "windMax": 9.68,
+        "popMax": 0,
+        "tempMax": 15.2,
+        "wbgtMax": 14.590693829724863
+      },
+      "2026-11-21": {
+        "gustMax": 6,
+        "windMax": 4.85,
+        "popMax": 0,
+        "tempMax": 14.6,
+        "wbgtMax": 14.622334938097216
+      },
+      "2026-11-22": {
+        "gustMax": 5.9,
+        "windMax": 4.47,
+        "popMax": 4,
+        "tempMax": 11.9,
+        "wbgtMax": 13.055278081799921
+      },
+      "2026-11-23": {
+        "gustMax": 5.7,
+        "windMax": 2.62,
+        "popMax": 2,
+        "tempMax": 13.1,
+        "wbgtMax": 14.915750224939597
+      },
+      "2026-11-24": {
+        "gustMax": 19,
+        "windMax": 8.48,
+        "popMax": 59,
+        "tempMax": 17.9,
+        "wbgtMax": 20.211225273463473
+      },
+      "2026-11-25": {
+        "gustMax": 8.1,
+        "windMax": 2.54,
+        "popMax": 36,
+        "tempMax": 12.8,
+        "wbgtMax": 14.212887116141482
+      },
+      "2026-11-26": {
+        "gustMax": 7.7,
+        "windMax": 2.74,
+        "popMax": 2,
+        "tempMax": 10.7,
+        "wbgtMax": 13.661264360258533
+      },
+      "2026-11-27": {
+        "gustMax": 5.5,
+        "windMax": 1.84,
+        "popMax": 3,
+        "tempMax": 14.5,
+        "wbgtMax": 16.17654647794809
+      },
+      "2026-11-28": {
+        "gustMax": 4.5,
+        "windMax": 2.2,
+        "popMax": 24,
+        "tempMax": 15.8,
+        "wbgtMax": 17.09432561088456
+      },
+      "2026-11-29": {
+        "gustMax": 9.5,
+        "windMax": 2.06,
+        "popMax": 29,
+        "tempMax": 17.9,
+        "wbgtMax": 17.898345521134935
+      },
+      "2026-11-30": {
+        "gustMax": 18.7,
+        "windMax": 4.63,
+        "popMax": 8,
+        "tempMax": 17.9,
+        "wbgtMax": 15.836638296846386
+      },
+      "2026-12-01": {
+        "gustMax": 15,
+        "windMax": 6.37,
+        "popMax": 1,
+        "tempMax": 18.3,
+        "wbgtMax": 19.758293261787596
+      },
+      "2026-12-02": {
+        "gustMax": 9.7,
+        "windMax": 2.61,
+        "popMax": 8,
+        "tempMax": 16.7,
+        "wbgtMax": 17.785503719373263
+      },
+      "2026-12-03": {
+        "gustMax": 7,
+        "windMax": 3.29,
+        "popMax": 15,
+        "tempMax": 15.5,
+        "wbgtMax": 16.136415676506026
+      },
+      "2026-12-04": {
+        "gustMax": 8.2,
+        "windMax": 5.73,
+        "popMax": 23,
+        "tempMax": 14.5,
+        "wbgtMax": 14.142570413363863
+      }
+    }
+  }
+}
