@@ -1,0 +1,65 @@
+{
+  "date": "2026-11-21",
+  "fetchedAt": "2026-11-21T11:57:39.174+09:00",
+  "sources": {
+    "jma": {
+      "2026-11-21": {
+        "gustMax": null,
+        "windMax": null,
+        "popMax": 0,
+        "tempMax": 15,
+        "wbgtMax": null
+      },
+      "2026-11-22": {
+        "gustMax": null,
+        "windMax": null,
+        "popMax": 0,
+        "tempMax": 15,
+        "wbgtMax": null
+      },
+      "2026-11-23": {
+        "gustMax": null,
+        "windMax": null,
+        "popMax": 20,
+        "tempMax": 16,
+        "wbgtMax": null
+      },
+      "2026-11-24": {
+        "gustMax": null,
+        "windMax": null,
+        "popMax": 60,
+        "tempMax": 18,
+        "wbgtMax": null
+      },
+      "2026-11-25": {
+        "gustMax": null,
+        "windMax": null,
+        "popMax": 20,
+        "tempMax": 14,
+        "wbgtMax": null
+      },
+      "2026-11-26": {
+        "gustMax": null,
+        "windMax": null,
+        "popMax": 30,
+        "tempMax": 18,
+        "wbgtMax": null
+      },
+      "2026-11-27": {
+        "gustMax": null,
+        "windMax": null,
+        "popMax": 30,
+        "tempMax": 19,
+        "wbgtMax": null
+      },
+      "2026-11-28": {
+        "gustMax": null,
+        "windMax": null,
+        "popMax": 50,
+        "tempMax": 19,
+        "wbgtMax": null
+      }
+    },
+    "open-meteo": {}
+  }
+}
